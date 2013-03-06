@@ -222,3 +222,5 @@ HAYSTACK_CONNECTIONS = {
         'URL': 'http://localhost:8983/solr',
     },
 }
+
+SOUTH_AUTO_FREEZE_APP = True
