@@ -107,9 +107,6 @@ class Project(models.Model):
     def get_project_type(self):
         return self.project_type
 
-    class Meta:
-        unique_together = (("slug", "nonprofit"),)
-
 class ProjectDonation(Project):
     objects = ProjectManager()
     project_type = 'donation'

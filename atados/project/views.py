@@ -48,7 +48,8 @@ class ProjectMixin(NonprofitMixin):
             try:
                 self.project = ProjectWork.objects.get(
                     nonprofit=self.get_nonprofit(),
-                    slug=self.kwargs.get('project'))
+                    slug=self.kwargs.get('project'),
+                    deleted=False)
             except ProjectWork.DoesNotExist:
                 try:
                     self.project = ProjectDonation.objects.get(

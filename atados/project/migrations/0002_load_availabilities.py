@@ -7,14 +7,16 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        from atados.project.models import Skill
-        for name in {'Artes e Artesanato', 'Comunicação e Marketing',
-                     'Contrução e Reparos', 'Educação', 'Esporte',
-                     'Gastronomia', 'Gestão', 'Informática e Eletrônicos',
-                     'Idiomas', 'Música e Dança', 'Outra'}:
-            skill = Skill()
-            skill.name = name
-            skill.save()
+        from atados.project.models import Availability
+        for weekday in range(7):
+            for period in range(3):
+                availability = Availability()
+                availability.weekday = weekday
+                availability.period = period
+                availability.save()
+
+    def backwards(self, orm):
+        raise RuntimeError("Cannot reverse this migration.")
 
     models = {
         'auth.group': {
@@ -84,7 +86,7 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         'project.project': {
-            'Meta': {'unique_together': "(('slug', 'nonprofit'),)", 'object_name': 'Project'},
+            'Meta': {'object_name': 'Project'},
             'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Cause']", 'symmetrical': 'False'}),
             'city': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),

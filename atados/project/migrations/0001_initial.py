@@ -30,13 +30,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('project', ['Skill'])
 
-        # Adding model 'Apply'
-        db.create_table('project_apply', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('volunteer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['volunteer.Volunteer'])),
-        ))
-        db.send_create_signal('project', ['Apply'])
-
         # Adding model 'Project'
         db.create_table('project_project', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -59,9 +52,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('project', ['Project'])
 
-        # Adding unique constraint on 'Project', fields ['slug', 'nonprofit']
-        db.create_unique('project_project', ['slug', 'nonprofit_id'])
-
         # Adding M2M table for field causes on 'Project'
         db.create_table('project_project_causes', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
@@ -69,14 +59,6 @@ class Migration(SchemaMigration):
             ('cause', models.ForeignKey(orm['project.cause'], null=False))
         ))
         db.create_unique('project_project_causes', ['project_id', 'cause_id'])
-
-        # Adding M2M table for field applies on 'Project'
-        db.create_table('project_project_applies', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('project', models.ForeignKey(orm['project.project'], null=False)),
-            ('apply', models.ForeignKey(orm['project.apply'], null=False))
-        ))
-        db.create_unique('project_project_applies', ['project_id', 'apply_id'])
 
         # Adding model 'ProjectDonation'
         db.create_table('project_projectdonation', (
@@ -116,11 +98,16 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('project', ['ProjectJob'])
 
+        # Adding model 'Apply'
+        db.create_table('project_apply', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('volunteer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['volunteer.Volunteer'])),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['project.Project'])),
+        ))
+        db.send_create_signal('project', ['Apply'])
+
 
     def backwards(self, orm):
-        # Removing unique constraint on 'Project', fields ['slug', 'nonprofit']
-        db.delete_unique('project_project', ['slug', 'nonprofit_id'])
-
         # Deleting model 'Availability'
         db.delete_table('project_availability')
 
@@ -130,17 +117,11 @@ class Migration(SchemaMigration):
         # Deleting model 'Skill'
         db.delete_table('project_skill')
 
-        # Deleting model 'Apply'
-        db.delete_table('project_apply')
-
         # Deleting model 'Project'
         db.delete_table('project_project')
 
         # Removing M2M table for field causes on 'Project'
         db.delete_table('project_project_causes')
-
-        # Removing M2M table for field applies on 'Project'
-        db.delete_table('project_project_applies')
 
         # Deleting model 'ProjectDonation'
         db.delete_table('project_projectdonation')
@@ -156,6 +137,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ProjectJob'
         db.delete_table('project_projectjob')
+
+        # Deleting model 'Apply'
+        db.delete_table('project_apply')
 
 
     models = {
@@ -211,6 +195,7 @@ class Migration(SchemaMigration):
         'project.apply': {
             'Meta': {'object_name': 'Apply'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Project']"}),
             'volunteer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['volunteer.Volunteer']"})
         },
         'project.availability': {
@@ -225,9 +210,8 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         'project.project': {
-            'Meta': {'unique_together': "(('slug', 'nonprofit'),)", 'object_name': 'Project'},
+            'Meta': {'object_name': 'Project'},
             'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'applies': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'project_related'", 'symmetrical': 'False', 'to': "orm['project.Apply']"}),
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Cause']", 'symmetrical': 'False'}),
             'city': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),

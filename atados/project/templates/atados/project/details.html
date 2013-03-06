@@ -68,7 +68,7 @@
             <div class="well">
               <h2>{% trans "Other projects" %}</h2>
               <div class="img-tiny-list">
-                {% for project in nonprofit.project_set.all %}
+                {% for project in nonprofit.project_set.active  %}
                 <div class="row-fluid">
                   <div class="span12">
                     {% thumbnail project.image "42x42" crop="center" as im %}
