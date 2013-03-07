@@ -56,7 +56,7 @@
           {% endif %}
         </div>
         <ul class="projects">
-          {% for project in nonprofit.project_set.all %}
+          {% for project in nonprofit.project_set.active %}
           <li class="row-fluid">
             <div class="span2">
               {% thumbnail project.image "60x60" crop="center" as im %}
