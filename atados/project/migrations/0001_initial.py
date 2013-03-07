@@ -8,28 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Availability'
-        db.create_table('project_availability', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('weekday', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('period', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-        ))
-        db.send_create_signal('project', ['Availability'])
-
-        # Adding model 'Cause'
-        db.create_table('project_cause', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal('project', ['Cause'])
-
-        # Adding model 'Skill'
-        db.create_table('project_skill', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal('project', ['Skill'])
-
         # Adding model 'Project'
         db.create_table('project_project', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -56,7 +34,7 @@ class Migration(SchemaMigration):
         db.create_table('project_project_causes', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('project', models.ForeignKey(orm['project.project'], null=False)),
-            ('cause', models.ForeignKey(orm['project.cause'], null=False))
+            ('cause', models.ForeignKey(orm['atados.cause'], null=False))
         ))
         db.create_unique('project_project_causes', ['project_id', 'cause_id'])
 
@@ -80,7 +58,7 @@ class Migration(SchemaMigration):
         db.create_table('project_projectwork_availabilities', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('projectwork', models.ForeignKey(orm['project.projectwork'], null=False)),
-            ('availability', models.ForeignKey(orm['project.availability'], null=False))
+            ('availability', models.ForeignKey(orm['atados.availability'], null=False))
         ))
         db.create_unique('project_projectwork_availabilities', ['projectwork_id', 'availability_id'])
 
@@ -88,7 +66,7 @@ class Migration(SchemaMigration):
         db.create_table('project_projectwork_skills', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('projectwork', models.ForeignKey(orm['project.projectwork'], null=False)),
-            ('skill', models.ForeignKey(orm['project.skill'], null=False))
+            ('skill', models.ForeignKey(orm['atados.skill'], null=False))
         ))
         db.create_unique('project_projectwork_skills', ['projectwork_id', 'skill_id'])
 
@@ -108,15 +86,6 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'Availability'
-        db.delete_table('project_availability')
-
-        # Deleting model 'Cause'
-        db.delete_table('project_cause')
-
-        # Deleting model 'Skill'
-        db.delete_table('project_skill')
-
         # Deleting model 'Project'
         db.delete_table('project_project')
 
@@ -143,6 +112,22 @@ class Migration(SchemaMigration):
 
 
     models = {
+        'atados.availability': {
+            'Meta': {'object_name': 'Availability'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'period': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'weekday': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
+        },
+        'atados.cause': {
+            'Meta': {'object_name': 'Cause'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
+        'atados.skill': {
+            'Meta': {'object_name': 'Skill'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
         'auth.group': {
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -182,6 +167,7 @@ class Migration(SchemaMigration):
         'nonprofit.nonprofit': {
             'Meta': {'object_name': 'Nonprofit'},
             'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['atados.Cause']", 'null': 'True', 'blank': 'True'}),
             'city': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'details': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -198,21 +184,10 @@ class Migration(SchemaMigration):
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Project']"}),
             'volunteer': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['volunteer.Volunteer']"})
         },
-        'project.availability': {
-            'Meta': {'object_name': 'Availability'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'period': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'weekday': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
-        },
-        'project.cause': {
-            'Meta': {'object_name': 'Cause'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
         'project.project': {
             'Meta': {'object_name': 'Project'},
             'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Cause']", 'symmetrical': 'False'}),
+            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['atados.Cause']", 'symmetrical': 'False'}),
             'city': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'deleted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
@@ -241,17 +216,12 @@ class Migration(SchemaMigration):
         },
         'project.projectwork': {
             'Meta': {'object_name': 'ProjectWork', '_ormbases': ['project.Project']},
-            'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Availability']", 'symmetrical': 'False'}),
+            'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['atados.Availability']", 'symmetrical': 'False'}),
             'can_be_done_remotely': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'prerequisites': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
             'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['project.Project']", 'unique': 'True', 'primary_key': 'True'}),
-            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Skill']", 'symmetrical': 'False'}),
+            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['atados.Skill']", 'symmetrical': 'False'}),
             'weekly_hours': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'})
-        },
-        'project.skill': {
-            'Meta': {'object_name': 'Skill'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
         'volunteer.volunteer': {
             'Meta': {'object_name': 'Volunteer'},
