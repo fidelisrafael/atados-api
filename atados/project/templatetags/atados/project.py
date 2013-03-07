@@ -1,7 +1,7 @@
 from django import template
 from django.template import Context
 from django.template.loader import get_template
-from atados.project.models import Availability, WEEKDAYS, PERIODS
+from atados.atados.models import Availability, WEEKDAYS, PERIODS
 import re
 
 
