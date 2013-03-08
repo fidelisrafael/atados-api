@@ -1,14 +1,13 @@
 {% extends 'atados/nonprofit/base.html' %}
 {% load i18n bootstrap_toolkit %}
 
-{% block breadcrumb %}
-<li class="active">{% trans "Post a project" %}</li>
+{% block out_breadcrumb %}
 {% endblock %}
 
 {% block content %}
 <div id="nonprofit-sign-up">
   <div class="page-header">
-    <h1>{% trans "Sign up to find more volunteers" %}</h1>
+    <h1>{% trans "Junte-se a nós para encontrar mais voluntários!" %}</h1>
   </div>
 
   <div class="row">
@@ -18,7 +17,7 @@
           <img class="img-rounded" src="{{ STATIC_URL }}/img/dummy.jpg" width="220" height="220" />
         </div>
         <div class="span3">
-          <h2>{% trans "Management platform free." %}</h2>
+          <h2>{% trans "Plataforma de gerenciamento de voluntários." %}</h2>
           <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sagittis mattis tincidunt. Sed at mauris eu lacus egestas fringilla vitae.
           </p>
@@ -30,7 +29,7 @@
           <img class="img-rounded" src="{{ STATIC_URL }}/img/dummy.jpg" width="220" height="220" />
         </div>
         <div class="span3">
-          <h2>{% trans "Find volunteers with specific skills" %}</h2>
+          <h2>{% trans "Encontre voluntários com habilidades específicas" %}</h2>
           <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nisi neque, pulvinar at viverra iaculis, gravida quis sem. Suspendisse iaculis.
           </p>
@@ -45,11 +44,11 @@
           {% url atados:home as terms_url %}
           {% url atados:home as privacy_url %}
           {% blocktrans %}
-          By clicking Sign Up, you are indicating that you have read and agree to the <a tabindex="-1"href="{{ terms_url }}">Terms of Service</a> and <a tabindex="-1" href="{{ privacy_url }}">Privacy Policy</a>.
+          Ao clicar em "Registrar", você estará indicando que leu e concorda com os <a tabindex="-1"href="{{ terms_url }}">Termos de uso</a> e <a tabindex="-1" href="{{ privacy_url }}">Políticas de privacidade</a>.
           {% endblocktrans %}
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">{% trans "Sign up" %}</button>
+          <button type="submit" class="btn btn-primary">{% trans "Registrar" %}</button>
         </div>
       </form>
     </div>
