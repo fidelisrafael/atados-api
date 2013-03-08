@@ -29,6 +29,6 @@ urlpatterns = patterns(
     url(_(r'^(?P<nonprofit>[-\w]+)/edit-nonprofit-picture$'), NonprofitPictureUpdateView.as_view(),
         name='edit-nonprofit-picture'),
 
-    url(_(r'^(?P<nonprofit>[-\w]+)/edit-nonprofit-details$'), NonprofitDetailsUpdateView.as_view(),
-        name='edit-nonprofit-details'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/edit$'), NonprofitDetailsUpdateView.as_view(),
+        name='edit'),
 )

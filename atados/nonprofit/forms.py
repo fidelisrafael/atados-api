@@ -102,4 +102,3 @@ class NonprofitPictureForm(forms.ModelForm):
 class NonprofitDetailsForm(forms.ModelForm):
     class Meta:
         model = Nonprofit
-        fields = ('details',)

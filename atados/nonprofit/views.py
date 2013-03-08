@@ -47,5 +47,5 @@ class NonprofitPictureUpdateView(NonprofitMixin, UpdateView):
 class NonprofitDetailsUpdateView(NonprofitMixin, UpdateView):
     model = Nonprofit
     form_class=NonprofitDetailsForm
-    template_name='atados/nonprofit/edit-details.html'
+    template_name='atados/nonprofit/edit.html'
     get_object = NonprofitMixin.get_nonprofit
