@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from atados.atados.models import Availability, Cause, Skill
+from atados.core.models import Availability, Cause, Skill
 from atados.nonprofit.models import Nonprofit
 from atados.volunteer.models import Volunteer
 from sorl.thumbnail import ImageField

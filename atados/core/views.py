@@ -9,7 +9,7 @@ from atados.nonprofit.views import NonprofitDetailsView, NonprofitHomeView
 from atados.nonprofit.models import Nonprofit
 
 
-template_name = 'atados/atados/home.html'
+template_name = 'atados/core/home.html'
 
 def home(request, *args, **kwargs):
     if request.user.is_authenticated():
@@ -19,7 +19,7 @@ def home(request, *args, **kwargs):
         except Nonprofit.DoesNotExist:
             return VolunteerHomeView.as_view()(request, *args, **kwargs)
 
-    return direct_to_template(request, 'atados/atados/home.html',
+    return direct_to_template(request, 'atados/core/home.html',
                               {'form': RegistrationForm()})
 
 def slug(request, *args, **kwargs):

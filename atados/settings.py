@@ -126,7 +126,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.markup',
     'flatblocks',
-    'atados.atados',
+    'atados.core',
     'atados.nonprofit',
     'atados.volunteer',
     'atados.project',
@@ -171,7 +171,7 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'atados.atados.backends.AuthenticationBackend',
+    'atados.core.backends.AuthenticationBackend',
 )
 
 LOGIN_REDIRECT_URL = "/"
@@ -191,7 +191,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "atados.atados.context_processors.site",
+    "atados.core.context_processors.site",
     "atados.nonprofit.context_processors.nonprofit",
     "atados.volunteer.context_processors.volunteer",
 )

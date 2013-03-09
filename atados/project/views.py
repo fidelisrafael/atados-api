@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
-from atados.atados.views import JSONResponseMixin
+from atados.core.views import JSONResponseMixin
 from atados.volunteer.models import Volunteer
 from atados.project.models import (Project, ProjectDonation, ProjectWork,
                                    ProjectJob, Apply, Availability)

@@ -1,13 +1,18 @@
 from django import template
 from django.template import Context
 from django.template.loader import get_template
-from atados.atados.models import Availability, WEEKDAYS, PERIODS
+from atados.core.models import Availability, WEEKDAYS, PERIODS
 import re
 
 
 register = template.Library()
 
-@register.filter
+@register.simple_tag
+def active(request, href):
+    if re.search(href, request.path):
+        return 'active'
+    return ''
+
 def as_availabilities_table(selected):
     availabilities = dict([(weekday_id, {'weekday_label': weekday_label, 'periods': {}})
         for weekday_id, weekday_label in WEEKDAYS])

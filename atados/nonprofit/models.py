@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from atados.atados.models import Cause
+from atados.core.models import Cause
 from sorl.thumbnail import ImageField
 from time import time
 

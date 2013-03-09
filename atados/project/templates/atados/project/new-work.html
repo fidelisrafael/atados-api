@@ -1,5 +1,5 @@
-{% extends 'atados/atados/base.html' %}
-{% load i18n bootstrap_toolkit atados.project %}
+{% extends 'atados/core/base.html' %}
+{% load i18n bootstrap_toolkit %}
 
 {% block breadcrumb %}
 <li><a href="{% url project:new nonprofit.slug %}">{% trans "Project kind choose" %}</a></li>

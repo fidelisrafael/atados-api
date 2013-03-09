@@ -11,7 +11,7 @@ pep8:
 	@pep8 --exclude 'migrations' .
 	
 sass:
-	@sass --style compressed --watch atados/atados/sass:atados/atados/static/css
+	@sass --style compressed --watch atados/core/sass:atados/core/static/css
 
 solr-rebuild:
 	@python ./manage.py rebuild_index
