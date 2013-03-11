@@ -1,5 +1,4 @@
-Atados
-======
+# [Atados](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
 encontram oportunidades de voluntariado.
@@ -9,8 +8,7 @@ cada vez mais pessoas a entrar nessa corrente de gente boa. Afinal, tudo o que
 você faz bem, pode fazer bem a alguém.
 
 
-Por que colaborar com o projeto?
---------------------------------
+## Por que colaborar com o projeto?
 
 Porque você quer viver em uma sociedade melhor!
 
@@ -26,8 +24,7 @@ uma forma de contribuir para o desenvolvimento coletivo fazendo algo que você
 faz muito bem!
 
 
-Quero colaborar!
-----------------
+## Quero colaborar!
 
 Você pode entrar em contato com <contato@atados.com.br> para nos contar um
 pouco mais sobre você, e como você gostaria de ajudar, ou então:
@@ -38,8 +35,7 @@ pouco mais sobre você, e como você gostaria de ajudar, ou então:
  * Resolver [nossos bugs](https://github.com/atados/atados/issues). Recomendamos que você comece por [bugs que marcamos como "bons para começar"](https://github.com/atados/atados/issues?labels=good+first+bug&page=1&state=open).
 
 
-Como rodar o projeto
---------------------
+## Como rodar o projeto
 
     git clone git@github.com:atados/atados.git
     cd atados
@@ -49,7 +45,6 @@ Como rodar o projeto
     python manage.py runserver
 
 
-Licença
--------
+## Licença
 
 Apache License, Version 2.0
