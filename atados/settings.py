@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'south',
     'sorl.thumbnail',
     'haystack',
+    'django_nose',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -224,3 +225,5 @@ HAYSTACK_CONNECTIONS = {
 }
 
 SOUTH_AUTO_FREEZE_APP = True
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
