@@ -1,8 +1,11 @@
 python:
   - 2.7
 
+env:
+  - DJANGO_VERSION=1.5
+
 install:
-  - pip install Django==1.4.2 --use-mirrors
+  - pip install Django==$DJANGO_VERSION
   - pip install -r requirements/travis --use-mirrors
 
 script:
