@@ -82,7 +82,7 @@
           <h2>{% trans "Nonprofit" %}</h2>
           {% if nonprofit in nonprofit_list %}
           <div>
-            <a href="{% url nonprofit:edit-nonprofit-details nonprofit.slug %}">{% trans "Edit" %}</a>
+            <a href="{% url nonprofit:edit nonprofit.slug %}">{% trans "Edit" %}</a>
           </div>
           {% endif %}
         </div>
