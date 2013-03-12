@@ -3,7 +3,7 @@ python:
   - 2.7
 
 install:
-  - pip install -r requirements/development --use-mirrors
+  - pip install -r requirements/development -q --use-mirrors
 
 script:
   - make test
