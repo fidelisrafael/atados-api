@@ -13,6 +13,7 @@ def active(request, href):
         return 'active'
     return ''
 
+@register.filter
 def as_availabilities_table(selected):
     availabilities = dict([(weekday_id, {'weekday_label': weekday_label, 'periods': {}})
         for weekday_id, weekday_label in WEEKDAYS])
@@ -20,7 +21,7 @@ def as_availabilities_table(selected):
         availabilities[availability.weekday]['periods'].update(
                 {availability.period: availability in selected.all()})
 
-    return get_template("atados/project/availabilities_table.html").render(
+    return get_template("atados/core/availabilities_table.html").render(
         Context({
             'availabilities': availabilities,
             'periods': PERIODS,
@@ -36,7 +37,7 @@ def as_availabilities_field(field):
         availabilities[availability.weekday]['periods'].update(
                 {availability.period: availability.id})
 
-    return get_template("atados/project/availabilities_field.html").render(
+    return get_template("atados/core/availabilities_field.html").render(
         Context({
             'field': field,
             'availabilities': availabilities,
@@ -47,7 +48,7 @@ def as_availabilities_field(field):
 
 @register.filter
 def as_select_button_list_field(field):
-    return get_template("atados/project/select_button_list_field.html").render(
+    return get_template("atados/core/select_button_list_field.html").render(
         Context({
             'field': field,
         })
