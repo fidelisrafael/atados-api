@@ -33,6 +33,7 @@ pouco mais sobre você, e como você gostaria de ajudar, ou então:
  * Formatar o código de acordo com a [PEP8](http://www.python.org/dev/peps/pep-0008/).
  * Enviar testes unitários.
  * Resolver [nossos bugs](https://github.com/atados/atados/issues). Recomendamos que você comece por [bugs que marcamos como "bons para começar"](https://github.com/atados/atados/issues?labels=good+first+bug&page=1&state=open).
+ * Enviar pull requests com novas features. Recomendamos que você siga [nosso board de planejamento](https://trello.com/atados).
 
 
 ## Como rodar o projeto
