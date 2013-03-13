@@ -57,8 +57,8 @@
     font-size:26px;
   }
 
-  fieldset {
-    margin-bottom:50px;
+  fieldset + fieldset {
+    margin-top:50px;
   }
 
   //legend + .row, legend + .row-fluid {
