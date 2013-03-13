@@ -39,7 +39,7 @@ pouco mais sobre você, e como você gostaria de ajudar, ou então:
 
     git clone git@github.com:atados/atados.git
     cd atados
-    pip install -r requirements/environment
+    pip install -r requirements/development
     python manage.py syncdb
     python manage.py migrate
     python manage.py runserver
