@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
+from django.contrib.auth import login
 from atados.nonprofit.forms import RegistrationForm
 from atados.nonprofit.models import Nonprofit
 from atados.volunteer.models import Volunteer
@@ -44,7 +45,9 @@ class RegistrationBackend(DefaultBackend):
         return ('nonprofit:sign-up-complete', (), {})
 
     def post_activation_redirect(self, request, user):
-        return ('nonprofit:sign-up-activation-complete', (), {})
+        user.backend = 'atados.core.backends.AuthenticationBackend'
+        login(request, user)
+        return ('nonprofit:first-step', (Nonprofit.objects.get(user=user).slug,), {})
 
     def get_form_class(self, request):
         return RegistrationForm

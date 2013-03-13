@@ -99,6 +99,21 @@ class NonprofitPictureForm(forms.ModelForm):
         model = Nonprofit
         fields = ('image',)
 
+class NonprofitFirstStepForm(forms.ModelForm):
+    class Meta:
+        model = Nonprofit
+        fields = ('causes',)
+        
+class NonprofitSecondStepForm(forms.ModelForm):
+    class Meta:
+        model = Nonprofit
+        fields = ('zipcode', 'addressline', 'neighborhood', 'city',)
+        
+class NonprofitThirdStepForm(forms.ModelForm):
+    class Meta:
+        model = Nonprofit
+        fields = ('image',)
+        
 class NonprofitDetailsForm(forms.ModelForm):
     class Meta:
         model = Nonprofit

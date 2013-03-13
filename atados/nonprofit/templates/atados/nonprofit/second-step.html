@@ -1,0 +1,28 @@
+{% extends 'atados/nonprofit/base.html' %}
+{% load i18n bootstrap_toolkit atados.core %}
+
+{% block breadcrumb %}
+<li><a href="{% url nonprofit:first-step nonprofit.slug %}">{% trans "Choose your causes" %}</a></li>
+<li class="active">{% trans "Set your location" %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  {% block h1 %}
+  <h1>{% trans "Second step: set your location" %}</h1>
+  {% endblock %}
+</div>
+<div class="row">
+  <div class="span8 offset2">
+    <form class="well" action="{% url nonprofit:second-step nonprofit.slug %}" method="post">{% csrf_token %}
+      <fieldset>
+      {% include "atados/core/location-fields.html" %}
+      </fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>
+        <a class="btn" href="{% url nonprofit:third-step nonprofit.slug %}">{% trans "Skip this step" %}</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -4,7 +4,10 @@ from django.views.generic.simple import direct_to_template, redirect_to
 from django.utils.translation import ugettext_lazy as _
 from atados.core.forms import AuthenticationForm
 from atados.nonprofit.views import (NonprofitPictureUpdateView,
-                                       NonprofitDetailsUpdateView)
+                                    NonprofitFirstStepView,
+                                    NonprofitSecondStepView,
+                                    NonprofitThirdStepView,
+                                    NonprofitDetailsUpdateView)
 from registration.views import register, activate
 
 urlpatterns = patterns(
@@ -20,8 +23,14 @@ urlpatterns = patterns(
          'template_name': 'atados/nonprofit/sign-up-activation.html'},
         name='sign-up-confirmation'),
 
-    url(_(r'^nonprofit/sign-up-activation-complete$'), direct_to_template, {'template': 'atados/nonprofit/sign-up-activation-complete.html'},
-        name='sign-up-activation-complete'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/first-step$'), NonprofitFirstStepView.as_view(),
+        name='first-step'),
+
+    url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/second-step$'), NonprofitSecondStepView.as_view(),
+        name='second-step'),
+
+    url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/third-step$'), NonprofitThirdStepView.as_view(),
+        name='third-step'),
 
     url(_(r'^nonprofit/sign-up-complete$'), direct_to_template, {'template': 'atados/nonprofit/sign-up-complete.html'},
         name='sign-up-complete'),

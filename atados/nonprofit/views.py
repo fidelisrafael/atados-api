@@ -1,11 +1,15 @@
 from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import classonlymethod
 from atados.nonprofit.models import Nonprofit
 from atados.nonprofit.forms import (NonprofitPictureForm,
-                                       NonprofitDetailsForm)
+                                    NonprofitFirstStepForm,
+                                    NonprofitSecondStepForm,
+                                    NonprofitThirdStepForm,
+                                    NonprofitDetailsForm)
 
 
 class NonprofitMixin(object):
@@ -49,3 +53,30 @@ class NonprofitDetailsUpdateView(NonprofitMixin, UpdateView):
     form_class=NonprofitDetailsForm
     template_name='atados/nonprofit/edit.html'
     get_object = NonprofitMixin.get_nonprofit
+
+class NonprofitFirstStepView(NonprofitMixin, UpdateView):
+    model = Nonprofit
+    form_class=NonprofitFirstStepForm
+    template_name='atados/nonprofit/first-step.html'
+    get_object = NonprofitMixin.get_nonprofit
+    
+    def get_success_url(self):
+        return reverse('nonprofit:second-step', args=(self.object.slug,))
+
+class NonprofitSecondStepView(NonprofitMixin, UpdateView):
+    model = Nonprofit
+    form_class=NonprofitSecondStepForm
+    template_name='atados/nonprofit/second-step.html'
+    get_object = NonprofitMixin.get_nonprofit
+    
+    def get_success_url(self):
+        return reverse('nonprofit:third-step', args=(self.object.slug,))
+    
+class NonprofitThirdStepView(NonprofitMixin, UpdateView):
+    model = Nonprofit
+    form_class=NonprofitThirdStepForm
+    template_name='atados/nonprofit/third-step.html'
+    get_object = NonprofitMixin.get_nonprofit
+
+    def get_success_url(self):
+        return reverse('atados:home',)
