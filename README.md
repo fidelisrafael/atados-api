@@ -1,4 +1,4 @@
-# [Atados](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
+# [Atados v0.0.1](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
 encontram oportunidades de voluntariado.
@@ -34,6 +34,9 @@ pouco mais sobre você, e como você gostaria de ajudar, ou então:
  * Enviar testes unitários.
  * Resolver [nossos bugs](https://github.com/atados/atados/issues). Recomendamos que você comece por [bugs que marcamos como "bons para começar"](https://github.com/atados/atados/issues?labels=good+first+bug&page=1&state=open).
  * Enviar pull requests com novas features. Recomendamos que você siga [nosso board de planejamento](https://trello.com/atados).
+
+Vamos seguir o [modelo de branching sugerido por Vincent Driessen](http://nvie.com/posts/a-successful-git-branching-model/),
+e o [modelo de versionamento sugerido por Tom Preston-Werner](http://semver.org/).
 
 
 ## Como rodar o projeto
