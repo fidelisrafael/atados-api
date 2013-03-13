@@ -39,7 +39,19 @@
     </div>
     <div class="span6">
       <form class="well" method="post" action="{% url nonprofit:sign-up %}">{% csrf_token %}
-        {{ form|as_bootstrap }}
+        <fieldset>
+          <legend>{% trans "About the nonprofit" %}</legend>
+          {{ form.nonprofit_name|as_bootstrap }}
+          {{ form.slug|as_bootstrap }}
+        </fieldset>
+        <fieldset>
+          <legend>{% trans "About you" %}</legend>
+          {{ form.first_name|as_bootstrap }}
+          {{ form.email|as_bootstrap }}
+          {{ form.username|as_bootstrap }}
+          {{ form.password1|as_bootstrap }}
+          {{ form.password2|as_bootstrap }}
+        </fieldset>
         <div class="form-terms alert">
           {% url atados:home as terms_url %}
           {% url atados:home as privacy_url %}

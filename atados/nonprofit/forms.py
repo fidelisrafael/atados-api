@@ -44,7 +44,7 @@ class RegistrationForm(DefaultRegistrationForm):
                                 widget=forms.TextInput(
                                     attrs=dict({'class': 'required'},
                                     maxlength=75)),
-                                label=_("Username"),
+                                label=_("Your username"),
                                 error_messages={'invalid':
                                                 _("This value may contain "
                                                   "only letters, numbers a"
