@@ -67,6 +67,7 @@ class ProjectModelMixin(NonprofitMixin, AvailabilityMixin):
         kwargs = super(ProjectModelMixin, self).get_form_kwargs()
         kwargs.update({
             'nonprofit': self.get_nonprofit(),
+            'user': self.request.user,
         })
         return kwargs
 
