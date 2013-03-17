@@ -1,4 +1,4 @@
-# [Atados v0.0.1](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
+# [Atados v0.0.2](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
 encontram oportunidades de voluntariado.
@@ -43,9 +43,7 @@ e o [modelo de versionamento sugerido por Tom Preston-Werner](http://semver.org/
 
     git clone git@github.com:atados/atados.git
     cd atados
-    pip install -r requirements/development
-    python manage.py syncdb
-    python manage.py migrate
+    make install
     python manage.py runserver
 
 
