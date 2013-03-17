@@ -64,7 +64,7 @@ class ProjectJobCreateForm(ProjectWorkCreateForm):
 
     def __init__(self, *args, **kwargs):
         super(ProjectJobCreateForm, self).__init__(*args, **kwargs)
-        self.fields['weekly_hours'].required = True
+        #self.fields['weekly_hours'].required = True
 
     class Meta:
         model = ProjectJob
