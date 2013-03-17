@@ -32,7 +32,6 @@ class ProjectCreateForm(forms.ModelForm):
         self.fields['city'].initial = nonprofit.city
 
         self.fields['responsible'].initial = user.first_name
-        self.fields['phone'].initial = user.first_name
         self.fields['email'].initial = user.email
         
     def clean_name(self):
@@ -61,10 +60,6 @@ class ProjectWorkCreateForm(ProjectCreateForm):
         exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')
 
 class ProjectJobCreateForm(ProjectWorkCreateForm):
-
-    def __init__(self, *args, **kwargs):
-        super(ProjectJobCreateForm, self).__init__(*args, **kwargs)
-        #self.fields['weekly_hours'].required = True
 
     class Meta:
         model = ProjectJob
