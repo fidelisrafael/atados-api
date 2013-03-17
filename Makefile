@@ -7,6 +7,11 @@ development:
 environment:
 	@pip install -r requirements/environment
 
+install:
+	@pip install -r requirements/development -q --use-mirrors
+	@python ./manage.py syncdb
+	@python ./manage.py migrate
+
 pep8:
 	@pep8 --exclude 'migrations' .
 	
