@@ -11,7 +11,7 @@ from atados.project.models import (Project,
 
 class ProjectCreateForm(forms.ModelForm):
 
-    def __init__(self, nonprofit, *args, **kwargs):
+    def __init__(self, nonprofit, user, *args, **kwargs):
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
 
         self.nonprofit = nonprofit
@@ -23,8 +23,17 @@ class ProjectCreateForm(forms.ModelForm):
             'placeholder' : _('Add more info about this project')})
 
         self.fields['causes'].empty_label = ""
-
         self.fields['causes'].label = _("Select one or more causes")
+        self.fields['causes'].initial = set([cause.id for cause in nonprofit.causes.all()])
+
+        self.fields['zipcode'].initial = nonprofit.zipcode
+        self.fields['addressline'].initial = nonprofit.addressline
+        self.fields['neighborhood'].initial = nonprofit.neighborhood
+        self.fields['city'].initial = nonprofit.city
+
+        self.fields['responsible'].initial = user.first_name
+        self.fields['phone'].initial = user.first_name
+        self.fields['email'].initial = user.email
         
     def clean_name(self):
         name = self.cleaned_data.get('name')
