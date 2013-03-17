@@ -1,4 +1,4 @@
-# [Atados v0.0.2](http://www.atados.com.br) [![Build Status](https://secure.travis-ci.org/atados/atados.png)](http://travis-ci.org/atados/atados)
+# [Atados v0.0.2](http://www.atados.com.br) [![Build Status](https://travis-ci.org/atados/atados.png?branch=master)](https://travis-ci.org/atados/atados)
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
 encontram oportunidades de voluntariado.
