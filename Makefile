@@ -9,7 +9,7 @@ environment:
 
 install:
 	@pip install -r requirements/development -q --use-mirrors
-	@python ./manage.py syncdb
+	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
 pep8:
