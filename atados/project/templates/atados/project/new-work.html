@@ -14,7 +14,7 @@
     {% endblock %}
   </div>
   <div class="row">
-    <div class="span7">
+    <div class="span8 offset2">
       <form class="well" method="post" action="{% block action %}{% url project:new-work nonprofit.slug %}{% endblock %}">{% csrf_token %}
         {% include "atados/project/form-work.html" %}
         <div class="form-actions">

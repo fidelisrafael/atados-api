@@ -136,9 +136,9 @@
     }
   }
 
-  .span7 > form {
+  .span8 > form {
     input[type=text], input[type=password], textarea {
-      width: 480px;
+      width: 566px;
     }
 
     textarea {
@@ -147,25 +147,18 @@
 
     .row-fluid {
       .span6 {
-        select {
-          width: 238px;
-        }
         input[type=text], input[type=password], textarea {
-          width: 224px;
+          width: 270px;
         }
       }
       .span4 {
         input[type=text], input[type=password], textarea {
-          width: 139px;
+          width: 171px;
         }
       }
       .span8 {
         input[type=text], input[type=password], textarea {
-          width: 308px;
-        }
-
-        select {
-          width: 322px;
+          width: 369px;
         }
       }
     }
@@ -685,7 +678,7 @@
 
       a {
         float:left;
-        width:97px;
+        width:118px;
         height:56px;
         overflow:hidden;
         padding:8px;
