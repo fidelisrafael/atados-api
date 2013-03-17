@@ -14,12 +14,12 @@
   {% endblock %}
 </div>
 <div class="row">
-  <div class="span8 offset2">
-    <form class="well" action="{% url nonprofit:third-step nonprofit.slug %}" method="post">{% csrf_token %}
-      <fieldset>
-      </fieldset>
+  <div class="span6 offset3">
+    <form class="well" action="{% url nonprofit:third-step nonprofit.slug %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ form|as_bootstrap }}
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{% trans "Finish" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Upload and Finish" %}</button>
+        <a class="btn" href="{% url nonprofit:third-step nonprofit.slug %}">{% trans "Skip this step" %}</a>
       </div>
     </form>
   </div>
