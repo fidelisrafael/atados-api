@@ -21,6 +21,7 @@ class Nonprofit(models.Model):
                                     blank=True, null=True, default=None)
     city = models.CharField(_('City'), max_length=50,
                             blank=True, null=True, default=None)
+    phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)

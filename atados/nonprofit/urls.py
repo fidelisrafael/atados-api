@@ -6,7 +6,6 @@ from atados.core.forms import AuthenticationForm
 from atados.nonprofit.views import (NonprofitPictureUpdateView,
                                     NonprofitFirstStepView,
                                     NonprofitSecondStepView,
-                                    NonprofitThirdStepView,
                                     NonprofitDetailsUpdateView)
 from registration.views import register, activate
 
@@ -28,9 +27,6 @@ urlpatterns = patterns(
 
     url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/second-step$'), NonprofitSecondStepView.as_view(),
         name='second-step'),
-
-    url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/third-step$'), NonprofitThirdStepView.as_view(),
-        name='third-step'),
 
     url(_(r'^nonprofit/sign-up-complete$'), direct_to_template, {'template': 'atados/nonprofit/sign-up-complete.html'},
         name='sign-up-complete'),

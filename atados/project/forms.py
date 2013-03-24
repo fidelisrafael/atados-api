@@ -33,6 +33,7 @@ class ProjectCreateForm(forms.ModelForm):
 
         self.fields['responsible'].initial = user.first_name
         self.fields['email'].initial = user.email
+        self.fields['phone'].initial = nonprofit.phone
         
     def clean_name(self):
         name = self.cleaned_data.get('name')

@@ -8,7 +8,6 @@ from atados.nonprofit.models import Nonprofit
 from atados.nonprofit.forms import (NonprofitPictureForm,
                                     NonprofitFirstStepForm,
                                     NonprofitSecondStepForm,
-                                    NonprofitThirdStepForm,
                                     NonprofitDetailsForm)
 
 
@@ -67,15 +66,6 @@ class NonprofitSecondStepView(NonprofitMixin, UpdateView):
     model = Nonprofit
     form_class=NonprofitSecondStepForm
     template_name='atados/nonprofit/second-step.html'
-    get_object = NonprofitMixin.get_nonprofit
-    
-    def get_success_url(self):
-        return reverse('nonprofit:third-step', args=(self.object.slug,))
-    
-class NonprofitThirdStepView(NonprofitMixin, UpdateView):
-    model = Nonprofit
-    form_class=NonprofitThirdStepForm
-    template_name='atados/nonprofit/third-step.html'
     get_object = NonprofitMixin.get_nonprofit
 
     def get_success_url(self):

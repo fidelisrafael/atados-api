@@ -15,7 +15,16 @@
   <div class="span8 offset2">
     <form class="well" action="{% url nonprofit:first-step nonprofit.slug %}" method="post">{% csrf_token %}
       <fieldset>
-      {{ form.causes|as_select_button_list_field }}
+        <legend>{% trans "Causes" %}</legend>
+        {{ form.causes|as_select_button_list_field }}
+      </fieldset>
+      <fieldset>
+        <legend>{% trans "Location" %}</legend>
+        {% include "atados/core/location-fields.html" %}
+      </fieldset>
+      <fieldset>
+        <legend>{% trans "Contact" %}</legend>
+        {{ form.phone|as_bootstrap }}
       </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>

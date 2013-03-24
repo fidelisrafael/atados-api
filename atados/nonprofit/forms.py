@@ -39,6 +39,10 @@ class RegistrationForm(DefaultRegistrationForm):
                        maxlength=75)),
         label=_("Your e-mail"))
 
+    phone = forms.CharField(max_length=20,
+                            widget=forms.TextInput(),
+                            label=_("Phone"))
+
     username = forms.RegexField(regex=r'^[\w-]+$',
                                 max_length=30,
                                 widget=forms.TextInput(
@@ -100,16 +104,22 @@ class NonprofitPictureForm(forms.ModelForm):
         fields = ('image',)
 
 class NonprofitFirstStepForm(forms.ModelForm):
+
+    phone = forms.CharField(max_length=20,
+                            widget=forms.TextInput(),
+                            label=_("Phone"))
+
+    def __init__(self, *args, **kwargs):
+        super(NonprofitFirstStepForm, self).__init__(*args, **kwargs)
+
+        self.fields['causes'].empty_label = ""
+        self.fields['causes'].label = _("Select one or more causes")
+
     class Meta:
         model = Nonprofit
-        fields = ('causes',)
+        fields = ('causes', 'zipcode', 'addressline', 'neighborhood', 'city', 'phone',)
         
 class NonprofitSecondStepForm(forms.ModelForm):
-    class Meta:
-        model = Nonprofit
-        fields = ('zipcode', 'addressline', 'neighborhood', 'city',)
-        
-class NonprofitThirdStepForm(forms.ModelForm):
     class Meta:
         model = Nonprofit
         fields = ('image',)
