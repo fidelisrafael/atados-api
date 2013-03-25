@@ -101,7 +101,7 @@ msgstr "Pré-requisitos"
 
 #: models.py:88 templates/atados/project/details-job.html:8
 msgid "Weekly hours"
-msgstr "Horas semanais"
+msgstr "Carga horária semanal"
 
 #: models.py:91
 #: templates/atados/project/details-work.html:67
