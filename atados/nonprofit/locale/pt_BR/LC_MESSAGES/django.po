@@ -121,7 +121,7 @@ msgstr "^(?P<nonprofit>[-\\w]+)/ong/segundo-passo$"
 
 #: urls.py:31
 msgid "^nonprofit/sign-up-complete$"
-msgstr "^ong/cadastro-completo"
+msgstr "^ong/cadastro-concluido"
 
 #: urls.py:34
 msgid "^(?P<nonprofit>[-\\w]+)/edit-nonprofit-picture$"
