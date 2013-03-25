@@ -21,115 +21,112 @@ msgstr ""
 #: backends.py:57
 #, python-format
 msgid "Welcome to %s"
-msgstr ""
+msgstr "Bem-vindo ap %s"
 
 #: forms.py:16
 msgid "Your first name"
-msgstr ""
+msgstr "Seu primeiro nome"
 
 #: forms.py:17
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: forms.py:22
 msgid "example@example.com"
-msgstr ""
+msgstr "exemplo@exemplo.com.br"
 
 #: forms.py:24
 msgid "Your e-mail"
-msgstr ""
+msgstr "Seu e-mail"
 
 #: forms.py:31
 msgid "Username"
-msgstr ""
+msgstr "Nome de usuário"
 
 #: forms.py:33
 msgid "This value may contain only letters, numbers and \"-\" character."
-msgstr ""
+msgstr "São permitidos apenas letras, números e \"-\"."
 
 #: forms.py:40
 msgid "Create a password"
-msgstr ""
+msgstr "Crie uma senha"
 
 #: forms.py:44
 msgid "Confirm your password"
-msgstr ""
+msgstr "Confirme sua senha"
 
 #: forms.py:60
 msgid "This username is already is use."
-msgstr ""
+msgstr "Este nome de usuário já está em uso."
 
 #: forms.py:68
 msgid "This e-mail is already is use."
-msgstr ""
+msgstr "Este e-mail já está em uso."
 
 #: urls.py:12
 msgid "^volunteer/sign-up$"
-msgstr ""
+msgstr "^voluntario/cadastro$"
 
 #: urls.py:17
 msgid "^volunteer/sign-up-confirmartion/(?P<activation_key>\\w+)$"
-msgstr ""
+msgstr "^voluntario/confirmacao-de-cadastro/(?P<activation_key>\\w+)$"
 
 #: urls.py:22
 msgid "^volunteer/sign-up-activation-complete$"
-msgstr ""
+msgstr "^voluntario/ativacao-de-cadastro-concluida"
 
 #: urls.py:25
 msgid "^volunteer/sign-up-complete$"
-msgstr ""
+msgstr "^voluntario/cadastro-concluido"
 
 #: urls.py:28
 msgid "^volunteer/profile$"
-msgstr ""
+msgstr "^voluntario/perfil"
 
 #: urls.py:31
 msgid "^(?P<username>[-\\w]+)/edit-volunteer-picture$"
-msgstr ""
+msgstr "^(?P<username>[-\\w]+)/editar-imagem-do-voluntario$"
 
 #: templates/atados/volunteer/details.html:21
+#: templates/atados/volunteer/picture.html:6
 msgid "Edit profile picture"
-msgstr ""
+msgstr "Editar imagem de perfil"
 
 #: templates/atados/volunteer/details.html:26
 msgid "Add profile picture"
-msgstr ""
+msgstr "Adicionar imagem de perfil"
 
 #: templates/atados/volunteer/details.html:33
 msgid "Recent activities"
-msgstr ""
+msgstr "Atividades recentes"
 
 #: templates/atados/volunteer/details.html:38
 msgid "Skills"
-msgstr ""
+msgstr "Habilidades"
 
 #: templates/atados/volunteer/details.html:39
 msgid "Achievements"
-msgstr ""
-
-#: templates/atados/volunteer/picture.html:6
-msgid "Edit volunteer picture"
-msgstr ""
+msgstr "Conquistas"
 
 #: templates/atados/volunteer/picture.html:13
 msgid "Upload"
-msgstr ""
+msgstr "Enviar"
 
 #: templates/atados/volunteer/sign-up.html:5
 msgid "Become a volunteer"
-msgstr ""
+msgstr "Torne-se um voluntário"
 
 #: templates/atados/volunteer/sign-up.html:11
 msgid "Sign up to become a volunteer"
-msgstr ""
+msgstr "Cadastre-se para se tornar um voluntário"
 
 #: templates/atados/volunteer/sign-up.html:21
 msgid "Find projects that need your skills"
-msgstr ""
+msgstr "Encontre atos que precisam de suas habilidades"
 
 #: templates/atados/volunteer/sign-up.html:33
 msgid "Meet people doing good"
-msgstr ""
+msgstr "Conheça pessoas fazendo o bem"
 
 #: templates/atados/volunteer/sign-up.html:46
 #, python-format
@@ -140,7 +137,12 @@ msgid ""
 "and <a tabindex=\"-1\" href=\"%(privacy_url)s\">Privacy Policy</a>.\n"
 "          "
 msgstr ""
+"\n"
+"          Ao clicar em \"Registrar\", você estará indicando que leu e "
+"concorda com os <a tabindex=\"-1\"href=\"%(terms_url)s\">Termos de uso</a> e "
+"<a tabindex=\"-1\" href=\"%(privacy_url)s\">Políticas de privacidade</a>.\n"
+"          "
 
 #: templates/atados/volunteer/sign-up.html:51
 msgid "Sign up"
-msgstr ""
+msgstr "Cadastrar"
