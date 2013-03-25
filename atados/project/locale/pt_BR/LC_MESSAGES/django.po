@@ -1,0 +1,344 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-24 21:29-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:20
+msgid "example@example.com"
+msgstr "exemplo@examplo.com.br"
+
+#: forms.py:23
+msgid "Add more info about this project"
+msgstr "Adicione mais informações sobre este ato"
+
+#: forms.py:26
+msgid "Select one or more causes"
+msgstr "Selecione uma ou mais causas"
+
+#: forms.py:43
+msgid "This name (or a very similar) is already is use."
+msgstr "Este nome (ou um muito parecido) já está em uso."
+
+#: forms.py:57
+msgid "Select one or more skills"
+msgstr "Selecione uma ou mais habilidades"
+
+#: models.py:24
+msgid "Project name"
+msgstr "Nome do ato"
+
+#: models.py:26
+msgid "Details"
+msgstr "Detalhes"
+
+#: models.py:27
+msgid "Responsible name"
+msgstr "Nome do responsável"
+
+#: models.py:28
+msgid "Phone"
+msgstr "Telefone"
+
+#: models.py:29
+msgid "E-mail"
+msgstr "E-mail"
+
+#: models.py:30
+msgid "Zip code"
+msgstr "CEP"
+
+#: models.py:32
+#: templates/atados/project/details-work.html:71
+msgid "Address line"
+msgstr "Logradouro"
+
+#: models.py:34 templates/atados/project/details-work.html:72
+msgid "Neighborhood"
+msgstr "Bairro"
+
+#: models.py:36 templates/atados/project/details-work.html:73
+msgid "City"
+msgstr "Cidade"
+
+#: models.py:38 templates/atados/project/details-work.html:17
+msgid "Vacancies"
+msgstr "Vagas"
+
+#: models.py:40
+msgid "Published"
+msgstr "Publicado"
+
+#: models.py:41
+msgid "Deleted"
+msgstr "Excluído"
+
+#: models.py:42
+msgid "Deleted date"
+msgstr "Data que foi excluído"
+
+#: models.py:80
+msgid "Collection made by the nonprofit"
+msgstr "Coleta realizada pela ONG"
+
+#: models.py:86 templates/atados/project/details-work.html:46
+msgid "Prerequisites"
+msgstr "Pré-requisitos"
+
+#: models.py:88 templates/atados/project/details-job.html:8
+msgid "Weekly hours"
+msgstr "Horas semanais"
+
+#: models.py:91
+#: templates/atados/project/details-work.html:67
+msgid "This work can be done remotely."
+msgstr "Este trabalho pode ser feito a distância."
+
+#: urls.py:18
+msgid "^project$"
+msgstr "^ato$"
+
+#: urls.py:19
+msgid "^(?P<nonprofit>[-\\w]+)/add-new-project$"
+msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato$"
+
+#: urls.py:20
+msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/donation$"
+msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/doacao$"
+
+#: urls.py:21
+msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/work$"
+msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-recorrente$"
+
+#: urls.py:22
+msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/job$"
+msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-pontual$"
+
+#: urls.py:23
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)$"
+msgstr ""
+
+#: urls.py:24
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/edit$"
+msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/editar$"
+
+#: urls.py:25
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/collaborators$"
+msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/colaboradores$"
+
+#: urls.py:26
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/delete$"
+msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/excluir$"
+
+#: urls.py:27
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/apply$"
+msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/atar$"
+
+#: urls.py:29
+msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/picture$"
+msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/imagem$"
+
+#: views.py:194
+msgid "Project was successfully deleted."
+msgstr "Ato excluído com sucesso."
+
+#: templates/atados/project/collaborators.html:7
+#: templates/atados/project/details.html:61
+#: templates/atados/project/nonprofit.html:20
+msgid "Volunteers"
+msgstr "Voluntários"
+
+#: templates/atados/project/delete.html:7
+#: templates/atados/project/nonprofit.html:26
+msgid "Delete this project"
+msgstr "Excluir este ato"
+
+#: templates/atados/project/delete.html:16
+msgid "Delete project"
+msgstr "Excluir ato"
+
+#: templates/atados/project/details-donation.html:6
+#: templates/atados/project/form-donation.html:18
+#: templates/atados/project/form-work.html:31
+msgid "Contact"
+msgstr "Contato"
+
+#: templates/atados/project/details-donation.html:10
+msgid "Delivery and Collection"
+msgstr "Entrega e coleta"
+
+#: templates/atados/project/details-work.html:8
+msgid "About"
+msgstr "Sobre"
+
+#: templates/atados/project/details-work.html:26
+#: templates/atados/project/form-donation.html:6
+#: templates/atados/project/form-work.html:6
+msgid "Causes"
+msgstr "Causas"
+
+#: templates/atados/project/details-work.html:36
+#: templates/atados/project/form-work.html:10
+msgid "Skills"
+msgstr "Habilidades"
+
+#: templates/atados/project/details-work.html:55
+#: templates/atados/project/form-work.html:15
+msgid "Availability"
+msgstr "Disponibilidade"
+
+#: templates/atados/project/details-work.html:63
+#: templates/atados/project/form-work.html:26
+msgid "Location"
+msgstr "Localização"
+
+#: templates/atados/project/details-work.html:69
+msgid "This work can't be done remotely."
+msgstr "Este ato não pode ser feito a distância"
+
+#: templates/atados/project/details.html:4
+msgid "Voluntary work: "
+msgstr "Trabalho voluntário: "
+
+#: templates/atados/project/details.html:22
+#: templates/atados/project/details.html:40
+msgid "Already applied"
+msgstr "Já se atou"
+
+#: templates/atados/project/details.html:42
+#: templates/atados/project/details.html:94
+#: templates/atados/project/details.html:101
+msgid "Apply"
+msgstr "Atar-se"
+
+#: templates/atados/project/details.html:45
+msgid "Sign in to apply"
+msgstr "Entre para se atar"
+
+#: templates/atados/project/details.html:69
+msgid "Other projects"
+msgstr "Outros atos"
+
+#: templates/atados/project/details.html:97
+#, python-format
+msgid "You are applying for &quot;%(project_name)s&quot;."
+msgstr "Você está se atando ao ato &quot;%(project_name)s&quot;."
+
+#: templates/atados/project/details.html:100
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/atados/project/details.html:101
+msgid "Appying..."
+msgstr "Atando..."
+
+#: templates/atados/project/edit.html:7
+msgid "Edit"
+msgstr "Editar"
+
+#: templates/atados/project/edit.html:17
+msgid "Save"
+msgstr "Salvar"
+
+#: templates/atados/project/form-donation.html:10
+msgid "Collecting"
+msgstr "Coleta"
+
+#: templates/atados/project/form-donation.html:14
+msgid "Delivery"
+msgstr "Entrega"
+
+#: templates/atados/project/form-donation.html:30
+#: templates/atados/project/form-work.html:43
+msgid "More info"
+msgstr "Mais informações"
+
+#: templates/atados/project/index.html:5
+#: templates/atados/project/index.html:11
+msgid "Explore projects"
+msgstr "Explore atos"
+
+#: templates/atados/project/new-donation.html:5
+#: templates/atados/project/new-job.html:5
+#: templates/atados/project/new-work.html:5
+#: templates/atados/project/project-kind-choose.html:7
+msgid "Project kind choose"
+msgstr "Escolho o tipo de ato"
+
+#: templates/atados/project/new-donation.html:6
+#: templates/atados/project/new-donation.html:12
+msgid "Add new donation"
+msgstr "Adicionar nova doação"
+
+#: templates/atados/project/new-donation.html:19
+#: templates/atados/project/new-work.html:21
+msgid "Create"
+msgstr "Criar"
+
+#: templates/atados/project/new-donation.html:20
+#: templates/atados/project/new-work.html:22
+msgid "Back"
+msgstr "Voltar"
+
+#: templates/atados/project/new-job.html:6
+#: templates/atados/project/new-job.html:10
+msgid "Add new job"
+msgstr "Adicionar novo ato pontual"
+
+#: templates/atados/project/new-work.html:6
+#: templates/atados/project/new-work.html:13
+msgid "Add new work"
+msgstr "Adicionar novo ato recorrente"
+
+#: templates/atados/project/nonprofit.html:17
+msgid "Options"
+msgstr "Opções"
+
+#: templates/atados/project/nonprofit.html:23
+msgid "Picture"
+msgstr "Imagem"
+
+#: templates/atados/project/picture.html:7
+msgid "Edit project picture"
+msgstr "Editar imagem do ato"
+
+#: templates/atados/project/picture.html:14
+msgid "Upload"
+msgstr "Enviar"
+
+#: templates/atados/project/project-kind-choose.html:4
+#: templates/atados/project/project-kind-choose.html:13
+msgid "What kind of project you want to create?"
+msgstr "Que tipo de ato você deseja criar?"
+
+#: templates/atados/project/project-kind-choose.html:18
+msgid "Job"
+msgstr "Ato pontual"
+
+#: templates/atados/project/project-kind-choose.html:20
+#: templates/atados/project/project-kind-choose.html:27
+#: templates/atados/project/project-kind-choose.html:40
+msgid "This one"
+msgstr "Este"
+
+#: templates/atados/project/project-kind-choose.html:25
+msgid "Work"
+msgstr "Ato recorrente"
+
+#: templates/atados/project/project-kind-choose.html:32
+msgid "Donation"
+msgstr "Doação"
