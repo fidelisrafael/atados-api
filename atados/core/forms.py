@@ -17,7 +17,7 @@ SEARCH_TYPES = (
 class SearchForm(HaystackSearchForm):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
-        self.fields['types'] = forms.MultipleChoiceField(choices=SEARCH_TYPES, required=False, label=_('Search In'), widget=forms.CheckboxSelectMultiple)
+        self.fields['types'] = forms.MultipleChoiceField(choices=SEARCH_TYPES, required=False, label=_('Search in'), widget=forms.CheckboxSelectMultiple)
 
     def get_models(self):
         """Return an alphabetical list of model classes in the index."""
