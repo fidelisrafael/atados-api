@@ -35,9 +35,12 @@ class Project(models.Model):
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
-    state = models.ForeignKey(State, blank=True, null=True, default=None)
-    city = models.ForeignKey(City, blank=True, null=True, default=None)
-    suburb = models.ForeignKey(Suburb, blank=True, null=True, default=None)
+    state = models.ForeignKey(State, verbose_name=_('State'), blank=True,
+                              null=True, default=None)
+    city = models.ForeignKey(City, verbose_name=_('City'), blank=True,
+                             null=True, default=None)
+    suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
+                               null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
     published = models.BooleanField(_("Published"), default=False)
