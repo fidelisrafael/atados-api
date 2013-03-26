@@ -6,6 +6,7 @@ from bootstrap_toolkit.widgets import BootstrapTextInput
 from registration.forms import RegistrationForm as DefaultRegistrationForm
 from atados.nonprofit.models import Nonprofit
 from atados.volunteer.models import Volunteer
+from atados.core.forms import LocationFormMixin
 
 
 class RegistrationForm(DefaultRegistrationForm):
@@ -69,6 +70,29 @@ class RegistrationForm(DefaultRegistrationForm):
         return email
 
 class VolunteerPictureForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = ('image',)
+
+class VolunteerFirstStepForm(LocationFormMixin, forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(VolunteerFirstStepForm, self).__init__(*args, **kwargs)
+
+        self.fields['causes'].empty_label = ""
+        self.fields['causes'].label = _("Select one or more causes")
+
+        self.fields['skills'].empty_label = ""
+        self.fields['skills'].label = _("Select one or more skills")
+
+        self.prepare_location_fields()
+
+    class Meta:
+        model = Volunteer
+        fields = ('causes', 'skills', 'zipcode', 'addressline', 'addressnumber',
+                  'neighborhood', 'state', 'city', 'suburb',)
+        
+class VolunteerSecondStepForm(forms.ModelForm):
     class Meta:
         model = Volunteer
         fields = ('image',)

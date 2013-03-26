@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth import login
 from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
@@ -38,7 +39,9 @@ class RegistrationBackend(DefaultBackend):
         return ('volunteer:sign-up-complete', (), {})
 
     def post_activation_redirect(self, request, user):
-        return ('volunteer:sign-up-activation-complete', (), {})
+        user.backend = 'atados.core.backends.AuthenticationBackend'
+        login(request, user)
+        return ('volunteer:first-step', (user.username,), {})
 
     def get_form_class(self, request):
         return RegistrationForm

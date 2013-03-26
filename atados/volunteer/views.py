@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView
 from django.views.generic.edit import UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import classonlymethod
 from atados.volunteer.models import Volunteer
-from atados.volunteer.forms import VolunteerPictureForm
+from atados.volunteer.forms import (VolunteerPictureForm,
+                                    VolunteerFirstStepForm,
+                                    VolunteerSecondStepForm)
 
 
 class UserReferenceMixin(object):
@@ -65,3 +68,21 @@ class VolunteerPictureUpdateView(VolunteerMixin, UpdateView):
     form_class=VolunteerPictureForm
     template_name='atados/volunteer/picture.html'
     get_object = VolunteerMixin.get_volunteer
+
+class VolunteerFirstStepView(VolunteerMixin, UpdateView):
+    model = Volunteer
+    form_class=VolunteerFirstStepForm
+    template_name='atados/volunteer/first-step.html'
+    get_object = VolunteerMixin.get_volunteer
+    
+    def get_success_url(self):
+        return reverse('volunteer:second-step', args=(self.object.user.username,))
+
+class VolunteerSecondStepView(VolunteerMixin, UpdateView):
+    model = Volunteer
+    form_class=VolunteerSecondStepForm
+    template_name='atados/volunteer/second-step.html'
+    get_object = VolunteerMixin.get_volunteer
+
+    def get_success_url(self):
+        return reverse('atados:home',)
