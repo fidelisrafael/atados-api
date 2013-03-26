@@ -1,8 +1,10 @@
 from django import http
 from django.utils import simplejson as json
 from django.http import Http404
+from django.views.generic import View
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.models import User
+from atados.core.models import City, Suburb
 from atados.volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados.volunteer.forms import RegistrationForm
 from atados.nonprofit.views import NonprofitDetailsView, NonprofitHomeView
@@ -49,3 +51,23 @@ class JSONResponseMixin(object):
 
     def convert_context_to_json(self, context):
         return json.dumps(context)
+
+class CityView(JSONResponseMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = [{
+            'id': city.pk,
+            'name': city.name,
+        } for city in City.objects.filter(state=kwargs['state'])]
+        context.insert(0, {'id': '', 'name': ''})
+        return self.render_to_response(context)
+
+class SuburbView(JSONResponseMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = [{
+            'id': suburb.pk,
+            'name': suburb.name,
+        } for suburb in Suburb.objects.filter(city=kwargs['city'])]
+        context.insert(0, {'id': '', 'name': ''})
+        return self.render_to_response(context)

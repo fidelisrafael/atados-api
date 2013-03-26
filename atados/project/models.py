@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from atados.core.models import Availability, Cause, Skill
+from atados.core.models import Availability, Cause, Skill, State, City, Suburb
 from atados.nonprofit.models import Nonprofit
 from atados.volunteer.models import Volunteer
 from sorl.thumbnail import ImageField
@@ -31,10 +31,13 @@ class Project(models.Model):
                                blank=True, null=True, default=None)
     addressline = models.CharField(_('Address line'), max_length=200,
                                   blank=True, null=True, default=None)
+    addressnumber = models.CharField(_('Address number'), max_length=10,
+                                  blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
-    city = models.CharField(_('City'), max_length=50,
-                            blank=True, null=True, default=None)
+    state = models.ForeignKey(State, blank=True, null=True, default=None)
+    city = models.ForeignKey(City, blank=True, null=True, default=None)
+    suburb = models.ForeignKey(Suburb, blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
     published = models.BooleanField(_("Published"), default=False)

@@ -150,15 +150,24 @@
         input[type=text], input[type=password], textarea {
           width: 270px;
         }
+        select {
+          width: 284px;
+        }
       }
       .span4 {
         input[type=text], input[type=password], textarea {
           width: 171px;
         }
+        select {
+          width: 185px;
+        }
       }
       .span8 {
         input[type=text], input[type=password], textarea {
           width: 369px;
+        }
+        select {
+          width: 383px;
         }
       }
     }

@@ -45,4 +45,34 @@
     return false;
   });
 
+  $('select[name="state"]').change(function(){
+    var state = $(this)
+    var city = state.closest('.location-fields').find('select[name="city"]');
+    city.closest('.city-field').hide();
+    if (state.val()) $.get('/city/' + state.val(), function(data) {
+      city.find('option').remove()
+      if (data.length > 1) {
+        $.each(data, function() {
+          city.append('<option value="' + this.id + '">' + this.name + '</option>')
+        });
+        city.closest('.city-field').show();
+      }
+    });
+  });
+
+  $('select[name="city"]').change(function(){
+    var city = $(this)
+    var suburb = city.closest('.location-fields').find('select[name="suburb"]');
+    suburb.closest('.suburb-field').hide();
+    if (city.val()) $.get('/suburb/' + city.val(), function(data) {
+      suburb.find('option').remove()
+      if (data.length > 1) {
+        $.each(data, function() {
+          suburb.append('<option value="' + this.id + '">' + this.name + '</option>')
+        });
+        suburb.closest('.suburb-field').show();
+      }
+    });
+  });
+
 }( window , window.jQuery ));

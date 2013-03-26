@@ -36,3 +36,32 @@ class Skill(models.Model):
 
     def __unicode__(self):
         return self.name
+
+class State(models.Model):
+    name = models.CharField(_('name'), max_length=30)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('state')
+
+class City(models.Model):
+    name = models.CharField(_('name'), max_length=50)
+    state = models.ForeignKey(State)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('city')
+
+class Suburb(models.Model):
+    name = models.CharField(_('name'), max_length=30)
+    city = models.ForeignKey(City)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('suburb')

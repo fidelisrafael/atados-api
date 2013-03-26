@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.utils.translation import ugettext_lazy as _
 from atados.core.forms import AuthenticationForm, SearchForm
-from atados.core.views import home
+from atados.core.views import home, CityView, SuburbView
 from haystack.views import SearchView
 
 urlpatterns = patterns(
@@ -35,4 +35,7 @@ urlpatterns = patterns(
 
     url(_(r'^about$'), direct_to_template,
         {'template': 'atados/core/about.html'}, name='about'),
+
+    url(r'^city/(?P<state>[0-9]+)$', CityView.as_view()),
+    url(r'^suburb/(?P<city>[0-9]+)$', SuburbView.as_view()),
 )
