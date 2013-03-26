@@ -227,3 +227,8 @@ HAYSTACK_CONNECTIONS = {
 SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Drupal legacy sucks :/
+PASSWORD_HASHERS = (
+        'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+        )
