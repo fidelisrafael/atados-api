@@ -53,7 +53,7 @@ msgstr "Telefone"
 
 #: forms.py:52
 msgid "Your username"
-msgstr "Seu nome"
+msgstr "Seu nome de usuário"
 
 #: forms.py:61
 msgid "Create a password"
