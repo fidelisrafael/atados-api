@@ -21,9 +21,12 @@ class Nonprofit(models.Model):
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
-    state = models.ForeignKey(State, blank=True, null=True, default=None)
-    city = models.ForeignKey(City, blank=True, null=True, default=None)
-    suburb = models.ForeignKey(Suburb, blank=True, null=True, default=None)
+    state = models.ForeignKey(State, verbose_name=_('State'), blank=True,
+                              null=True, default=None)
+    city = models.ForeignKey(City, verbose_name=_('City'), blank=True,
+                             null=True, default=None)
+    suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
+                               null=True, default=None)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
     def image_name(self, filename):

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 02:02-0300\n"
+"POT-Creation-Date: 2013-03-26 02:14-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr "examplo@examplo.com.br"
 msgid "Your e-mail"
 msgstr "Seu e-mail"
 
-#: forms.py:45 models.py:27
+#: forms.py:45 models.py:30
 msgid "Phone"
 msgstr "Telefone"
 
@@ -103,6 +103,18 @@ msgstr "Endereço"
 #: models.py:22
 msgid "Neighborhood"
 msgstr "Bairro"
+
+#: models.py:24
+msgid "State"
+msgstr "Estado"
+
+#: models.py:26
+msgid "City"
+msgstr "Cidade"
+
+#: models.py:28
+msgid "Suburb"
+msgstr "Zona"
 
 #: urls.py:15
 msgid "^nonprofit/sign-up$"
@@ -284,6 +296,3 @@ msgstr ""
 #: templates/atados/nonprofit/sign-up.html:63
 msgid "Registrar"
 msgstr ""
-
-#~ msgid "City"
-#~ msgstr "Cidade"
