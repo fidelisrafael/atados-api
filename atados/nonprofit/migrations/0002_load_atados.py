@@ -1,48 +1,32 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
+from django.contrib.auth.models import User
+from atados.nonprofit.models import Nonprofit
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Adding model 'Nonprofit'
-        db.create_table('nonprofit_nonprofit', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
-            ('details', self.gf('django.db.models.fields.TextField')(default=None, max_length=1024, null=True, blank=True)),
-            ('zipcode', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('addressline', self.gf('django.db.models.fields.CharField')(default=None, max_length=200, null=True, blank=True)),
-            ('addressnumber', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('neighborhood', self.gf('django.db.models.fields.CharField')(default=None, max_length=50, null=True, blank=True)),
-            ('state', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.State'], null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.City'], null=True, blank=True)),
-            ('suburb', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['core.Suburb'], null=True, blank=True)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
-            ('image', self.gf('sorl.thumbnail.fields.ImageField')(default=None, max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal('nonprofit', ['Nonprofit'])
+        user = User()
+        user.username = 'guedes'
+        user.first_name = 'Guedes'
+        user.email = 'guedes@atados.com.br'
+        user.set_password('asdfgh')
+        user.is_staff = True
+        user.is_active = True
+        user.is_superuser = True
+        user.save()
 
-        # Adding M2M table for field causes on 'Nonprofit'
-        db.create_table('nonprofit_nonprofit_causes', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('nonprofit', models.ForeignKey(orm['nonprofit.nonprofit'], null=False)),
-            ('cause', models.ForeignKey(orm['core.cause'], null=False))
-        ))
-        db.create_unique('nonprofit_nonprofit_causes', ['nonprofit_id', 'cause_id'])
-
+        nonprofit = Nonprofit()
+        nonprofit.user = user
+        nonprofit.name = 'Atados'
+        nonprofit.slug = 'atados'
+        nonprofit.save()
 
     def backwards(self, orm):
-        # Deleting model 'Nonprofit'
-        db.delete_table('nonprofit_nonprofit')
-
-        # Removing M2M table for field causes on 'Nonprofit'
-        db.delete_table('nonprofit_nonprofit_causes')
-
+        raise RuntimeError("Cannot reverse this migration.")
 
     models = {
         'auth.group': {
@@ -124,3 +108,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['nonprofit']
+    symmetrical = True

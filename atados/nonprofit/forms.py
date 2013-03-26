@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from bootstrap_toolkit.widgets import BootstrapTextInput
 from registration.forms import RegistrationForm as DefaultRegistrationForm
 from atados.nonprofit.models import Nonprofit
+from atados.core.forms import LocationFormMixin
 
 
 class RegistrationForm(DefaultRegistrationForm):
@@ -103,11 +104,7 @@ class NonprofitPictureForm(forms.ModelForm):
         model = Nonprofit
         fields = ('image',)
 
-class NonprofitFirstStepForm(forms.ModelForm):
-
-    phone = forms.CharField(max_length=20,
-                            widget=forms.TextInput(),
-                            label=_("Phone"))
+class NonprofitFirstStepForm(LocationFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(NonprofitFirstStepForm, self).__init__(*args, **kwargs)
@@ -115,9 +112,12 @@ class NonprofitFirstStepForm(forms.ModelForm):
         self.fields['causes'].empty_label = ""
         self.fields['causes'].label = _("Select one or more causes")
 
+        self.prepare_location_fields()
+
     class Meta:
         model = Nonprofit
-        fields = ('causes', 'zipcode', 'addressline', 'neighborhood', 'city', 'phone',)
+        fields = ('causes', 'zipcode', 'addressline', 'addressnumber',
+                  'neighborhood', 'state', 'city', 'suburb', 'phone',)
         
 class NonprofitSecondStepForm(forms.ModelForm):
     class Meta:

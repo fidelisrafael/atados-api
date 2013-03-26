@@ -7,6 +7,7 @@ from haystack.forms import SearchForm as HaystackSearchForm, model_choices
 from atados.nonprofit.models import Nonprofit
 from atados.project.models import ProjectDonation, ProjectWork
 from atados.volunteer.models import Volunteer
+from atados.core.models import State, City, Suburb
 
 
 SEARCH_TYPES = (
@@ -42,3 +43,26 @@ class AuthenticationForm(ContribAuthenticationForm):
     username = forms.CharField(label=_('E-mail'), max_length=30)
     rememberme = forms.BooleanField(label=_('Stay signed in'),
                                     initial=True, required=False)
+
+class LocationFormMixin(object):
+
+    def prepare_location_fields(self):
+        self.fields['state'].empty_label = ""
+        self.fields['city'].empty_label = ""
+        self.fields['suburb'].empty_label = ""
+
+        if self.is_bound:
+            if 'state' in self.data and self.data['state']:
+                self.fields['city'].queryset = City.objects.filter(state=self.data['state'])
+            else:
+                self.fields['city'].queryset = City.objects.none()
+        else:
+            self.fields['city'].queryset = City.objects.filter(state=self.initial.get('state'))
+
+        if self.is_bound:
+            if 'city' in self.data and self.data['city']:
+                self.fields['suburb'].queryset = Suburb.objects.filter(city=self.data['city'])
+            else:
+                self.fields['suburb'].queryset = Suburb.objects.none()
+        else:
+            self.fields['suburb'].queryset = Suburb.objects.filter(city=self.initial.get('city'))
