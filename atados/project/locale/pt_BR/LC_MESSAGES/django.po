@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-24 21:29-0300\n"
+"POT-Creation-Date: 2013-03-26 02:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,23 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:20
+#: forms.py:36
 msgid "example@example.com"
 msgstr "exemplo@examplo.com.br"
 
-#: forms.py:23
+#: forms.py:39
 msgid "Add more info about this project"
 msgstr "Adicione mais informações sobre este ato"
 
-#: forms.py:26
+#: forms.py:42
 msgid "Select one or more causes"
 msgstr "Selecione uma ou mais causas"
 
-#: forms.py:43
+#: forms.py:51
 msgid "This name (or a very similar) is already is use."
 msgstr "Este nome (ou um muito parecido) já está em uso."
 
-#: forms.py:57
+#: forms.py:65
 msgid "Select one or more skills"
 msgstr "Selecione uma ou mais habilidades"
 
@@ -63,48 +63,47 @@ msgid "Zip code"
 msgstr "CEP"
 
 #: models.py:32
-#: templates/atados/project/details-work.html:71
 msgid "Address line"
 msgstr "Logradouro"
 
-#: models.py:34 templates/atados/project/details-work.html:72
+#: models.py:34
+#, fuzzy
+msgid "Address number"
+msgstr "Logradouro"
+
+#: models.py:36 templates/atados/project/details-work.html:72
 msgid "Neighborhood"
 msgstr "Bairro"
 
-#: models.py:36 templates/atados/project/details-work.html:73
-msgid "City"
-msgstr "Cidade"
-
-#: models.py:38 templates/atados/project/details-work.html:17
+#: models.py:41 templates/atados/project/details-work.html:17
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:40
+#: models.py:43
 msgid "Published"
 msgstr "Publicado"
 
-#: models.py:41
+#: models.py:44
 msgid "Deleted"
 msgstr "Excluído"
 
-#: models.py:42
+#: models.py:45
 msgid "Deleted date"
 msgstr "Data que foi excluído"
 
-#: models.py:80
+#: models.py:83
 msgid "Collection made by the nonprofit"
 msgstr "Coleta realizada pela ONG"
 
-#: models.py:86 templates/atados/project/details-work.html:46
+#: models.py:89 templates/atados/project/details-work.html:46
 msgid "Prerequisites"
 msgstr "Pré-requisitos"
 
-#: models.py:88 templates/atados/project/details-job.html:8
+#: models.py:91 templates/atados/project/details-job.html:8
 msgid "Weekly hours"
 msgstr "Carga horária semanal"
 
-#: models.py:91
-#: templates/atados/project/details-work.html:67
+#: models.py:94 templates/atados/project/details-work.html:67
 msgid "This work can be done remotely."
 msgstr "Este trabalho pode ser feito a distância."
 
@@ -209,6 +208,15 @@ msgstr "Localização"
 #: templates/atados/project/details-work.html:69
 msgid "This work can't be done remotely."
 msgstr "Este ato não pode ser feito a distância"
+
+#: templates/atados/project/details-work.html:71
+#, fuzzy
+msgid "Addressline"
+msgstr "Logradouro"
+
+#: templates/atados/project/details-work.html:73
+msgid "City"
+msgstr "Cidade"
 
 #: templates/atados/project/details.html:4
 msgid "Voluntary work: "
