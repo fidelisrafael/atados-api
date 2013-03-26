@@ -37,6 +37,10 @@ nosetests.xml
 #virtualenv
 env
 
+#aws
+.ebextensions
+
 #atados
 atados.sqlite
 storage
+.elasticbeanstalk/
