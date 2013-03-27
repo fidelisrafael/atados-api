@@ -11,7 +11,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if os.environ['RDS_DB_NAME']:
+if 'RDS_DB_NAME' in os.environ:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',

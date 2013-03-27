@@ -10,7 +10,7 @@ from atados.core.models import State, City, Suburb, Skill, Availability, Cause
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        for slug in {'terms', 'privacy', 'security', 'about'}:
+        for slug in ['terms', 'privacy', 'security', 'about']:
             flatblock = FlatBlock()
             flatblock.content = flatblock.slug = slug
             flatblock.save()
@@ -22,17 +22,17 @@ class Migration(DataMigration):
                 availability.period = period
                 availability.save()
 
-        for name in {'Artes e Artesanato', 'Comunicação e Marketing',
+        for name in ['Artes e Artesanato', 'Comunicação e Marketing',
                      'Contrução e Reparos', 'Educação', 'Esporte',
                      'Gastronomia', 'Gestão', 'Informática e Eletrônicos',
-                     'Idiomas', 'Música e Dança', 'Outra'}:
+                     'Idiomas', 'Música e Dança', 'Outra']:
             skill = Skill()
             skill.name = name
             skill.save()
 
-        for name in {'Animal', 'Profissionalização', 'Saúde',
+        for name in ['Animal', 'Profissionalização', 'Saúde',
                      'Cultura', 'Meio ambiente', 'Direitos humanos',
-                     'Religião'}:
+                     'Religião']:
             cause = Cause()
             cause.name = name
             cause.save()
