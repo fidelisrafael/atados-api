@@ -229,12 +229,9 @@ THUMBNAIL_DEBUG = DEBUG
 #    'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
 #}
 
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-        'URL': 'http://localhost:8983/solr',
-    },
-}
+HAYSTACK_SITECONF = 'atados.search_indexes'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
 
 SOUTH_AUTO_FREEZE_APP = True
 
