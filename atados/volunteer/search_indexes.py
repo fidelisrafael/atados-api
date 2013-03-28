@@ -1,10 +1,9 @@
 import datetime
-from haystack import indexes
+from haystack import indexes, site
 from atados.volunteer.models import Volunteer
 
 
-class ProjectIndex(indexes.RealTimeSearchIndex, indexes.SearchIndex):
-    text = indexes.CharField(document=True, model_attr='user')
+class VolunteerIndex(indexes.RealTimeSearchIndex):
+    text = indexes.CharField(document=True, use_template=True)
 
-    def get_model(self):
-        return Volunteer
+site.register(Volunteer, VolunteerIndex)

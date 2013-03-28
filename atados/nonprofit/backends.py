@@ -26,16 +26,16 @@ class RegistrationBackend(DefaultBackend):
                                      user=new_user,
                                      request=request)
 
-        nonprofit = Nonprofit.objects.create(user=new_user)
-        nonprofit.name = kwargs['nonprofit_name']
-        nonprofit.slug = kwargs['slug']
-        nonprofit.save()
+        new_user.first_name = kwargs['first_name']
+        new_user.save();
 
         volunteer = Volunteer.objects.create(user=new_user)
         volunteer.save()
 
-        new_user.first_name = kwargs['first_name']
-        new_user.save();
+        nonprofit = Nonprofit.objects.create(user=new_user)
+        nonprofit.name = kwargs['nonprofit_name']
+        nonprofit.slug = kwargs['slug']
+        nonprofit.save()
 
         self.send_activation_email(new_user)
 

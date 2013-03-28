@@ -1,10 +1,9 @@
 import datetime
-from haystack import indexes
+from haystack import indexes, site
 from atados.nonprofit.models import Nonprofit
 
 
-class ProjectIndex(indexes.RealTimeSearchIndex, indexes.SearchIndex):
-    text = indexes.CharField(document=True, model_attr='name')
+class NonprofitIndex(indexes.RealTimeSearchIndex):
+    text = indexes.CharField(document=True, use_template=True)
 
-    def get_model(self):
-        return Nonprofit
+site.register(Nonprofit, NonprofitIndex)

@@ -1,16 +1,18 @@
 import datetime
-from haystack import indexes
-from atados.project.models import ProjectWork, ProjectDonation
+from django.db.models import signals
+from haystack import indexes, site
+from atados.project.models import (ProjectDonation, ProjectWork, ProjectJob)
 
 
-class ProjectDonationIndex(indexes.RealTimeSearchIndex, indexes.SearchIndex):
-    text = indexes.CharField(document=True, model_attr='details')
+class ProjectJobIndex(indexes.RealTimeSearchIndex):
+    text = indexes.CharField(document=True, use_template=True)
 
-    def get_model(self):
-        return ProjectDonation
+class ProjectWorkIndex(indexes.RealTimeSearchIndex):
+    text = indexes.CharField(document=True, use_template=True)
 
-class ProjectWorkIndex(indexes.RealTimeSearchIndex, indexes.SearchIndex):
-    text = indexes.CharField(document=True, model_attr='details')
+class ProjectDonationIndex(indexes.RealTimeSearchIndex):
+    text = indexes.CharField(document=True, use_template=True)
 
-    def get_model(self):
-        return ProjectWork
+site.register(ProjectJob, ProjectJobIndex)
+site.register(ProjectWork, ProjectWorkIndex)
+site.register(ProjectDonation, ProjectDonationIndex)

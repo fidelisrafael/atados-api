@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
 from django.utils.translation import ugettext_lazy as _
 from haystack.forms import SearchForm as HaystackSearchForm, model_choices
 from atados.nonprofit.models import Nonprofit
-from atados.project.models import ProjectDonation, ProjectWork
+from atados.project.models import ProjectDonation, ProjectWork, ProjectJob
 from atados.volunteer.models import Volunteer
 from atados.core.models import State, City, Suburb
 
@@ -32,6 +32,7 @@ class SearchForm(HaystackSearchForm):
             if 'Project' in self.cleaned_data['types'] or not search_models:
                 search_models.append(ProjectDonation)
                 search_models.append(ProjectWork)
+                search_models.append(ProjectJob)
 
         return search_models
 
