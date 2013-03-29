@@ -32,7 +32,7 @@
             <div class="span3">
               <form class="form-search" action="{% url atados:search %}" method="get">
                 <div class="input-append">
-                  <input type="text" class="search-query" name="q" value="{{ form.q.value }}" placeholder="{% trans "Buscar" %}">
+                  <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}">
                   <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
               </form>

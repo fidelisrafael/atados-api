@@ -12,7 +12,7 @@
     <h1>{% trans "Search" %}</h1>
     <form class="form-search" method="get" action="{% url atados:search %}">
       <div class="input-append">
-        <input type="text" class="input-xxlarge search-query" name="q" value="{{ form.q.value }}" />
+        <input type="text" class="input-xxlarge search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" />
         <button type="submit" class="btn">{% trans "Search" %}</button>
         {% for type in form.types.value %}
         <input type="hidden" name="types" value="{{ type }}" />
@@ -25,13 +25,13 @@
     <div class="span3">
       <ul class="nav nav-tabs nav-stacked">
         <li{% if 'Project' in form.types.value or not form.types.value %} class="active"{% endif %}>
-        <a href="?q={{ form.q.value }}&amp;types=Project">{% trans "Projects" %}</a>
+        <a href="?q={{ form.q.value|default_if_none:"" }}&amp;types=Project">{% trans "Projects" %}</a>
         </li>
         <li{% if 'Nonprofit' in form.types.value %} class="active"{% endif %}>
-        <a href="?q={{ form.q.value }}&amp;types=Nonprofit">{% trans "Nonprofits" %}</a>
+        <a href="?q={{ form.q.value|default_if_none:"" }}&amp;types=Nonprofit">{% trans "Nonprofits" %}</a>
         </li>
         <li{% if 'Volunteer' in form.types.value %} class="active"{% endif %}>
-        <a href="?q={{ form.q.value }}&amp;types=Volunteer">{% trans "Volunteers" %}</a>
+        <a href="?q={{ form.q.value|default_if_none:"" }}&amp;types=Volunteer">{% trans "Volunteers" %}</a>
         </li>
       </ul>
     </div>
