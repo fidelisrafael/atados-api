@@ -23,7 +23,7 @@ class Availability(models.Model):
     period = models.PositiveSmallIntegerField(_('period'), choices=PERIODS)
 
     def __unicode__(self):
-        return _('%(weekday)s at %(period)s') % (self.get_weekday_display(), self.get_period_display())
+        return _('%(weekday)s at %(period)s') % {'weekday': self.get_weekday_display(), 'period': self.get_period_display()}
 
 class Cause(models.Model):
     name = models.CharField(_('name'), max_length=30)
