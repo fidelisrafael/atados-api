@@ -71,22 +71,16 @@
           {% endif %}
           {% endwith %}
         </div>
-        <ul class="results">
+        <ul class="results row">
           {% for result in page.object_list %}
-          <li>
-          <div class="row">
-            <div class="span1">
-              {% thumbnail result.object.image "60x60" crop="center" as im %}
+          <li class="span3">
+              {% thumbnail result.object.image "220x220" crop="center" as im %}
               <img class="img-rounded" alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
               {% empty %}
-              <div class="img-rounded icon project small"></div>
+              <div class="img-rounded icon project large"></div>
               {% endthumbnail %}
-            </div>
-            <div class="span8">
               <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
-              <p class="description">{{ result.object.details }}</p>
-            </div>
-          </div>
+              <p class="description">{{ result.object.details|truncatechars:130 }}</p>
           </li>
           {% endfor %}
         </ul>
