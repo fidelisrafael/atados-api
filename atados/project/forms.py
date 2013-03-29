@@ -14,20 +14,6 @@ from atados.project.models import (Project,
 class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
 
     def __init__(self, nonprofit, user, *args, **kwargs):
-        kwargs['initial'].update({
-            'causes': set([cause.id for cause in nonprofit.causes.all()]),
-            'zipcode': nonprofit.zipcode,
-            'addressline': nonprofit.addressline,
-            'addressnumber': nonprofit.addressnumber,
-            'neighborhood': nonprofit.neighborhood,
-            'responsible': user.first_name,
-            'email': user.email,
-            'phone': nonprofit.phone,
-            'state': nonprofit.state,
-            'city': nonprofit.city,
-            'suburb': nonprofit.suburb,
-        });
-
         super(ProjectCreateForm, self).__init__(*args, **kwargs)
 
         self.nonprofit = nonprofit

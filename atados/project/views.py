@@ -105,7 +105,22 @@ class ProjectUpdateView(ProjectModelMixin, ProjectMixin, UpdateView):
     get_object = ProjectMixin.get_project
 
 class ProjectCreateView(ProjectModelMixin, CreateView):
-    pass
+    def get_initial(self):
+        nonprofit = self.get_nonprofit()
+
+        return {
+            'causes': set([cause.id for cause in nonprofit.causes.all()]),
+            'zipcode': nonprofit.zipcode,
+            'addressline': nonprofit.addressline,
+            'addressnumber': nonprofit.addressnumber,
+            'neighborhood': nonprofit.neighborhood,
+            'responsible': self.request.user.first_name,
+            'email': self.request.user.email,
+            'phone': nonprofit.phone,
+            'state': nonprofit.state,
+            'city': nonprofit.city,
+            'suburb': nonprofit.suburb,
+        };
 
 class ProjectDonationCreateView(ProjectCreateView):
     form_class=ProjectDonationCreateForm
