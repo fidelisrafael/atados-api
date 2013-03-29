@@ -236,7 +236,7 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
 
 HAYSTACK_SITECONF = 'atados.search_indexes'
 HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr'
 
 SOUTH_AUTO_FREEZE_APP = True
 
