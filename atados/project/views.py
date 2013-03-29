@@ -52,11 +52,18 @@ class ProjectMixin(NonprofitMixin):
                     deleted=False)
             except ProjectWork.DoesNotExist:
                 try:
-                    self.project = ProjectDonation.objects.get(
+                    self.project = ProjectJob.objects.get(
                         nonprofit=self.get_nonprofit(),
-                        slug=self.kwargs.get('project'))
-                except ProjectDonation.DoesNotExist:
-                    raise Http404
+                        slug=self.kwargs.get('project'),
+                        deleted=False)
+                except ProjectJob.DoesNotExist:
+                    try:
+                        self.project = ProjectDonation.objects.get(
+                            nonprofit=self.get_nonprofit(),
+                            slug=self.kwargs.get('project'),
+                            deleted=False)
+                    except ProjectDonation.DoesNotExist:
+                        raise Http404
 
         return self.project
 
@@ -163,11 +170,10 @@ class ProjectDetailsView(ProjectMixin, DetailView):
     def get_template_names(self):
         if isinstance(self.object, ProjectDonation):
             return 'atados/project/details-donation.html'
+        if isinstance(self.object, ProjectJob):
+            return 'atados/project/details-job.html'
         if isinstance(self.object, ProjectWork):
-            if self.object.weekly_hours > 0:
-                return 'atados/project/details-job.html'
-            else:
-                return 'atados/project/details-work.html'
+            return 'atados/project/details-work.html'
         raise Http404
 
     get_object = ProjectMixin.get_project

@@ -96,9 +96,16 @@ class ProjectWork(Project):
     can_be_done_remotely = models.BooleanField(
             _('This work can be done remotely.'))
 
-class ProjectJob(ProjectWork):
+class ProjectJob(Project):
     objects = ProjectManager()
     project_type = 'job'
+    availabilities = models.ManyToManyField(Availability)
+    prerequisites = models.TextField(_('Prerequisites'), max_length=1024)
+    skills = models.ManyToManyField(Skill)
+    weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
+                                        blank=True, null=True)
+    can_be_done_remotely = models.BooleanField(
+            _('This work can be done remotely.'))
 
 class Apply(models.Model):
     volunteer = models.ForeignKey(Volunteer)

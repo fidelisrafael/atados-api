@@ -75,9 +75,28 @@ class Migration(SchemaMigration):
 
         # Adding model 'ProjectJob'
         db.create_table('project_projectjob', (
-            ('projectwork_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['project.ProjectWork'], unique=True, primary_key=True)),
+            ('project_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['project.Project'], unique=True, primary_key=True)),
+            ('prerequisites', self.gf('django.db.models.fields.TextField')(max_length=1024)),
+            ('weekly_hours', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
+            ('can_be_done_remotely', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('project', ['ProjectJob'])
+
+        # Adding M2M table for field availabilities on 'ProjectJob'
+        db.create_table('project_projectjob_availabilities', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('projectjob', models.ForeignKey(orm['project.projectjob'], null=False)),
+            ('availability', models.ForeignKey(orm['core.availability'], null=False))
+        ))
+        db.create_unique('project_projectjob_availabilities', ['projectjob_id', 'availability_id'])
+
+        # Adding M2M table for field skills on 'ProjectJob'
+        db.create_table('project_projectjob_skills', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('projectjob', models.ForeignKey(orm['project.projectjob'], null=False)),
+            ('skill', models.ForeignKey(orm['core.skill'], null=False))
+        ))
+        db.create_unique('project_projectjob_skills', ['projectjob_id', 'skill_id'])
 
         # Adding model 'Apply'
         db.create_table('project_apply', (
@@ -109,6 +128,12 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ProjectJob'
         db.delete_table('project_projectjob')
+
+        # Removing M2M table for field availabilities on 'ProjectJob'
+        db.delete_table('project_projectjob_availabilities')
+
+        # Removing M2M table for field skills on 'ProjectJob'
+        db.delete_table('project_projectjob_skills')
 
         # Deleting model 'Apply'
         db.delete_table('project_apply')
@@ -187,15 +212,18 @@ class Migration(SchemaMigration):
         'nonprofit.nonprofit': {
             'Meta': {'object_name': 'Nonprofit'},
             'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['core.Cause']", 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.City']", 'null': 'True', 'blank': 'True'}),
             'details': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('sorl.thumbnail.fields.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'phone': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.State']", 'null': 'True', 'blank': 'True'}),
+            'suburb': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.Suburb']", 'null': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
         },
@@ -235,8 +263,13 @@ class Migration(SchemaMigration):
             'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['project.Project']", 'unique': 'True', 'primary_key': 'True'})
         },
         'project.projectjob': {
-            'Meta': {'object_name': 'ProjectJob', '_ormbases': ['project.ProjectWork']},
-            'projectwork_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['project.ProjectWork']", 'unique': 'True', 'primary_key': 'True'})
+            'Meta': {'object_name': 'ProjectJob', '_ormbases': ['project.Project']},
+            'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Availability']", 'symmetrical': 'False'}),
+            'can_be_done_remotely': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'prerequisites': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
+            'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['project.Project']", 'unique': 'True', 'primary_key': 'True'}),
+            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['core.Skill']", 'symmetrical': 'False'}),
+            'weekly_hours': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         'project.projectwork': {
             'Meta': {'object_name': 'ProjectWork', '_ormbases': ['project.Project']},
@@ -249,9 +282,18 @@ class Migration(SchemaMigration):
         },
         'volunteer.volunteer': {
             'Meta': {'object_name': 'Volunteer'},
+            'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
+            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['core.Cause']", 'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.City']", 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('sorl.thumbnail.fields.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['core.Skill']", 'null': 'True', 'blank': 'True'}),
+            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.State']", 'null': 'True', 'blank': 'True'}),
+            'suburb': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['core.Suburb']", 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
         }
     }
 
