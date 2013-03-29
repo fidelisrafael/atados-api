@@ -1,3 +1,4 @@
+import os
 from django import http
 from django.utils import simplejson as json
 from django.http import Http404
@@ -22,7 +23,8 @@ def home(request, *args, **kwargs):
             return VolunteerHomeView.as_view()(request, *args, **kwargs)
 
     return direct_to_template(request, 'atados/core/home.html',
-                              {'form': RegistrationForm()})
+                              {'form': RegistrationForm(),
+                               'environ': os.environ})
 
 def slug(request, *args, **kwargs):
     try:
