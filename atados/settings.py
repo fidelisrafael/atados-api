@@ -217,14 +217,17 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "atados.volunteer.context_processors.volunteer",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_PORT = 587
-#EMAIL_HOST_USER = 'no-reply@atados.com.br'
-#EMAIL_HOST_PASSWORD = 'yokomizo'
-#EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
+if all(var in AWS_EB for var in('email_user', 'email_password')):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = AWS_EB['email_user']
+    EMAIL_HOST_PASSWORD = AWS_EB['email_password']
+    EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
 
 THUMBNAIL_DEBUG = DEBUG
 
