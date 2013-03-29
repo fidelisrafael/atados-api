@@ -2,11 +2,17 @@
 # Django settings for atados project.
 import os
 
-DEBUG = os.getenv('ATADOS_DEBUG', True)
+AWS_EB = []
+if 'PARAM1' in os.environ:
+    import json
+    AWS_EB = json.loads(os.environ['PARAM1'])
+
+
+DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Rogério Yokomizo', 'me@ro.ger.io'),
 )
 
 MANAGERS = ADMINS
@@ -222,6 +228,12 @@ DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
 
 THUMBNAIL_DEBUG = DEBUG
 
+# Drupal legacy sucks :/
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+)
+
+
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
                                       'AWS_SECRET_KEY')):
@@ -236,22 +248,21 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
 
 HAYSTACK_SITECONF = 'atados.search_indexes'
 HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr'
+
+if 'solr_endpoint' in AWS_EB:
+    HAYSTACK_SOLR_URL = AWS_EB['solr_endpoint']
+else:
+    HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
 
 SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Drupal legacy sucks :/
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-)
-
-if 'MEMCACHED_ENDPOINT' in os.environ:
+if 'memcached_endpoint' in AWS_EB:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': os.environ['MEMCACHED_ENDPOINT']
+            'LOCATION': AWS_EB['memcached_endpoint']
         },
     }
 else:

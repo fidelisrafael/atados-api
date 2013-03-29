@@ -1,0 +1,1 @@
+{ "debug": true, "solr_endpoint": "http://localhost:8983/solr", "memcached_endpoint": "localhost:11211" }
