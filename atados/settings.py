@@ -2,7 +2,7 @@
 # Django settings for atados project.
 import os
 
-DEBUG = True
+DEBUG = os.getenv('ATADOS_DEBUG', True)
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -222,14 +222,15 @@ DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
 
 THUMBNAIL_DEBUG = DEBUG
 
-#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-#AWS_ACCESS_KEY_ID = 'AKIAIQ42GPO6DJ7O2THA'
-#AWS_SECRET_ACCESS_KEY = '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'
-#AWS_STORAGE_BUCKET_NAME = 'atados'
-#AWS_S3_SECURE_URLS = False
-#AWS_HEADERS = {
-#    'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
-#}
+if 'AWS_STORAGE_BUCKET_NAME' in os.environ:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRETE_ACCESS_KEY']
+    AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+    AWS_S3_SECURE_URLS = False
+    AWS_HEADERS = {
+        'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
+    }
 
 HAYSTACK_SITECONF = 'atados.search_indexes'
 HAYSTACK_SEARCH_ENGINE = 'solr'
@@ -241,20 +242,25 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # Drupal legacy sucks :/
 PASSWORD_HASHERS = (
-        'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-        )
+    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+)
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake'
-    },
-    'file': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/var/tmp/django_cache',
+if 'MEMCACHED_ENDPOINT' in os.environ:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': os.environ['MEMCACHED_ENDPOINT']
+        },
     }
-}
-CACHE_MIDDLEWARE_ALIAS = 'file'
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake'
+        },
+    }
+
+CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
