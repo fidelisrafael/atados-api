@@ -268,6 +268,8 @@ if 'memcached_endpoint' in AWS_EB:
             'LOCATION': AWS_EB['memcached_endpoint']
         },
     }
+
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 else:
     CACHES = {
         'default': {
