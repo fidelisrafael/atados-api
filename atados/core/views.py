@@ -6,10 +6,13 @@ from django.views.generic import View
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.models import User
 from atados.core.models import City, Suburb
+from atados.core.forms import SearchForm
 from atados.volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados.volunteer.forms import RegistrationForm
 from atados.nonprofit.views import NonprofitDetailsView, NonprofitHomeView
 from atados.nonprofit.models import Nonprofit
+from haystack.views import FacetedSearchView
+from haystack.query import SearchQuerySet
 
 
 template_name = 'atados/core/home.html'
@@ -73,3 +76,10 @@ class SuburbView(JSONResponseMixin, View):
         } for suburb in Suburb.objects.filter(city=kwargs['city'])]
         context.insert(0, {'id': '', 'name': ''})
         return self.render_to_response(context)
+
+class SearchView(FacetedSearchView):
+
+    def __init__(self, *args, **kwargs):
+        kwargs['form_class'] = SearchForm
+        kwargs['searchqueryset'] = SearchQuerySet().facet('causes')
+        super(FacetedSearchView, self).__init__(*args, **kwargs)

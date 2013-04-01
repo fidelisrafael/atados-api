@@ -104,7 +104,23 @@
     <dynamicField name="*_dt" type="date"    indexed="true"  stored="true"/>
     
 
+    <field name="city" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="city_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="state_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="suburb_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="causes_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
+    <field name="suburb" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="state" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="causes" type="text" indexed="true" stored="true" multiValued="true" />
 
   </fields>
 

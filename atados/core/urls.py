@@ -2,9 +2,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import login_required
 from django.views.generic.simple import direct_to_template, redirect_to
 from django.utils.translation import ugettext_lazy as _
-from atados.core.forms import AuthenticationForm, SearchForm
-from atados.core.views import home, CityView, SuburbView
-from haystack.views import SearchView
+from atados.core.forms import AuthenticationForm
+from atados.core.views import home, CityView, SuburbView, SearchView
+
 
 urlpatterns = patterns(
     '',
@@ -22,7 +22,7 @@ urlpatterns = patterns(
     url(_(r'^sign-out$'), 'django.contrib.auth.views.logout',
         {'next_page': _('/sign-in')}, name='sign-out'),
 
-    url(_(r'^search$'), SearchView(form_class=SearchForm), name='search'),
+    url(_(r'^search$'), SearchView(), name='search'),
 
     url(_(r'^terms$'), direct_to_template,
         {'template': 'atados/core/terms.html'}, name='terms'),

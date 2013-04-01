@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import (
     AuthenticationForm as ContribAuthenticationForm)
 from django.utils.translation import ugettext_lazy as _
-from haystack.forms import SearchForm as HaystackSearchForm, model_choices
+from haystack.forms import FacetedSearchForm, model_choices
 from atados.nonprofit.models import Nonprofit
 from atados.project.models import ProjectDonation, ProjectWork, ProjectJob
 from atados.volunteer.models import Volunteer
@@ -15,7 +15,7 @@ SEARCH_TYPES = (
         ('Project', 'Project'),
         ('Volunteer', 'Volunteer'),)
 
-class SearchForm(HaystackSearchForm):
+class SearchForm(FacetedSearchForm):
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['types'] = forms.MultipleChoiceField(choices=SEARCH_TYPES, required=False, label=_('Search in'), widget=forms.CheckboxSelectMultiple)

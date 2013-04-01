@@ -29,6 +29,15 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
 
         self.prepare_location_fields()
 
+    def save(self, commit=True):
+        instance = super(ProjectCreateForm, self).save(commit)
+
+        # save instance again to trigger RealTimeSearchIndex with m2m updated
+        if commit:
+            instance.save()
+
+        return instance
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         slug = slugify(name)
