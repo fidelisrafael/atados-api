@@ -5,7 +5,7 @@ from django.http import Http404
 from django.views.generic import View
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.models import User
-from atados.core.models import City, Suburb
+from atados.core.models import City, Suburb, Cause
 from atados.core.forms import SearchForm
 from atados.volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados.volunteer.forms import RegistrationForm
@@ -82,16 +82,31 @@ class CauseMixin(object):
 
     def __init__(self, *args, **kwargs):
         super(CauseMixin, self).__init__(*args, **kwargs)
-        self.cause_list = Cause.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super(CauseMixin, self).get_context_data(**kwargs)
         context.update({'cause_list': self.cause_list})
         return context
 
-class SearchView(FacetedSearchView, CauseMixin):
+class SearchView(FacetedSearchView):
 
     def __init__(self, *args, **kwargs):
         kwargs['form_class'] = SearchForm
         kwargs['searchqueryset'] = SearchQuerySet().facet('causes')
         super(FacetedSearchView, self).__init__(*args, **kwargs)
+
+    def extra_context(self):
+        context = super(SearchView, self).extra_context()
+        cause_list = []
+        for cause in Cause.objects.all():
+            if 'fields' in context['facets']:
+                total = dict(context['facets']['fields']['causes']).get(unicode(cause.id), 0)
+            else:
+                total = 0
+            cause_list.append({
+                'id': cause.id,
+                'label': cause.name,
+                'total': total,
+            })
+        context.update({'cause_list': cause_list})
+        return context
