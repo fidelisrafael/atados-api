@@ -7,9 +7,9 @@ from atados.project.models import (Project, ProjectDonation, ProjectWork, Projec
 class ProjectIndex(indexes.RealTimeSearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     causes = indexes.MultiValueField(faceted=True)
-    state = indexes.CharField(model_attr='state', faceted=True)
-    city = indexes.CharField(model_attr='city', faceted=True)
-    suburb = indexes.CharField(model_attr='suburb', faceted=True)
+    state = indexes.CharField(model_attr='state', faceted=True, null=True)
+    city = indexes.CharField(model_attr='city', faceted=True, null=True)
+    suburb = indexes.CharField(model_attr='suburb', faceted=True, null=True)
 
     def prepare_causes(self, obj):
         return [cause.id for cause in obj.causes.all()]
