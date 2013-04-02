@@ -44,7 +44,13 @@
           {% trans "Causes" %}
           <ul class="nav nav-pills nav-stacked">
             {% for cause in cause_list %}
-            <li><a href="{% search_query cause=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="badge badge-info">{{ cause.total }}</span>{% endif %}</a></li>
+            {% if cause.id|safe in form.causes.value|safe %}
+            <li class="active"><a href="{% search_query %}">{{ cause.label }}</a></li>
+            {% else %}
+            <li>
+              <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="badge badge-info">{{ cause.total }}</span>{% endif %}</a>
+            </li>
+            {% endif %}
             {% endfor %}
           </ul>
         </div>

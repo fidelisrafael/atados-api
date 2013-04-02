@@ -7,7 +7,7 @@ from haystack.forms import FacetedSearchForm, model_choices
 from atados.nonprofit.models import Nonprofit
 from atados.project.models import ProjectDonation, ProjectWork, ProjectJob
 from atados.volunteer.models import Volunteer
-from atados.core.models import State, City, Suburb
+from atados.core.models import State, City, Suburb, Cause
 
 
 SEARCH_TYPES = (
@@ -16,6 +16,10 @@ SEARCH_TYPES = (
         ('Volunteer', 'Volunteer'),)
 
 class SearchForm(FacetedSearchForm):
+    causes = forms.MultipleChoiceField(required=False,
+                                       widget=forms.CheckboxSelectMultiple,
+                                       choices=((cause.id, cause.name) for cause in Cause.objects.all()))
+
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
         self.fields['types'] = forms.MultipleChoiceField(choices=SEARCH_TYPES, required=False, label=_('Search in'), widget=forms.CheckboxSelectMultiple)
@@ -38,6 +42,9 @@ class SearchForm(FacetedSearchForm):
 
     def search(self):
         sqs = super(SearchForm, self).search()
+        if 'causes' in self.cleaned_data:
+            for cause in self.cleaned_data['causes']:
+                sqs = sqs.narrow(u'causes_exact:"%s"' % sqs.query.clean(cause))
         return sqs.models(*self.get_models())
 
 class AuthenticationForm(ContribAuthenticationForm):
