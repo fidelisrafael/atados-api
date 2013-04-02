@@ -93,7 +93,7 @@ msgstr "CEP"
 
 #: models.py:18
 msgid "Address line"
-msgstr "Endereço"
+msgstr "Logradouro"
 
 #: models.py:20
 #, fuzzy
@@ -205,7 +205,7 @@ msgstr "Causas"
 
 #: templates/atados/nonprofit/first-step.html:22
 msgid "Location"
-msgstr "Endereço"
+msgstr "Localização"
 
 #: templates/atados/nonprofit/first-step.html:26
 msgid "Contact"
