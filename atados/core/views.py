@@ -77,7 +77,19 @@ class SuburbView(JSONResponseMixin, View):
         context.insert(0, {'id': '', 'name': ''})
         return self.render_to_response(context)
 
-class SearchView(FacetedSearchView):
+class CauseMixin(object):
+    cause_list = None
+
+    def __init__(self, *args, **kwargs):
+        super(CauseMixin, self).__init__(*args, **kwargs)
+        self.cause_list = Cause.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(CauseMixin, self).get_context_data(**kwargs)
+        context.update({'cause_list': self.cause_list})
+        return context
+
+class SearchView(FacetedSearchView, CauseMixin):
 
     def __init__(self, *args, **kwargs):
         kwargs['form_class'] = SearchForm
