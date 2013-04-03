@@ -108,6 +108,8 @@
 
     <field name="city_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
+    <field name="skills_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
     <field name="state_exact" type="string" indexed="true" stored="true" multiValued="false" />
 
     <field name="text" type="text" indexed="true" stored="true" multiValued="false" />
@@ -119,6 +121,8 @@
     <field name="suburb" type="text" indexed="true" stored="true" multiValued="false" />
 
     <field name="state" type="text" indexed="true" stored="true" multiValued="false" />
+
+    <field name="skills" type="text" indexed="true" stored="true" multiValued="true" />
 
     <field name="causes" type="text" indexed="true" stored="true" multiValued="true" />
 

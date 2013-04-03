@@ -1,8 +1,12 @@
 .atados {
 
   $blue:#25b3ef;
+  $grayDarker:#222;
+  $grayDark:#333;
   $gray:#555;
-  $dark-blue:darken($blue, 10%);
+  $grayLight:#999;
+  $grayLighter:#eee;
+  $darkBlue:darken($blue, 10%);
 
   min-width:1000px;
   color:$gray;
@@ -12,7 +16,7 @@
   }
 
   h1 a, h1 a, h2 a, a h2 {
-    color:$dark-blue;
+    color:$darkBlue;
   }
 
   p.block-message {
@@ -32,7 +36,7 @@
   }
 
   .btn-primary {
-    background:$dark-blue;
+    background:$darkBlue;
   }
 
   .btn-danger {
@@ -42,7 +46,7 @@
   .dropdown-menu {
     .active > a,
     li > a:hover {
-      background:$dark-blue;
+      background:$darkBlue;
     }
   }
 
@@ -206,11 +210,11 @@
     left:0;
     right:0;
     background:$blue;
-    //background-image: -moz-linear-gradient(top, $blue, $dark-blue);
-    //background-image: -webkit-gradient(linear, 0 0, 0 100%, from($blue), to($dark-blue));
-    //background-image: -webkit-linear-gradient(top, $blue, $dark-blue);
-    //background-image: -o-linear-gradient(top, $blue, $dark-blue);
-    //background-image: linear-gradient(to bottom, $blue, $dark-blue);
+    //background-image: -moz-linear-gradient(top, $blue, $darkBlue);
+    //background-image: -webkit-gradient(linear, 0 0, 0 100%, from($blue), to($darkBlue));
+    //background-image: -webkit-linear-gradient(top, $blue, $darkBlue);
+    //background-image: -o-linear-gradient(top, $blue, $darkBlue);
+    //background-image: linear-gradient(to bottom, $blue, $darkBlue);
     //background-repeat: repeat-x;
     font-size:14px;
     height: 60px;
@@ -555,7 +559,7 @@
       }
       li.active {
         a {
-          background:$dark-blue;
+          background:$darkBlue;
           color:#fff;
         }
       }
@@ -703,7 +707,7 @@
 
       &.active {
         a {
-          background:$dark-blue;
+          background:$darkBlue;
           color:#fff;
           text-decoration:none;
         }
@@ -729,15 +733,19 @@
       }
     }
     .nav  {
-      li.active {
-        a {
-          background:$dark-blue;
-          color:#fff;
+      li {
+        &.active {
+          a {
+            background:$darkBlue;
+            color:#fff;
+          }
         }
-      }
 
-      .badge {
-        float: right;
+        .results-total {
+          float:right;
+          font-size:13px;
+          color:$grayLight;
+        }
       }
     }
 

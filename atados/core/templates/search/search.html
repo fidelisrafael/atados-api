@@ -48,7 +48,7 @@
             <li class="active"><a href="{% search_query %}">{{ cause.label }}</a></li>
             {% else %}
             <li>
-              <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="badge badge-info">{{ cause.total }}</span>{% endif %}</a>
+              <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="results-total">{{ cause.total }}</span>{% endif %}</a>
             </li>
             {% endif %}
             {% endfor %}
@@ -58,6 +58,17 @@
       <div class="row">
         <div class="span3">
           {% trans "Skills" %}
+          <ul class="nav nav-pills nav-stacked">
+            {% for skill in skill_list %}
+            {% if skill.id|safe in form.skills.value|safe %}
+            <li class="active"><a href="{% search_query %}">{{ skill.label }}</a></li>
+            {% else %}
+            <li>
+              <a href="{% search_query skills=skill.id %}">{{ skill.label }} {% if skill.total > 0 %}<span class="results-total">{{ skill.total }}</span>{% endif %}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
         </div>
       </div>
       <div class="row">

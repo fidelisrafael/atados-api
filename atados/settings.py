@@ -250,7 +250,7 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
     }
 
 HAYSTACK_SITECONF = 'atados.search_indexes'
-HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
 
 if 'solr_endpoint' in AWS_EB:
     HAYSTACK_SOLR_URL = AWS_EB['solr_endpoint']

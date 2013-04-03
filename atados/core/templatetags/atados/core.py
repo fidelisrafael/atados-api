@@ -70,6 +70,12 @@ class SearchQueryNode(template.Node):
         if context['form']['types'].value():
             params['types'] = context['form']['types'].value()[0]
 
+        if context['form']['causes'].value():
+            params['causes'] = context['form']['causes'].value()[0]
+
+        if context['form']['skills'].value():
+            params['skills'] = context['form']['skills'].value()[0]
+
         params = dict(params.items() + kwargs.items())
 
         params = ['%s=%s' % (key, value) for key, value in params.iteritems() if value is not None]

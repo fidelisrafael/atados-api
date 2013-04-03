@@ -15,7 +15,7 @@ class ProjectIndex(indexes.RealTimeSearchIndex):
         return [cause.id for cause in obj.causes.all()]
 
 
-class SkillsIndexMixin(object):
+class SkillsIndexMixin(indexes.RealTimeSearchIndex):
     skills = indexes.MultiValueField(faceted=True)
 
     def prepare_skills(self, obj):
@@ -25,10 +25,10 @@ class SkillsIndexMixin(object):
 class ProjectDonationIndex(ProjectIndex):
     pass
     
-class ProjectWorkIndex(ProjectIndex, SkillsIndexMixin):
+class ProjectWorkIndex(SkillsIndexMixin, ProjectIndex):
     pass
 
-class ProjectJobIndex(ProjectIndex, SkillsIndexMixin):
+class ProjectJobIndex(SkillsIndexMixin, ProjectIndex):
     pass
 
 site.register(ProjectJob, ProjectJobIndex)

@@ -5,7 +5,7 @@ from django.http import Http404
 from django.views.generic import View
 from django.views.generic.simple import direct_to_template
 from django.contrib.auth.models import User
-from atados.core.models import City, Suburb, Cause
+from atados.core.models import City, Suburb, Cause, Skill
 from atados.core.forms import SearchForm
 from atados.volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados.volunteer.forms import RegistrationForm
@@ -92,11 +92,10 @@ class SearchView(FacetedSearchView):
 
     def __init__(self, *args, **kwargs):
         kwargs['form_class'] = SearchForm
-        kwargs['searchqueryset'] = SearchQuerySet().facet('causes')
+        kwargs['searchqueryset'] = SearchQuerySet().facet('causes').facet('skills')
         super(FacetedSearchView, self).__init__(*args, **kwargs)
 
-    def extra_context(self):
-        context = super(SearchView, self).extra_context()
+    def get_cause_list(self, context):
         cause_list = []
         for cause in Cause.objects.all():
             if 'fields' in context['facets']:
@@ -108,5 +107,26 @@ class SearchView(FacetedSearchView):
                 'label': cause.name,
                 'total': total,
             })
-        context.update({'cause_list': cause_list})
+        return cause_list
+
+    def get_skill_list(self, context):
+        skill_list = []
+        for skill in Skill.objects.all():
+            if 'fields' in context['facets']:
+                total = dict(context['facets']['fields']['skills']).get(unicode(skill.id), 0)
+            else:
+                total = 0
+            skill_list.append({
+                'id': skill.id,
+                'label': skill.name,
+                'total': total,
+            })
+        return skill_list
+
+    def extra_context(self):
+        context = super(SearchView, self).extra_context()
+        context.update({
+            'cause_list': self.get_cause_list(context),
+            'skill_list': self.get_skill_list(context),
+        })
         return context
