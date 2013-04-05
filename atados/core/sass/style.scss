@@ -43,6 +43,16 @@
     background:#da4f49;
   }
 
+  .nav-stacked {
+    li.active {
+      a {
+        background:$darkBlue;
+        color:#fff;
+        text-decoration:none;
+      }
+    }
+  }
+
   .dropdown-menu {
     .active > a,
     li > a:hover {
@@ -557,12 +567,6 @@
         float:right;
         margin-top:2px;
       }
-      li.active {
-        a {
-          background:$darkBlue;
-          color:#fff;
-        }
-      }
     }
   }
 
@@ -705,13 +709,6 @@
         }
       }
 
-      &.active {
-        a {
-          background:$darkBlue;
-          color:#fff;
-          text-decoration:none;
-        }
-      }
     }
   }
 
@@ -739,13 +736,6 @@
       }
 
       li {
-        &.active {
-          a {
-            background:$darkBlue;
-            color:#fff;
-          }
-        }
-
         .results-total {
           float:right;
           font-size:13px;
