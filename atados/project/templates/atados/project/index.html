@@ -1,22 +1,316 @@
 {% extends 'atados/core/base.html' %}
 {% load i18n bootstrap_toolkit %}
+{% load url from future %}
 
-{% block breadcrumb %}
-<li class="active">{% trans "Explore projects" %}</li>
+{% block out_breadcrumb %}
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="span12">
+<div class="search-result">
+  <div class="page-header">
     <h1>{% trans "Explore projects" %}</h1>
+    <form class="form-search" method="get" action="{% url "atados:search" %}">
+      <div class="input-append">
+        <input type="text" class="input-xxlarge search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" />
+        <button type="submit" class="btn">{% trans "Search" %}</button>
+        {% for type in form.types.value %}
+        <input type="hidden" name="types" value="{{ type }}" />
+        {% endfor %}
+      </div>
+    </form>
   </div>
-</div>
-<div class="row">
-  <div class="span3">
-    X
+
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span12">
+          <h2>{% trans "Atos em destaque" %}</h2>
+        </div>
+      </div>
+      <ul class="results row">
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="span9">
-    xxx
+
+  <div class="row">
+    <div class="span6">
+      <div class="row">
+        <div class="span6">
+          <h2>{% trans "Mais recentes" %}</h2>
+        </div>
+      </div>
+      <ul class="results row">
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+      </ul>
+    </div>
+    <div class="span6">
+      <div class="row">
+        <div class="span6">
+          <h2>{% trans "Mais atados" %}</h2>
+        </div>
+      </div>
+      <ul class="results row">
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+      </ul>
+    </div>
   </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="span12">
+      <div class="row">
+        <div class="span12">
+          <h2>{% trans "Todos os atos" %}</h2>
+        </div>
+      </div>
+      <ul class="results row">
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+        <li class="span3 project-item">
+          <div class="img-rounded icon project large"></div>
+          <a class="title" href="#">Lorem ipsum amet</a>
+          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
 </div>
 {% endblock %}
