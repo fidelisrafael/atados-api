@@ -61,7 +61,7 @@
             <ul class="nav nav-pills nav-stacked">
               {% for skill in skill_list %}
               {% if skill.id|safe in form.skills.value|safe %}
-              <li class="active"><a href="{% search_query %}">{{ skill.label }}</a></li>
+              <li class="active"><a href="{% search_query skills=None %}">{{ skill.label }}</a></li>
               {% else %}
               <li>
                 <a href="{% search_query skills=skill.id %}">{{ skill.label }} {% if skill.total > 0 %}<span class="results-total">{{ skill.total }}</span>{% endif %}</a>
