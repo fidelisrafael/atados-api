@@ -733,6 +733,11 @@
       }
     }
     .nav  {
+      &.nav-model {
+        padding-bottom:28px;
+        border-bottom:1px solid $grayLighter;
+      }
+
       li {
         &.active {
           a {
@@ -759,6 +764,12 @@
       button {
         font-size:18px;
         height:40px;
+      }
+    }
+
+    .filter {
+      .title {
+        font-weight:bold;
       }
     }
 

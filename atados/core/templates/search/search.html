@@ -26,7 +26,7 @@
     <div class="span3">
       <div class="row">
         <div class="span3">
-          <ul class="nav nav-tabs nav-stacked">
+          <ul class="nav nav-tabs nav-stacked nav-model">
             <li{% if 'Project' in form.types.value or not form.types.value %} class="active"{% endif %}>
             <a href="{% search_query types='Project' %}">{% trans "Projects" %}</a>
             </li>
@@ -39,36 +39,38 @@
           </ul>
         </div>
       </div>
-      <div class="row">
-        <div class="span3">
-          {% trans "Causes" %}
-          <ul class="nav nav-pills nav-stacked">
-            {% for cause in cause_list %}
-            {% if cause.id|safe in form.causes.value|safe %}
-            <li class="active"><a href="{% search_query %}">{{ cause.label }}</a></li>
-            {% else %}
-            <li>
-              <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="results-total">{{ cause.total }}</span>{% endif %}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-          </ul>
+      <div class="filter">
+        <div class="row">
+          <div class="span3">
+            <span class="title">{% trans "Causes" %}</span>
+            <ul class="nav nav-pills nav-stacked">
+              {% for cause in cause_list %}
+              {% if cause.id|safe in form.causes.value|safe %}
+              <li class="active"><a href="{% search_query %}">{{ cause.label }}</a></li>
+              {% else %}
+              <li>
+                <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="results-total">{{ cause.total }}</span>{% endif %}</a>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="span3">
-          {% trans "Skills" %}
-          <ul class="nav nav-pills nav-stacked">
-            {% for skill in skill_list %}
-            {% if skill.id|safe in form.skills.value|safe %}
-            <li class="active"><a href="{% search_query %}">{{ skill.label }}</a></li>
-            {% else %}
-            <li>
-              <a href="{% search_query skills=skill.id %}">{{ skill.label }} {% if skill.total > 0 %}<span class="results-total">{{ skill.total }}</span>{% endif %}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-          </ul>
+        <div class="row">
+          <div class="span3">
+            <span class="title">{% trans "Skills" %}</span>
+            <ul class="nav nav-pills nav-stacked">
+              {% for skill in skill_list %}
+              {% if skill.id|safe in form.skills.value|safe %}
+              <li class="active"><a href="{% search_query %}">{{ skill.label }}</a></li>
+              {% else %}
+              <li>
+                <a href="{% search_query skills=skill.id %}">{{ skill.label }} {% if skill.total > 0 %}<span class="results-total">{{ skill.total }}</span>{% endif %}</a>
+              </li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
