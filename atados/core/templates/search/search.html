@@ -45,7 +45,7 @@
             <ul class="nav nav-pills nav-stacked">
               {% for cause in cause_list %}
               {% if cause.id|safe in form.causes.value|safe %}
-              <li class="active"><a href="{% search_query %}">{{ cause.label }}</a></li>
+              <li class="active"><a href="{% search_query causes=None %}">{{ cause.label }}</a></li>
               {% else %}
               <li>
                 <a href="{% search_query causes=cause.id %}">{{ cause.label }} {% if cause.total > 0 %}<span class="results-total">{{ cause.total }}</span>{% endif %}</a>

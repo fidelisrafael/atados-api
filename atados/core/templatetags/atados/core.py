@@ -78,7 +78,7 @@ class SearchQueryNode(template.Node):
 
         params = dict(params.items() + kwargs.items())
 
-        params = ['%s=%s' % (key, value) for key, value in params.iteritems() if value is not None]
+        params = ['%s=%s' % (key, value) for key, value in params.iteritems() if value]
 
         return '?' + '&'.join(params)
 
