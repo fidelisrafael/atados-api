@@ -1,0 +1,36 @@
+{% extends 'atados/core/base.html' %}
+{% load i18n flatblock_tags markup atados.core %}
+
+{% block out_breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+{% block title_about %}
+  <h1>{% trans "About us" %}</h1>
+{% endblock %}
+</div>
+<div class="row">
+  <div class="span3">
+    <ul class="nav nav-tabs nav-stacked">
+
+      {% url atados:about as href %}
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Sobre nós" %}</a></li>
+
+      {% url atados:terms as href %}
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Termos de uso" %}</a></li>
+
+      {% url atados:privacy as href %}
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Privacidade" %}</a></li>
+
+      {% url atados:security as href %}
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Segurança" %}</a></li>
+
+    </ul>
+  </div>
+  <div class="span8">
+    {% block content_about %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
