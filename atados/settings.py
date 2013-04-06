@@ -257,8 +257,6 @@ if 'solr_endpoint' in AWS_EB:
 else:
     HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
 
-#HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr/'
-
 SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
