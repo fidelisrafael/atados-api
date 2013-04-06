@@ -709,6 +709,14 @@
         }
       }
 
+      &.active {
+        a {
+          background:$darkBlue;
+          color:#fff;
+          text-decoration:none;
+        }
+      }
+
     }
   }
 
