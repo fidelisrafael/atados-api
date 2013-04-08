@@ -6,6 +6,8 @@ AWS_EB = []
 if 'PARAM1' in os.environ:
     import json
     AWS_EB = json.loads(os.environ['PARAM1'])
+    print AWS_EB
+print 'loading atados'
 
 
 DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
