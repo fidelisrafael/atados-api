@@ -1,19 +1,12 @@
-{% extends 'atados/core/base.html' %}
-{% load i18n flatblock_tags markup %}
+{% extends 'atados/core/about_base.html' %}
+{% load i18n flatblock_tags markup atados.core %}
 
 {% block title %}{% trans "Terms of service" %}{% endblock %}
 
-{% block breadcrumb %}
-<li class="active">{% trans "Terms of service" %}</li>
+{% block title_about %}
+  <h1>{% trans "Terms of service" %}</h1>
 {% endblock %}
 
-{% block content %}
-<div class="page-header">
-  <h1>{% trans "Terms of service" %}</h1>
-</div>
-<div class="row">
-  <div class="span8">
-    {% filter markdown %}{% plain_flatblock "terms" %}{% endfilter %}
-  </div>
-</div>
+{% block content_about %}
+  {% filter markdown %}{% plain_flatblock "terms" %}{% endfilter %}
 {% endblock %}

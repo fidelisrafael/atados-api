@@ -1,19 +1,12 @@
-{% extends 'atados/core/base.html' %}
-{% load i18n flatblock_tags markup %}
+{% extends 'atados/core/about_base.html' %}
+{% load i18n flatblock_tags markup atados.core %}
 
 {% block title %}{% trans "Security" %}{% endblock %}
 
-{% block breadcrumb %}
-<li class="active">{% trans "Security" %}</li>
+{% block title_aobut %}
+  <h1>{% trans "Security" %}</h1>
 {% endblock %}
 
-{% block content %}
-<div class="page-header">
-  <h1>{% trans "Security" %}</h1>
-</div>
-<div class="row">
-  <div class="span8">
-    {% filter markdown %}{% plain_flatblock "security" %}{% endfilter %}
-  </div>
-</div>
+{% block content_about %}
+  {% filter markdown %}{% plain_flatblock "security" %}{% endfilter %}
 {% endblock %}
