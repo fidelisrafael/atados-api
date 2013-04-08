@@ -254,7 +254,7 @@ HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
 
 #if 'solr_endpoint' in AWS_EB:
     #HAYSTACK_SOLR_URL = 'http://%s/solr' % AWS_EB['solr_endpoint']
-    HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr'
+HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr'
 #else:
     #HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
 
