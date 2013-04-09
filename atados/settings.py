@@ -5,10 +5,9 @@ import os
 AWS_EB = []
 if 'PARAM1' in os.environ:
     import json
-    AWS_EB = json.loads(os.environ['PARAM1'])
-    print AWS_EB
-print 'loading atados'
-
+    def decode_param1(data):
+        return [(key.encode('utf-8'), value) for key, value in data.iteritems()]
+    AWS_EB = json.loads(os.environ['PARAM1'], object_hook=decode_param1)
 
 DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
@@ -254,11 +253,10 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
 HAYSTACK_SITECONF = 'atados.search_indexes'
 HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
 
-#if 'solr_endpoint' in AWS_EB:
-    #HAYSTACK_SOLR_URL = 'http://%s/solr' % AWS_EB['solr_endpoint']
-HAYSTACK_SOLR_URL = 'http://ec2-54-232-12-102.sa-east-1.compute.amazonaws.com:8080/solr'
-#else:
-    #HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+if 'solr_endpoint' in AWS_EB:
+    HAYSTACK_SOLR_URL = AWS_EB['solr_endpoint']
+else:
+    HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
 
 SOUTH_AUTO_FREEZE_APP = True
 
