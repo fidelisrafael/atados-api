@@ -257,7 +257,6 @@ if 'solr_endpoint' in AWS_EB:
     HAYSTACK_SOLR_URL = 'http://%s/solr' % (AWS_EB['solr_endpoint'])
 else:
     HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
-print AWS_EB
 
 SOUTH_AUTO_FREEZE_APP = True
 
