@@ -3,11 +3,13 @@
 import os
 
 AWS_EB = []
+print os.environ
 if 'PARAM1' in os.environ:
     import json
     def decode_param1(data):
         return [(key.encode('utf-8'), value) for key, value in data.iteritems()]
     AWS_EB = json.loads(os.environ['PARAM1'], object_hook=decode_param1)
+    print AWS_EB
 
 DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
