@@ -17,6 +17,9 @@ class ProjectManager(models.Manager):
     def published(self):
         return self.get_query_set().active(published=True)
 
+class Role(models.Model):
+    pass
+
 class Project(models.Model):
     objects = ProjectManager()
     nonprofit = models.ForeignKey(Nonprofit)

@@ -3,21 +3,12 @@
   $blue:#25b3ef;
   $grayDarker:#222;
   $grayDark:#333;
-  $gray:#555;
+  $gray:#babdbe;
   $grayLight:#999;
   $grayLighter:#eee;
   $darkBlue:darken($blue, 10%);
 
   min-width:1000px;
-  color:$gray;
-
-  a {
-    color:$blue;
-  }
-
-  h1 a, h1 a, h2 a, a h2 {
-    color:$darkBlue;
-  }
 
   p.block-message {
     padding:30px;
@@ -26,56 +17,12 @@
     font-size:20px;
   }
 
-  .btn {
-    color:$gray;
-    background:#f5f5f5;
-  }
-
-  .btn-primary, .btn-danger, .btn-sucess {
-    color:#fff;
-  }
-
-  .btn-primary {
-    background:$darkBlue;
-  }
-
-  .btn-danger {
-    background:#da4f49;
-  }
-
-  .nav-stacked {
-    li.active {
-      a {
-        background:$darkBlue;
-        color:#fff;
-        text-decoration:none;
-      }
-    }
-  }
-
-  .dropdown-menu {
-    .active > a,
-    li > a:hover {
-      background:$darkBlue;
-    }
-  }
-
-  & > div {
-    padding:0 30px;
-    min-width:940px;
-    margin:0 auto;
-    display:block;
-  }
-
-  font-family: Helvetica, sans-serif, Arial;
-
-  label {
-    font-weight: bold;
-  }
+  font-family: 'Open Sans', sans-serif;
 
   legend {
     margin-bottom:0;
     font-size:26px;
+    text-transform:uppercase;
   }
 
   fieldset + fieldset {
@@ -193,8 +140,12 @@
     padding:4px 8px;
   }
 
-  h1 {
+  h1, h2, h3, h4, h5, h6 {
     font-weight:normal;
+    text-transform:uppercase;
+  }
+
+  h1 {
     font-size:30px;
   }
 
