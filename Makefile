@@ -23,7 +23,7 @@ sass:
 	@sass --style compressed --watch atados/core/sass:atados/core/static/css
 
 test:
-	@python ./manage.py test
+	@coverage run --source=atados ./manage.py test
 
 solr-rebuild:
 	@python ./manage.py rebuild_index

@@ -37,6 +37,9 @@ nosetests.xml
 #virtualenv
 env
 
+# Coverage
+coverage_html_report/
+
 #aws
 #.ebextensions
 .elasticbeanstalk/
