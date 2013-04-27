@@ -251,12 +251,12 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
     }
 
 HAYSTACK_SITECONF = 'atados.search_indexes'
-HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
 
 if 'solr_endpoint' in AWS_EB:
     HAYSTACK_SOLR_URL = 'http://%s/solr' % (AWS_EB['solr_endpoint'])
+    HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
 else:
-    HAYSTACK_SOLR_URL = 'http://localhost:8983/solr'
+    HAYSTACK_SEARCH_ENGINE = 'simple'
 
 SOUTH_AUTO_FREEZE_APP = True
 
