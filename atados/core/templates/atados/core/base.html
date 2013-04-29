@@ -6,6 +6,13 @@
     <meta name="description" content="{% block description %}{% endblock %}">
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
     <link rel="shortcut icon" href="{{ STATIC_URL }}favicon.ico" />
 
@@ -20,48 +27,48 @@
   </head>
   <body>
     <div id="main" class="atados">
-      <div id="header">
-        <div class="container">
-          <div class="row">
-            <div class="span1">
-              <div class="logo">
-                <a href="{% url atados:home %}">{{ site.name }}</a>
-              </div>
-            </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+            <a class="brand" href="{% url atados:home %}">{{ site.name }}</a>
+
+            <div class="nav-collapse collapse">
+
             {% block search %}
-            <div class="span3">
-              <form class="form-search" action="{% url atados:search %}" method="get">
-                <div class="input-append">
-                  <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}">
-                  <button type="submit" class="btn"><i class="icon-search"></i></button>
-                </div>
-              </form>
-            </div>
+            <form class="navbar-search pull-left" action="{% url atados:search %}" method="get">
+              <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}">
+            </form>
             {% endblock %}
-            <div class="span2">
-              <div class="dropdown location-selector">
+
+            <ul class="nav">
+              <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Explore sua cidade" %} <span class="caret"></span></a>
-                <div class="dropdown-menu">
-                  <ul class="cities nav nav-tabs nav-stacked">
-                    <li><a href="#">S&atilde;o Paulo</a></li>
-                    <li><a href="#">Rio de Janeiro</a></li>
-                    <li><a href="#">Curitiba</a></li>
-                  </ul>
-                  {% trans "Mais cidades em breve." %}
-                </div>
-              </div>
-            </div>
+                <ul class="dropdown-menu">
+                  <li><a href="#">S&atilde;o Paulo</a></li>
+                  <li><a href="#">Rio de Janeiro</a></li>
+                  <li><a href="#">Curitiba</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">{% trans "Mais cidades em breve." %}</a></li>
+                </ul>
+              </li>
+              <li><a href="{% url project:index %}">{% trans "Explore" %}</a></li>
+              {% if not user.is_authenticated %}
+              <li><a href="{% url volunteer:sign-up %}">{% trans "Torne-se um voluntário" %}</a></li>
+              {% endif %}
+            </ul>
+
             {% if not user.is_authenticated %}
-            <div class="span4">
-              <ul class="menu">
-                <li><a href="{% url project:index %}">{% trans "Explore" %}</a></li>
-                <li><a href="{% url volunteer:sign-up %}">{% trans "Torne-se um voluntário" %}</a></li>
-              </ul>
-            </div>
-            <div class="span2">
-              <div class="dropdown tools">
+            <ul class="nav pull-right">
+              <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Entrar" %} <span class="caret"></span></a>
-                <div class="login dropdown-menu" style="left:auto; right:0">
+                <div class="dropdown-menu">
                   <form class="form-inline" method="post" action="{% url atados:sign-in %}">{% csrf_token %}
                     <input type="text" class="input-small" name="username" placeholder="{% trans "E-mail" %}">
                     <input type="password" class="input-small" name="password" placeholder="{% trans "Senha" %}">
@@ -72,21 +79,16 @@
                     </label>
                   </form>
                 </div>
-              </div>
-            </div>
+              </li>
+            </ul>
             {% else %}
-            <div class="span2">
-              <ul class="menu">
-                <li><a href="{% url project:index %}">{% trans "Explore" %}</a></li>
-              </ul>
-            </div>
-            <div class="span4">
-              <div class="dropdown tools">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.email }} <span class="caret"></span></a>
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.username }} <span class="caret"></span></a>
                 <ul class="dropdown-menu" style="left:auto; right:0">
                   <li>
                   <div style="padding:3px 15px; margin-bottom:12px">
-                    <span style="display:block; font-weight:bold">{{ user.first_name }}</span>
+                    <span style="display:block; text-transform:uppercase">{{ user.first_name }}</span>
                     <span style="display:block">{{ user.email }}</span>
                   </div>
                   </li>
@@ -97,100 +99,99 @@
                   <li class="divider"></li>
                   <li><a href="{% url atados:sign-out %}">{% trans "Sair" %}</a></li>
                 </ul>
+              </li>
+            </ul>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% block out_breadcrumb %}
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <ul class="breadcrumb">
+              <li><a href="{% url atados:home %}">{% trans "Início" %}</a></li>
+              {% block breadcrumb %}
+              {% endblock %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+
+      {% if messages %}
+      <div class="container">
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert alert-success"><strong>{% trans "Boa!" %}</strong> {{ message }}</div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% block out_content %}
+      <div class="container">
+        {% block content %}
+        {% endblock %}
+      </div>
+      {% endblock %}
+
+      <div class="container">
+        <div id="footer" class="well">
+          <div class="row-fluid">
+            <div class="span3 logo">
+              <div>
+                {{ site.name }}
               </div>
             </div>
-            {% endif %}
-          </div><!-- /.row -->
-        </div><!-- /.container -->
-      </div><!-- /#header -->
-
-      <div>
-        {% block out_breadcrumb %}
-        <div class="container">
-          <div class="row">
-            <div class="span12">
-              <ul class="breadcrumb">
-                <li><a href="{% url atados:home %}">{% trans "Início" %}</a></li>
-                {% block breadcrumb %}
-                {% endblock %}
+            <div class="span3">
+              <h4>{{ site.name }}</h4>
+              <ul>
+                <li><a href="{% url atados:about %}">{% trans "Sobre nós" %}</a></li>
+                <li><a href="#">{% trans "Colabore" %}</a></li>
+                <li><a href="#">{% trans "Contato" %}</a></li>
+                <li><a href="#">{% trans "Novidades" %}</a></li>
+              </ul>
+            </div>
+            <div class="span3">
+              <h4>{% trans "Serviços" %}</h4>
+              <ul>
+                <li><a href="{% url nonprofit:sign-up %}">{% trans "Para ONGs" %}</a></li>
+                <li><a href="">{% trans "Para universidades" %}</a></li>
+                <li><a href="">{% trans "Para empresas" %}</a></li>
+              </ul>
+            </div>
+            <div class="span3">
+              <h4>{% trans "Social" %}</h4>
+              <ul>
+                <li><a href="http://www.atados.com.br/blog/">{% trans "Blog" %}</a></li>
+                <li><a href="https://www.facebook.com/atadosjuntandogenteboa">{% trans "Facebook" %}</a></li>
               </ul>
             </div>
           </div>
         </div>
-        {% endblock %}
 
-        {% if messages %}
-        <div class="container">
-          <div class="messages">
-            {% for message in messages %}
-            <div class="alert alert-success"><strong>{% trans "Boa!" %}</strong> {{ message }}</div>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
-
-        {% block out_content %}
-        <div class="container">
-          {% block content %}
-          {% endblock %}
-        </div>
-        {% endblock %}
-
-        <div class="container">
-          <div id="footer" class="well">
-            <div class="row-fluid">
-              <div class="span3 logo">
-                <div>
-                  {{ site.name }}
-                </div>
-              </div>
-              <div class="span3">
-                <h4>{{ site.name }}</h4>
-                <ul>
-                  <li><a href="{% url atados:about %}">{% trans "Sobre nós" %}</a></li>
-                  <li><a href="#">{% trans "Colabore" %}</a></li>
-                  <li><a href="#">{% trans "Contato" %}</a></li>
-                  <li><a href="#">{% trans "Novidades" %}</a></li>
-                </ul>
-              </div>
-              <div class="span3">
-                <h4>{% trans "Serviços" %}</h4>
-                <ul>
-                  <li><a href="{% url nonprofit:sign-up %}">{% trans "Para ONGs" %}</a></li>
-                  <li><a href="">{% trans "Para universidades" %}</a></li>
-                  <li><a href="">{% trans "Para empresas" %}</a></li>
-                </ul>
-              </div>
-              <div class="span3">
-                <h4>{% trans "Social" %}</h4>
-                <ul>
-                  <li><a href="http://www.atados.com.br/blog/">{% trans "Blog" %}</a></li>
-                  <li><a href="https://www.facebook.com/atadosjuntandogenteboa">{% trans "Facebook" %}</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div id="footer-legal" class="row">
-            <ul>
-              <li><a href="{% url atados:terms %}">{% trans "Termos de uso" %}</a></li>
-              <li><a href="{% url atados:privacy %}">{% trans "Privacidade" %}</a></li>
-              <li><a href="{% url atados:security %}">{% trans "Segurança" %}</a></li>
-              {% with site.name as site_name %}
-              <li id="copyright">{% blocktrans %}&copy; 2013 {{ site_name }}{% endblocktrans %}</li>
-              {% endwith %}
-            </ul>
-          </div><!-- /#footer-legal -->
-
-        </div>
-
-        <script src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
-        <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-        <script src="{{ STATIC_URL }}js/atados.js"></script>
-        {% block js %}
-        {% endblock %}
+        <div id="footer-legal" class="row">
+          <ul>
+            <li><a href="{% url atados:terms %}">{% trans "Termos de uso" %}</a></li>
+            <li><a href="{% url atados:privacy %}">{% trans "Privacidade" %}</a></li>
+            <li><a href="{% url atados:security %}">{% trans "Segurança" %}</a></li>
+            {% with site.name as site_name %}
+            <li id="copyright">{% blocktrans %}&copy; 2013 {{ site_name }}{% endblocktrans %}</li>
+            {% endwith %}
+          </ul>
+        </div><!-- /#footer-legal -->
 
       </div>
+
+      <script src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
+      <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+      <script src="{{ STATIC_URL }}js/atados.js"></script>
+      {% block js %}
+      {% endblock %}
+
     </div><!-- /#main -->
   </body>
 </html>

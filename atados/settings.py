@@ -274,8 +274,7 @@ if 'memcached_endpoint' in AWS_EB:
 else:
     CACHES = {
         'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            'LOCATION': 'unique-snowflake'
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
         },
     }
 

@@ -18,6 +18,12 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
 
         self.nonprofit = nonprofit
 
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class' : 'input-block-level'})
+
+        self.fields['prerequisites'].widget.attrs.update({'rows' : 5})
+
         self.fields['email'].widget.attrs.update({
             'placeholder' : _('example@example.com')})
 

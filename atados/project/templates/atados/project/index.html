@@ -9,308 +9,136 @@
 <div class="search-result">
   <div class="page-header">
     <h1>{% trans "Explore projects" %}</h1>
-    <form class="form-search" method="get" action="{% url "atados:search" %}">
-      <div class="input-append">
-        <input type="text" class="input-xxlarge search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" />
-        <button type="submit" class="btn">{% trans "Search" %}</button>
-        {% for type in form.types.value %}
-        <input type="hidden" name="types" value="{{ type }}" />
-        {% endfor %}
-      </div>
-    </form>
   </div>
 
-  <div class="row">
-    <div class="span12">
-      <div class="row">
-        <div class="span12">
-          <h2>{% trans "Atos em destaque" %}</h2>
-        </div>
-      </div>
-      <ul class="results row">
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="span6">
-      <div class="row">
-        <div class="span6">
-          <h2>{% trans "Mais recentes" %}</h2>
-        </div>
-      </div>
-      <ul class="results row">
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-      </ul>
-    </div>
-    <div class="span6">
-      <div class="row">
-        <div class="span6">
-          <h2>{% trans "Mais atados" %}</h2>
-        </div>
-      </div>
-      <ul class="results row">
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <hr />
-
-  <div class="row">
-    <div class="span12">
-      <div class="row">
-        <div class="span12">
-          <h2>{% trans "Todos os atos" %}</h2>
-        </div>
-      </div>
-      <ul class="results row">
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-        <li class="span3 project-item">
-          <div class="img-rounded icon project large"></div>
-          <a class="title" href="#">Lorem ipsum amet</a>
-          <p class="description">Lorem ipsum amet skeo iaoijfi oaisdjf jfijd uehwas df.</p>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <ul class="results row">
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+    <li class="span4 project-item">
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <h2>Oficinas de Cultura</h2>
+    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+    <p><a class="btn" href="#">View details &raquo;</a></p>
+    </li>
+  </ul>
 
 </div>
 {% endblock %}
