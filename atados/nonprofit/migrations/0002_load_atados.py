@@ -19,11 +19,8 @@ class Migration(DataMigration):
         user.is_superuser = True
         user.save()
 
-        nonprofit = Nonprofit()
-        nonprofit.user = user
-        nonprofit.name = 'Atados'
-        nonprofit.slug = 'atados'
-        nonprofit.save()
+        from django.core.management import call_command
+        call_command("loaddata", "nonprofit/atados_data.json")
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")

@@ -1,0 +1,1 @@
+[{"pk": 1, "model": "nonprofit.nonprofit", "fields": {"city": null, "neighborhood": null, "addressline": null, "phone": null, "image": "", "zipcode": null, "name": "Atados", "suburb": null, "state": null, "details": null, "addressnumber": null, "slug": "atados", "causes": [], "user": 1}}]
