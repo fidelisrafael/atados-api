@@ -3,6 +3,7 @@ import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+from django.contrib.sites.models import Site
 from flatblocks.models import FlatBlock
 from atados.core.models import State, City, Suburb, Skill, Availability, Cause
 
@@ -15,8 +16,13 @@ class Migration(DataMigration):
             flatblock.content = flatblock.slug = slug
             flatblock.save()
 
+        site = Site.objects.get(pk=1)
+        site.domain = 'beta.atados.com.br'
+        site.name = 'Atados'
+        site.save()
+
         from django.core.management import call_command
-        call_command("loaddata", "core/load_basics.json")
+        call_command("loaddata", "atados/core/fixtures/load_basics.json")
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")

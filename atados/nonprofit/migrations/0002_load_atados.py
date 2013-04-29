@@ -20,7 +20,7 @@ class Migration(DataMigration):
         user.save()
 
         from django.core.management import call_command
-        call_command("loaddata", "nonprofit/atados_data.json")
+        call_command("loaddata", "atados/nonprofit/fixtures/atados_fixture.json")
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")

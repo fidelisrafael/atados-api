@@ -30,3 +30,9 @@ solr-rebuild:
 
 solr-schema:
 	@python ./manage.py build_solr_schema > schema.xml
+
+dump:
+	@python ./manage.py dumpdata core > atados/core/fixtures/initial_data.json
+	@python ./manage.py dumpdata volunteer > atados/volunteer/fixtures/initial_data.json
+	@python ./manage.py dumpdata nonprofit > atados/nonprofit/fixtures/initial_data.json
+	@python ./manage.py dumpdata project > atados/project/fixtures/initial_data.json
