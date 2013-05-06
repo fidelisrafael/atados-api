@@ -7,10 +7,10 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
-from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
-from atados.core.views import JSONResponseMixin
+from atados.core.forms import SearchForm
+from atados.core.views import JSONResponseMixin, SearchView
 from atados.volunteer.models import Volunteer
 from atados.project.models import (Project, ProjectDonation, ProjectWork,
                                    ProjectJob, Apply, Availability)
@@ -214,3 +214,6 @@ class ProjectDeleteView(ProjectMixin, DeleteView):
     def get_success_url(self):
         messages.info(self.request, _('Project was successfully deleted.'))
         return reverse('atados:home')
+
+class ProjectSearchView(SearchView):
+    template = 'atados/project/index.html'

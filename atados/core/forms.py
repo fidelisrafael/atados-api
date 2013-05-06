@@ -46,10 +46,11 @@ class SearchForm(FacetedSearchForm):
 
     def search(self):
         sqs = super(SearchForm, self).search()
-        if 'causes' in self.cleaned_data and self.cleaned_data['causes']:
-            sqs = sqs.narrow(u'causes_exact:(%s)' % ' OR '.join([sqs.query.clean(cause) for cause in self.cleaned_data['causes']]))
-        if 'skills' in self.cleaned_data and self.cleaned_data['skills']:
-            sqs = sqs.narrow(u'skills_exact:(%s)' % ' OR '.join([sqs.query.clean(skill) for skill in self.cleaned_data['skills']]))
+        if self.is_bound:
+            if 'causes' in self.cleaned_data and self.cleaned_data['causes']:
+                sqs = sqs.narrow(u'causes_exact:(%s)' % ' OR '.join([sqs.query.clean(cause) for cause in self.cleaned_data['causes']]))
+            if 'skills' in self.cleaned_data and self.cleaned_data['skills']:
+                sqs = sqs.narrow(u'skills_exact:(%s)' % ' OR '.join([sqs.query.clean(skill) for skill in self.cleaned_data['skills']]))
         return sqs.models(*self.get_models())
 
 class AuthenticationForm(ContribAuthenticationForm):

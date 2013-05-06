@@ -10,12 +10,13 @@ from atados.project.views import (ProjectDonationCreateView,
                                   ProjectCollaboratorsView,
                                   ProjectDeleteView,
                                   ProjectApplyView,
+                                  ProjectSearchView,
                                   ProjectPictureUpdateView)
 
 urlpatterns = patterns(
     '',
 
-    url(_(r'^project$'), direct_to_template, {'template': 'atados/project/index.html'}, name='index'),
+    url(_(r'^project$'), ProjectSearchView(), name='index'),
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project$'), NonprofitBaseView.as_view(template_name='atados/project/project-kind-choose.html'), name='new'),
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/donation$'), ProjectDonationCreateView.as_view(), name='new-donation'),
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/work$'), ProjectWorkCreateView.as_view(), name='new-work'),
