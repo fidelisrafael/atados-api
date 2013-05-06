@@ -13,3 +13,4 @@ django-flatblocks==0.6.0
 markdown==2.2.1
 python-memcached==1.48
 beautifulsoup==3.2.1
+django_facebook==5.0.13
