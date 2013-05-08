@@ -9,7 +9,7 @@
 
 {% block content %}
 <div id="sign-in">
-  <form class="well" method="post" action="{% url atados:sign-in %}">{% csrf_token %}
+  <form class="well" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
     {{ form|as_bootstrap }}
     <button type="submit" tabindex="6" class="btn btn-primary">{% trans "Sign in" %}</button>
     <input type="hidden" name="next" value="{{ next }}" />

@@ -38,7 +38,7 @@
 
     </div>
     <div class="span6">
-      <form class="well" method="post" action="{% url nonprofit:sign-up %}">{% csrf_token %}
+      <form class="well" method="post" action="{% url "nonprofit:sign-up" %}">{% csrf_token %}
         <fieldset>
           <legend>{% trans "About the nonprofit" %}</legend>
           {{ form.nonprofit_name|as_bootstrap }}
@@ -53,8 +53,8 @@
           {{ form.password2|as_bootstrap }}
         </fieldset>
         <div class="form-terms alert">
-          {% url atados:home as terms_url %}
-          {% url atados:home as privacy_url %}
+          {% url "atados:home" as terms_url %}
+          {% url "atados:home" as privacy_url %}
           {% blocktrans %}
           Ao clicar em "Registrar", você estará indicando que leu e concorda com os <a tabindex="-1"href="{{ terms_url }}">Termos de uso</a> e <a tabindex="-1" href="{{ privacy_url }}">Políticas de privacidade</a>.
           {% endblocktrans %}

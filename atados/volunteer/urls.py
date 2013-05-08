@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.decorators import login_required
-from django.views.generic.simple import direct_to_template, redirect_to
+from django.views.generic import TemplateView, RedirectView
 from django.utils.translation import ugettext_lazy as _
 from atados.core.forms import AuthenticationForm
 from atados.volunteer.views import (VolunteerPictureUpdateView,
@@ -21,10 +21,10 @@ urlpatterns = patterns(
          'template_name': 'atados/volunteer/sign-up-activation.html'},
         name='sign-up-confirmation'),
 
-    url(_(r'^volunteer/sign-up-complete$'), direct_to_template, {'template': 'atados/volunteer/sign-up-complete.html'},
+    url(_(r'^volunteer/sign-up-complete$'), TemplateView.as_view(template_name='atados/volunteer/sign-up-complete.html'),
         name='sign-up-complete'),
 
-    url(_(r'^volunteer/profile$'), direct_to_template, {'template': 'atados/volunteer/sign-up-complete.html'},
+    url(_(r'^volunteer/profile$'), TemplateView.as_view(template_name='atados/volunteer/sign-up-complete.html'),
         name='profile'),
 
     url(_(r'^(?P<username>[-\w]+)/edit-volunteer-picture$'), VolunteerPictureUpdateView.as_view(),

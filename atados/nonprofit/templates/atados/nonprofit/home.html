@@ -14,7 +14,7 @@
   {% for nonprofit in nonprofit_list %}
   <div class="row">
     <div class="span1">
-      <a href="{% url slug nonprofit.slug %}">
+      <a href="{% url "slug" nonprofit.slug %}">
         {% thumbnail nonprofit.image "60x60" crop="center" as im %}
         <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="img-rounded" />
         {% empty %}
@@ -23,7 +23,7 @@
       </a>
     </div>
     <div class="span11">
-      <h1><a href="{% url slug nonprofit.slug %}">{{ nonprofit.name }}</a></h1>
+      <h1><a href="{% url "slug" nonprofit.slug %}">{{ nonprofit.name }}</a></h1>
     </div>
   </div>
   <div class="row">
@@ -36,7 +36,7 @@
           <h2>{% trans "Projects" %}</h2>
         </div>
         <div style="text-align:right" class="span2">
-          <a class="btn btn-primary btn-small" href="{% url project:new nonprofit.slug %}">{% trans "New project" %}</a>
+          <a class="btn btn-primary btn-small" href="{% url "project:new" nonprofit.slug %}">{% trans "New project" %}</a>
         </div>
       </div>
       <ul class="nav nav-tabs nav-stacked">

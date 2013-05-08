@@ -157,7 +157,6 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'haystack',
     'django_nose',
-    'django_facebook',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -194,7 +193,7 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth_backends.FacebookBackend',
+    #'django_facebook.auth_backends.FacebookBackend',
     'atados.core.backends.AuthenticationBackend',
 )
 
@@ -215,7 +214,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "django_facebook.context_processors.facebook",
+    #"django_facebook.context_processors.facebook",
     "atados.core.context_processors.site",
     "atados.nonprofit.context_processors.nonprofit",
     "atados.volunteer.context_processors.volunteer",
@@ -287,6 +286,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 if 'facebook_appplication_id' in AWS_EB:
+    INSTALLED_APPS.add('django_facebook')
     FACEBOOK_APP_ID = AWS_EB['facebook_application_id']
     FACEBOOK_APP_SECRET = AWS_EB['facebook_application_secret']
 

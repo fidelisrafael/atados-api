@@ -19,7 +19,7 @@
         <h2>{% trans "Pontual" %}</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis diam arcu, consequat nec dapibus non, adipiscing at metus. Duis ut turpis ut mauris elementum lobortis. Etiam purus erat, hendrerit non.</p>
       </div>
-      <a class="btn btn-primary btn-large btn-block" href="{% url project:new-job nonprofit.slug %}">{% trans "This one" %}</a>
+      <a class="btn btn-primary btn-large btn-block" href="{% url "project:new-job" nonprofit.slug %}">{% trans "This one" %}</a>
     </div>
   </div>
   <div class="span4">
@@ -28,7 +28,7 @@
         <h2>{% trans "Recorrente" %}</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed molestie, nulla aliquet ultricies placerat, enim tellus sagittis sem, luctus porttitor felis erat quis diam. Donec at leo dui. Quisque sit.</p>
       </div>
-      <a class="btn btn-primary btn-large btn-block" href="{% url project:new-work nonprofit.slug %}">{% trans "This one" %}</a>
+      <a class="btn btn-primary btn-large btn-block" href="{% url "project:new-work" nonprofit.slug %}">{% trans "This one" %}</a>
     </div>
   </div>
   <div class="span4">
@@ -43,7 +43,7 @@
           </ul>
         </p>
       </div>
-      <a class="btn btn-primary btn-large btn-block" href="{% url project:new-donation nonprofit.slug %}">{% trans "This one" %}</a>
+      <a class="btn btn-primary btn-large btn-block" href="{% url "project:new-donation" nonprofit.slug %}">{% trans "This one" %}</a>
     </div>
   </div>
 </div>

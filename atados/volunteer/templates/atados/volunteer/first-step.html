@@ -13,7 +13,7 @@
 </div>
 <div class="row">
   <div class="span8 offset2">
-    <form class="well" action="{% url volunteer:first-step volunteer.user.username %}" method="post">{% csrf_token %}
+    <form class="well" action="{% url "volunteer:first-step" volunteer.user.username %}" method="post">{% csrf_token %}
       <fieldset>
         <legend>{% trans "Causes" %}</legend>
         {{ form.causes|as_select_button_list_field }}
@@ -28,7 +28,7 @@
       </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>
-        <a class="btn" href="{% url volunteer:second-step volunteer.user.username %}">{% trans "Skip this step" %}</a>
+        <a class="btn" href="{% url "volunteer:second-step" volunteer.user.username %}">{% trans "Skip this step" %}</a>
       </div>
     </form>
   </div>

@@ -18,12 +18,12 @@
         {% thumbnail nonprofit.image "220x220" crop="center" as im %}
         <img class="img-rounded" alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
         {% if nonprofit in nonprofit_list %}
-        <a class="btn" href="{% url nonprofit:edit-nonprofit-picture nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
+        <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
         {% endif %}
         {% empty %}
         <div class="img-rounded icon nonprofit large"></div>
         {% if nonprofit in nonprofit_list %}
-        <a class="btn" href="{% url nonprofit:edit-nonprofit-picture nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
+        <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
         {% endif %}
         {% endthumbnail %}
       </div>
@@ -51,7 +51,7 @@
           <h2>{% trans "Projects" %}</h2>
           {% if nonprofit in nonprofit_list %}
           <div>
-            <a href="{% url project:new nonprofit.slug %}">{% trans "New project" %}</a>
+            <a href="{% url "project:new" nonprofit.slug %}">{% trans "New project" %}</a>
           </div>
           {% endif %}
         </div>
@@ -82,7 +82,7 @@
           <h2>{% trans "Nonprofit" %}</h2>
           {% if nonprofit in nonprofit_list %}
           <div>
-            <a href="{% url nonprofit:edit nonprofit.slug %}">{% trans "Edit" %}</a>
+            <a href="{% url "nonprofit:edit" nonprofit.slug %}">{% trans "Edit" %}</a>
           </div>
           {% endif %}
         </div>

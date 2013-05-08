@@ -37,12 +37,12 @@
               <span class="icon-bar"></span>
             </a>
 
-            <a class="brand" href="{% url atados:home %}">{{ site.name }}</a>
+            <a class="brand" href="{% url "atados:home" %}">{{ site.name }}</a>
 
             <div class="nav-collapse collapse">
 
             {% block search %}
-            <form class="navbar-search pull-left" action="{% url atados:search %}" method="get">
+            <form class="navbar-search pull-left" action="{% url "atados:search" %}" method="get">
               <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}">
             </form>
             {% endblock %}
@@ -58,9 +58,9 @@
                   <li><a href="#">{% trans "Mais cidades em breve." %}</a></li>
                 </ul>
               </li>
-              <li><a href="{% url project:index %}">{% trans "Explore" %}</a></li>
+              <li><a href="{% url "project:index" %}">{% trans "Explore" %}</a></li>
               {% if not user.is_authenticated %}
-              <li><a href="{% url volunteer:sign-up %}">{% trans "Torne-se um voluntário" %}</a></li>
+              <li><a href="{% url "volunteer:sign-up" %}">{% trans "Torne-se um voluntário" %}</a></li>
               {% endif %}
             </ul>
 
@@ -69,7 +69,7 @@
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Entrar" %} <span class="caret"></span></a>
                 <div class="dropdown-menu">
-                  <form class="form-inline" method="post" action="{% url atados:sign-in %}">{% csrf_token %}
+                  <form class="form-inline" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
                     <input type="text" class="input-small" name="username" placeholder="{% trans "E-mail" %}">
                     <input type="password" class="input-small" name="password" placeholder="{% trans "Senha" %}">
                     <button type="submit" class="btn btn-primary">{% trans "Entrar" %}</button>
@@ -97,7 +97,7 @@
                   <li><a href="#">{% trans "Editar minhas informações" %}</a></li>
                   <li><a href="#">{% trans "Mudar senha" %}</a></li>
                   <li class="divider"></li>
-                  <li><a href="{% url atados:sign-out %}">{% trans "Sair" %}</a></li>
+                  <li><a href="{% url "atados:sign-out" %}">{% trans "Sair" %}</a></li>
                 </ul>
               </li>
             </ul>
@@ -112,7 +112,7 @@
         <div class="row">
           <div class="span12">
             <ul class="breadcrumb">
-              <li><a href="{% url atados:home %}">{% trans "Início" %}</a></li>
+              <li><a href="{% url "atados:home" %}">{% trans "Início" %}</a></li>
               {% block breadcrumb %}
               {% endblock %}
             </ul>
@@ -149,7 +149,7 @@
             <div class="span3">
               <h4>{{ site.name }}</h4>
               <ul>
-                <li><a href="{% url atados:about %}">{% trans "Sobre nós" %}</a></li>
+                <li><a href="{% url "atados:about" %}">{% trans "Sobre nós" %}</a></li>
                 <li><a href="#">{% trans "Colabore" %}</a></li>
                 <li><a href="#">{% trans "Contato" %}</a></li>
                 <li><a href="#">{% trans "Novidades" %}</a></li>
@@ -158,7 +158,7 @@
             <div class="span3">
               <h4>{% trans "Serviços" %}</h4>
               <ul>
-                <li><a href="{% url nonprofit:sign-up %}">{% trans "Para ONGs" %}</a></li>
+                <li><a href="{% url "nonprofit:sign-up" %}">{% trans "Para ONGs" %}</a></li>
                 <li><a href="">{% trans "Para universidades" %}</a></li>
                 <li><a href="">{% trans "Para empresas" %}</a></li>
               </ul>
@@ -175,9 +175,9 @@
 
         <div id="footer-legal" class="row">
           <ul>
-            <li><a href="{% url atados:terms %}">{% trans "Termos de uso" %}</a></li>
-            <li><a href="{% url atados:privacy %}">{% trans "Privacidade" %}</a></li>
-            <li><a href="{% url atados:security %}">{% trans "Segurança" %}</a></li>
+            <li><a href="{% url "atados:terms" %}">{% trans "Termos de uso" %}</a></li>
+            <li><a href="{% url "atados:privacy" %}">{% trans "Privacidade" %}</a></li>
+            <li><a href="{% url "atados:security" %}">{% trans "Segurança" %}</a></li>
             {% with site.name as site_name %}
             <li id="copyright">{% blocktrans %}&copy; 2013 {{ site_name }}{% endblocktrans %}</li>
             {% endwith %}

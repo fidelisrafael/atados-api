@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
-from django.views.generic.simple import direct_to_template
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from atados.core.views import slug

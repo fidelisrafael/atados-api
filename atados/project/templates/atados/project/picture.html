@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block inner_content %}
-<form class="well" action="{% url project:edit-project-picture nonprofit.slug project.slug %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<form class="well" action="{% url "project:edit-project-picture" nonprofit.slug project.slug %}" method="post" enctype="multipart/form-data">{% csrf_token %}
   {{ form|as_bootstrap }}
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>

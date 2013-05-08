@@ -13,16 +13,16 @@
     <div class="span3">
       <ul class="nav nav-tabs nav-stacked">
 
-        {% url project:edit nonprofit.slug project.slug as href %}
+        {% url "project:edit" nonprofit.slug project.slug as href %}
         <li class="{% active request href %}"><a href="{{ href }}">{% trans "Options" %}</a></li>
         
-        {% url project:collaborators nonprofit.slug project.slug as href %}
+        {% url "project:collaborators" nonprofit.slug project.slug as href %}
         <li class="{% active request href %}"><a href="{{ href }}">{% trans "Volunteers" %}</a></li>
         
-        {% url project:edit-project-picture nonprofit.slug project.slug as href %}
+        {% url "project:edit-project-picture" nonprofit.slug project.slug as href %}
         <li class="{% active request href %}"><a href="{{ href }}">{% trans "Picture" %}</span></a></li>
         
-        {% url project:delete nonprofit.slug project.slug as href %}
+        {% url "project:delete" nonprofit.slug project.slug as href %}
         <li class="{% active request href %}"><a href="{{ href }}">{% trans "Delete this project" %}</a></li>
 
       </ul>

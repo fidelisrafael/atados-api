@@ -18,12 +18,12 @@
         {% thumbnail volunteer.image "220x220" crop="center" as im %}
         <img class="img-rounded" alt="{{ volunteer }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
         {% if volunteer.user == request.user %}
-        <a class="btn" href="{% url volunteer:edit-volunteer-picture volunteer.user.username %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
+        <a class="btn" href="{% url "volunteer:edit-volunteer-picture" volunteer.user.username %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
         {% endif %}
         {% empty %}
         <div class="img-rounded icon volunteer large"></div>
         {% if volunteer.user == request.user %}
-        <a class="btn" href="{% url volunteer:edit-volunteer-picture volunteer.user.username %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
+        <a class="btn" href="{% url "volunteer:edit-volunteer-picture" volunteer.user.username %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
         {% endif %}
         {% endthumbnail %}
       </div>

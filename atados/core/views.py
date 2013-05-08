@@ -2,8 +2,7 @@ import os
 from django import http
 from django.utils import simplejson as json
 from django.http import Http404
-from django.views.generic import View
-from django.views.generic.simple import direct_to_template
+from django.views.generic import View, TemplateView
 from django.contrib.auth.models import User
 from atados.core.models import City, Suburb, Cause, Skill
 from atados.core.forms import SearchForm
@@ -17,17 +16,24 @@ from haystack.query import SearchQuerySet
 
 template_name = 'atados/core/home.html'
 
-def home(request, *args, **kwargs):
-    if request.user.is_authenticated():
-        try:
-            Nonprofit.objects.get(user=request.user)
-            return NonprofitHomeView.as_view()(request, *args, **kwargs)
-        except Nonprofit.DoesNotExist:
-            return VolunteerHomeView.as_view()(request, *args, **kwargs)
+class HomeView(TemplateView):
+    template_name='atados/core/home.html'
 
-    return direct_to_template(request, 'atados/core/home.html',
-                              {'form': RegistrationForm(),
-                               'environ': os.environ})
+    def get_context_date(self):
+        return {'form': RegistrationForm(),
+                'environ': os.environ}
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            try:
+                Nonprofit.objects.get(user=request.user)
+                return NonprofitHomeView.as_view()(request, *args, **kwargs)
+            except Nonprofit.DoesNotExist:
+                return VolunteerHomeView.as_view()(request, *args, **kwargs)
+
+        return super(HomeView, self).get(request, *args, **kwargs)
+
+
 
 def slug(request, *args, **kwargs):
     try:
