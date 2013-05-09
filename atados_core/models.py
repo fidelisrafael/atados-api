@@ -1,5 +1,4 @@
 from django.db import models
-from django_facebook.models import FacebookProfileModel
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -19,8 +18,6 @@ PERIODS = (
         (2, _('Evening')),
 )
 
-#class User(FacebookProfileModel):
-    #pass
 
 class Availability(models.Model):
     weekday = models.PositiveSmallIntegerField(_('weekday'), choices=WEEKDAYS)

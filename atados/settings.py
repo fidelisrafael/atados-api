@@ -301,11 +301,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 if 'facebook_application_id' in AWS_EB:
-    TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + ("django_facebook.context_processors.facebook",)
-    AUTHENTICATION_BACKENDS =  ('django_facebook.auth_backends.FacebookBackend',) + AUTHENTICATION_BACKENDS
-    INSTALLED_APPS = INSTALLED_APPS + ('django_facebook',)
+    AUTHENTICATION_BACKENDS =  ('social_auth.backends.facebook.FacebookBackend',) + AUTHENTICATION_BACKENDS
+    INSTALLED_APPS = INSTALLED_APPS + ('social_auth',)
     FACEBOOK_APP_ID = AWS_EB['facebook_application_id']
-    FACEBOOK_APP_SECRET = AWS_EB['facebook_application_secret']
-
-#AUTH_USER_MODEL = 'django_facebook.FacebookUser'
-#AUTH_USER_MODEL = 'core.User'
+    FACEBOOK_API_SECRET = AWS_EB['facebook_application_secret']
