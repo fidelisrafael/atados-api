@@ -7,7 +7,6 @@ from django.contrib.sites.models import Site
 from flatblocks.models import FlatBlock
 from atados_core.models import State, City, Suburb, Skill, Availability, Cause
 
-
 class Migration(DataMigration):
 
     def forwards(self, orm):
@@ -28,40 +27,40 @@ class Migration(DataMigration):
         raise RuntimeError("Cannot reverse this migration.")
 
     models = {
-        'core.availability': {
+        u'atados_core.availability': {
             'Meta': {'object_name': 'Availability'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'period': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'weekday': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
         },
-        'core.cause': {
+        u'atados_core.cause': {
             'Meta': {'object_name': 'Cause'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
-        'core.city': {
+        u'atados_core.city': {
             'Meta': {'object_name': 'City'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'state': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.State']"})
+            'state': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.State']"})
         },
-        'core.skill': {
+        u'atados_core.skill': {
             'Meta': {'object_name': 'Skill'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
-        'core.state': {
+        u'atados_core.state': {
             'Meta': {'object_name': 'State'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         },
-        'core.suburb': {
+        u'atados_core.suburb': {
             'Meta': {'object_name': 'Suburb'},
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.City']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.City']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
         }
     }
 
-    complete_apps = ['core']
+    complete_apps = ['atados_core']
     symmetrical = True
