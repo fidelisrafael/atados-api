@@ -1,0 +1,357 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-26 02:02-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+#: forms.py:21
+msgid "Search in"
+msgstr "Buscar em"
+
+#: forms.py:43 templates/atados_core/base.html:66
+msgid "E-mail"
+msgstr "E-mail"
+
+#: forms.py:44
+msgid "Stay signed in"
+msgstr "Mantenha-me conectado "
+
+#: models.py:6
+msgid "Monday"
+msgstr "Segunda"
+
+#: models.py:7
+msgid "Tuesday"
+msgstr "Terça"
+
+#: models.py:8
+msgid "Wednesday"
+msgstr "Quarta"
+
+#: models.py:9
+msgid "Thursday"
+msgstr "Quinta"
+
+#: models.py:10
+msgid "Friday"
+msgstr "Sexta"
+
+#: models.py:11
+msgid "Saturday"
+msgstr "Sábado"
+
+#: models.py:12
+msgid "Sunday"
+msgstr "Domingo"
+
+#: models.py:16
+msgid "Morning"
+msgstr "Manhã"
+
+#: models.py:17
+msgid "Afternoon"
+msgstr "Tarde"
+
+#: models.py:18
+msgid "Evening"
+msgstr "Noite"
+
+#: models.py:22
+msgid "weekday"
+msgstr "dia da semana"
+
+#: models.py:23
+msgid "period"
+msgstr "período"
+
+#: models.py:26
+#, python-format
+msgid "%(weekday)s at %(period)s"
+msgstr "%(weekday)s -  %(period)s"
+
+#: models.py:29 models.py:35 models.py:41 models.py:50 models.py:60
+msgid "name"
+msgstr "nome"
+
+#: models.py:47
+msgid "state"
+msgstr "estado"
+
+#: models.py:57
+msgid "city"
+msgstr "cidade"
+
+#: models.py:67
+msgid "suburb"
+msgstr "zona"
+
+#: urls.py:14
+msgid "^sign-in$"
+msgstr "^entrar"
+
+#: urls.py:19 urls.py:23
+msgid "/sign-in"
+msgstr "/entrar"
+
+#: urls.py:22
+msgid "^sign-out$"
+msgstr "^sair"
+
+#: urls.py:25
+msgid "^search$"
+msgstr "^buscar"
+
+#: urls.py:27
+msgid "^terms$"
+msgstr "^termos"
+
+#: urls.py:30
+msgid "^privacy$"
+msgstr "^privacidade"
+
+#: urls.py:33
+msgid "^security$"
+msgstr "^seguranca"
+
+#: urls.py:36
+msgid "^about$"
+msgstr "^sobre"
+
+#: templates/atados_core/about.html:4 templates/atados_core/about.html.py:7
+#: templates/atados_core/about.html:12
+msgid "About us"
+msgstr "Sobre nós"
+
+#: templates/atados_core/base.html:35
+msgid "Buscar"
+msgstr ""
+
+#: templates/atados_core/base.html:43
+msgid "Explore sua cidade"
+msgstr ""
+
+#: templates/atados_core/base.html:50
+msgid "Mais cidades em breve."
+msgstr ""
+
+#: templates/atados_core/base.html:57 templates/atados_core/base.html.py:80
+msgid "Explore"
+msgstr ""
+
+#: templates/atados_core/base.html:58
+msgid "Torne-se um voluntário"
+msgstr ""
+
+#: templates/atados_core/base.html:63 templates/atados_core/base.html.py:68
+msgid "Entrar"
+msgstr ""
+
+#: templates/atados_core/base.html:67
+msgid "Senha"
+msgstr ""
+
+#: templates/atados_core/base.html:70
+msgid "Mantenha-me conectado"
+msgstr ""
+
+#: templates/atados_core/base.html:93
+msgid "Meu perfil"
+msgstr ""
+
+#: templates/atados_core/base.html:95
+msgid "Editar minhas informações"
+msgstr ""
+
+#: templates/atados_core/base.html:96
+msgid "Mudar senha"
+msgstr ""
+
+#: templates/atados_core/base.html:98
+msgid "Sair"
+msgstr ""
+
+#: templates/atados_core/base.html:113
+msgid "Início"
+msgstr ""
+
+#: templates/atados_core/base.html:126
+msgid "Boa!"
+msgstr ""
+
+#: templates/atados_core/base.html:150
+msgid "Sobre nós"
+msgstr ""
+
+#: templates/atados_core/base.html:151
+msgid "Colabore"
+msgstr ""
+
+#: templates/atados_core/base.html:152
+msgid "Contato"
+msgstr ""
+
+#: templates/atados_core/base.html:153
+msgid "Novidades"
+msgstr ""
+
+#: templates/atados_core/base.html:157
+msgid "Serviços"
+msgstr ""
+
+#: templates/atados_core/base.html:159
+msgid "Para ONGs"
+msgstr ""
+
+#: templates/atados_core/base.html:160
+msgid "Para universidades"
+msgstr ""
+
+#: templates/atados_core/base.html:161
+msgid "Para empresas"
+msgstr ""
+
+#: templates/atados_core/base.html:165
+msgid "Documentação"
+msgstr ""
+
+#: templates/atados_core/base.html:167
+msgid "Perguntas frequentes"
+msgstr ""
+
+#: templates/atados_core/base.html:168
+msgid "Ajuda"
+msgstr ""
+
+#: templates/atados_core/base.html:176
+msgid "Termos de uso"
+msgstr ""
+
+#: templates/atados_core/base.html:177
+msgid "Privacidade"
+msgstr ""
+
+#: templates/atados_core/base.html:178
+msgid "Segurança"
+msgstr ""
+
+#: templates/atados_core/base.html:180
+#, python-format
+msgid "&copy; 2013 %(site_name)s"
+msgstr ""
+
+#: templates/atados_core/privacy.html:4 templates/atados_core/privacy.html:7
+#: templates/atados_core/privacy.html:12
+msgid "Privacy"
+msgstr "Privacidade"
+
+#: templates/atados_core/security.html:4 templates/atados_core/security.html:7
+#: templates/atados_core/security.html:12
+msgid "Security"
+msgstr "Segurança"
+
+#: templates/atados_core/sign-in.html:4 templates/atados_core/sign-in.html:7
+#: templates/atados_core/sign-in.html:14
+msgid "Sign in"
+msgstr "Entrar"
+
+#: templates/atados_core/terms.html:4 templates/atados_core/terms.html.py:7
+#: templates/atados_core/terms.html:12
+msgid "Terms of service"
+msgstr "Termos de uso"
+
+#: templates/search/search.html:5 templates/search/search.html.py:12
+#: templates/search/search.html:16
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/search/search.html:28
+msgid "Projects"
+msgstr "Atos"
+
+#: templates/search/search.html:31
+msgid "Nonprofits"
+msgstr "ONGs"
+
+#: templates/search/search.html:34
+msgid "Volunteers"
+msgstr "Voluntários"
+
+#: templates/search/search.html:46
+#, python-format
+msgid "We've found %(count)s projects"
+msgstr "Nós encontramos %(count)s atos"
+
+#: templates/search/search.html:48
+msgid "We've found 1 project"
+msgstr "Nós encontramos 1 ato"
+
+#: templates/search/search.html:53
+#, python-format
+msgid "We've found %(count)s nonprofits"
+msgstr "Nós encontramos %(count)s ONGs"
+
+#: templates/search/search.html:55
+msgid "We've found 1 nonprofit"
+msgstr "Nós encontramos 1 ONG"
+
+#: templates/search/search.html:60
+#, python-format
+msgid "We've found %(count)s volunteers"
+msgstr "Nós encontramos %(count)s voluntários"
+
+#: templates/search/search.html:62
+msgid "We've found 1 volunteer"
+msgstr "Nós encontramos 1 voluntário"
+
+#: templates/search/search.html:67
+#, python-format
+msgid "We've found %(count)s results"
+msgstr "Nós encontramos %(count)s resutados"
+
+#: templates/search/search.html:69
+msgid "We've found 1 result"
+msgstr "Nós encontramos 1 resultado"
+
+#: templates/search/search.html:97
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/search/search.html:100
+msgid "Next"
+msgstr "Próximo"
+
+#: templates/search/search.html:108
+#, python-format
+msgid "We couldn't find any projects matching '%(query)s'."
+msgstr "Nós não conseguimos encontrar nenhum ato ao buscar por '%(query)s'"
+
+#: templates/search/search.html:111
+#, python-format
+msgid "We couldn't find any nonprofits matching '%(query)s'."
+msgstr "Nós não conseguimos encontrar nenhuma ONG ao buscar por '%(query)s'"
+
+#: templates/search/search.html:114
+#, python-format
+msgid "We couldn't find any volunteers matching '%(query)s'."
+msgstr ""
+"Nós não conseguimos encontrar nenhum voluntário ao buscar por '%(query)s'"
+
+#: templates/search/search.html:117
+#, python-format
+msgid "We couldn't find any results matching '%(query)s'."
+msgstr ""
+"Nós não conseguimos encontrar nenhum resultado ao buscar por '%(query)s'"

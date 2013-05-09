@@ -1,0 +1,26 @@
+{% extends 'atados_volunteer/base.html' %}
+{% load i18n bootstrap_toolkit atados_core %}
+
+{% block breadcrumb %}
+<li><a href="{% url "volunteer:first-step" volunteer.user.username %}">{% trans "Choose your causes" %}</a></li>
+<li class="active">{% trans "Set your picture" %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  {% block h1 %}
+  <h1>{% trans "Second step: set your picture" %}</h1>
+  {% endblock %}
+</div>
+<div class="row">
+  <div class="span6 offset3">
+    <form class="well" action="{% url "volunteer:second-step" volunteer.user.username %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+      {{ form|as_bootstrap }}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% trans "Upload and Finish" %}</button>
+        <a class="btn" href="{% url "atados:home" %}">{% trans "Skip this step" %}</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

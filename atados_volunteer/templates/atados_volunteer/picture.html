@@ -1,0 +1,16 @@
+{% extends 'atados_nonprofit/base.html' %}
+{% load i18n bootstrap_toolkit %}
+
+{% block breadcrumb %}
+<li><a href="{{ volunteer.get_absolute_url }}">{{ volunteer.user.first_name }}</a></li>
+<li class="active">{% trans "Edit profile picture" %}</li>
+{% endblock %}
+
+{% block content %}
+<form class="well" action="{% url "volunteer:edit-volunteer-picture" volunteer.user.username %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+  {{ form|as_bootstrap }}
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>
+  </div>
+</form>
+{% endblock %}

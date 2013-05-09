@@ -20,7 +20,7 @@ pep8:
 	@pep8 --exclude 'migrations' .
 	
 sass:
-	@sass --style compressed --watch atados/core/sass:atados/core/static/css
+	@sass --style compressed --watch atados_core/sass:atados_core/static/css
 
 test:
 	@coverage run --source=atados ./manage.py test
@@ -32,7 +32,7 @@ solr-schema:
 	@python ./manage.py build_solr_schema > schema.xml
 
 dump:
-	@python ./manage.py dumpdata core > atados/core/fixtures/initial_data.json
-	@python ./manage.py dumpdata volunteer > atados/volunteer/fixtures/initial_data.json
-	@python ./manage.py dumpdata nonprofit > atados/nonprofit/fixtures/initial_data.json
-	@python ./manage.py dumpdata project > atados/project/fixtures/initial_data.json
+	@python ./manage.py dumpdata core > atados_core/fixtures/initial_data.json
+	@python ./manage.py dumpdata volunteer > atados_volunteer/fixtures/initial_data.json
+	@python ./manage.py dumpdata nonprofit > atados_nonprofit/fixtures/initial_data.json
+	@python ./manage.py dumpdata project > atados_project/fixtures/initial_data.json

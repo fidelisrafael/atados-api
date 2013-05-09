@@ -1,0 +1,12 @@
+{% extends 'atados_core/about_base.html' %}
+{% load i18n flatblock_tags markup atados_core %}
+
+{% block title %}{% trans "Terms of service" %}{% endblock %}
+
+{% block title_about %}
+  <h1>{% trans "Terms of service" %}</h1>
+{% endblock %}
+
+{% block content_about %}
+  {% filter markdown %}{% plain_flatblock "terms" %}{% endfilter %}
+{% endblock %}

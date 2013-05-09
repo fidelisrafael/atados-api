@@ -1,0 +1,70 @@
+{% extends 'atados_nonprofit/base.html' %}
+{% load i18n bootstrap_toolkit %}
+
+{% block out_breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div id="nonprofit-sign-up">
+  <div class="page-header">
+    <h1>{% trans "Junte-se a nós para encontrar mais voluntários!" %}</h1>
+  </div>
+
+  <div class="row">
+    <div class="span6 reasons">
+      <div class="row">
+        <div class="span3">
+          <img class="img-rounded" src="{{ STATIC_URL }}/img/dummy.jpg" width="220" height="220" />
+        </div>
+        <div class="span3">
+          <h2>{% trans "Plataforma de gerenciamento de voluntários." %}</h2>
+          <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sagittis mattis tincidunt. Sed at mauris eu lacus egestas fringilla vitae.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="span3">
+          <img class="img-rounded" src="{{ STATIC_URL }}/img/dummy.jpg" width="220" height="220" />
+        </div>
+        <div class="span3">
+          <h2>{% trans "Encontre voluntários com habilidades específicas" %}</h2>
+          <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nisi neque, pulvinar at viverra iaculis, gravida quis sem. Suspendisse iaculis.
+          </p>
+        </div>
+      </div>
+
+    </div>
+    <div class="span6">
+      <form class="well" method="post" action="{% url "nonprofit:sign-up" %}">{% csrf_token %}
+        <fieldset>
+          <legend>{% trans "About the nonprofit" %}</legend>
+          {{ form.nonprofit_name|as_bootstrap }}
+          {{ form.slug|as_bootstrap }}
+        </fieldset>
+        <fieldset>
+          <legend>{% trans "About you" %}</legend>
+          {{ form.first_name|as_bootstrap }}
+          {{ form.email|as_bootstrap }}
+          {{ form.username|as_bootstrap }}
+          {{ form.password1|as_bootstrap }}
+          {{ form.password2|as_bootstrap }}
+        </fieldset>
+        <div class="form-terms alert">
+          {% url "atados:home" as terms_url %}
+          {% url "atados:home" as privacy_url %}
+          {% blocktrans %}
+          Ao clicar em "Registrar", você estará indicando que leu e concorda com os <a tabindex="-1"href="{{ terms_url }}">Termos de uso</a> e <a tabindex="-1" href="{{ privacy_url }}">Políticas de privacidade</a>.
+          {% endblocktrans %}
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">{% trans "Registrar" %}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'atados_nonprofit/base.html' %}
+{% load i18n bootstrap_toolkit %}
+
+{% block out_breadcrumb %}
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  {% with site.name as site_name %}
+  <h1>{% blocktrans %}Welcome to {{ site_name }}!{% endblocktrans %}</h1>
+</div>
+{% blocktrans %}
+Para começar, conte um pouco mais sobre a ONG
+{% endblocktrans %}
+
+{% endblock %}
+

@@ -147,10 +147,10 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.markup',
     'flatblocks',
-    'atados.core',
-    'atados.nonprofit',
-    'atados.volunteer',
-    'atados.project',
+    'atados_core',
+    'atados_nonprofit',
+    'atados_volunteer',
+    'atados_project',
     'registration',
     'bootstrap_toolkit',
     'south',
@@ -193,8 +193,7 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    #'django_facebook.auth_backends.FacebookBackend',
-    'atados.core.backends.AuthenticationBackend',
+    'atados_core.backends.AuthenticationBackend',
 )
 
 LOGIN_REDIRECT_URL = "/"
@@ -214,10 +213,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    #"django_facebook.context_processors.facebook",
-    "atados.core.context_processors.site",
-    "atados.nonprofit.context_processors.nonprofit",
-    "atados.volunteer.context_processors.volunteer",
+    "atados_core.context_processors.site",
+    "atados_nonprofit.context_processors.nonprofit",
+    "atados_volunteer.context_processors.volunteer",
 )
 
 if all(var in AWS_EB for var in('email_user', 'email_password')):
@@ -256,7 +254,7 @@ HAYSTACK_SITECONF = 'atados.search_indexes'
 
 if 'solr_endpoint' in AWS_EB:
     HAYSTACK_SOLR_URL = 'http://%s/solr' % (AWS_EB['solr_endpoint'])
-    HAYSTACK_SEARCH_ENGINE = 'atados.core.search'
+    HAYSTACK_SEARCH_ENGINE = 'atados_core.search'
 else:
     HAYSTACK_SEARCH_ENGINE = 'simple'
 
@@ -285,8 +283,12 @@ CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-if 'facebook_appplication_id' in AWS_EB:
-    INSTALLED_APPS.add('django_facebook')
+if 'facebook_application_id' in AWS_EB:
+    TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + ("django_facebook.context_processors.facebook",)
+    AUTHENTICATION_BACKENDS =  ('django_facebook.auth_backends.FacebookBackend',) + AUTHENTICATION_BACKENDS
+    INSTALLED_APPS = INSTALLED_APPS + ('django_facebook',)
     FACEBOOK_APP_ID = AWS_EB['facebook_application_id']
     FACEBOOK_APP_SECRET = AWS_EB['facebook_application_secret']
 
+#AUTH_USER_MODEL = 'django_facebook.FacebookUser'
+#AUTH_USER_MODEL = 'core.User'

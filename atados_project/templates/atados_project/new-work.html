@@ -1,0 +1,30 @@
+{% extends 'atados_core/base.html' %}
+{% load i18n bootstrap_toolkit %}
+
+{% block breadcrumb %}
+<li><a href="{% url "project:new" nonprofit.slug %}">{% trans "Project kind choose" %}</a></li>
+<li class="active">{% trans "Add new work" %}</li>
+{% endblock %}
+
+{% block content %}
+<div id="project-new-just-once">
+  <div class="page-header">
+    {% block h1 %}
+    <h1>{% trans "Add new work" %}</h1>
+    {% endblock %}
+  </div>
+  <div class="row">
+    <div class="span8 offset2">
+      <form class="well" method="post" action="{% block action %}{% url "project:new-work" nonprofit.slug %}{% endblock %}">{% csrf_token %}
+        {% include "atados_project/form-work.html" %}
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">{% trans "Create" %}</button>
+          <a class="btn" href="{% url "project:new" nonprofit.slug %}">{% trans "Back" %}</a>
+        </div>
+      </form>
+    </div>
+    <div class="span5">
+    </div>
+  </div>
+</div>
+{% endblock %}
