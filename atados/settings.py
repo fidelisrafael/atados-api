@@ -250,13 +250,30 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
         'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
     }
 
-HAYSTACK_SITECONF = 'atados.search_indexes'
+"""HAYSTACK_SITECONF = 'atados.search_indexes'
 
-if 'solr_endpoint' in AWS_EB:
+if '_solr_endpoint' in AWS_EB:
     HAYSTACK_SOLR_URL = 'http://%s/solr' % (AWS_EB['solr_endpoint'])
     HAYSTACK_SEARCH_ENGINE = 'atados_core.search'
 else:
-    HAYSTACK_SEARCH_ENGINE = 'simple'
+    HAYSTACK_SEARCH_ENGINE = 'simple'"""
+
+if 'solr_endpoint' in AWS_EB:
+    HAYSTACK_CONNECTIONS = {
+            'default': {
+                #'ENGINE': 'atados_core.search_backend.SearchEngine',
+                'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+                'URL': 'http://%s/solr' % (AWS_EB['solr_endpoint']),
+                },
+            }
+else:
+    HAYSTACK_CONNECTIONS = {
+            'default': {
+                'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+                },
+            }
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 SOUTH_AUTO_FREEZE_APP = True
 

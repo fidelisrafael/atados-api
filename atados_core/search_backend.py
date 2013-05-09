@@ -1,10 +1,8 @@
-from haystack.backends.solr_backend import SearchBackend as SolrBackend, SearchQuery as SolrQuery
-from haystack.backends import log_query
+from haystack.backends.solr_backend import SolrSearchBackend, SolrSearchQuery
+from haystack.backends import BaseEngine, log_query
 
 
-BACKEND_NAME = 'search'
-
-class SearchBackend(SolrBackend):
+class SearchBackend(SolrSearchBackend):
 
     @log_query
     def search(self, *args, **kwargs):
@@ -14,7 +12,7 @@ class SearchBackend(SolrBackend):
             kwargs['facets'] = map(exdt, kwargs['facets'])
         return super(SearchBackend, self).search(*args, **kwargs)
 
-class SearchQuery(SolrQuery):
+class SearchQuery(SolrSearchQuery):
 
     def __init__(self, site=None, backend=None):
         backend = SearchBackend(site=site)
@@ -23,3 +21,7 @@ class SearchQuery(SolrQuery):
     def add_narrow_query(self, query):
         name, value = query.split(':')
         super(SearchQuery, self).add_narrow_query('{!tag=%s}%s' % (name, query))
+
+class SearchEngine(BaseEngine):
+    backend = SearchBackend
+    query = SearchQuery

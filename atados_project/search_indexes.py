@@ -1,10 +1,10 @@
 import datetime
 from django.db.models import signals
-from haystack import indexes, site
+from haystack import indexes
 from atados_project.models import (Project, ProjectDonation, ProjectWork, ProjectJob)
 
 
-class ProjectIndex(indexes.RealTimeSearchIndex):
+class ProjectDonationIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     causes = indexes.MultiValueField(faceted=True)
     state = indexes.CharField(model_attr='state', faceted=True, null=True)
@@ -14,23 +14,41 @@ class ProjectIndex(indexes.RealTimeSearchIndex):
     def prepare_causes(self, obj):
         return [cause.id for cause in obj.causes.all()]
 
+    def get_model(self):
+        return ProjectDonation
+    
 
-class SkillsIndexMixin(indexes.RealTimeSearchIndex):
+class ProjectWorkIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    causes = indexes.MultiValueField(faceted=True)
+    state = indexes.CharField(model_attr='state', faceted=True, null=True)
+    city = indexes.CharField(model_attr='city', faceted=True, null=True)
+    suburb = indexes.CharField(model_attr='suburb', faceted=True, null=True)
     skills = indexes.MultiValueField(faceted=True)
 
     def prepare_skills(self, obj):
         return [skill.id for skill in obj.skills.all()]
 
+    def prepare_causes(self, obj):
+        return [cause.id for cause in obj.causes.all()]
 
-class ProjectDonationIndex(ProjectIndex):
-    pass
-    
-class ProjectWorkIndex(SkillsIndexMixin, ProjectIndex):
-    pass
+    def get_model(self):
+        return ProjectWork
 
-class ProjectJobIndex(SkillsIndexMixin, ProjectIndex):
-    pass
 
-site.register(ProjectJob, ProjectJobIndex)
-site.register(ProjectWork, ProjectWorkIndex)
-site.register(ProjectDonation, ProjectDonationIndex)
+class ProjectJobIndex(indexes.SearchIndex, indexes.Indexable):
+    text = indexes.CharField(document=True, use_template=True)
+    causes = indexes.MultiValueField(faceted=True)
+    state = indexes.CharField(model_attr='state', faceted=True, null=True)
+    city = indexes.CharField(model_attr='city', faceted=True, null=True)
+    suburb = indexes.CharField(model_attr='suburb', faceted=True, null=True)
+    skills = indexes.MultiValueField(faceted=True)
+
+    def prepare_skills(self, obj):
+        return [skill.id for skill in obj.skills.all()]
+
+    def prepare_causes(self, obj):
+        return [cause.id for cause in obj.causes.all()]
+
+    def get_model(self):
+        return ProjectJob
