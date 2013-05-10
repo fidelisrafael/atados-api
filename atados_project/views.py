@@ -12,8 +12,8 @@ from django.utils.translation import ugettext_lazy as _, ugettext as __
 from atados_core.forms import SearchForm
 from atados_core.views import JSONResponseMixin, SearchView
 from atados_volunteer.models import Volunteer
-from atados_project.models import (Project, ProjectDonation, ProjectWork,
-                                   ProjectJob, Apply, Availability)
+from atados_project.models import (Project, Donation, Work, Apply,
+                                   Availability)
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.views import NonprofitMixin
 from atados_project.forms import (ProjectDonationCreateForm,

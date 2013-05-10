@@ -18,6 +18,14 @@ class Migration(SchemaMigration):
             ('responsible', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('phone', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
+            ('zipcode', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
+            ('addressline', self.gf('django.db.models.fields.CharField')(default=None, max_length=200, null=True, blank=True)),
+            ('addressnumber', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
+            ('neighborhood', self.gf('django.db.models.fields.CharField')(default=None, max_length=50, null=True, blank=True)),
+            ('state', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.State'], null=True, blank=True)),
+            ('city', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.City'], null=True, blank=True)),
+            ('suburb', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.Suburb'], null=True, blank=True)),
+            ('vacancies', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
             ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('deleted_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
@@ -33,50 +41,62 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(u'atados_project_project_causes', ['project_id', 'cause_id'])
 
-        # Adding model 'Donation'
-        db.create_table(u'atados_project_donation', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_project.Project'])),
-            ('delivery', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Address'])),
+        # Adding model 'ProjectDonation'
+        db.create_table(u'atados_project_projectdonation', (
+            (u'project_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_project.Project'], unique=True, primary_key=True)),
             ('collection_by_nonprofit', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal(u'atados_project', ['Donation'])
+        db.send_create_signal(u'atados_project', ['ProjectDonation'])
 
-        # Adding model 'Work'
-        db.create_table(u'atados_project_work', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_project.Project'])),
-            ('address', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Address'])),
+        # Adding model 'ProjectWork'
+        db.create_table(u'atados_project_projectwork', (
+            (u'project_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_project.Project'], unique=True, primary_key=True)),
+            ('prerequisites', self.gf('django.db.models.fields.TextField')(max_length=1024)),
             ('weekly_hours', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
             ('can_be_done_remotely', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal(u'atados_project', ['Work'])
+        db.send_create_signal(u'atados_project', ['ProjectWork'])
 
-        # Adding M2M table for field availabilities on 'Work'
-        db.create_table(u'atados_project_work_availabilities', (
+        # Adding M2M table for field availabilities on 'ProjectWork'
+        db.create_table(u'atados_project_projectwork_availabilities', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('work', models.ForeignKey(orm[u'atados_project.work'], null=False)),
+            ('projectwork', models.ForeignKey(orm[u'atados_project.projectwork'], null=False)),
             ('availability', models.ForeignKey(orm[u'atados_core.availability'], null=False))
         ))
-        db.create_unique(u'atados_project_work_availabilities', ['work_id', 'availability_id'])
+        db.create_unique(u'atados_project_projectwork_availabilities', ['projectwork_id', 'availability_id'])
 
-        # Adding M2M table for field skills on 'Work'
-        db.create_table(u'atados_project_work_skills', (
+        # Adding M2M table for field skills on 'ProjectWork'
+        db.create_table(u'atados_project_projectwork_skills', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('work', models.ForeignKey(orm[u'atados_project.work'], null=False)),
+            ('projectwork', models.ForeignKey(orm[u'atados_project.projectwork'], null=False)),
             ('skill', models.ForeignKey(orm[u'atados_core.skill'], null=False))
         ))
-        db.create_unique(u'atados_project_work_skills', ['work_id', 'skill_id'])
+        db.create_unique(u'atados_project_projectwork_skills', ['projectwork_id', 'skill_id'])
 
-        # Adding model 'Role'
-        db.create_table(u'atados_project_role', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('work', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_project.Work'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+        # Adding model 'ProjectJob'
+        db.create_table(u'atados_project_projectjob', (
+            (u'project_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_project.Project'], unique=True, primary_key=True)),
             ('prerequisites', self.gf('django.db.models.fields.TextField')(max_length=1024)),
-            ('vacancies', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
+            ('weekly_hours', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
+            ('can_be_done_remotely', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal(u'atados_project', ['Role'])
+        db.send_create_signal(u'atados_project', ['ProjectJob'])
+
+        # Adding M2M table for field availabilities on 'ProjectJob'
+        db.create_table(u'atados_project_projectjob_availabilities', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('projectjob', models.ForeignKey(orm[u'atados_project.projectjob'], null=False)),
+            ('availability', models.ForeignKey(orm[u'atados_core.availability'], null=False))
+        ))
+        db.create_unique(u'atados_project_projectjob_availabilities', ['projectjob_id', 'availability_id'])
+
+        # Adding M2M table for field skills on 'ProjectJob'
+        db.create_table(u'atados_project_projectjob_skills', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('projectjob', models.ForeignKey(orm[u'atados_project.projectjob'], null=False)),
+            ('skill', models.ForeignKey(orm[u'atados_core.skill'], null=False))
+        ))
+        db.create_unique(u'atados_project_projectjob_skills', ['projectjob_id', 'skill_id'])
 
         # Adding model 'Apply'
         db.create_table(u'atados_project_apply', (
@@ -94,37 +114,32 @@ class Migration(SchemaMigration):
         # Removing M2M table for field causes on 'Project'
         db.delete_table('atados_project_project_causes')
 
-        # Deleting model 'Donation'
-        db.delete_table(u'atados_project_donation')
+        # Deleting model 'ProjectDonation'
+        db.delete_table(u'atados_project_projectdonation')
 
-        # Deleting model 'Work'
-        db.delete_table(u'atados_project_work')
+        # Deleting model 'ProjectWork'
+        db.delete_table(u'atados_project_projectwork')
 
-        # Removing M2M table for field availabilities on 'Work'
-        db.delete_table('atados_project_work_availabilities')
+        # Removing M2M table for field availabilities on 'ProjectWork'
+        db.delete_table('atados_project_projectwork_availabilities')
 
-        # Removing M2M table for field skills on 'Work'
-        db.delete_table('atados_project_work_skills')
+        # Removing M2M table for field skills on 'ProjectWork'
+        db.delete_table('atados_project_projectwork_skills')
 
-        # Deleting model 'Role'
-        db.delete_table(u'atados_project_role')
+        # Deleting model 'ProjectJob'
+        db.delete_table(u'atados_project_projectjob')
+
+        # Removing M2M table for field availabilities on 'ProjectJob'
+        db.delete_table('atados_project_projectjob_availabilities')
+
+        # Removing M2M table for field skills on 'ProjectJob'
+        db.delete_table('atados_project_projectjob_skills')
 
         # Deleting model 'Apply'
         db.delete_table(u'atados_project_apply')
 
 
     models = {
-        u'atados_core.address': {
-            'Meta': {'object_name': 'Address'},
-            'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.City']", 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.State']", 'null': 'True', 'blank': 'True'}),
-            'suburb': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.Suburb']", 'null': 'True', 'blank': 'True'}),
-            'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
-        },
         u'atados_core.availability': {
             'Meta': {'object_name': 'Availability'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -182,16 +197,12 @@ class Migration(SchemaMigration):
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_project.Project']"}),
             'volunteer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_volunteer.Volunteer']"})
         },
-        u'atados_project.donation': {
-            'Meta': {'object_name': 'Donation'},
-            'collection_by_nonprofit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'delivery': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Address']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_project.Project']"})
-        },
         u'atados_project.project': {
             'Meta': {'object_name': 'Project'},
+            'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Cause']", 'symmetrical': 'False'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.City']", 'null': 'True', 'blank': 'True'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'deleted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'details': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
@@ -199,27 +210,37 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('sorl.thumbnail.fields.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'nonprofit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_nonprofit.Nonprofit']"}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'responsible': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'})
-        },
-        u'atados_project.role': {
-            'Meta': {'object_name': 'Role'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'prerequisites': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
+            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.State']", 'null': 'True', 'blank': 'True'}),
+            'suburb': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.Suburb']", 'null': 'True', 'blank': 'True'}),
             'vacancies': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'work': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_project.Work']"})
+            'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
         },
-        u'atados_project.work': {
-            'Meta': {'object_name': 'Work'},
-            'address': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Address']"}),
+        u'atados_project.projectdonation': {
+            'Meta': {'object_name': 'ProjectDonation', '_ormbases': [u'atados_project.Project']},
+            'collection_by_nonprofit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            u'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_project.Project']", 'unique': 'True', 'primary_key': 'True'})
+        },
+        u'atados_project.projectjob': {
+            'Meta': {'object_name': 'ProjectJob', '_ormbases': [u'atados_project.Project']},
             'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Availability']", 'symmetrical': 'False'}),
             'can_be_done_remotely': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_project.Project']"}),
+            'prerequisites': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
+            u'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_project.Project']", 'unique': 'True', 'primary_key': 'True'}),
+            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Skill']", 'symmetrical': 'False'}),
+            'weekly_hours': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'atados_project.projectwork': {
+            'Meta': {'object_name': 'ProjectWork', '_ormbases': [u'atados_project.Project']},
+            'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Availability']", 'symmetrical': 'False'}),
+            'can_be_done_remotely': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'prerequisites': ('django.db.models.fields.TextField', [], {'max_length': '1024'}),
+            u'project_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_project.Project']", 'unique': 'True', 'primary_key': 'True'}),
             'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Skill']", 'symmetrical': 'False'}),
             'weekly_hours': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'})
         },

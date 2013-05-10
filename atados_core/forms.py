@@ -5,7 +5,7 @@ from django.contrib.auth.forms import (
 from django.utils.translation import ugettext_lazy as _
 from haystack.forms import FacetedSearchForm, model_choices
 from atados_nonprofit.models import Nonprofit
-from atados_project.models import ProjectDonation, ProjectWork, ProjectJob
+from atados_project.models import Project
 from atados_volunteer.models import Volunteer
 from atados_core.models import State, City, Suburb, Cause, Skill
 
@@ -38,9 +38,7 @@ class SearchForm(FacetedSearchForm):
             if 'Volunteer' in self.cleaned_data['types']:
                 search_models.append(Volunteer)
             if 'Project' in self.cleaned_data['types'] or not search_models:
-                search_models.append(ProjectDonation)
-                search_models.append(ProjectWork)
-                search_models.append(ProjectJob)
+                search_models.append(Project)
 
         return search_models
 

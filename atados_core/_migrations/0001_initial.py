@@ -53,19 +53,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'atados_core', ['Suburb'])
 
-        # Adding model 'Address'
-        db.create_table(u'atados_core_address', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('zipcode', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('addressline', self.gf('django.db.models.fields.CharField')(default=None, max_length=200, null=True, blank=True)),
-            ('addressnumber', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('neighborhood', self.gf('django.db.models.fields.CharField')(default=None, max_length=50, null=True, blank=True)),
-            ('state', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.State'], null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.City'], null=True, blank=True)),
-            ('suburb', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.Suburb'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Address'])
-
 
     def backwards(self, orm):
         # Deleting model 'Availability'
@@ -86,22 +73,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Suburb'
         db.delete_table(u'atados_core_suburb')
 
-        # Deleting model 'Address'
-        db.delete_table(u'atados_core_address')
-
 
     models = {
-        u'atados_core.address': {
-            'Meta': {'object_name': 'Address'},
-            'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.City']", 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.State']", 'null': 'True', 'blank': 'True'}),
-            'suburb': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.Suburb']", 'null': 'True', 'blank': 'True'}),
-            'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
-        },
         u'atados_core.availability': {
             'Meta': {'object_name': 'Availability'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

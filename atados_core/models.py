@@ -66,3 +66,19 @@ class Suburb(models.Model):
 
     class Meta:
         verbose_name = _('suburb')
+
+class Address(models.Model):
+    zipcode = models.CharField(_('Zip code'), max_length=10,
+                               blank=True, null=True, default=None)
+    addressline = models.CharField(_('Address line'), max_length=200,
+                                  blank=True, null=True, default=None)
+    addressnumber = models.CharField(_('Address number'), max_length=10,
+                                  blank=True, null=True, default=None)
+    neighborhood = models.CharField(_('Neighborhood'), max_length=50,
+                                    blank=True, null=True, default=None)
+    state = models.ForeignKey(State, verbose_name=_('State'), blank=True,
+                              null=True, default=None)
+    city = models.ForeignKey(City, verbose_name=_('City'), blank=True,
+                             null=True, default=None)
+    suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
+                               null=True, default=None)

@@ -6,9 +6,8 @@ from bootstrap_toolkit.widgets import BootstrapTextInput
 from atados_core.models import State, City, Suburb
 from atados_core.forms import LocationFormMixin
 from atados_project.models import (Project,
-                                   ProjectDonation,
-                                   ProjectWork,
-                                   ProjectJob)
+                                   Donation,
+                                   Work)
 
 
 class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
@@ -52,7 +51,7 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
             raise forms.ValidationError(_('This name (or a very similar) is already is use.'))
         return name
 
-class ProjectDonationCreateForm(ProjectCreateForm):
+'''class ProjectDonationCreateForm(ProjectCreateForm):
 
     class Meta:
         model = ProjectDonation
@@ -67,13 +66,7 @@ class ProjectWorkCreateForm(ProjectCreateForm):
         
     class Meta:
         model = ProjectWork
-        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')
-
-class ProjectJobCreateForm(ProjectWorkCreateForm):
-
-    class Meta:
-        model = ProjectJob
-        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')
+        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')'''
 
 class ProjectPictureForm(forms.ModelForm):
     class Meta:
