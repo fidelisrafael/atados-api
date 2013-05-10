@@ -7,7 +7,7 @@ South==0.7.6
 boto==2.7.0
 django-storages==1.1.6
 #django-haystack==1.2.7
-https://github.com/yokomizor/django-haystack.git
+git+https://github.com/yokomizor/django-haystack.git
 pysolr==2.1.0-beta
 pil
 django-flatblocks==0.6.0
