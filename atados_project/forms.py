@@ -15,7 +15,7 @@ class RoleForm(forms.ModelForm):
         model = Role
 
     def __init__(self, *args, **kwargs):
-        super(ProjectForm, self).__init__(*arg, **kwargs)
+        super(RoleForm, self).__init__(*args, **kwargs)
         
         self.fields['prerequisites'].widget.attrs.update({'rows' : 5})
         

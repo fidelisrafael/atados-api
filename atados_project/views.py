@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.views.generic import TemplateView, View
 from django.views.generic.edit import (CreateView, ModelFormMixin, UpdateView,
-                                       DeleteView)
+                                       DeleteView, FormMixin)
 from django.views.generic.detail import DetailView
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
@@ -19,6 +19,7 @@ from atados_nonprofit.views import NonprofitMixin
 from atados_project.forms import (DonationForm,
                                   WorkForm,
                                   ProjectForm,
+                                  RoleForm,
                                   ProjectPictureForm)
 
 
@@ -67,51 +68,25 @@ class ProjectMixin(NonprofitMixin):
 
         return self.project
 
-class ProjectModelMixin(NonprofitMixin, AvailabilityMixin):
-    model=Project
+class ProjectView(TemplateView, NonprofitMixin, FormMixin):
 
-    def get_form_kwargs(self):
-        kwargs = super(ProjectModelMixin, self).get_form_kwargs()
-        kwargs.update({
-            'nonprofit': self.get_nonprofit(),
-            'user': self.request.user,
-        })
-        return kwargs
+    def get(self, request, *args, **kwargs):
+        project_form = self.get_form(ProjectForm)
+        work_form = self.get_form(WorkForm)
+        role_form = self.get_form(RoleForm)
+        return super(ProjectView, self).get(request, *args, **kwargs)
 
-    def form_valid(self, form):
-        model = form.save(commit=False)
-        if self.request.user.is_authenticated():
-            model.nonprofit = Nonprofit.objects.get(user=self.request.user)
-            model.slug = slugify(model.name)
+    def post(self, request, *args, **kwargs):
+        project_form = self.get_form(ProjectForm)
+        work_form = self.get_form(WorkForm)
+        role_form = self.get_form(RoleForm)
+        if (project_form.is_valid() and
+            work_form.is_valid() and
+            role_form.is_valid()):
+            return self.form_valid(project_form, work_form, role_form)
         else:
-            forms.ValidationError("Authentication required")
-        return super(ProjectModelMixin, self).form_valid(form)
+            return self.form_invalid(project_form, work_form, role_form)
 
-class ProjectUpdateView(ProjectModelMixin, ProjectMixin, UpdateView):
-    template_name = 'atados_project/edit.html'
-
-    def get_form_class(self):
-        if isinstance(self.object, ProjectWork):
-            return ProjectWorkCreateForm
-        elif isinstance(self.object, ProjectJob):
-            return ProjectJobCreateForm
-        elif isinstance(self.object, ProjectDonation):
-            return ProjectDonationCreateForm
-        else:
-            raise Http404
-    
-    def get_context_data(self, **kwargs):
-        context = super(ProjectUpdateView, self).get_context_data(**kwargs)
-        context.update({'form_template': ('atados_project/form-%s.html' % self.get_project().get_project_type())})
-        return context
-        
-    def get_success_url(self):
-        return reverse('project:edit',
-                       args=[self.object.nonprofit.slug, self.object.slug])
-
-    get_object = ProjectMixin.get_project
-
-class ProjectCreateView(ProjectModelMixin, CreateView):
     def get_initial(self):
         nonprofit = self.get_nonprofit()
 
@@ -129,13 +104,42 @@ class ProjectCreateView(ProjectModelMixin, CreateView):
             'suburb': nonprofit.suburb,
         };
 
+    def get_form(self, form_class):
+        if form_class == ProjectForm:
+            return form_class(**self.get_project_form_kwargs())
+        return form_class(**self.get_form_kwargs())
+
+    def get_project_form_kwargs(self):
+        kwargs = super(ProjectView, self).get_form_kwargs()
+        kwargs.update({
+            'nonprofit': self.get_nonprofit(),
+            'user': self.request.user,
+        })
+        return kwargs
+
+    def form_valid(self, project_form, work_form, role_form):
+        model = form.save(commit=False)
+        if self.request.user.is_authenticated():
+            model.nonprofit = Nonprofit.objects.get(user=self.request.user)
+            model.slug = slugify(model.name)
+        else:
+            forms.ValidationError("Authentication required")
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, project_form, work_form, role_form):
+        return self.render_to_response(self.get_context_data(
+            project_form=project_form,
+            work_form=work_form,
+            role_form=role_form))
+
+
 class ProjectDonationCreateView(TemplateView):
     template_name='atados_project/new-donation.html'
 
 class ProjectWorkCreateView(TemplateView):
     template_name='atados_project/new-work.html'
 
-class ProjectJobCreateView(ProjectCreateView):
+class ProjectJobCreateView(ProjectView):
     template_name='atados_project/new-job.html'
 
 class ProjectDetailsView(ProjectMixin, DetailView):
