@@ -58,7 +58,6 @@
                   <li><a href="#">{% trans "Mais cidades em breve." %}</a></li>
                 </ul>
               </li>
-              <li><a href="{% url "project:index" %}">{% trans "Explore" %}</a></li>
               {% if not user.is_authenticated %}
               <li><a href="{% url "volunteer:sign-up" %}">{% trans "Torne-se um voluntário" %}</a></li>
               {% endif %}
