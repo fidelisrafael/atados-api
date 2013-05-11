@@ -2,18 +2,31 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
-from bootstrap_toolkit.widgets import BootstrapTextInput
-from atados_core.models import State, City, Suburb
-from atados_core.forms import LocationFormMixin
+from atados_core.forms import AddressForm
 from atados_project.models import (Project,
                                    Donation,
-                                   Work)
+                                   Work,
+                                   Role)
 
 
-class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
+class RoleForm(forms.ModelForm):
+
+    class Meta:
+        model = Role
+
+    def __init__(self, *args, **kwargs):
+        super(ProjectForm, self).__init__(*arg, **kwargs)
+        
+        self.fields['prerequisites'].widget.attrs.update({'rows' : 5})
+        
+class ProjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')
 
     def __init__(self, nonprofit, user, *args, **kwargs):
-        super(ProjectCreateForm, self).__init__(*args, **kwargs)
+        super(ProjectForm, self).__init__(*args, **kwargs)
 
         self.nonprofit = nonprofit
 
@@ -21,7 +34,6 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class' : 'input-block-level'})
 
-        self.fields['prerequisites'].widget.attrs.update({'rows' : 5})
 
         self.fields['email'].widget.attrs.update({
             'placeholder' : _('example@example.com')})
@@ -31,8 +43,6 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
 
         self.fields['causes'].empty_label = ""
         self.fields['causes'].label = _("Select one or more causes")
-
-        self.prepare_location_fields()
 
     def save(self, commit=True):
         instance = super(ProjectCreateForm, self).save(commit)
@@ -51,23 +61,21 @@ class ProjectCreateForm(LocationFormMixin, forms.ModelForm):
             raise forms.ValidationError(_('This name (or a very similar) is already is use.'))
         return name
 
-'''class ProjectDonationCreateForm(ProjectCreateForm):
+class DonationForm(forms.ModelForm):
 
     class Meta:
-        model = ProjectDonation
-        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')
+        model = Donation
 
-class ProjectWorkCreateForm(ProjectCreateForm):
+class WorkForm(ProjectCreateForm):
+
+    class Meta:
+        model = Work
 
     def __init__(self, *args, **kwargs):
-        super(ProjectWorkCreateForm, self).__init__(*args, **kwargs)
+        super(WorkForm, self).__init__(*args, **kwargs)
         self.fields['skills'].empty_label = ""
         self.fields['skills'].label = _("Select one or more skills")
         
-    class Meta:
-        model = ProjectWork
-        exclude = ('nonprofit', 'slug', 'published', 'deleted', 'deleted_date')'''
-
 class ProjectPictureForm(forms.ModelForm):
     class Meta:
         model = Project

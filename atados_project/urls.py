@@ -3,24 +3,23 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from django.utils.translation import ugettext_lazy as _
 from atados_nonprofit.views import NonprofitBaseView
-#from atados_project.views import (ProjectDonationCreateView,
-                                  #ProjectWorkCreateView,
-                                  #ProjectJobCreateView,
+from atados_project.views import (ProjectDonationCreateView,
+                                  ProjectWorkCreateView,
+                                  ProjectJobCreateView,
                                   #ProjectDetailsView, ProjectUpdateView,
                                   #ProjectCollaboratorsView,
                                   #ProjectDeleteView,
                                   #ProjectApplyView,
                                   #ProjectSearchView,
-                                  #ProjectPictureUpdateView)
+                                  ProjectPictureUpdateView)
 
 urlpatterns = patterns(
     '',
 
-    #url(_(r'^project$'), ProjectSearchView(), name='index'),
-    #url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project$'), NonprofitBaseView.as_view(template_name='atados_project/project-kind-choose.html'), name='new'),
-    #url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/donation$'), ProjectDonationCreateView.as_view(), name='new-donation'),
-    #url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/work$'), ProjectWorkCreateView.as_view(), name='new-work'),
-    #url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/job$'), ProjectJobCreateView.as_view(), name='new-job'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project$'), NonprofitBaseView.as_view(template_name='atados_project/project-kind-choose.html'), name='new'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/donation$'), ProjectDonationCreateView.as_view(), name='new-donation'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/work$'), ProjectWorkCreateView.as_view(), name='new-work'),
+    url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/job$'), ProjectJobCreateView.as_view(), name='new-job'),
     #url(_(r'^(?P<nonprofit>[-\w]+)/(?P<project>[-\w]+)$'), ProjectDetailsView.as_view(), name='details'),
     #url(_(r'^(?P<nonprofit>[-\w]+)/(?P<project>[-\w]+)/edit$'), ProjectUpdateView.as_view(), name='edit'),
     #url(_(r'^(?P<nonprofit>[-\w]+)/(?P<project>[-\w]+)/collaborators$'), ProjectCollaboratorsView.as_view(), name='collaborators'),

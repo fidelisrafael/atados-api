@@ -56,9 +56,14 @@ class AuthenticationForm(ContribAuthenticationForm):
     rememberme = forms.BooleanField(label=_('Stay signed in'),
                                     initial=True, required=False)
 
-class LocationFormMixin(object):
+class AddessForm(forms.ModelForm):
 
-    def prepare_location_fields(self):
+    class Meta:
+        model = Address
+
+    def __init__(self, *args, **kwargs):
+        super(AddressForm, self).init(*args, **kwargs)
+
         self.fields['state'].empty_label = ""
         self.fields['city'].empty_label = ""
         self.fields['suburb'].empty_label = ""
