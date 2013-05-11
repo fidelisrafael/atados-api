@@ -70,6 +70,7 @@ class WorkForm(forms.ModelForm):
 
     class Meta:
         model = Work
+        exclude = ('address',)
 
     def __init__(self, *args, **kwargs):
         super(WorkForm, self).__init__(*args, **kwargs)

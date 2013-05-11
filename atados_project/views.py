@@ -60,7 +60,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         address_form = self.get_form(AddressForm)
         return self.render_to_response(self.get_context_data(project_form=project_form,
                                                              work_form=work_form,
-                                                             role_form=work_form,
+                                                             role_form=role_form,
                                                              address_form=address_form))
 
     def post(self, request, *args, **kwargs):

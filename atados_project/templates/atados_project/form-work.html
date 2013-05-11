@@ -12,19 +12,25 @@
   {{ project_form.prerequisites|as_bootstrap }}
 </fieldset>
 <fieldset>
+  <legend>{% trans "Roles" %}</legend>
+  {{ role_form.name|as_bootstrap }}
+  {{ role_form.prerequisites|as_bootstrap }}
+  {{ role_form.vacancies|as_bootstrap }}
+</fieldset>
+<fieldset>
   <legend>{% trans "Availability" %}</legend>
   <div class="row-fluid">
     <div class="span4">
-      {{ project_form.weekly_hours|as_bootstrap }}
+      {{ wokr_form.weekly_hours|as_bootstrap }}
     </div>
   </div>
 
-  {{ project_form.availabilities|as_availabilities_field }}
+  {{ work_form.availabilities|as_availabilities_field }}
 
 </fieldset>
 <fieldset>
   <legend>{% trans "Location" %}</legend>
-  {{ project_form.can_be_done_remotely|as_bootstrap }}
+  {{ wokr_form.can_be_done_remotely|as_bootstrap }}
   {% include "atados_core/address-fields.html" %}
 </fieldset>
 <fieldset id="project-new-contact">
