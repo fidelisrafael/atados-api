@@ -135,7 +135,7 @@ class ProjectDonationCreateView(TemplateView):
 class ProjectWorkCreateView(TemplateView):
     template_name='atados_project/new-work.html'
 
-class ProjectJobCreateView(TemplateView):
+class ProjectJobCreateView(ProjectCreateView):
     template_name='atados_project/new-job.html'
 
 class ProjectDetailsView(ProjectMixin, DetailView):
