@@ -66,7 +66,7 @@ class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
 
-class WorkForm(ProjectCreateForm):
+class WorkForm(forms.ModelForm):
 
     class Meta:
         model = Work

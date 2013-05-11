@@ -16,9 +16,9 @@ from atados_project.models import (Project, Donation, Work, Apply,
                                    Availability)
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.views import NonprofitMixin
-from atados_project.forms import (ProjectDonationCreateForm,
-                                  ProjectWorkCreateForm,
-                                  ProjectJobCreateForm,
+from atados_project.forms import (DonationForm,
+                                  WorkForm,
+                                  ProjectForm,
                                   ProjectPictureForm)
 
 
@@ -129,16 +129,13 @@ class ProjectCreateView(ProjectModelMixin, CreateView):
             'suburb': nonprofit.suburb,
         };
 
-class ProjectDonationCreateView(ProjectCreateView):
-    form_class=ProjectDonationCreateForm
+class ProjectDonationCreateView(TemplateView):
     template_name='atados_project/new-donation.html'
 
-class ProjectWorkCreateView(ProjectCreateView):
-    form_class=ProjectWorkCreateForm
+class ProjectWorkCreateView(TemplateView):
     template_name='atados_project/new-work.html'
 
-class ProjectJobCreateView(ProjectWorkCreateView):
-    form_class=ProjectJobCreateForm
+class ProjectJobCreateView(TemplateView):
     template_name='atados_project/new-job.html'
 
 class ProjectDetailsView(ProjectMixin, DetailView):

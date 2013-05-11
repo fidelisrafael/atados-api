@@ -7,7 +7,7 @@ from haystack.forms import FacetedSearchForm, model_choices
 from atados_nonprofit.models import Nonprofit
 from atados_project.models import Project
 from atados_volunteer.models import Volunteer
-from atados_core.models import State, City, Suburb, Cause, Skill
+from atados_core.models import Address, State, City, Suburb, Cause, Skill
 
 
 SEARCH_TYPES = (
@@ -56,7 +56,7 @@ class AuthenticationForm(ContribAuthenticationForm):
     rememberme = forms.BooleanField(label=_('Stay signed in'),
                                     initial=True, required=False)
 
-class AddessForm(forms.ModelForm):
+class AddressForm(forms.ModelForm):
 
     class Meta:
         model = Address
