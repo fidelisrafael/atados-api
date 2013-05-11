@@ -30,7 +30,6 @@ class AvailabilityMixin(object):
         super(AvailabilityMixin, self).__init__(*args, **kwargs)
         self.availability_list = Availability.objects.all()
 
-
     def get_context_data(self, **kwargs):
         context = super(AvailabilityMixin, self).get_context_data(**kwargs)
         context.update({'availability_list': self.availability_list})
@@ -71,13 +70,15 @@ class ProjectMixin(NonprofitMixin):
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):
 
     def get(self, request, *args, **kwargs):
-        project_form = self.get_form(ProjectForm)
+        project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
         role_form = self.get_form(RoleForm)
-        return super(ProjectView, self).get(request, *args, **kwargs)
+        return self.render_to_response(self.get_context_data(project_form=project_form,
+                                                             work_form=work_form,
+                                                             role_form=work_form))
 
     def post(self, request, *args, **kwargs):
-        project_form = self.get_form(ProjectForm)
+        project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
         role_form = self.get_form(RoleForm)
         if (project_form.is_valid() and
@@ -104,10 +105,8 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             'suburb': nonprofit.suburb,
         };
 
-    def get_form(self, form_class):
-        if form_class == ProjectForm:
-            return form_class(**self.get_project_form_kwargs())
-        return form_class(**self.get_form_kwargs())
+    def get_project_form(self):
+        return ProjectForm(**self.get_project_form_kwargs())
 
     def get_project_form_kwargs(self):
         kwargs = super(ProjectView, self).get_form_kwargs()
