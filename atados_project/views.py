@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
-from atados_core.forms import SearchForm
+from atados_core.forms import AddressForm
 from atados_core.views import JSONResponseMixin, SearchView
 from atados_volunteer.models import Volunteer
 from atados_project.models import (Project, Donation, Work, Apply,
@@ -45,26 +45,10 @@ class ProjectMixin(NonprofitMixin):
 
     def get_project(self):
         if self.project is None:
-            try:
-                self.project = ProjectWork.objects.get(
-                    nonprofit=self.get_nonprofit(),
-                    slug=self.kwargs.get('project'),
-                    deleted=False)
-            except ProjectWork.DoesNotExist:
-                try:
-                    self.project = ProjectJob.objects.get(
-                        nonprofit=self.get_nonprofit(),
-                        slug=self.kwargs.get('project'),
-                        deleted=False)
-                except ProjectJob.DoesNotExist:
-                    try:
-                        self.project = ProjectDonation.objects.get(
-                            nonprofit=self.get_nonprofit(),
-                            slug=self.kwargs.get('project'),
-                            deleted=False)
-                    except ProjectDonation.DoesNotExist:
-                        raise Http404
-
+            self.project = get_object_or_404(Project, 
+                                             nonprofit=self.get_nonprofit(),
+                                             slug=self.kwargs.get('project'),
+                                             deleted=False)
         return self.project
 
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):
@@ -73,20 +57,24 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
         role_form = self.get_form(RoleForm)
+        address_form = self.get_form(AddressForm)
         return self.render_to_response(self.get_context_data(project_form=project_form,
                                                              work_form=work_form,
-                                                             role_form=work_form))
+                                                             role_form=work_form,
+                                                             address_form=address_form))
 
     def post(self, request, *args, **kwargs):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
         role_form = self.get_form(RoleForm)
+        address_form = self.get_form(AddressForm)
         if (project_form.is_valid() and
             work_form.is_valid() and
-            role_form.is_valid()):
-            return self.form_valid(project_form, work_form, role_form)
+            role_form.is_valid() and
+            address_form.is_valid()):
+            return self.form_valid(project_form, work_form, role_form, address_form)
         else:
-            return self.form_invalid(project_form, work_form, role_form)
+            return self.form_invalid(project_form, work_form, role_form, address_form)
 
     def get_initial(self):
         nonprofit = self.get_nonprofit()
@@ -116,7 +104,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         })
         return kwargs
 
-    def form_valid(self, project_form, work_form, role_form):
+    def form_valid(self, project_form, work_form, role_form, address_form):
         model = form.save(commit=False)
         if self.request.user.is_authenticated():
             model.nonprofit = Nonprofit.objects.get(user=self.request.user)
@@ -125,11 +113,12 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             forms.ValidationError("Authentication required")
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, project_form, work_form, role_form):
+    def form_invalid(self, project_form, work_form, role_form, address_form):
         return self.render_to_response(self.get_context_data(
             project_form=project_form,
             work_form=work_form,
-            role_form=role_form))
+            role_form=role_form,
+            address_form=address_form))
 
 
 class ProjectDonationCreateView(TemplateView):

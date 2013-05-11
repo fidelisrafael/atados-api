@@ -62,7 +62,11 @@ class AddressForm(forms.ModelForm):
         model = Address
 
     def __init__(self, *args, **kwargs):
-        super(AddressForm, self).init(*args, **kwargs)
+        super(AddressForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class' : 'input-block-level'})
 
         self.fields['state'].empty_label = ""
         self.fields['city'].empty_label = ""
