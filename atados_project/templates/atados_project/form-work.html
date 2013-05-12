@@ -12,12 +12,22 @@
 </fieldset>
 <fieldset>
   <legend>{% trans "Roles" %}</legend>
-  {{ role_formset.management_form }}
-  {% for role_form in role_formset %}
-    {{ role_form.name|as_bootstrap }}
-    {{ role_form.prerequisites|as_bootstrap }}
-    {{ role_form.vacancies|as_bootstrap }}
-  {% endfor %}
+  <div class="roles">
+    {{ role_formset.management_form }}
+    {% for role_form in role_formset %}
+      {{ role_form.name|as_bootstrap }}
+      {{ role_form.prerequisites|as_bootstrap }}
+      {{ role_form.vacancies|as_bootstrap }}
+    {% endfor %}
+    
+    <button type="button" class="btn add"><i class="icon-plus"></i> {% trans "Add" %}</button>
+
+    <div class="hide empty-form">
+      {{ role_formset.empty_form.name|as_bootstrap }}
+      {{ role_formset.empty_form.prerequisites|as_bootstrap }}
+      {{ role_formset.empty_form.vacancies|as_bootstrap }}
+    </div>
+  </div>
 </fieldset>
 <fieldset>
   <legend>{% trans "Availability" %}</legend>

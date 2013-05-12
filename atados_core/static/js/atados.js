@@ -75,4 +75,22 @@
     });
   });
 
+  $('.roles .add').click(function() {
+    var roles = $(this).closest('.roles');
+    var clone = $('.empty-form', roles).clone().removeClass('empty-form').removeClass('hide');
+    var total_forms = parseInt($('[name="form-TOTAL_FORMS"]', roles).val());
+    var max_num_forms = parseInt($('[name="form-MAX_NUM_FORMS"]', roles).val());
+
+    if (total_forms++ > max_num_forms) return;
+
+    $('[name="id_form-TOTAL_FORMS"]', roles).val(total_forms);
+    
+    $('input, textarea', clone).each(function(index, element) {
+      $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
+      $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
+    });
+
+    clone.insertBefore($(this));
+  });
+
 }( window , window.jQuery ));
