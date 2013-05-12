@@ -57,7 +57,8 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     def get(self, request, *args, **kwargs):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
-        role_formset = formset_factory(RoleForm, extra=3)
+        RoleFormset = formset_factory(RoleForm)
+        role_formset = RoleFormset()
         address_form = self.get_form(AddressForm)
         return self.render_to_response(self.get_context_data(project_form=project_form,
                                                              work_form=work_form,
@@ -67,7 +68,8 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     def post(self, request, *args, **kwargs):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
-        role_formset = formset_factory(RoleForm, extra=3)
+        RoleFormset = formset_factory(RoleForm)
+        role_formset = RoleFormset(request.POST, request.FILES)
         address_form = self.get_form(AddressForm)
         if (project_form.is_valid() and
             work_form.is_valid() and

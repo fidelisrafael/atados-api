@@ -83,7 +83,7 @@
 
     if (total_forms++ > max_num_forms) return;
 
-    $('[name="id_form-TOTAL_FORMS"]', roles).val(total_forms);
+    $('[name="form-TOTAL_FORMS"]', roles).val(total_forms);
     
     $('input, textarea', clone).each(function(index, element) {
       $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
