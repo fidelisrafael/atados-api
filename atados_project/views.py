@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
+from django.forms.formsets import formset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 from atados_core.forms import AddressForm
@@ -56,25 +57,25 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     def get(self, request, *args, **kwargs):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
-        role_form = self.get_form(RoleForm)
+        role_formset = formset_factory(RoleForm, extra=3)
         address_form = self.get_form(AddressForm)
         return self.render_to_response(self.get_context_data(project_form=project_form,
                                                              work_form=work_form,
-                                                             role_form=role_form,
+                                                             role_formset=role_formset,
                                                              address_form=address_form))
 
     def post(self, request, *args, **kwargs):
         project_form = self.get_project_form()
         work_form = self.get_form(WorkForm)
-        role_form = self.get_form(RoleForm)
+        role_formset = formset_factory(RoleForm, extra=3)
         address_form = self.get_form(AddressForm)
         if (project_form.is_valid() and
             work_form.is_valid() and
-            role_form.is_valid() and
+            role_formset.is_valid() and
             address_form.is_valid()):
-            return self.form_valid(project_form, work_form, role_form, address_form)
+            return self.form_valid(project_form, work_form, role_formset, address_form)
         else:
-            return self.form_invalid(project_form, work_form, role_form, address_form)
+            return self.form_invalid(project_form, work_form, role_formset, address_form)
 
     def get_initial(self):
         nonprofit = self.get_nonprofit()
@@ -104,7 +105,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         })
         return kwargs
 
-    def form_valid(self, project_form, work_form, role_form, address_form):
+    def form_valid(self, project_form, work_form, role_formset, address_form):
         model = form.save(commit=False)
         if self.request.user.is_authenticated():
             model.nonprofit = Nonprofit.objects.get(user=self.request.user)
@@ -113,11 +114,11 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             forms.ValidationError("Authentication required")
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, project_form, work_form, role_form, address_form):
+    def form_invalid(self, project_form, work_form, role_formset, address_form):
         return self.render_to_response(self.get_context_data(
             project_form=project_form,
             work_form=work_form,
-            role_form=role_form,
+            role_formset=role_formset,
             address_form=address_form))
 
 

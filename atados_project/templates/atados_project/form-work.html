@@ -8,14 +8,16 @@
 </fieldset>
 <fieldset>
   <legend>{% trans "Skills" %}</legend>
-  {{ project_form.skills|as_select_button_list_field }}
-  {{ project_form.prerequisites|as_bootstrap }}
+  {{ work_form.skills|as_select_button_list_field }}
 </fieldset>
 <fieldset>
   <legend>{% trans "Roles" %}</legend>
-  {{ role_form.name|as_bootstrap }}
-  {{ role_form.prerequisites|as_bootstrap }}
-  {{ role_form.vacancies|as_bootstrap }}
+  {{ role_formset.management_form }}
+  {% for role_form in role_formset %}
+    {{ role_form.name|as_bootstrap }}
+    {{ role_form.prerequisites|as_bootstrap }}
+    {{ role_form.vacancies|as_bootstrap }}
+  {% endfor %}
 </fieldset>
 <fieldset>
   <legend>{% trans "Availability" %}</legend>
