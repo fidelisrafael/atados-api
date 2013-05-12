@@ -17,7 +17,11 @@ class RoleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RoleForm, self).__init__(*args, **kwargs)
         
-        self.fields['prerequisites'].widget.attrs.update({'rows' : 5})
+        self.fields['prerequisites'].widget.attrs.update({'rows' : 3})
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class' : 'input-block-level'})
         
 class ProjectForm(forms.ModelForm):
 

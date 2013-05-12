@@ -90,7 +90,7 @@
       $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
     });
 
-    clone.insertBefore($(this));
+    $('.role-forms', roles).append(clone);
   });
 
 }( window , window.jQuery ));

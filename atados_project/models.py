@@ -82,7 +82,7 @@ class Work(models.Model):
 
 class Role(models.Model):
     work = models.ForeignKey(Work)
-    name = models.CharField(_('Project name'), max_length=50)
+    name = models.CharField(_('Role name'), max_length=50)
     prerequisites = models.TextField(_('Prerequisites'), max_length=1024)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)

@@ -14,18 +14,35 @@
   <legend>{% trans "Roles" %}</legend>
   <div class="roles">
     {{ role_formset.management_form }}
-    {% for role_form in role_formset %}
-      {{ role_form.name|as_bootstrap }}
-      {{ role_form.prerequisites|as_bootstrap }}
-      {{ role_form.vacancies|as_bootstrap }}
-    {% endfor %}
+    <div class="role-forms">
+      {% for role_form in role_formset %}
+        <div class="row-fluid">
+          <div class="span8">
+            {{ role_form.name|as_bootstrap }}
+          </div>
+          <div class="span4">
+            {{ role_form.vacancies|as_bootstrap }}
+          </div>
+        </div>
+        {{ role_form.prerequisites|as_bootstrap }}
+      {% endfor %}
+    </div>
     
-    <button type="button" class="btn add"><i class="icon-plus"></i> {% trans "Add" %}</button>
+    <div class="form-actions">
+      <button type="button" class="btn add"><i class="icon-plus"></i> {% trans "Add more roles" %}</button>
+    </div>
 
     <div class="hide empty-form">
-      {{ role_formset.empty_form.name|as_bootstrap }}
+      <hr />
+      <div class="row-fluid">
+        <div class="span8">
+          {{ role_formset.empty_form.name|as_bootstrap }}
+        </div>
+        <div class="span4">
+          {{ role_formset.empty_form.vacancies|as_bootstrap }}
+        </div>
+      </div>
       {{ role_formset.empty_form.prerequisites|as_bootstrap }}
-      {{ role_formset.empty_form.vacancies|as_bootstrap }}
     </div>
   </div>
 </fieldset>
