@@ -10,6 +10,7 @@ from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados_volunteer.forms import RegistrationForm
 from atados_nonprofit.views import NonprofitDetailsView, NonprofitHomeView
 from atados_nonprofit.models import Nonprofit
+from atados_project.models import Project
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
 
@@ -19,9 +20,11 @@ template_name = 'atados_core/home.html'
 class HomeView(TemplateView):
     template_name='atados_core/home.html'
 
-    def get_context_date(self):
+    def get_context_data(self):
+        projects = SearchQuerySet().models(Project).order_by('-id')[:60]
         return {'form': RegistrationForm(),
-                'environ': os.environ}
+                'environ': os.environ,
+                'projects': projects}
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():

@@ -307,17 +307,26 @@ legend + * {
   }
 }
 
-ul.projects {
-  padding:0;
-  margin:0;
+.project-list {
+  .row + .row {
+    margin-top:40px;
+  }
 
-  li {
-    padding:0;
-    margin:0;
-    list-style:none;
+  .project-item {
+    text-align: center;
 
-    & + li {
-      margin-top:10px;
+    .title {
+      display:block;
+      text-transform:uppercase;
+      font-size:31.5px;
+      color:#555;
+      line-height:40px;
+      margin:10px 0;
+    }
+
+    p {
+      margin-left: 10px;
+      margin-right: 10px;
     }
   }
 }
