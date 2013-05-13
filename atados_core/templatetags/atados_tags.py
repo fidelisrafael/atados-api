@@ -4,6 +4,7 @@ from django.template import Context
 from django.template.defaulttags import kwarg_re
 from django.template.loader import get_template
 from django.utils.encoding import smart_str
+from atados_core.models import Availability, WEEKDAYS, PERIODS
 import re
 
 
@@ -17,11 +18,36 @@ def active(request, href):
 
 @register.filter
 def as_availabilities_table(selected):
-    return 'availabilities'
+    availabilities = dict([(weekday_id, {'weekday_label': weekday_label, 'periods': {}})
+        for weekday_id, weekday_label in WEEKDAYS])
+    for availability in Availability.objects.all():
+        availabilities[availability.weekday]['periods'].update(
+                {availability.period: availability in selected.all()})
+
+    return get_template("atados_core/availabilities_table.html").render(
+        Context({
+            'availabilities': availabilities,
+            'periods': PERIODS,
+            'weekdays': WEEKDAYS,
+        })
+    )
 
 @register.filter
 def as_availabilities_field(field):
-    return 'availabilities'
+    availabilities = dict([(weekday_id, {'weekday_label': weekday_label, 'periods': {}})
+        for weekday_id, weekday_label in WEEKDAYS])
+    for availability in Availability.objects.all():
+        availabilities[availability.weekday]['periods'].update(
+                {availability.period: availability.id})
+
+    return get_template("atados_core/availabilities_field.html").render(
+        Context({
+            'field': field,
+            'availabilities': availabilities,
+            'periods': PERIODS,
+            'weekdays': WEEKDAYS,
+        })
+    )
 
 @register.filter
 def as_select_button_list_field(field):

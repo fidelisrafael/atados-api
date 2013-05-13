@@ -1,5 +1,5 @@
 {% extends 'atados_project/details.html' %}
-{% load i18n atados_core thumbnail %}
+{% load i18n atados_tags thumbnail %}
 
 {% block project %}
 
@@ -49,13 +49,22 @@
     {{ project.prerequisites }}
   </div>
 </div>
-{% block hours %}{% endblock %}
+{% if project.weekly_hours %}
+<div class="row">
+  <div class="span2">
+    <h2>{% trans "Weekly hours" %}</h2>
+  </div>
+  <div class="span6">
+    {{ project.work.weekly_hours }}
+  </div>
+</div>
+{% endif %}
 <div class="row">
   <div class="span2">
     <h2>{% trans "Availability" %}</h2>
   </div>
   <div class="span6">
-    {{ project.availabilities|as_availabilities_table }}
+    {{ project.work.availabilities|as_availabilities_table }}
   </div>
 </div>
 <div class="row">

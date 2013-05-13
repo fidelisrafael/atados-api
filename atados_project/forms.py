@@ -13,6 +13,7 @@ class RoleForm(forms.ModelForm):
 
     class Meta:
         model = Role
+        exclude = ('work',)
 
     def __init__(self, *args, **kwargs):
         super(RoleForm, self).__init__(*args, **kwargs)
@@ -49,7 +50,7 @@ class ProjectForm(forms.ModelForm):
         self.fields['causes'].label = _("Select one or more causes")
 
     def save(self, commit=True):
-        instance = super(ProjectCreateForm, self).save(commit)
+        instance = super(ProjectForm, self).save(commit)
 
         # save instance again to trigger RealTimeSearchIndex with m2m updated
         if commit:
@@ -74,7 +75,7 @@ class WorkForm(forms.ModelForm):
 
     class Meta:
         model = Work
-        exclude = ('address',)
+        exclude = ('address', 'project',)
 
     def __init__(self, *args, **kwargs):
         super(WorkForm, self).__init__(*args, **kwargs)

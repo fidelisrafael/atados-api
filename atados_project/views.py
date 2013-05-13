@@ -1,4 +1,5 @@
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView, View
 from django.views.generic.edit import (CreateView, ModelFormMixin, UpdateView,
                                        DeleteView, FormMixin)
@@ -53,6 +54,8 @@ class ProjectMixin(NonprofitMixin):
         return self.project
 
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):
+    success_url=''
+    project=None
 
     def get(self, request, *args, **kwargs):
         project_form = self.get_project_form()
@@ -96,6 +99,10 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             'suburb': nonprofit.suburb,
         };
 
+    def get_success_url(self):
+        return reverse('project:details',
+                       args=[self.get_nonprofit().slug, self.project.slug])
+
     def get_project_form(self):
         return ProjectForm(**self.get_project_form_kwargs())
 
@@ -108,10 +115,24 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         return kwargs
 
     def form_valid(self, project_form, work_form, role_formset, address_form):
-        model = form.save(commit=False)
         if self.request.user.is_authenticated():
-            model.nonprofit = Nonprofit.objects.get(user=self.request.user)
-            model.slug = slugify(model.name)
+            self.project = project_form.save(commit=False)
+            self.project.nonprofit = Nonprofit.objects.get(user=self.request.user)
+            self.project.slug = slugify(self.project.name)
+            self.project = project_form.save()
+
+            address = address_form.save()
+
+            work = work_form.save(commit=False)
+            work.project = self.project
+            work.address = address
+            work = work_form.save()
+
+            for role_form in role_formset.forms:
+                if role_form.has_changed():
+                    role = role_form.save(commit=False)
+                    role.work = work
+                    role = role_form.save()
         else:
             forms.ValidationError("Authentication required")
         return HttpResponseRedirect(self.get_success_url())
@@ -160,13 +181,7 @@ class ProjectDetailsView(ProjectMixin, DetailView):
         return context
 
     def get_template_names(self):
-        if isinstance(self.object, ProjectDonation):
-            return 'atados_project/details-donation.html'
-        if isinstance(self.object, ProjectJob):
-            return 'atados_project/details-job.html'
-        if isinstance(self.object, ProjectWork):
-            return 'atados_project/details-work.html'
-        raise Http404
+        return 'atados_project/details-work.html'
 
     get_object = ProjectMixin.get_project
 
@@ -206,6 +221,3 @@ class ProjectDeleteView(ProjectMixin, DeleteView):
     def get_success_url(self):
         messages.info(self.request, _('Project was successfully deleted.'))
         return reverse('atados:home')
-
-class ProjectSearchView(SearchView):
-    template = 'atados_project/index.html'

@@ -65,14 +65,14 @@ class Project(models.Model):
         return self.project_type
 
 class Donation(models.Model):
-    project = models.ForeignKey(Project)
-    delivery = models.ForeignKey(Address)
+    project = models.OneToOneField(Project)
+    delivery = models.OneToOneField(Address)
     collection_by_nonprofit = models.BooleanField(
             _('Collection made by the nonprofit'))
 
 class Work(models.Model):
-    project = models.ForeignKey(Project)
-    address = models.ForeignKey(Address)
+    project = models.OneToOneField(Project)
+    address = models.OneToOneField(Address)
     availabilities = models.ManyToManyField(Availability)
     skills = models.ManyToManyField(Skill)
     weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
@@ -82,8 +82,10 @@ class Work(models.Model):
 
 class Role(models.Model):
     work = models.ForeignKey(Work)
-    name = models.CharField(_('Role name'), max_length=50)
-    prerequisites = models.TextField(_('Prerequisites'), max_length=1024)
+    name = models.CharField(_('Role name'), max_length=50,
+                                    blank=True, null=True, default=None)
+    prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
+                                    blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
 
