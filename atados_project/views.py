@@ -145,10 +145,10 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             address_form=address_form))
 
 
-class ProjectDonationCreateView(TemplateView):
+class ProjectDonationCreateView(ProjectView):
     template_name='atados_project/new-donation.html'
 
-class ProjectWorkCreateView(TemplateView):
+class ProjectWorkCreateView(ProjectView):
     template_name='atados_project/new-work.html'
 
 class ProjectJobCreateView(ProjectView):
