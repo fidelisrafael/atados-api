@@ -1,33 +1,33 @@
-{% load i18n bootstrap_toolkit atados_core %}
+{% load i18n bootstrap_toolkit atados_tags %}
 <fieldset>
-  {{ form.name|as_bootstrap }}
+  {{ project_form.name|as_bootstrap }}
 </fieldset>
 <fieldset>
   <legend>{% trans "Causes" %}</legend>
-  {{ form.causes|as_select_button_list_field }}
+  {{ project_form.causes|as_select_button_list_field }}
 </fieldset>
 <fieldset>
   <legend>{% trans "Collecting" %}</legend>
-  {{ form.collection_by_nonprofit|as_bootstrap }}
+  {{ donation_form.collection_by_nonprofit|as_bootstrap }}
 </fieldset>
 <fieldset>
   <legend>{% trans "Delivery" %}</legend>
-  {% include "atados_core/location-fields.html" %}
+  {% include "atados_core/address-fields.html" %}
 </fieldset>
 <fieldset id="project-new-contact">
   <legend>{% trans "Contact" %}</legend>
-  {{ form.responsible|as_bootstrap }}
+  {{ project_form.responsible|as_bootstrap }}
   <div class="row-fluid">
     <div class="span6">
-      {{ form.phone|as_bootstrap }}
+      {{ project_form.phone|as_bootstrap }}
     </div>
     <div class="span6">
-      {{ form.email|as_bootstrap }}
+      {{ project_form.email|as_bootstrap }}
     </div>
   </div>
 </fieldset>
 <fieldset>
   <legend>{% trans "More info" %}</legend>
-  {{ form.details|as_bootstrap }}
+  {{ project_form.details|as_bootstrap }}
 </fieldset>
 
