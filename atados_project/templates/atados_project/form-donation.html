@@ -1,4 +1,9 @@
 {% load i18n bootstrap_toolkit atados_tags %}
+
+{{ project_form.errors }}
+{{ donation_form.errors }}
+{{ address_form.errors }}
+
 <fieldset>
   {{ project_form.name|as_bootstrap }}
 </fieldset>

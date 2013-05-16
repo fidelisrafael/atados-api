@@ -54,33 +54,22 @@ class ProjectMixin(NonprofitMixin):
         return self.project
 
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):
-    success_url=''
     project=None
 
+    def get_forms(self):
+        return {
+            'project_form': self.get_project_form(),
+        }
+
     def get(self, request, *args, **kwargs):
-        project_form = self.get_project_form()
-        work_form = self.get_form(WorkForm)
-        RoleFormset = formset_factory(RoleForm)
-        role_formset = RoleFormset()
-        address_form = self.get_form(AddressForm)
-        return self.render_to_response(self.get_context_data(project_form=project_form,
-                                                             work_form=work_form,
-                                                             role_formset=role_formset,
-                                                             address_form=address_form))
+        return self.render_to_response(self.get_context_data(**self.get_forms()))
 
     def post(self, request, *args, **kwargs):
-        project_form = self.get_project_form()
-        work_form = self.get_form(WorkForm)
-        RoleFormset = formset_factory(RoleForm)
-        role_formset = RoleFormset(request.POST, request.FILES)
-        address_form = self.get_form(AddressForm)
-        if (project_form.is_valid() and
-            work_form.is_valid() and
-            role_formset.is_valid() and
-            address_form.is_valid()):
-            return self.form_valid(project_form, work_form, role_formset, address_form)
+        forms = self.get_forms()
+        if all([form.is_valid() for key, form in forms.iteritems()]):
+            return self.form_valid(**forms)
         else:
-            return self.form_invalid(project_form, work_form, role_formset, address_form)
+            return self.form_invalid(**forms)
 
     def get_initial(self):
         nonprofit = self.get_nonprofit()
@@ -99,9 +88,9 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
             'suburb': nonprofit.suburb,
         };
 
-    def get_success_url(self):
+    def get_success_url(self, project):
         return reverse('project:details',
-                       args=[self.get_nonprofit().slug, self.project.slug])
+                       args=[self.get_nonprofit().slug, project.slug])
 
     def get_project_form(self):
         return ProjectForm(**self.get_project_form_kwargs())
@@ -114,42 +103,75 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         })
         return kwargs
 
-    def form_valid(self, project_form, work_form, role_formset, address_form):
-        if self.request.user.is_authenticated():
-            self.project = project_form.save(commit=False)
-            self.project.nonprofit = Nonprofit.objects.get(user=self.request.user)
-            self.project.slug = slugify(self.project.name)
-            self.project = project_form.save()
+    def form_invalid(self, project_form, donation_form, address_form):
+        return self.render_to_response(self.get_context_data(**self.get_forms()))
 
-            address = address_form.save()
-
-            work = work_form.save(commit=False)
-            work.project = self.project
-            work.address = address
-            work = work_form.save()
-
-            for role_form in role_formset.forms:
-                if role_form.has_changed():
-                    role = role_form.save(commit=False)
-                    role.work = work
-                    role = role_form.save()
-        else:
-            forms.ValidationError("Authentication required")
-        return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, project_form, work_form, role_formset, address_form):
-        return self.render_to_response(self.get_context_data(
-            project_form=project_form,
-            work_form=work_form,
-            role_formset=role_formset,
-            address_form=address_form))
+    def save_project(self, project_form):
+        project = project_form.save(commit=False)
+        project.nonprofit = Nonprofit.objects.get(user=self.request.user)
+        project.slug = slugify(project.name)
+        return project_form.save()
 
 
 class ProjectDonationCreateView(ProjectView):
     template_name='atados_project/new-donation.html'
 
+    def get_forms(self):
+        forms = super(ProjectDonationCreateView, self).get_forms()
+        forms.update({
+            'donation_form': self.get_form(DonationForm),
+            'address_form': self.get_form(AddressForm),
+        })
+        return forms
+
+    def form_valid(self, project_form, donation_form, address_form):
+        if not self.request.user.is_authenticated():
+            forms.ValidationError("Authentication required")
+
+        project = self.save_project(project_form)
+
+        address = address_form.save()
+
+        donation = donation_form.save(commit=False)
+        donation.project = project
+        donation.delivery = address
+        donation = donation.save()
+
+        return HttpResponseRedirect(self.get_success_url(project))
+
 class ProjectWorkCreateView(ProjectView):
     template_name='atados_project/new-work.html'
+
+    def get_forms(self):
+        RoleFormset = formset_factory(RoleForm)
+        forms = super(ProjectDonationCreateView, self).get_forms()
+        forms.update({
+            'work_form': self.get_form(WorkForm),
+            'role_formset': RoleFormset(request.POST, request.FILES),
+            'address_form': self.get_form(AddressForm),
+        })
+        return forms
+
+    def form_valid(self, project_form, work_form, role_formset, address_form):
+        if not self.request.user.is_authenticated():
+            forms.ValidationError("Authentication required")
+
+        project = self.save_project(project_form)
+
+        address = address_form.save()
+
+        work = work_form.save(commit=False)
+        work.project = project
+        work.address = address
+        work = work_form.save()
+
+        for role_form in role_formset.forms:
+            if role_form.has_changed():
+                role = role_form.save(commit=False)
+                role.work = work
+                role = role_form.save()
+
+        return HttpResponseRedirect(self.get_success_url(project))
 
 class ProjectJobCreateView(ProjectView):
     template_name='atados_project/new-job.html'
@@ -181,6 +203,7 @@ class ProjectDetailsView(ProjectMixin, DetailView):
         return context
 
     def get_template_names(self):
+        return 'atados_project/details-donation.html'
         return 'atados_project/details-work.html'
 
     get_object = ProjectMixin.get_project

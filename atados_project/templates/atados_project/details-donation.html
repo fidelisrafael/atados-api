@@ -1,0 +1,40 @@
+{% extends 'atados_project/details.html' %}
+{% load i18n thumbnail %}
+
+{% block project %}
+
+<div class="row">
+  <div class="span2">
+    <h2>{% trans "About" %}</h2>
+  </div>
+  <div class="span6">
+    {{ project.details|linebreaks }}
+  </div>
+</div>
+<div class="row">
+  <div class="span2">
+    <h2>{% trans "Causes" %}</h2>
+  </div>
+  <div class="span6">
+    {% for cause in  project.causes.all %}
+    <span class="label label-info">{{ cause }}</span>
+    {% endfor %}
+  </div>
+</div>
+<div class="row">
+  <div class="span2">
+    <h2>{% trans "Location" %}</h2>
+  </div>
+  <div class="span6">
+    {% if project.can_be_done_remotely %}
+    {% trans "This work can be done remotely." %}
+    {% else %}
+    {% trans "This work can't be done remotely." %}
+    {% endif %} <br />
+    {% trans "Addressline" %} {{ project.addressline }} <br />
+    {% trans "Neighborhood" %} {{ project.neighborhood }} <br />
+    {% trans "City" %} {{ project.city }} <br />
+  </div>
+</div>
+{% endblock %}
+

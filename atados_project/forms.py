@@ -70,6 +70,7 @@ class DonationForm(forms.ModelForm):
 
     class Meta:
         model = Donation
+        exclude = ('delivery', 'project',)
 
 class WorkForm(forms.ModelForm):
 
