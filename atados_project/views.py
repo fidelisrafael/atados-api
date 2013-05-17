@@ -65,7 +65,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         return self.render_to_response(self.get_context_data(**self.get_forms()))
 
     def post(self, request, *args, **kwargs):
-        forms = self.get_forms()
+        forms = self.get_forms(request)
         if all([form.is_valid() for key, form in forms.iteritems()]):
             return self.form_valid(**forms)
         else:
@@ -116,7 +116,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
 class ProjectDonationCreateView(ProjectView):
     template_name='atados_project/new-donation.html'
 
-    def get_forms(self):
+    def get_forms(self, request=None):
         forms = super(ProjectDonationCreateView, self).get_forms()
         forms.update({
             'donation_form': self.get_form(DonationForm),
@@ -142,14 +142,20 @@ class ProjectDonationCreateView(ProjectView):
 class ProjectWorkCreateView(ProjectView):
     template_name='atados_project/new-work.html'
 
-    def get_forms(self):
+    def get_forms(self, request=None):
         RoleFormset = formset_factory(RoleForm)
-        forms = super(ProjectDonationCreateView, self).get_forms()
+        forms = super(ProjectWorkCreateView, self).get_forms()
         forms.update({
             'work_form': self.get_form(WorkForm),
-            'role_formset': RoleFormset(request.POST, request.FILES),
             'address_form': self.get_form(AddressForm),
         })
+
+        if (request):
+            forms.update({
+                'role_formset': RoleFormset(self.request.POST, self.request.FILES),
+            })
+        else:
+            forms.update({'role_formset': RoleFormset(),})
         return forms
 
     def form_valid(self, project_form, work_form, role_formset, address_form):
@@ -173,7 +179,7 @@ class ProjectWorkCreateView(ProjectView):
 
         return HttpResponseRedirect(self.get_success_url(project))
 
-class ProjectJobCreateView(ProjectView):
+class ProjectJobCreateView(ProjectWorkCreateView):
     template_name='atados_project/new-job.html'
 
 class ProjectDetailsView(ProjectMixin, DetailView):
