@@ -165,12 +165,8 @@ legend + * {
     color:#B94A48;
   }
 
-  input[type=text], input[type=password] { 
-    width: 404px;
-  }
-
   .input-prepend input {
-    width: 215px;
+    width: 231px;
   }
 
   .form-terms {
@@ -184,6 +180,28 @@ legend + * {
     padding-top: 12px;
   }
 
+}
+
+@media (max-width: 767px) {
+  #volunteer-sign-up, #nonprofit-sign-up {
+    .input-prepend input {
+      width: 122px;
+    }
+  }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+  #volunteer-sign-up, #nonprofit-sign-up {
+    .input-prepend input {
+      width: 123px;
+    }
+  }
+}
+@media (min-width: 1200px) {
+  #volunteer-sign-up, #nonprofit-sign-up {
+    .input-prepend input {
+      width: 341px;
+    }
+  }
 }
 
 #sign-in {
