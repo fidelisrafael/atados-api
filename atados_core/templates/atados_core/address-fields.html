@@ -1,5 +1,5 @@
 {% load i18n bootstrap_toolkit %}
-<div class="location-fields">
+<div class="location-fields{% if class %} {{ class }}{% endif %}">
   <div class="row-fluid">
     <div class="span4">
       {{ address_form.zipcode|as_bootstrap }}

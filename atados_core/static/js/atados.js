@@ -45,6 +45,17 @@
     return false;
   });
 
+  $('[name="can_be_done_remotely"]').change(function(){
+    var container = $(this).parents('fieldset').find('.location-fields');
+    if ($(this).is(':checked')) {
+      container.hide();
+      container.addClass('hide');
+    } else {
+      container.show();
+      container.removeClass('hide');
+    }
+  });
+
   $('select[name="state"]').change(function(){
     var state = $(this)
     var city = state.closest('.location-fields').find('select[name="city"]');

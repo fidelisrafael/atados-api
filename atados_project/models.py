@@ -29,6 +29,7 @@ class Project(models.Model):
     phone = models.CharField(_('Phone'), max_length=20)
     email = models.EmailField(_('E-mail'))
     published = models.BooleanField(_("Published"), default=False)
+    closed = models.BooleanField(_("Closed"), default=False)
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
                                         null=True)

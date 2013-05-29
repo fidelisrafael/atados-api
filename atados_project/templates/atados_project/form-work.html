@@ -59,8 +59,13 @@
 </fieldset>
 <fieldset>
   <legend>{% trans "Location" %}</legend>
-  {{ wokr_form.can_be_done_remotely|as_bootstrap }}
-  {% include "atados_core/address-fields.html" %}
+  {{ work_form.can_be_done_remotely|as_bootstrap }}
+
+  {% if work_form.can_be_done_remotely.value %}
+    {% include "atados_core/address-fields.html" with class="hide" %}
+  {% else %}
+    {% include "atados_core/address-fields.html" %}
+  {% endif %}
 </fieldset>
 <fieldset id="project-new-contact">
   <legend>{% trans "Contact" %}</legend>
