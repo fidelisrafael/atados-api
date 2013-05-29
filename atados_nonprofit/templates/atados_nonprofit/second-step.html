@@ -1,5 +1,5 @@
 {% extends 'atados_nonprofit/base.html' %}
-{% load i18n bootstrap_toolkit atados_core %}
+{% load i18n bootstrap_toolkit atados_tags %}
 
 {% block breadcrumb %}
 <li><a href="{% url "nonprofit:first-step" nonprofit.slug %}">{% trans "Choose your causes" %}</a></li>

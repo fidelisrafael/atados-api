@@ -13,20 +13,8 @@ p.block-message {
   font-size:20px;
 }
 
-legend {
-  margin-bottom:0;
-  font-size:26px;
-  text-transform:uppercase;
-}
-
 fieldset + fieldset {
   margin-top:50px;
-}
-
-//legend + .row, legend + .row-fluid {
-legend + * {
-  margin-top: 20px;
-  -webkit-margin-top-collapse: separate;
 }
 
 .required {
@@ -145,16 +133,6 @@ legend + * {
 }
 
 #volunteer-sign-up, #nonprofit-sign-up {
-
-  .reasons {
-    p {
-      color:#999;
-    }
-
-    .row {
-      margin-bottom:44px;
-    }
-  }
 
   .add-on {
     padding:4px 5px;

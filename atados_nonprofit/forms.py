@@ -115,12 +115,9 @@ class NonprofitFirstStepForm(forms.ModelForm):
         self.fields['causes'].empty_label = ""
         self.fields['causes'].label = _("Select one or more causes")
 
-        self.prepare_location_fields()
-
     class Meta:
         model = Nonprofit
-        fields = ('causes', 'zipcode', 'addressline', 'addressnumber',
-                  'neighborhood', 'state', 'city', 'suburb', 'phone',)
+        fields = ('causes', 'phone',)
         
 class NonprofitSecondStepForm(forms.ModelForm):
     class Meta:

@@ -3,12 +3,12 @@ from django import http
 from django.utils import simplejson as json
 from django.http import Http404
 from django.views.generic import View, TemplateView
+from django.views.generic.base import ContextMixin
 from django.contrib.auth.models import User
 from atados_core.models import City, Suburb, Cause, Skill
-from atados_core.forms import SearchForm
+from atados_core.forms import SearchForm, AddressForm
 from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados_volunteer.forms import RegistrationForm
-from atados_nonprofit.views import NonprofitDetailsView, NonprofitHomeView
 from atados_nonprofit.models import Nonprofit
 from atados_project.models import Project
 from haystack.views import FacetedSearchView
@@ -30,6 +30,7 @@ class HomeView(TemplateView):
         if request.user.is_authenticated():
             try:
                 Nonprofit.objects.get(user=request.user)
+                from atados_nonprofit.views import NonprofitHomeView
                 return NonprofitHomeView.as_view()(request, *args, **kwargs)
             except Nonprofit.DoesNotExist:
                 return VolunteerHomeView.as_view()(request, *args, **kwargs)
@@ -51,6 +52,7 @@ def slug(request, *args, **kwargs):
             kwargs.update({
                 'nonprofit': kwargs.pop('slug')
             })
+            from atados_nonprofit.views import NonprofitDetailsView
             return NonprofitDetailsView.as_view()(request, *args, **kwargs)
         except Nonprofit.DoesNotExist:
             raise Http404

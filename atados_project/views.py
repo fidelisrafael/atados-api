@@ -74,19 +74,26 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     def get_initial(self):
         nonprofit = self.get_nonprofit()
 
-        return {
+        initial = {
             'causes': set([cause.id for cause in nonprofit.causes.all()]),
-            'zipcode': nonprofit.zipcode,
-            'addressline': nonprofit.addressline,
-            'addressnumber': nonprofit.addressnumber,
-            'neighborhood': nonprofit.neighborhood,
             'responsible': self.request.user.first_name,
             'email': self.request.user.email,
             'phone': nonprofit.phone,
-            'state': nonprofit.state,
-            'city': nonprofit.city,
-            'suburb': nonprofit.suburb,
         };
+
+        if nonprofit.address:
+            initial.update({
+                'zipcode': nonprofit.address.zipcode,
+                'addressline': nonprofit.address.addressline,
+                'addressnumber': nonprofit.address.addressnumber,
+                'neighborhood': nonprofit.address.neighborhood,
+                'state': nonprofit.address.state,
+                'city': nonprofit.address.city,
+                'suburb': nonprofit.address.suburb,
+            })
+
+
+        return initial
 
     def get_success_url(self, project):
         return reverse('project:details',
@@ -103,7 +110,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         })
         return kwargs
 
-    def form_invalid(self, project_form, donation_form, address_form):
+    def form_invalid(self, *args, **kwargs):
         return self.render_to_response(self.get_context_data(**self.get_forms()))
 
     def save_project(self, project_form):

@@ -1,5 +1,5 @@
 {% extends 'atados_nonprofit/base.html' %}
-{% load i18n bootstrap_toolkit atados_core %}
+{% load i18n bootstrap_toolkit atados_tags %}
 
 {% block breadcrumb %}
 <li class="active">{% trans "Choose your causes" %}</li>
@@ -16,15 +16,15 @@
     <form class="well" action="{% url "nonprofit:first-step" nonprofit.slug %}" method="post">{% csrf_token %}
       <fieldset>
         <legend>{% trans "Causes" %}</legend>
-        {{ form.causes|as_select_button_list_field }}
+        {{ nonprofit_form.causes|as_select_button_list_field }}
       </fieldset>
       <fieldset>
         <legend>{% trans "Location" %}</legend>
-        {% include "atados_core/location-fields.html" %}
+        {% include "atados_core/address-fields.html" %}
       </fieldset>
       <fieldset>
         <legend>{% trans "Contact" %}</legend>
-        {{ form.phone|as_bootstrap }}
+        {{ nonprofit_form.phone|as_bootstrap }}
       </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>
