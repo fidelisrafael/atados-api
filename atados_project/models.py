@@ -25,9 +25,10 @@ class Project(models.Model):
     name = models.CharField(_('Project name'), max_length=50)
     slug = models.SlugField(max_length=50)
     details = models.TextField(_('Details'), max_length=1024)
-    responsible = models.CharField(_('Responsible name'), max_length=50)
-    phone = models.CharField(_('Phone'), max_length=20)
-    email = models.EmailField(_('E-mail'))
+    responsible = models.CharField(_('Responsible name'), max_length=50,
+                                   blank=True, null=True)
+    phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
+    email = models.EmailField(_('E-mail'), blank=True, null=True)
     published = models.BooleanField(_("Published"), default=False)
     closed = models.BooleanField(_("Closed"), default=False)
     deleted = models.BooleanField(_("Deleted"), default=False)
