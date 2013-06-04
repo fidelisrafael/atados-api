@@ -12,7 +12,7 @@
   /* Padding below the footer and lighter body text */
 
   body {
-    padding-top: 40px;
+    padding-top:66px;
   }
 
   /* CUSTOMIZE THE CAROUSEL
@@ -20,51 +20,56 @@
 
   /* Carousel base class */
   .carousel {
-    margin-bottom: 60px;
+    margin-bottom:30px;
   }
 
   .carousel .container {
-    position: relative;
-    z-index: 9;
+    position:relative;
+    z-index:9;
   }
 
   .carousel-control {
-    height: 80px;
-    margin-top: 0;
-    font-size: 120px;
-    text-shadow: 0 1px 1px rgba(0,0,0,.4);
-    background-color: transparent;
-    border: 0;
-    z-index: 10;
+    height:80px;
+    margin-top:0;
+    font-size:120px;
+    background-color:transparent;
+    border:0;
+    z-index:10;
+  }
+
+  .carousel .lead {
+    font-size:14px;
+    line-height:1.5;
+    color:#fff;
+    margin:8px 0 4px;
   }
 
   .carousel .item {
-    height: 500px;
+    height:300px;
+    overflow:hidden;
   }
   .carousel img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    min-width: 100%;
-    height: 500px;
+    position:absolute;
+    top:0;
+    right:0;
+    width:100%;
+    min-width:1024px;
   }
 
   .carousel-caption {
-    background-color: transparent;
-    position: static;
-    max-width: 550px;
-    padding: 0 20px;
-    margin-top: 200px;
+    background-color:transparent;
+    position:static;
+    max-width:550px;
+    padding:0 20px 0 0;
+    margin-top:60px;
   }
-  .carousel-caption h1,
-  .carousel-caption .lead {
-    margin: 0;
-    line-height: 1.25;
-    color: #fff;
-    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+  .carousel-caption h1 {
+    margin:0;
+    line-height:1.25;
+    color:#fff;
   }
   .carousel-caption .btn {
-    margin-top: 10px;
+    margin-top:10px;
   }
 
   /* RESPONSIVE CSS
@@ -86,11 +91,10 @@
     }
 
     .carousel .item {
-      height: 500px;
+      height: 300px;
     }
     .carousel img {
-      width: auto;
-      height: 500px;
+      height: 300px;
     }
   }
 
@@ -109,10 +113,12 @@
 
     }
     .carousel .item {
-      height: 300px;
+      height: 400px;
     }
     .carousel img {
-      height: 300px;
+      width:1365px;
+      min-width:1365px;
+      height:400px;
     }
     .carousel-caption {
       width: 65%;
@@ -120,11 +126,11 @@
       margin-top: 100px;
     }
     .carousel-caption h1 {
-      font-size: 30px;
+      font-size: 28px;
     }
     .carousel-caption .lead,
     .carousel-caption .btn {
-      font-size: 18px;
+      font-size: 12px;
     }
   }
 </style>
@@ -140,9 +146,9 @@
         <img src="{{ STATIC_URL }}img/carousel/1.jpg" alt="">
         <div class="container">
           <div class="carousel-caption">
-            <h1>Example headline.</h1>
+            <h1>Encontre os mais<br>diversos atos voluntários</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <a class="btn btn-large btn-primary" href="#">Sign up today</a>
+            <a class="btn btn-small btn-primary" href="#">Sign up today</a>
           </div>
         </div>
       </div>
@@ -152,7 +158,7 @@
           <div class="carousel-caption">
             <h1>Another example headline.</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <a class="btn btn-large btn-primary" href="#">Learn more</a>
+            <a class="btn btn-small btn-primary" href="#">Learn more</a>
           </div>
         </div>
       </div>
@@ -162,7 +168,7 @@
           <div class="carousel-caption">
             <h1>One more for good measure.</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
+            <a class="btn btn-small btn-primary" href="#">Browse gallery</a>
           </div>
         </div>
       </div>
@@ -171,24 +177,51 @@
     <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
   </div><!-- /.carousel -->
 
-  <div class="container project-list">
+  <div class="container">
     <div class="row">
-      {% for result in projects %}
-      <div class="span4 project-item">
-        {% thumbnail result.object.image "300x300" crop="center" as im %}
-        <img alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-        {% empty %}
-        <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
-        {% endthumbnail %}
-        <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
-        <p class="description">{{ result.object.details|truncatechars:130 }}</p>
-        <p><a class="btn" href="#">View details &raquo;</a></p>
+      <div class="span9">
+        <h2>{% trans "Recommended" %}</h2>
+        <div class="project-list">
+          <div class="row">
+            {% for result in recommended %}
+            <div class="span3 project-item">
+              {% thumbnail result.object.image "270x180" crop="center" as im %}
+              <img alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+              {% empty %}
+              <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+              {% endthumbnail %}
+              <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
+              <p class="description">{{ result.object.details|truncatechars:144 }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <h2>{% trans "Recommended" %}</h2>
+        <div class="project-list infinite">
+          <div class="row">
+            {% for result in projects %}
+            <div class="span3 project-item">
+              {% thumbnail result.object.image "270x180" crop="center" as im %}
+              <img alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+              {% empty %}
+              <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+              {% endthumbnail %}
+              <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
+              <p class="description">{{ result.object.details|truncatechars:144 }}</p>
+            </div>
+            {% if forloop.counter|divisibleby:3 %}
+          </div>
+          <div class="row">
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div><!-- /.project-list -->
       </div>
-      {% if forloop.counter|divisibleby:3 %}
     </div>
-    <div class="row project-list">
-      {% endif %}
-      {% endfor %}
+    <div class="row">
+      <div class="span12 navigation">
+        <a href="#">{% trans "More" %}</a>
+      </div>
     </div>
   </div>
 </div>

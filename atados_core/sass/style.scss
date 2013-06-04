@@ -44,6 +44,26 @@ fieldset + fieldset {
   }
 }
 
+.navbar {
+  .brand {
+    background:url('../img/atados.png') no-repeat 0 0;
+    width:136px;
+    height:45px;
+    overflow:hidden;
+    text-indent:-999em;
+    padding:0;
+    margin:10px 54px 0 0px;
+  }
+}
+
+@media (max-width: 979px) {
+  .navbar {
+    .brand {
+      margin-left:20px;
+    }
+  }
+}
+
 .breadcrumb {
   background:none;
   padding:0;
@@ -310,19 +330,32 @@ fieldset + fieldset {
 
   .project-item {
     text-align: center;
+    background:#fff;
+    height:360px;
+    overflow:hidden;
+    max-width:270px;
 
     .title {
       display:block;
       text-transform:uppercase;
-      font-size:31.5px;
-      color:#555;
-      line-height:40px;
-      margin:10px 0;
+      font-size:14px;
+      color:#69d1e8;
+      font-family:'Francois One', sans-serif;
+      margin:10px 10px 5px;
     }
 
     p {
-      margin-left: 10px;
-      margin-right: 10px;
+      text-align: left;
+      margin:0 10px;
+      font-size:12px;
+    }
+  }
+}
+
+@media (max-width: 979px) {
+  .project-list {
+    .project-item + .project-item {
+      margin-top:40px;
     }
   }
 }
@@ -459,14 +492,5 @@ fieldset + fieldset {
         }
       }
     }
-  }
-}
-
-.project-item {
-  list-style:none;
-  text-align: center;
-  p {
-    margin-left: 10px;
-    margin-right: 10px;
   }
 }

@@ -104,4 +104,29 @@
     $('.role-forms', roles).append(clone);
   });
 
+  $('.project-list.infinite').infinitescroll({
+    path: function(page) {
+      return '/project-list/' + page;
+    },
+    dataType: 'json',
+    appendCallback: false,
+  }, function(json, opts) {
+    container = $(this);
+    var row;
+    for (var key in json) {
+      project = json[key];
+      if (key % 3 == 0) {
+        container.append(row);
+        row = $('<div class="row"></div>');
+      }
+      var span = $('<div class="span3 project-item"></div>');
+      span.append('<img src="' + project.image + '">');
+      span.append('<a class="title" href="' + project.url + '">' + project.name + '</a>');
+      span.append('<p class="description">' + project.details + '</p>');
+      row.append(span);
+    }
+    container.append(row);
+    console.log(json);
+  });
+
 }( window , window.jQuery ));

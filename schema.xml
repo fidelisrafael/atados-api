@@ -150,7 +150,11 @@
 
     <field name="causes_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
+    <field name="published" type="boolean" indexed="true" stored="true" multiValued="false" />
+
     <field name="causes" type="text_en" indexed="true" stored="true" multiValued="true" />
+
+    <field name="has_image" type="boolean" indexed="true" stored="true" multiValued="false" />
 
   </fields>
 

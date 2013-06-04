@@ -21,10 +21,12 @@ class HomeView(TemplateView):
     template_name='atados_core/home.html'
 
     def get_context_data(self):
-        projects = SearchQuerySet().models(Project).order_by('-id')[:60]
+        projects = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:12]
+        recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
         return {'form': RegistrationForm(),
                 'environ': os.environ,
-                'projects': projects}
+                'projects': projects,
+                'recommended': recommended}
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():
