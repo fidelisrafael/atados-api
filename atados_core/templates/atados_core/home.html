@@ -148,7 +148,7 @@
           <div class="carousel-caption">
             <h1>Encontre os mais<br>diversos atos voluntários</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <a class="btn btn-small btn-primary" href="#">Sign up today</a>
+            <a class="btn btn-small btn-primary btn-project-list-filter" href="#project-list-filter">{% trans "Explore" %}</a>
           </div>
         </div>
       </div>
@@ -190,13 +190,43 @@
               {% empty %}
               <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
               {% endthumbnail %}
-              <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
+              <a class="well-title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
               <p class="description">{{ result.object.details|truncatechars:144 }}</p>
             </div>
             {% endfor %}
           </div>
         </div>
-        <h2>{% trans "Recommended" %}</h2>
+
+        <div id="project-list-filter" class="project-list-filter">
+          <a href="#" class="active">{% trans "Projects" %}</a>
+          <a href="#">{% trans "Nonprofits" %}</a>
+          <div class="filters">
+            <p>{% trans "Find projects by their..." %}</p>
+            <div class="row-fluid">
+              <div class="span3">
+                <select class="input-block-level">
+                  <option>{% trans "Cause" %}</option>
+                </select>
+              </div>
+              <div class="span3">
+                <select class="input-block-level">
+                  <option>{% trans "Skill" %}</option>
+                </select>
+              </div>
+              <div class="span3">
+                <select class="input-block-level">
+                  <option>{% trans "Location" %}</option>
+                </select>
+              </div>
+              <div class="span3">
+                <select class="input-block-level">
+                  <option>{% trans "Availability" %}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div><!-- /.project-list-filter -->
+
         <div class="project-list infinite">
           <div class="row">
             {% for result in projects %}
@@ -206,23 +236,58 @@
               {% empty %}
               <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
               {% endthumbnail %}
-              <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
+              <a class="well-title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
               <p class="description">{{ result.object.details|truncatechars:144 }}</p>
             </div>
-            {% if forloop.counter|divisibleby:3 %}
+            {% if forloop.counter|divisibleby:3 and not forloop.last  %}
           </div>
           <div class="row">
             {% endif %}
             {% endfor %}
           </div>
         </div><!-- /.project-list -->
-      </div>
-    </div>
-    <div class="row">
-      <div class="span12 navigation">
-        <a href="#">{% trans "More" %}</a>
-      </div>
-    </div>
+        <div class="navigation">
+          <a href="#" class="next">{% trans "Next page" %}</a>
+        </div>
+        <div class="infinite-preloader"></div>
+        <div class="infinite-navigation hide">
+          <a href="#" class="more btn btn-primary input-block-level">{% trans "Load more" %}</a>
+        </div>
+      </div><!-- /.span9 -->
+      <div class="span3" style="margin-top:55px">
+        <div class="well">
+          <a href="http://blog.atados.com.br" class="well-title">{% trans "/blog" %}</a>
+        </div>
+        <div class="well">
+          <a href="https://twitter.com/movimentoatados" class="well-title">{% trans "@movimentoatados" %}</a>
+        </div>
+      </div><!-- /.span3 -->
+    </div><!-- /.row -->
   </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  ( function ( w , $ , undefined ) {
+
+    var filterTop = $('.filters').offset().top;
+
+    $(w).scroll(function() {
+      if (filterTop < ($(window).scrollTop() + 40)) {
+        $('.project-list-filter .filters').addClass('fixed');
+        } else {
+        $('.project-list-filter .filters').removeClass('fixed');
+      }
+    });
+
+    $(".btn-project-list-filter").click(function() {
+      $('html, body').animate({
+        scrollTop: $("#project-list-filter").offset().top
+      }, 500);
+      return false;
+    });
+
+  }( window , window.jQuery ));
+</script>
 {% endblock %}

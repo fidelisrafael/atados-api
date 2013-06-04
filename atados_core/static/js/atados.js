@@ -104,13 +104,29 @@
     $('.role-forms', roles).append(clone);
   });
 
+  $('.infinite-navigation .more').click(function() {
+    $('.project-list.infinite').infinitescroll('resume');
+    $('.project-list.infinite').scroll();
+    $('.infinite-navigation').hide();
+    return false;
+  });
+
   $('.project-list.infinite').infinitescroll({
+    loading: {
+      img: undefined,
+      selector: '.infinite-preloader',
+    },
     path: function(page) {
       return '/project-list/' + page;
     },
     dataType: 'json',
     appendCallback: false,
   }, function(json, opts) {
+    if (opts.state.currPage == 3) {
+      $('.project-list.infinite').infinitescroll('pause');
+      $('.infinite-navigation').show();
+    }
+
     container = $(this);
     var row;
     for (var key in json) {
@@ -121,12 +137,11 @@
       }
       var span = $('<div class="span3 project-item"></div>');
       span.append('<img src="' + project.image + '">');
-      span.append('<a class="title" href="' + project.url + '">' + project.name + '</a>');
+      span.append('<a class="well-title" href="' + project.url + '">' + project.name + '</a>');
       span.append('<p class="description">' + project.details + '</p>');
       row.append(span);
     }
     container.append(row);
-    console.log(json);
   });
 
 }( window , window.jQuery ));
