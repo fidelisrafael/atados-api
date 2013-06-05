@@ -1,32 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
-from django.contrib.auth.models import User
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        user = User()
-        user.id = 1
-        user.username = 'guedes'
-        user.first_name = 'Guedes'
-        user.email = 'guedes@atados.com.br'
-        user.set_password('asdfgh')
-        user.is_staff = True
-        user.is_active = True
-        user.is_superuser = True
-        user.save()
+        # Adding field 'Nonprofit.cover'
+        db.add_column(u'atados_nonprofit_nonprofit', 'cover',
+                      self.gf('sorl.thumbnail.fields.ImageField')(default=None, max_length=100, null=True, blank=True),
+                      keep_default=False)
 
-        nonprofit = orm.Nonprofit()
-        nonprofit.user = orm['auth.User'].objects.get(id=1)
-        nonprofit.name = 'Atados'
-        nonprofit.slug = 'atados'
-        nonprofit.save()
 
     def backwards(self, orm):
-        raise RuntimeError("Cannot reverse this migration.")
+        # Deleting field 'Nonprofit.cover'
+        db.delete_column(u'atados_nonprofit_nonprofit', 'cover')
+
 
     models = {
         u'atados_core.address': {
@@ -66,6 +57,7 @@ class Migration(DataMigration):
             'Meta': {'object_name': 'Nonprofit'},
             'address': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.Address']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Cause']", 'null': 'True', 'blank': 'True'}),
+            'cover': ('sorl.thumbnail.fields.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'details': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('sorl.thumbnail.fields.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
@@ -113,4 +105,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['atados_nonprofit']
-    symmetrical = True

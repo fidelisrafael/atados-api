@@ -23,6 +23,13 @@ class Nonprofit(models.Model):
     image = ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
+    def cover_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit-cover/%s/%s.%s' % (time(), self.slug, extension)
+
+    cover = ImageField(upload_to=cover_name, blank=True,
+                       null=True, default=None)
+
     @models.permalink
     def get_absolute_url(self):
         return ('slug', (self.slug,))

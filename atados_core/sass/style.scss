@@ -333,7 +333,7 @@ fieldset + fieldset {
 
 .project-list {
   .row + .row {
-    margin-top:40px;
+    margin-top:20px;
   }
 
   .project-item {
@@ -358,7 +358,7 @@ fieldset + fieldset {
 
 .project-list-filter {
   margin:20px 0;
-  height:158px;
+  height:130px;
   position:relative;
 
   & > a {
@@ -414,7 +414,7 @@ fieldset + fieldset {
       margin:0 auto;
     }
     .project-item + .project-item {
-      margin-top:40px;
+      margin-top:20px;
     }
   }
 
