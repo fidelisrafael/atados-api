@@ -12,6 +12,11 @@ if 'PARAM1' in os.environ:
 DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = (
+    'beta.atados.com.br',
+    'www.atados.com.br',
+)
+
 ADMINS = (
     ('Rogério Yokomizo', 'me@ro.ger.io'),
 )
