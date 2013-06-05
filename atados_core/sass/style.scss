@@ -44,6 +44,29 @@ fieldset + fieldset {
   }
 }
 
+.tag {
+  display:inline-block;
+  margin-right:18px;
+  background:#fff;
+  color:#f28730;
+  font-weight:bold;
+  font-size:11px;
+  text-transform:uppercase;
+  padding:0 10px;
+  line-height:26px;
+  position:relative;
+
+  &:after {
+    position:absolute;
+    right:-12px;
+    top:0;
+    content:"";
+    width:12px;
+    height:26px;
+    background:url('../img/atados.png') 0 -45px no-repeat;
+  }
+}
+
 .well-title {
   display:block;
   text-transform:uppercase;
@@ -327,6 +350,26 @@ fieldset + fieldset {
       .well {
         margin-bottom:0;
       }
+    }
+  }
+}
+
+#nonprofit-details {
+  .top {
+    position:relative;
+    height:285px;
+
+    .cover {
+      position:absolute;
+      left:0;
+      top:0;
+      height:285px;
+    }
+
+    .nonprofit-image {
+      position:absolute;
+      left:0;
+      bottom:0;
     }
   }
 }
