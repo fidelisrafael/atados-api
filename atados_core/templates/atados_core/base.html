@@ -74,10 +74,10 @@
                   <a href="{% url "socialauth_begin" "facebook" %}">Facebook</a>
                   <form class="form-inline" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
                     <input type="text" class="input-small" name="username" placeholder="{% trans "E-mail" %}">
-                    <input type="password" class="input-small" name="password" placeholder="{% trans "Senha" %}">
+                    <input type="password" class="input-small" name="password" placeholder="{% trans "Password" %}">
                     <button type="submit" class="btn btn-primary">{% trans "Entrar" %}</button>
                     <label class="checkbox">
-                      <input type="checkbox" name="rememberme" checked="checked" /> {% trans "Mantenha-me conectado" %}
+                      <input type="checkbox" name="rememberme" checked="checked" /> {% trans "Stay signed in" %}
                       <!-- <input type="hidden" name="next" value="{{ request.path }}" /> -->
                     </label>
                   </form>
