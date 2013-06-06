@@ -4,6 +4,9 @@
     <meta charset="utf-8">
     <title>{% block fulltitle %}{% block title %}{{ site.name }}{% endblock %} - {{ site.name }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{% endblock %}">
+    <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
+    {% block metas %}
+    {% endblock %}
 
     <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
     <style type="text/css">

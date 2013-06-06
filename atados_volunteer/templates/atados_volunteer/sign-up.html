@@ -16,8 +16,8 @@
       <form class="well" method="post" action="{% url "volunteer:sign-up" %}">{% csrf_token %}
         {{ form|as_bootstrap }}
         <div class="form-terms alert">
-          {% url "atados:home" as terms_url %}
-          {% url "atados:home" as privacy_url %}
+          {% url "atados:terms" as terms_url %}
+          {% url "atados:privacy" as privacy_url %}
           {% blocktrans %}
           By clicking Sign Up, you are indicating that you have read and agree to the <a tabindex="-1" href="{{ terms_url }}">Terms of Service</a> and <a tabindex="-1" href="{{ privacy_url }}">Privacy Policy</a>.
           {% endblocktrans %}

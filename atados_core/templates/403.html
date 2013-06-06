@@ -1,6 +1,25 @@
-{% extends 'atados_core/base.html' %}
-{% load i18n %}
+{% extends 'atados_core/basic.html' %}
+{% load i18n bootstrap_toolkit %}
+
+{% block robots %}noindex,nofollow{% endblock %}
 
 {% block content %}
-Ops 403
+<div class="page-header">
+  <h1>{% trans "Sorry, but this is a private page" %}</h1>
+</div>
+
+<p class="block-message">
+{% trans "Sorry, but the page you are looking for is private. If you have an account with permissions to see it, please sign in:" %}
+</p>
+
+<form class="well form-inline" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
+  <input type="text" class="input-small" name="username" placeholder="{% trans "E-mail" %}">
+  <input type="password" class="input-small" name="password" placeholder="{% trans "Password" %}">
+  <button type="submit" class="btn btn-primary">{% trans "Entrar" %}</button>
+  <label class="checkbox" style="margin-left:20px">
+    <input type="checkbox" name="rememberme" checked="checked" /> {% trans "Stay signed in" %}
+    <input type="hidden" name="next" value="{{ request.path }}" />
+  </label>
+</form>
+
 {% endblock %}

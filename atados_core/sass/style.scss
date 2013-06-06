@@ -7,10 +7,11 @@ $grayLighter:#eee;
 $darkBlue:darken($blue, 10%);
 
 p.block-message {
-  padding:30px;
+  padding:10px;
   text-align:center;
   margin:60px 0;
-  font-size:20px;
+  font-size:40px;
+  line-height:1.2;
 }
 
 fieldset + fieldset {
@@ -395,6 +396,14 @@ fieldset + fieldset {
       text-align: left;
       margin:0 10px;
       font-size:12px;
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .project-list {
+    .row + .row {
+      margin-top:30px;
     }
   }
 }

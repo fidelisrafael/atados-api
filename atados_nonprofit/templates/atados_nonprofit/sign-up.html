@@ -28,8 +28,8 @@
           {{ form.password2|as_bootstrap }}
         </fieldset>
         <div class="form-terms alert">
-          {% url "atados:home" as terms_url %}
-          {% url "atados:home" as privacy_url %}
+          {% url "atados:terms" as terms_url %}
+          {% url "atados:privacy" as privacy_url %}
           {% blocktrans %}
           Ao clicar em "Registrar", você estará indicando que leu e concorda com os <a tabindex="-1"href="{{ terms_url }}">Termos de uso</a> e <a tabindex="-1" href="{{ privacy_url }}">Políticas de privacidade</a>.
           {% endblocktrans %}
