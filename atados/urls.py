@@ -18,9 +18,7 @@ urlpatterns = patterns(
     url(_(r'^(?P<slug>[-\w]+)$'), slug, name='slug'),
 )
 
-handler403 = TemplateView.as_view(template_name='403.html')
-handler404 = TemplateView.as_view(template_name='404.html')
-handler500 = TemplateView.as_view(template_name='500.html')
+handler500 = "atados_core.views.server_error"
 
 if settings.DEBUG:
     urlpatterns += patterns('',

@@ -1,10 +1,12 @@
 import os
 from django import http
+from django.contrib.auth.models import User
+from django.http import Http404, HttpResponseServerError
+from django.template import RequestContext, TemplateDoesNotExist, loader
 from django.utils import simplejson as json
-from django.http import Http404
+from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View, TemplateView
 from django.views.generic.base import ContextMixin
-from django.contrib.auth.models import User
 from atados_core.models import City, Suburb, Cause, Skill
 from atados_core.forms import SearchForm, AddressForm
 from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
@@ -15,7 +17,13 @@ from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
 
 
-template_name = 'atados_core/home.html'
+@requires_csrf_token
+def server_error(request, template_name='500.html'):
+    try:
+        template = loader.get_template(template_name)
+    except TemplateDoesNotExist:
+        return HttpResponseServerError('<h1>Server Error (500)</h1>')
+    return HttpResponseServerError(template.render(RequestContext(request, {'request_path': request.path})))
 
 class HomeView(TemplateView):
     template_name='atados_core/home.html'
@@ -38,7 +46,6 @@ class HomeView(TemplateView):
                 return VolunteerHomeView.as_view()(request, *args, **kwargs)
 
         return super(HomeView, self).get(request, *args, **kwargs)
-
 
 
 def slug(request, *args, **kwargs):
