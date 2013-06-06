@@ -38,7 +38,3 @@ urlpatterns = patterns(
     url(r'^city/(?P<state>[0-9]+)$', CityView.as_view()),
     url(r'^suburb/(?P<city>[0-9]+)$', SuburbView.as_view()),
 )
-
-handler403 = TemplateView.as_view(template_name='403.html')
-handler404 = TemplateView.as_view(template_name='404.html')
-handler500 = TemplateView.as_view(template_name='500.html')
