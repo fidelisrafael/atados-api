@@ -3,8 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, RedirectView
 from django.utils.translation import ugettext_lazy as _
 from atados_nonprofit.views import NonprofitBaseView
-from atados_project.views import (ProjectList,
-                                  ProjectDonationCreateView,
+from atados_project.views import (ProjectDonationCreateView,
                                   ProjectWorkCreateView,
                                   ProjectJobCreateView,
                                   ProjectDetailsView,
@@ -16,9 +15,6 @@ from atados_project.views import (ProjectList,
 
 urlpatterns = patterns(
     '',
-
-    url(r'^project-list$', ProjectList(),
-        name='project-list'),
 
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project$'), NonprofitBaseView.as_view(template_name='atados_project/project-kind-choose.html'), name='new'),
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project/donation$'), ProjectDonationCreateView.as_view(), name='new-donation'),
