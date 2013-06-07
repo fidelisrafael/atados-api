@@ -27,14 +27,14 @@
       <div class="row">
         <div class="span3">
           <ul class="nav nav-tabs nav-stacked nav-model">
-            <li{% if 'Project' in form.types.value or not form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='Project' %}">{% trans "Projects" %}</a>
+            <li{% if 'project' in form.types.value or not form.types.value %} class="active"{% endif %}>
+            <a href="{% search_query types='project' %}">{% trans "projects" %}</a>
             </li>
-            <li{% if 'Nonprofit' in form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='Nonprofit' %}">{% trans "Nonprofits" %}</a>
+            <li{% if 'nonprofit' in form.types.value %} class="active"{% endif %}>
+            <a href="{% search_query types='nonprofit' %}">{% trans "nonprofits" %}</a>
             </li>
-            <li{% if 'Volunteer' in form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='Volunteer' %}">{% trans "Volunteers" %}</a>
+            <li{% if 'volunteer' in form.types.value %} class="active"{% endif %}>
+            <a href="{% search_query types='volunteer' %}">{% trans "volunteers" %}</a>
             </li>
           </ul>
         </div>
@@ -79,21 +79,21 @@
         {% if paginator.count > 0 %}
         <div class="bar">
           {% with paginator.count as count %}
-          {% if 'Project' in form.types.value and form.types.value|length == 1 or not form.types.value %}
+          {% if 'project' in form.types.value and form.types.value|length == 1 or not form.types.value %}
           {% if count > 1 %}
           {% blocktrans %}We've found {{ count }} projects{% endblocktrans %}
           {% elif count == 1 %}
           {% blocktrans %}We've found 1 project{% endblocktrans %}
           {% endif %}
 
-          {% elif 'Nonprofit' in form.types.value and form.types.value|length == 1 %}
+          {% elif 'nonprofit' in form.types.value and form.types.value|length == 1 %}
           {% if count > 1 %}
           {% blocktrans %}We've found {{ count }} nonprofits{% endblocktrans %}
           {% elif count == 1 %}
           {% blocktrans %}We've found 1 nonprofit{% endblocktrans %}
           {% endif %}
 
-          {% elif 'Volunteer' in form.types.value and form.types.value|length == 1 %}
+          {% elif 'volunteer' in form.types.value and form.types.value|length == 1 %}
           {% if count > 1 %}
           {% blocktrans %}We've found {{ count }} volunteers{% endblocktrans %}
           {% elif count == 1 %}
@@ -141,13 +141,13 @@
 
         {% else %}
         <div class="well">
-          {% if 'Project' in form.types.value and form.types.value|length == 1 or not form.types.value %}
+          {% if 'project' in form.types.value and form.types.value|length == 1 or not form.types.value %}
           {% blocktrans %}We couldn't find any projects matching '{{ query }}'.{% endblocktrans %}
 
-          {% elif 'Nonprofit' in form.types.value and form.types.value|length == 1 %}
+          {% elif 'nonprofit' in form.types.value and form.types.value|length == 1 %}
           {% blocktrans %}We couldn't find any nonprofits matching '{{ query }}'.{% endblocktrans %}
 
-          {% elif 'Volunteer' in form.types.value and form.types.value|length == 1 %}
+          {% elif 'volunteer' in form.types.value and form.types.value|length == 1 %}
           {% blocktrans %}We couldn't find any volunteers matching '{{ query }}'.{% endblocktrans %}
 
           {% else %}

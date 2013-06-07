@@ -11,9 +11,8 @@ from django.contrib import messages
 from django.forms.formsets import formset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
-from atados.settings import STATIC_URL
 from atados_core.forms import AddressForm, SearchForm
-from atados_core.views import JSONResponseMixin, SearchView
+from atados_core.views import JSONResponseMixin
 from atados_volunteer.models import Volunteer
 from atados_project.models import (Project, Donation, Work, Apply,
                                    Availability)

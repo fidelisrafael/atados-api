@@ -11,9 +11,9 @@ from atados_core.models import Address, State, City, Suburb, Cause, Skill
 
 
 SEARCH_TYPES = (
-        ('Nonprofit', 'Nonprofit'),
-        ('Project', 'Project'),
-        ('Volunteer', 'Volunteer'),)
+        ('nonprofit', 'nonprofit'),
+        ('project', 'project'),
+        ('volunteer', 'volunteer'),)
 
 class SearchForm(FacetedSearchForm):
     causes = forms.MultipleChoiceField(required=False,
@@ -33,11 +33,11 @@ class SearchForm(FacetedSearchForm):
         search_models = []
 
         if self.is_valid():
-            if 'Nonprofit' in self.cleaned_data['types']:
+            if 'nonprofit' in self.cleaned_data['types']:
                 search_models.append(Nonprofit)
-            if 'Volunteer' in self.cleaned_data['types']:
+            if 'volunteer' in self.cleaned_data['types']:
                 search_models.append(Volunteer)
-            if 'Project' in self.cleaned_data['types'] or not search_models:
+            if 'project' in self.cleaned_data['types'] or not search_models:
                 search_models.append(Project)
 
         return search_models

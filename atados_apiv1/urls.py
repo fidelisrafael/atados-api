@@ -6,5 +6,5 @@ urlpatterns = patterns(
 
     url(r'^project$', ProjectApi.as_view(), name='project'),
     url(r'^nonprofit$', NonprofitApi.as_view(), name='nonprofit'),
-    url(r'^volunteer$', ProjectApi.as_view(), name='volunteer'),
+    url(r'^volunteer$', VolunteerApi.as_view(), name='volunteer'),
 )
