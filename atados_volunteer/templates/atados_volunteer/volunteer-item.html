@@ -1,0 +1,13 @@
+{% load i18n thumbnail %}
+<div class="span3 project-item">
+  <a href="{{ volunteer.get_absolute_url }}">
+    {% thumbnail volunteer.image "270x180" crop="center" as im %}
+    <img alt="{{ volunteer }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+    {% empty %}
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    {% endthumbnail %}
+  </a>
+  <a class="well-title" href="{{ volunteer.get_absolute_url }}">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</a>
+  <p class="description"></p>
+
+</div>

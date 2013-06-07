@@ -1,5 +1,7 @@
 {% extends 'atados_core/base.html' %}
-{% load i18n bootstrap_toolkit thumbnail atados_core %}
+{% load i18n bootstrap_toolkit thumbnail atados_tags %}
+
+{% block robots %}noindex,nofollow{% endblock %}
 
 {% block out_breadcrumb %}
 {% endblock %}
@@ -108,19 +110,24 @@
           {% endif %}
           {% endwith %}
         </div>
-        <ul class="results row">
-          {% for result in page.object_list %}
-          <li class="span3 project-item">
-            {% thumbnail result.object.image "220x220" crop="center" as im %}
-            <img class="img-rounded" alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-            {% empty %}
-            <div class="img-rounded icon project large"></div>
-            {% endthumbnail %}
-            <a class="title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
-            <p class="description">{{ result.object.details|truncatechars:130 }}</p>
-          </li>
-          {% endfor %}
-        </ul>
+
+        <div class="project-list">
+          <div class="row">
+            {% for result in page.object_list %}
+            {% if  result.model_name == 'project' %}
+            {% include "atados_project/project-item.html" with project=result.object %}
+            {% elif result.model_name == 'nonprofit' %}
+            {% include "atados_nonprofit/nonprofit-item.html" with nonprofit=result.object %}
+            {% elif result.model_name == 'volunteer' %}
+            {% include "atados_volunteer/volunteer-item.html" with volunteer=result.object %}
+            {% endif %}
+            {% if forloop.counter|divisibleby:3 and not forloop.last  %}
+          </div>
+          <div class="row">
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div><!-- /.project-list -->
 
         {% if page.has_previous or page.has_next %}
         <ul class="pagination">
