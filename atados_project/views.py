@@ -12,7 +12,7 @@ from django.forms.formsets import formset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
 from atados.settings import STATIC_URL
-from atados_core.forms import AddressForm
+from atados_core.forms import AddressForm, SearchForm
 from atados_core.views import JSONResponseMixin, SearchView
 from atados_volunteer.models import Volunteer
 from atados_project.models import (Project, Donation, Work, Apply,
@@ -28,14 +28,10 @@ from haystack.query import SearchQuerySet
 from sorl.thumbnail import get_thumbnail
 
 
-class ProjectList(JSONResponseMixin, View):
+class ProjectList(SearchView, JSONResponseMixin):
 
-    def get(self, request, *args, **kwargs):
-        page = int(kwargs['page']) - 1
-        results_per_page = 12
-        offset = (page * results_per_page)
-        limit = offset + results_per_page
-        projects = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[offset:limit]
+    def create_response(self):
+        (paginator, page) = self.build_page()
 
         def get_image(image, size):
             try:
@@ -45,7 +41,7 @@ class ProjectList(JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_image(result.object.image, '270x180'),
+            'image': get_image(result.object.image, '270x270'),
             'url': result.object.get_absolute_url(),
             'name': result.object.name,
             'details': result.object.get_description(),
@@ -55,7 +51,7 @@ class ProjectList(JSONResponseMixin, View):
                 'url': result.object.nonprofit.get_absolute_url(),
                 'name': result.object.nonprofit.name,
             }
-        } for result in projects]
+        } for result in page.object_list]
         return self.render_to_response(context)
 
 

@@ -15,6 +15,7 @@ class Nonprofit(models.Model):
                                null=True, default=None)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
+    published = models.BooleanField(_("Published"), default=False)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)

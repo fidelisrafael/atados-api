@@ -42,8 +42,12 @@ class SearchForm(FacetedSearchForm):
 
         return search_models
 
+    def no_query_found(self):
+        return self.searchqueryset.all()
+
     def search(self):
         sqs = super(SearchForm, self).search()
+
         if self.is_bound:
             if 'causes' in self.cleaned_data and self.cleaned_data['causes']:
                 sqs = sqs.narrow(u'causes_exact:(%s)' % ' OR '.join([sqs.query.clean(cause) for cause in self.cleaned_data['causes']]))

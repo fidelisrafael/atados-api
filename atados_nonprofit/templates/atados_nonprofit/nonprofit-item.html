@@ -1,7 +1,7 @@
 {% load i18n thumbnail %}
 <div class="span3 project-item">
   <a href="{{ nonprofit.get_absolute_url }}">
-    {% thumbnail nonprofit.image "270x180" crop="center" as im %}
+    {% thumbnail nonprofit.image "270x270" crop="center" as im %}
     <img alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
     {% empty %}
     <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">

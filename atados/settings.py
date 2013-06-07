@@ -280,6 +280,8 @@ else:
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
+
 SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'

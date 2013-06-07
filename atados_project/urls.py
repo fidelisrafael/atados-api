@@ -17,7 +17,7 @@ from atados_project.views import (ProjectList,
 urlpatterns = patterns(
     '',
 
-    url(r'^project-list/(?P<page>[0-9]+)$', ProjectList.as_view(),
+    url(r'^project-list$', ProjectList(),
         name='project-list'),
 
     url(_(r'^(?P<nonprofit>[-\w]+)/add-new-project$'), NonprofitBaseView.as_view(template_name='atados_project/project-kind-choose.html'), name='new'),

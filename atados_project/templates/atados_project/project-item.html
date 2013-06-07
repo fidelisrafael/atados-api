@@ -1,14 +1,14 @@
 {% load i18n thumbnail %}
 <div class="span3 project-item">
   <a href="{{ project.get_absolute_url }}">
-    {% thumbnail project.image "270x180" crop="center" as im %}
+    {% thumbnail project.image "270x270" crop="center" as im %}
     <img alt="{{ project }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
     {% empty %}
     <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
     {% endthumbnail %}
   </a>
   <a class="well-title" href="{{ project.get_absolute_url }}">{{ project.name }}</a>
-  <p class="description">{{ project.details|truncatechars:100 }}</p>
+  <p class="description">{{ project.get_description }}</p>
 
   <div class="nonprofit">
     <a href="{{ project.nonprofit.get_absolute_url }}" class="picture">
