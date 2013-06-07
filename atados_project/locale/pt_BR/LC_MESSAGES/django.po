@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 02:14-0300\n"
+"POT-Creation-Date: 2013-06-07 14:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,152 +18,129 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:36
+#: forms.py:44
 msgid "example@example.com"
 msgstr "exemplo@examplo.com.br"
 
-#: forms.py:39
+#: forms.py:47
 msgid "Add more info about this project"
 msgstr "Adicione mais informações sobre este ato"
 
-#: forms.py:42
+#: forms.py:50
 msgid "Select one or more causes"
 msgstr "Selecione uma ou mais causas"
 
-#: forms.py:51
+#: forms.py:66
 msgid "This name (or a very similar) is already is use."
 msgstr "Este nome (ou um muito parecido) já está em uso."
 
-#: forms.py:65
+#: forms.py:84
 msgid "Select one or more skills"
 msgstr "Selecione uma ou mais habilidades"
 
-#: models.py:24
+#: models.py:26
 msgid "Project name"
 msgstr "Nome do ato"
 
-#: models.py:26
+#: models.py:28
 msgid "Details"
 msgstr "Detalhes"
 
-#: models.py:27
+#: models.py:29
+msgid "Short description"
+msgstr ""
+
+#: models.py:31
 msgid "Responsible name"
 msgstr "Nome do responsável"
 
-#: models.py:28
+#: models.py:33
 msgid "Phone"
 msgstr "Telefone"
 
-#: models.py:29
+#: models.py:34
 msgid "E-mail"
 msgstr "E-mail"
 
-#: models.py:30
-msgid "Zip code"
-msgstr "CEP"
-
-#: models.py:32
-msgid "Address line"
-msgstr "Logradouro"
-
-#: models.py:34
-#, fuzzy
-msgid "Address number"
-msgstr "Logradouro"
-
-#: models.py:36 templates/atados_project/details-work.html:72
-msgid "Neighborhood"
-msgstr "Bairro"
-
-#: models.py:38
-msgid "State"
-msgstr "Estado"
-
-#: models.py:40 templates/atados_project/details-work.html:73
-msgid "City"
-msgstr "Cidade"
-
-#: models.py:42
-msgid "Suburb"
-msgstr "Zona"
-
-#: models.py:44 templates/atados_project/details-work.html:17
-msgid "Vacancies"
-msgstr "Vagas"
-
-#: models.py:46
+#: models.py:35
 msgid "Published"
 msgstr "Publicado"
 
-#: models.py:47
+#: models.py:36
+msgid "Closed"
+msgstr "Fechado"
+
+#: models.py:37
 msgid "Deleted"
 msgstr "Excluído"
 
-#: models.py:48
+#: models.py:38
 msgid "Deleted date"
 msgstr "Data que foi excluído"
 
-#: models.py:86
+#: models.py:80
 msgid "Collection made by the nonprofit"
 msgstr "Coleta realizada pela ONG"
 
-#: models.py:92 templates/atados_project/details-work.html:46
-msgid "Prerequisites"
-msgstr "Pré-requisitos"
-
-#: models.py:94 templates/atados_project/details-job.html:8
+#: models.py:87 templates/atados_project/details-work.html:55
 msgid "Weekly hours"
 msgstr "Carga horária semanal"
 
-#: models.py:97 templates/atados_project/details-work.html:67
+#: models.py:90 templates/atados_project/details-donation.html:30
+#: templates/atados_project/details-work.html:76
 msgid "This work can be done remotely."
 msgstr "Este trabalho pode ser feito a distância."
 
-#: urls.py:18
-msgid "^project$"
-msgstr "^ato$"
+#: models.py:94
+#, fuzzy
+msgid "Role name"
+msgstr "Nome do responsável"
 
-#: urls.py:19
+#: models.py:96 templates/atados_project/details-work.html:46
+msgid "Prerequisites"
+msgstr "Pré-requisitos"
+
+#: models.py:98 templates/atados_project/details-work.html:17
+msgid "Vacancies"
+msgstr "Vagas"
+
+#: urls.py:23
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato$"
 
-#: urls.py:20
+#: urls.py:24
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/donation$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/doacao$"
 
-#: urls.py:21
+#: urls.py:25
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/work$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-recorrente$"
 
-#: urls.py:22
+#: urls.py:26
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/job$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-pontual$"
 
-#: urls.py:23
+#: urls.py:27
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)$"
 msgstr ""
 
-#: urls.py:24
-msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/edit$"
-msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/editar$"
-
-#: urls.py:25
+#: urls.py:29
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/collaborators$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/colaboradores$"
 
-#: urls.py:26
+#: urls.py:30
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/delete$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/excluir$"
 
-#: urls.py:27
+#: urls.py:31
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/apply$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/atar$"
 
-#: urls.py:29
+#: urls.py:33
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/picture$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/imagem$"
 
-#: views.py:194
+#: views.py:292
 msgid "Project was successfully deleted."
 msgstr "Ato excluído com sucesso."
 
@@ -182,49 +159,54 @@ msgstr "Excluir este ato"
 msgid "Delete project"
 msgstr "Excluir ato"
 
-#: templates/atados_project/details-donation.html:6
-#: templates/atados_project/form-donation.html:18
-#: templates/atados_project/form-work.html:31
-msgid "Contact"
-msgstr "Contato"
-
-#: templates/atados_project/details-donation.html:10
-msgid "Delivery and Collection"
-msgstr "Entrega e coleta"
-
+#: templates/atados_project/details-donation.html:8
 #: templates/atados_project/details-work.html:8
 msgid "About"
 msgstr "Sobre"
 
+#: templates/atados_project/details-donation.html:16
 #: templates/atados_project/details-work.html:26
-#: templates/atados_project/form-donation.html:6
+#: templates/atados_project/form-donation.html:11
 #: templates/atados_project/form-work.html:6
 msgid "Causes"
 msgstr "Causas"
+
+#: templates/atados_project/details-donation.html:26
+#: templates/atados_project/details-work.html:72
+#: templates/atados_project/form-work.html:61
+msgid "Location"
+msgstr "Localização"
+
+#: templates/atados_project/details-donation.html:32
+#: templates/atados_project/details-work.html:78
+msgid "This work can't be done remotely."
+msgstr "Este ato não pode ser feito a distância"
+
+#: templates/atados_project/details-donation.html:34
+#: templates/atados_project/details-work.html:80
+#, fuzzy
+msgid "Addressline"
+msgstr "Logradouro"
+
+#: templates/atados_project/details-donation.html:35
+#: templates/atados_project/details-work.html:81
+msgid "Neighborhood"
+msgstr "Bairro"
+
+#: templates/atados_project/details-donation.html:36
+#: templates/atados_project/details-work.html:82
+msgid "City"
+msgstr "Cidade"
 
 #: templates/atados_project/details-work.html:36
 #: templates/atados_project/form-work.html:10
 msgid "Skills"
 msgstr "Habilidades"
 
-#: templates/atados_project/details-work.html:55
-#: templates/atados_project/form-work.html:15
+#: templates/atados_project/details-work.html:64
+#: templates/atados_project/form-work.html:50
 msgid "Availability"
 msgstr "Disponibilidade"
-
-#: templates/atados_project/details-work.html:63
-#: templates/atados_project/form-work.html:26
-msgid "Location"
-msgstr "Localização"
-
-#: templates/atados_project/details-work.html:69
-msgid "This work can't be done remotely."
-msgstr "Este ato não pode ser feito a distância"
-
-#: templates/atados_project/details-work.html:71
-#, fuzzy
-msgid "Addressline"
-msgstr "Logradouro"
 
 #: templates/atados_project/details.html:4
 msgid "Voluntary work: "
@@ -270,21 +252,33 @@ msgstr "Editar"
 msgid "Save"
 msgstr "Salvar"
 
-#: templates/atados_project/form-donation.html:10
+#: templates/atados_project/form-donation.html:15
 msgid "Collecting"
 msgstr "Coleta"
 
-#: templates/atados_project/form-donation.html:14
+#: templates/atados_project/form-donation.html:19
 msgid "Delivery"
 msgstr "Entrega"
 
-#: templates/atados_project/form-donation.html:30
-#: templates/atados_project/form-work.html:43
+#: templates/atados_project/form-donation.html:23
+#: templates/atados_project/form-work.html:71
+msgid "Contact"
+msgstr "Contato"
+
+#: templates/atados_project/form-donation.html:35
+#: templates/atados_project/form-work.html:83
 msgid "More info"
 msgstr "Mais informações"
 
-#: templates/atados_project/index.html:5
-#: templates/atados_project/index.html:11
+#: templates/atados_project/form-work.html:14
+msgid "Roles"
+msgstr "Cargos"
+
+#: templates/atados_project/form-work.html:32
+msgid "Add more roles"
+msgstr "Adicionar mais cargos"
+
+#: templates/atados_project/index.html:10
 msgid "Explore projects"
 msgstr "Explore atos"
 
@@ -341,20 +335,60 @@ msgstr "Enviar"
 msgid "What kind of project you want to create?"
 msgstr "Que tipo de ato você deseja criar?"
 
-#: templates/atados_project/project-kind-choose.html:18
-msgid "Job"
-msgstr "Ato pontual"
+#: templates/atados_project/project-kind-choose.html:19
+msgid "Pontual"
+msgstr ""
 
-#: templates/atados_project/project-kind-choose.html:20
-#: templates/atados_project/project-kind-choose.html:27
-#: templates/atados_project/project-kind-choose.html:40
-msgid "This one"
-msgstr "Este"
+#: templates/atados_project/project-kind-choose.html:22
+msgid "Criar ato pontual"
+msgstr ""
 
-#: templates/atados_project/project-kind-choose.html:25
-msgid "Work"
-msgstr "Ato recorrente"
+#: templates/atados_project/project-kind-choose.html:28
+msgid "Recorrente"
+msgstr ""
 
-#: templates/atados_project/project-kind-choose.html:32
+#: templates/atados_project/project-kind-choose.html:31
+msgid "Criar ato recorrente"
+msgstr ""
+
+#: templates/atados_project/project-kind-choose.html:37
 msgid "Donation"
 msgstr "Doação"
+
+#: templates/atados_project/project-kind-choose.html:46
+msgid "Criar doação"
+msgstr ""
+
+#~ msgid "Zip code"
+#~ msgstr "CEP"
+
+#~ msgid "Address line"
+#~ msgstr "Logradouro"
+
+#, fuzzy
+#~ msgid "Address number"
+#~ msgstr "Logradouro"
+
+#~ msgid "State"
+#~ msgstr "Estado"
+
+#~ msgid "Suburb"
+#~ msgstr "Zona"
+
+#~ msgid "^project$"
+#~ msgstr "^ato$"
+
+#~ msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/edit$"
+#~ msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/editar$"
+
+#~ msgid "Delivery and Collection"
+#~ msgstr "Entrega e coleta"
+
+#~ msgid "Job"
+#~ msgstr "Ato pontual"
+
+#~ msgid "This one"
+#~ msgstr "Este"
+
+#~ msgid "Work"
+#~ msgstr "Ato recorrente"

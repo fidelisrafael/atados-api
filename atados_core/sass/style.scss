@@ -1,10 +1,11 @@
-$blue:#25b3ef;
+$blue:#69d1e8;
 $grayDarker:#222;
 $grayDark:#333;
 $gray:#f3f3f3;
 $grayLight:#999;
 $grayLighter:#eee;
 $darkBlue:darken($blue, 10%);
+$orange:#f28730;
 
 p.block-message {
   padding:10px;
@@ -58,7 +59,7 @@ fieldset + fieldset {
   display:inline-block;
   margin-right:18px;
   background:#fff;
-  color:#f28730;
+  color:$orange;
   font-weight:bold;
   font-size:11px;
   text-transform:uppercase;
@@ -501,7 +502,7 @@ fieldset + fieldset {
 
       &.active {
         background:#fff;
-        color:#f28730;
+        color:$orange;
       }
     }
 

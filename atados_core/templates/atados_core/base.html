@@ -46,19 +46,19 @@
 
             {% block search %}
             <form class="navbar-search pull-left" action="{% url "atados:search" %}" method="get">
-              <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}">
+              <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Search" %}">
             </form>
             {% endblock %}
 
             <ul class="nav">
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Explore sua cidade" %} <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Explore your city" %} <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="#">S&atilde;o Paulo</a></li>
                   <li><a href="#">Rio de Janeiro</a></li>
                   <li><a href="#">Curitiba</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">{% trans "Mais cidades em breve." %}</a></li>
+                  <li><a href="#">{% trans "More city soon" %}</a></li>
                 </ul>
               </li>
               {% if not user.is_authenticated %}
@@ -69,13 +69,13 @@
             {% if not user.is_authenticated %}
             <ul class="nav pull-right">
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Entrar" %} <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Sign in" %} <span class="caret"></span></a>
                 <div class="dropdown-menu">
                   <a href="{% url "socialauth_begin" "facebook" %}">Facebook</a>
                   <form class="form-inline" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
                     <input type="text" class="input-small" name="username" placeholder="{% trans "E-mail" %}">
                     <input type="password" class="input-small" name="password" placeholder="{% trans "Password" %}">
-                    <button type="submit" class="btn btn-primary">{% trans "Entrar" %}</button>
+                    <button type="submit" class="btn btn-primary">{% trans "Sign in" %}</button>
                     <label class="checkbox">
                       <input type="checkbox" name="rememberme" checked="checked" /> {% trans "Stay signed in" %}
                       <!-- <input type="hidden" name="next" value="{{ request.path }}" /> -->
@@ -95,12 +95,12 @@
                     <span style="display:block">{{ user.email }}</span>
                   </div>
                   </li>
-                  <li><a href="{{ volunteer_session.get_absolute_url }}">{% trans "Meu perfil" %}</a></li>
+                  <li><a href="{{ volunteer_session.get_absolute_url }}">{% trans "My profile" %}</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">{% trans "Editar minhas informações" %}</a></li>
-                  <li><a href="#">{% trans "Mudar senha" %}</a></li>
+                  <li><a href="#">{% trans "Edit my information" %}</a></li>
+                  <li><a href="#">{% trans "Change password" %}</a></li>
                   <li class="divider"></li>
-                  <li><a href="{% url "atados:sign-out" %}">{% trans "Sair" %}</a></li>
+                  <li><a href="{% url "atados:sign-out" %}">{% trans "Sign out" %}</a></li>
                 </ul>
               </li>
             </ul>
@@ -115,7 +115,7 @@
         <div class="row">
           <div class="span12">
             <ul class="breadcrumb">
-              <li><a href="{% url "atados:home" %}">{% trans "Início" %}</a></li>
+              <li><a href="{% url "atados:home" %}">{% trans "Home" %}</a></li>
               {% block breadcrumb %}
               {% endblock %}
             </ul>
@@ -128,7 +128,7 @@
       <div class="container">
         <div class="messages">
           {% for message in messages %}
-          <div class="alert alert-success"><strong>{% trans "Boa!" %}</strong> {{ message }}</div>
+          <div class="alert alert-success"><strong>{% trans "Well done!" %}</strong> {{ message }}</div>
           {% endfor %}
         </div>
       </div>
@@ -152,18 +152,18 @@
             <div class="span3">
               <h4>{{ site.name }}</h4>
               <ul>
-                <li><a href="{% url "atados:about" %}">{% trans "Sobre nós" %}</a></li>
+                <li><a href="{% url "atados:about" %}">{% trans "About us" %}</a></li>
                 <li><a href="#">{% trans "Colabore" %}</a></li>
-                <li><a href="#">{% trans "Contato" %}</a></li>
-                <li><a href="#">{% trans "Novidades" %}</a></li>
+                <li><a href="#">{% trans "Contact" %}</a></li>
+                <li><a href="#">{% trans "News" %}</a></li>
               </ul>
             </div>
             <div class="span3">
-              <h4>{% trans "Serviços" %}</h4>
+              <h4>{% trans "Services" %}</h4>
               <ul>
-                <li><a href="{% url "nonprofit:sign-up" %}">{% trans "Para ONGs" %}</a></li>
-                <li><a href="">{% trans "Para universidades" %}</a></li>
-                <li><a href="">{% trans "Para empresas" %}</a></li>
+                <li><a href="{% url "nonprofit:sign-up" %}">{% trans "For nonprofits" %}</a></li>
+                <li><a href="">{% trans "For schools" %}</a></li>
+                <li><a href="">{% trans "For business" %}</a></li>
               </ul>
             </div>
             <div class="span3">
@@ -178,9 +178,9 @@
 
         <div id="footer-legal" class="row">
           <ul>
-            <li><a href="{% url "atados:terms" %}">{% trans "Termos de uso" %}</a></li>
-            <li><a href="{% url "atados:privacy" %}">{% trans "Privacidade" %}</a></li>
-            <li><a href="{% url "atados:security" %}">{% trans "Segurança" %}</a></li>
+            <li><a href="{% url "atados:terms" %}">{% trans "Terms of service" %}</a></li>
+            <li><a href="{% url "atados:privacy" %}">{% trans "Privacy" %}</a></li>
+            <li><a href="{% url "atados:security" %}">{% trans "Security" %}</a></li>
             {% with site.name as site_name %}
             <li id="copyright">{% blocktrans %}&copy; 2013 {{ site_name }}{% endblocktrans %}</li>
             {% endwith %}

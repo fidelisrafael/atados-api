@@ -17,7 +17,7 @@
 <div class="well">
 <form action="{% url "atados:search" %}" method="get" style="margin-bottom:0">
   <label>{% trans "Feel free to find projects, nonprofits and volunteers:" %}</label>
-  <input type="text" class="search-query input-append" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Buscar" %}" />
+  <input type="text" class="search-query input-append" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Search" %}" />
   <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
 </form>
 </div>

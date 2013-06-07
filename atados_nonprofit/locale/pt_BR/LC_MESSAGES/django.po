@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-26 02:14-0300\n"
+"POT-Creation-Date: 2013-06-07 14:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,59 +23,59 @@ msgstr ""
 msgid "Welcome to %s"
 msgstr "Bem-vindo ao %s"
 
-#: forms.py:16
+#: forms.py:15
 msgid "Nonprofit name"
 msgstr "Nome da ONG"
 
-#: forms.py:23
+#: forms.py:22
 msgid "Nonprofit address"
 msgstr "Endereço da ONG"
 
-#: forms.py:25 forms.py:54
+#: forms.py:24 forms.py:53
 msgid "This value may contain only letters, numbers and \"-\" character."
 msgstr "São permitidos apenas letras, números e \"-\"."
 
-#: forms.py:33
+#: forms.py:32
 msgid "Your name"
 msgstr "Seu nome"
 
-#: forms.py:39
+#: forms.py:38
 msgid "example@example.com"
 msgstr "examplo@examplo.com.br"
 
-#: forms.py:41
+#: forms.py:40
 msgid "Your e-mail"
 msgstr "Seu e-mail"
 
-#: forms.py:45 models.py:30
+#: forms.py:44 models.py:16
 msgid "Phone"
 msgstr "Telefone"
 
-#: forms.py:52
+#: forms.py:51
 msgid "Your username"
 msgstr "Seu nome de usuário"
 
-#: forms.py:61
+#: forms.py:60
 msgid "Create a password"
 msgstr "Crie uma senha"
 
-#: forms.py:65
+#: forms.py:64
 msgid "Confirm your password"
 msgstr "Confirme sua senha"
 
-#: forms.py:83
+#: forms.py:86
 msgid "This username is already is use."
 msgstr "Este nome de usuário já está em uso."
 
-#: forms.py:91
+#: forms.py:94
 msgid "This nonprofit address is already is use."
 msgstr "Este enereço já está em uso."
 
-#: forms.py:99
+#: forms.py:102
 msgid "This e-mail is already is use."
 msgstr "Este e-mail já está em uso"
 
-#: forms.py:113
+#: forms.py:116
 msgid "Select one or more causes"
 msgstr "Selecione uma ou mais causas"
 
@@ -86,35 +86,6 @@ msgstr "Nome"
 #: models.py:14
 msgid "Details"
 msgstr "Detalhes"
-
-#: models.py:16
-msgid "Zip code"
-msgstr "CEP"
-
-#: models.py:18
-msgid "Address line"
-msgstr "Logradouro"
-
-#: models.py:20
-#, fuzzy
-msgid "Address number"
-msgstr "Endereço"
-
-#: models.py:22
-msgid "Neighborhood"
-msgstr "Bairro"
-
-#: models.py:24
-msgid "State"
-msgstr "Estado"
-
-#: models.py:26
-msgid "City"
-msgstr "Cidade"
-
-#: models.py:28
-msgid "Suburb"
-msgstr "Zona"
 
 #: urls.py:15
 msgid "^nonprofit/sign-up$"
@@ -144,43 +115,44 @@ msgstr "^(?P<nonprofit>[-\\w]+)/editar-imagem-da-ong$"
 msgid "^(?P<nonprofit>[-\\w]+)/edit$"
 msgstr "^(?P<nonprofit>[-\\w]+)/editar$"
 
-#: templates/atados_nonprofit/details.html:21
+#: templates/atados_nonprofit/details.html:41
+#: templates/atados_nonprofit/details.html:53
 msgid "Edit profile picture"
 msgstr "Editar a imagem de perfil"
 
-#: templates/atados_nonprofit/details.html:26
+#: templates/atados_nonprofit/details.html:45
+#: templates/atados_nonprofit/details.html:58
 msgid "Add profile picture"
 msgstr "Adicione uma imagem de perfil"
 
-#: templates/atados_nonprofit/details.html:32
-msgid "Volunteers"
-msgstr "Voluntários"
+#: templates/atados_nonprofit/details.html:66
+msgid "Who we are and what we do"
+msgstr "Quem somos e o que fazemos"
 
-#: templates/atados_nonprofit/details.html:51
+#: templates/atados_nonprofit/details.html:71
+msgid "Nothing about this nonprofit"
+msgstr "Nada sobre esta ONG"
+
+#: templates/atados_nonprofit/details.html:74
+#: templates/atados_nonprofit/first-step.html:18
+msgid "Causes"
+msgstr "Causas"
+
+#: templates/atados_nonprofit/details.html:80
 #: templates/atados_nonprofit/home.html:36
 msgid "Projects"
 msgstr "Atos"
 
-#: templates/atados_nonprofit/details.html:54
-#: templates/atados_nonprofit/home.html:39
-msgid "New project"
-msgstr "Novo ato"
+#: templates/atados_nonprofit/details.html:100
+#: templates/atados_nonprofit/first-step.html:26
+#, fuzzy
+msgid "Contact"
+msgstr "Contato"
 
-#: templates/atados_nonprofit/details.html:74
-msgid "This nonprofit doesn't have any projects."
-msgstr "Esta ONG não tem nenhum ato"
-
-#: templates/atados_nonprofit/details.html:82
-msgid "Nonprofit"
-msgstr "ONG"
-
-#: templates/atados_nonprofit/details.html:85
-msgid "Edit"
-msgstr "Editar"
-
-#: templates/atados_nonprofit/details.html:93
-msgid "Nothing about this nonprofit"
-msgstr "Nada sobre esta ONG"
+#: templates/atados_nonprofit/details.html:104
+#, fuzzy
+msgid "Volunteers"
+msgstr "Voluntários"
 
 #: templates/atados_nonprofit/edit.html:6
 msgid "Edit nonprofit details"
@@ -199,17 +171,9 @@ msgstr "Selecione suas causas"
 msgid "First step: choose your causes"
 msgstr "Primeiro passo: selecione suas causas"
 
-#: templates/atados_nonprofit/first-step.html:18
-msgid "Causes"
-msgstr "Causas"
-
 #: templates/atados_nonprofit/first-step.html:22
 msgid "Location"
 msgstr "Localização"
-
-#: templates/atados_nonprofit/first-step.html:26
-msgid "Contact"
-msgstr "Contato"
 
 #: templates/atados_nonprofit/first-step.html:30
 msgid "Next step"
@@ -219,6 +183,10 @@ msgstr "Próximo passo"
 #: templates/atados_nonprofit/second-step.html:21
 msgid "Skip this step"
 msgstr "Pular este passo"
+
+#: templates/atados_nonprofit/home.html:39
+msgid "New project"
+msgstr "Novo ato"
 
 #: templates/atados_nonprofit/home.html:46
 msgid "Your nonprofit does not have any project"
@@ -255,35 +223,36 @@ msgid ""
 "Para começar, conte um pouco mais sobre a ONG\n"
 msgstr ""
 
-#: templates/atados_nonprofit/sign-up-complete.html:10
-msgid "Registro completo!"
-msgstr ""
+#: templates/atados_nonprofit/sign-up-complete.html:5
+msgid "Sign up successful"
+msgstr "Registro concluído com sucesso"
 
-#: templates/atados_nonprofit/sign-up-complete.html:14
+#: templates/atados_nonprofit/sign-up-complete.html:11
+msgid "Thanks for signing up!"
+msgstr "Obrigado por se registrar!"
+
+#: templates/atados_nonprofit/sign-up-complete.html:15
 msgid "Em breve, você receberá um e-mail de confirmação!"
 msgstr ""
 
-#: templates/atados_nonprofit/sign-up.html:10
-msgid "Junte-se a nós para encontrar mais voluntários!"
-msgstr ""
+#: templates/atados_nonprofit/sign-up.html:5
+#, fuzzy
+msgid "Nonprofit registration"
+msgstr "Endereço da ONG"
 
-#: templates/atados_nonprofit/sign-up.html:20
-msgid "Plataforma de gerenciamento de voluntários."
-msgstr ""
+#: templates/atados_nonprofit/sign-up.html:11
+msgid "Join us to find more volunteers!"
+msgstr "Junte-se a nós para encontrar mais voluntários!"
 
-#: templates/atados_nonprofit/sign-up.html:32
-msgid "Encontre voluntários com habilidades específicas"
-msgstr ""
-
-#: templates/atados_nonprofit/sign-up.html:43
+#: templates/atados_nonprofit/sign-up.html:18
 msgid "About the nonprofit"
 msgstr "Sobre a ONG"
 
-#: templates/atados_nonprofit/sign-up.html:48
+#: templates/atados_nonprofit/sign-up.html:23
 msgid "About you"
 msgstr "Sobre você"
 
-#: templates/atados_nonprofit/sign-up.html:58
+#: templates/atados_nonprofit/sign-up.html:33
 #, python-format
 msgid ""
 "\n"
@@ -293,6 +262,37 @@ msgid ""
 "          "
 msgstr ""
 
-#: templates/atados_nonprofit/sign-up.html:63
-msgid "Registrar"
-msgstr ""
+#: templates/atados_nonprofit/sign-up.html:38
+msgid "Sign up"
+msgstr "Registrar"
+
+#~ msgid "Zip code"
+#~ msgstr "CEP"
+
+#~ msgid "Address line"
+#~ msgstr "Logradouro"
+
+#, fuzzy
+#~ msgid "Address number"
+#~ msgstr "Endereço"
+
+#~ msgid "Neighborhood"
+#~ msgstr "Bairro"
+
+#~ msgid "State"
+#~ msgstr "Estado"
+
+#~ msgid "City"
+#~ msgstr "Cidade"
+
+#~ msgid "Suburb"
+#~ msgstr "Zona"
+
+#~ msgid "This nonprofit doesn't have any projects."
+#~ msgstr "Esta ONG não tem nenhum ato"
+
+#~ msgid "Nonprofit"
+#~ msgstr "ONG"
+
+#~ msgid "Edit"
+#~ msgstr "Editar"

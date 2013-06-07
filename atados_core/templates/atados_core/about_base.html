@@ -15,16 +15,16 @@
     <ul class="nav nav-tabs nav-stacked">
 
       {% url "atados:about" as href %}
-      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Sobre nós" %}</a></li>
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "About us" %}</a></li>
 
       {% url "atados:terms" as href %}
-      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Termos de uso" %}</a></li>
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Terms of service" %}</a></li>
 
       {% url "atados:privacy" as href %}
-      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Privacidade" %}</a></li>
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Privacy" %}</a></li>
 
       {% url "atados:security" as href %}
-      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Segurança" %}</a></li>
+      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Security" %}</a></li>
 
     </ul>
   </div>
