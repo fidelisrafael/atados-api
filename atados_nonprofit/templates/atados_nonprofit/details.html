@@ -81,15 +81,7 @@
       <div class="project-list">
         <div class="row">
           {% for project in nonprofit.project_set.active %}
-          <div class="span3 project-item">
-            {% thumbnail project.image "270x180" crop="center" as im %}
-            <img alt="{{ project }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-            {% empty %}
-            <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
-            {% endthumbnail %}
-            <a class="well-title" href="{{ project.get_absolute_url }}">{{ project.name }}</a>
-            <p class="description">{{ project.details|truncatechars:144 }}</p>
-          </div>
+          {% include "atados_project/project-item.html" with project=project %}
           {% if forloop.counter|divisibleby:3 and not forloop.last  %}
         </div>
         <div class="row">

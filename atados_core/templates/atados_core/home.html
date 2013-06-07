@@ -189,35 +189,37 @@
           </div>
         </div>
 
-        <div id="project-list-filter" class="project-list-filter">
-          <a href="#" class="active">{% trans "Projects" %}</a>
-          <a href="#">{% trans "Nonprofits" %}</a>
-          <div class="filters">
-            <p>{% trans "Find projects by their..." %}</p>
-            <div class="row-fluid">
-              <div class="span3">
-                <select class="input-block-level">
-                  <option>{% trans "Cause" %}</option>
-                </select>
-              </div>
-              <div class="span3">
-                <select class="input-block-level">
-                  <option>{% trans "Skill" %}</option>
-                </select>
-              </div>
-              <div class="span3">
-                <select class="input-block-level">
-                  <option>{% trans "Location" %}</option>
-                </select>
-              </div>
-              <div class="span3">
-                <select class="input-block-level">
-                  <option>{% trans "Availability" %}</option>
-                </select>
+        <div class="project-list-filter-container">
+          <div id="project-list-filter" class="project-list-filter">
+            <a href="#" class="active">{% trans "Projects" %}</a>
+            <a href="#">{% trans "Nonprofits" %}</a>
+            <div class="filters">
+              <p>{% trans "Find projects by their..." %}</p>
+              <div class="row-fluid">
+                <div class="span3">
+                  <select class="input-block-level">
+                    <option>{% trans "Cause" %}</option>
+                  </select>
+                </div>
+                <div class="span3">
+                  <select class="input-block-level">
+                    <option>{% trans "Skill" %}</option>
+                  </select>
+                </div>
+                <div class="span3">
+                  <select class="input-block-level">
+                    <option>{% trans "Location" %}</option>
+                  </select>
+                </div>
+                <div class="span3">
+                  <select class="input-block-level">
+                    <option>{% trans "Availability" %}</option>
+                  </select>
+                </div>
               </div>
             </div>
-          </div>
-        </div><!-- /.project-list-filter -->
+          </div><!-- /.project-list-filter -->
+        </div><!-- /.project-list-filter-container -->
 
         <div class="project-list infinite">
           <div class="row">
@@ -258,13 +260,11 @@
 <script>
   ( function ( w , $ , undefined ) {
 
-    var filterTop = $('.filters').offset().top;
-
     $(w).scroll(function() {
-      if (filterTop < ($(window).scrollTop() + 40)) {
-        $('.project-list-filter .filters').addClass('fixed');
-        } else {
-        $('.project-list-filter .filters').removeClass('fixed');
+      if ($('.project-list-filter-container').offset().top < ($(window).scrollTop() + 66)) {
+        $('.project-list-filter').addClass('fixed');
+      } else {
+        $('.project-list-filter').removeClass('fixed');
       }
     });
 
