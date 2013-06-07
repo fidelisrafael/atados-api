@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.forms.formsets import formset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
+from atados.settings import STATIC_URL
 from atados_core.forms import AddressForm
 from atados_core.views import JSONResponseMixin, SearchView
 from atados_volunteer.models import Volunteer
@@ -35,12 +36,25 @@ class ProjectList(JSONResponseMixin, View):
         offset = (page * results_per_page)
         limit = offset + results_per_page
         projects = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[offset:limit]
+
+        def get_image(image, size):
+            try:
+                return get_thumbnail(image, size, crop='center').url
+            except:
+                return STATIC_URL + 'img/thumb/300.gif';
+
         context = [{
             'id': result.object.id,
-            'image': get_thumbnail(result.object.image, '270x180', crop='center').url,
+            'image': get_image(result.object.image, '270x180'),
             'url': result.object.get_absolute_url(),
             'name': result.object.name,
-            'details': result.object.details
+            'details': result.object.get_description(),
+            'volunteers': 0,
+            'nonprofit': {
+                'image': get_image(result.object.nonprofit.image, '34x34'),
+                'url': result.object.nonprofit.get_absolute_url(),
+                'name': result.object.nonprofit.name,
+            }
         } for result in projects]
         return self.render_to_response(context)
 

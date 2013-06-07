@@ -1,7 +1,7 @@
 $blue:#25b3ef;
 $grayDarker:#222;
 $grayDark:#333;
-$gray:#babdbe;
+$gray:#f3f3f3;
 $grayLight:#999;
 $grayLighter:#eee;
 $darkBlue:darken($blue, 10%);
@@ -16,6 +16,15 @@ p.block-message {
 
 fieldset + fieldset {
   margin-top:50px;
+}
+
+.icon {
+  &.icon-volunteer {
+    background-image:url('../img/atados.png');
+    background-position:-12px -45px;
+    width:22px;
+    height:18px;
+  }
 }
 
 .required {
@@ -72,7 +81,7 @@ fieldset + fieldset {
   display:block;
   text-transform:uppercase;
   font-size:18px;
-  color:#69d1e8;
+  color:$blue;
   font-family:'Francois One', sans-serif;
 }
 
@@ -381,6 +390,7 @@ fieldset + fieldset {
   }
 
   .project-item {
+    position:relative;
     text-align: center;
     background:#fff;
     height:360px;
@@ -397,6 +407,56 @@ fieldset + fieldset {
       margin:0 10px;
       font-size:12px;
     }
+
+    .nonprofit {
+      position:absolute;
+      text-align: left;
+      bottom:10px;
+      left:10px;
+      right:10px;
+      height:34px;
+      overflow:hidden;
+      font-size:12px;
+
+      .picture {
+        position:absolute;
+        top:0;
+        left:0;
+      }
+
+      & > a:hover {
+        text-decoration:none;
+      }
+
+      .name {
+        position:absolute;
+        top:0;
+        left:48px;
+        color:#8a8a8a;
+        width:130px;
+        overflow:hidden;
+        height:29px;
+        line-height:1.2;
+        border-right:1px solid $gray;
+        padding-top:5px;
+        padding-right:12px;
+      }
+
+      .volunteers {
+        position:absolute;
+        top:5px;
+        right:0;
+        height:34px;
+        width:47px;
+        color: $blue;
+
+        & > span {
+          position:absolute;
+          top:4px;
+          right:0;
+        }
+      }
+    }
   }
 }
 
@@ -412,6 +472,7 @@ fieldset + fieldset {
   margin:20px 0;
   height:130px;
   position:relative;
+  z-index:100;
 
   & > a {
     font-family:'Francois One', sans-serif;
@@ -448,6 +509,7 @@ fieldset + fieldset {
     height:70px;
     overflow:hidden;
     display:block;
+    border-bottom:20px solid #f6f6f6;
 
     & > p {
       margin:0 0 12px;

@@ -184,15 +184,7 @@
         <div class="project-list">
           <div class="row">
             {% for result in recommended %}
-            <div class="span3 project-item">
-              {% thumbnail result.object.image "270x180" crop="center" as im %}
-              <img alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-              {% empty %}
-              <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
-              {% endthumbnail %}
-              <a class="well-title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
-              <p class="description">{{ result.object.details|truncatechars:144 }}</p>
-            </div>
+            {% include "atados_project/project-item.html" with project=result.object %}
             {% endfor %}
           </div>
         </div>
@@ -230,15 +222,7 @@
         <div class="project-list infinite">
           <div class="row">
             {% for result in projects %}
-            <div class="span3 project-item">
-              {% thumbnail result.object.image "270x180" crop="center" as im %}
-              <img alt="{{ result.object }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-              {% empty %}
-              <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
-              {% endthumbnail %}
-              <a class="well-title" href="{{ result.object.get_absolute_url }}">{{ result.object.name }}</a>
-              <p class="description">{{ result.object.details|truncatechars:144 }}</p>
-            </div>
+            {% include "atados_project/project-item.html" with project=result.object %}
             {% if forloop.counter|divisibleby:3 and not forloop.last  %}
           </div>
           <div class="row">

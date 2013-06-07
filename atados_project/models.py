@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from atados_core.models import Availability, Cause, Skill, Address
 from atados_nonprofit.models import Nonprofit
@@ -25,6 +26,8 @@ class Project(models.Model):
     name = models.CharField(_('Project name'), max_length=50)
     slug = models.SlugField(max_length=50)
     details = models.TextField(_('Details'), max_length=1024)
+    description = models.TextField(_('Short description'), max_length=100,
+                                   blank=True, null=True)
     responsible = models.CharField(_('Responsible name'), max_length=50,
                                    blank=True, null=True)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
@@ -34,6 +37,10 @@ class Project(models.Model):
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
                                         null=True)
+
+    def get_description(self):
+        return self.description if self.description else Truncator(
+                self.details).chars(100)
 
     def delete(self, *args, **kwargs):
         self.deleted = True

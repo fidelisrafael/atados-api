@@ -27,7 +27,10 @@ class Volunteer(models.Model):
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'volunteer/%s/%s.%s' % (time(), self.user.username, extension)
+        return 'volunteer/%s/%s/%s.%s' % (self.user.username,
+                                          time(),
+                                          self.user.username,
+                                          extension)
 
     image = ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)

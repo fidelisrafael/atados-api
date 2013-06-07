@@ -1,0 +1,27 @@
+{% load i18n thumbnail %}
+<div class="span3 project-item">
+  <a href="{{ project.get_absolute_url }}">
+    {% thumbnail project.image "270x180" crop="center" as im %}
+    <img alt="{{ project }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+    {% empty %}
+    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    {% endthumbnail %}
+  </a>
+  <a class="well-title" href="{{ project.get_absolute_url }}">{{ project.name }}</a>
+  <p class="description">{{ project.details|truncatechars:100 }}</p>
+
+  <div class="nonprofit">
+    <a href="{{ project.nonprofit.get_absolute_url }}" class="picture">
+      {% thumbnail project.nonprofit.image "34x34" crop="center" as im %}
+      <img alt="{{ project.nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+      {% empty %}
+      <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="" width="34" height="34">
+      {% endthumbnail %}
+    </a>
+
+    <a href="{{ project.nonprofit.get_absolute_url }}" class="name">{{ project.nonprofit.name }}</a>
+    <div class="volunteers"><i class="icon icon-volunteer"></i> <span>0</span></div>
+
+  </div>
+
+</div>
