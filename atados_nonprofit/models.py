@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from atados_core.models import Cause, Address
 from sorl.thumbnail import ImageField
@@ -13,9 +14,15 @@ class Nonprofit(models.Model):
     slug = models.SlugField(max_length=50)
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
+    description = models.TextField(_('Short description'), max_length=100,
+                                   blank=True, null=True)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
     published = models.BooleanField(_("Published"), default=False)
+
+    def get_description(self):
+        return self.description if self.description else Truncator(
+                self.details).chars(100)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)

@@ -117,7 +117,7 @@
       selector: '.infinite-preloader',
     },
     path: function(page) {
-      return '/project-list?page=' + page;
+      return '/api/v1/project?page=' + page;
     },
     dataType: 'json',
     appendCallback: false,
