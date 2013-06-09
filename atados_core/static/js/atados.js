@@ -112,7 +112,13 @@
   });
 
   $('.project-list-filter .update').click(function() {
+    $('.project-list.infinite').addClass('empty');
     $('.project-list.infinite').empty();
+
+    if ($(w).scrollTop() > $('#list').offset().top) {
+      $('html, body').scrollTop($('#list').offset().top);
+    }
+
     $('.project-list.infinite').infinitescroll({
       state: {
         currPage: 0,
@@ -144,7 +150,7 @@
 
   $('.project-list.infinite').infinitescroll({
     loading: {
-      img: undefined,
+      msg: $('<span>...</span>'),
       selector: '.infinite-preloader',
     },
     path: function(page) {
@@ -155,6 +161,7 @@
   }, function(json, opts) {
     if (json.length === 0) {
       $('.project-list.infinite').infinitescroll('pause');
+      $('.project-list.infinite').removeClass('empty');
       return false;
     }
 
@@ -165,10 +172,12 @@
 
     container = $(this);
     var row;
+      
     for (var key in json) {
       project = json[key];
       if (key % 3 == 0) {
-        container.append(row);
+        if (key > 0)
+          row.hide().appendTo(container).fadeIn();
         row = $('<div class="row"></div>');
       }
 
@@ -194,7 +203,10 @@
 
       row.append(item);
     }
-    container.append(row);
+
+    row.hide().appendTo(container).fadeIn();
+
+    $('.project-list.infinite').removeClass('empty');
   });
 
 }( window , window.jQuery ));

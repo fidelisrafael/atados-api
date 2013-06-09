@@ -390,6 +390,10 @@ fieldset + fieldset {
     margin-top:20px;
   }
 
+  &.empty {
+    min-height:1000px;
+  }
+
   .project-item {
     position:relative;
     text-align: center;
@@ -463,6 +467,11 @@ fieldset + fieldset {
       margin-top:30px;
     }
   }
+}
+
+#list {
+  position:absolute;
+  top:835px;
 }
 
 .project-list-filter-container {
@@ -641,6 +650,14 @@ fieldset + fieldset {
 
 .infinite-navigation {
   margin-top:20px;
+}
+
+.infinite-preloader {
+  font-size:60px;
+  font-family:'Francois One';
+  display:block;
+  text-align:center;
+  line-height:140px;
 }
 
 .well-header {

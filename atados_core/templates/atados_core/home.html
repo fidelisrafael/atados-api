@@ -148,7 +148,7 @@
           <div class="carousel-caption">
             <h1>Encontre os mais<br>diversos atos voluntários</h1>
             <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            <a class="btn btn-small btn-primary btn-project-list-filter" href="#project-list-filter">{% trans "Explore" %}</a>
+            <a class="btn btn-small btn-primary btn-project-list-filter" href="#list">{% trans "Explore" %}</a>
           </div>
         </div>
       </div>
@@ -188,6 +188,8 @@
             {% endfor %}
           </div>
         </div>
+
+        <div id="list"></div>
 
         <div class="project-list-filter-container">
           <div id="project-list-filter" class="project-list-filter">
@@ -351,7 +353,7 @@
 
     $(".btn-project-list-filter").click(function() {
       $('html, body').animate({
-        scrollTop: $("#project-list-filter").offset().top
+        scrollTop: $("#list").offset().top
       }, 500);
       return false;
     });
