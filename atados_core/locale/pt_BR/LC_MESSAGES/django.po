@@ -116,7 +116,6 @@ msgid "Neighborhood"
 msgstr "Bairro"
 
 #: models.py:79
-#, fuzzy
 msgid "State"
 msgstr "Estado"
 
@@ -125,7 +124,6 @@ msgid "City"
 msgstr "Cidade"
 
 #: models.py:83
-#, fuzzy
 msgid "Suburb"
 msgstr "Zona"
 
@@ -346,7 +344,6 @@ msgid "Find projects by their..."
 msgstr "Encontre atos de acordo com sua..."
 
 #: templates/atados_core/home.html:211 templates/atados_core/home.html:271
-#, fuzzy
 msgid "cause"
 msgstr "causa"
 
@@ -357,27 +354,22 @@ msgid "Filter"
 msgstr "Filtrar"
 
 #: templates/atados_core/home.html:222
-#, fuzzy
 msgid "skill"
 msgstr "habilidade"
 
 #: templates/atados_core/home.html:233 templates/atados_core/home.html:282
-#, fuzzy
 msgid "location"
 msgstr "localização"
 
 #: templates/atados_core/home.html:254
-#, fuzzy
 msgid "availability"
 msgstr "disponibilidade"
 
 #: templates/atados_core/home.html:267
-#, fuzzy
 msgid "Find nonprofits by their..."
 msgstr "Encontre ONGs de acordo com sua..."
 
 #: templates/atados_core/home.html:319
-#, fuzzy
 msgid "Next page"
 msgstr "Próximo"
 
@@ -394,17 +386,14 @@ msgid "@movimentoatados"
 msgstr "@movimentoatados"
 
 #: templates/search/search.html:31
-#, fuzzy
 msgid "projects"
-msgstr "Atos"
+msgstr "atos"
 
 #: templates/search/search.html:34
-#, fuzzy
 msgid "nonprofits"
 msgstr "ONGs"
 
 #: templates/search/search.html:37
-#, fuzzy
 msgid "volunteers"
 msgstr "voluntários"
 

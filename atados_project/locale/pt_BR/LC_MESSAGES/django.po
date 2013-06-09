@@ -92,9 +92,8 @@ msgid "This work can be done remotely."
 msgstr "Este trabalho pode ser feito a distância."
 
 #: models.py:94
-#, fuzzy
 msgid "Role name"
-msgstr "Nome do responsável"
+msgstr "Nome do cargo"
 
 #: models.py:96 templates/atados_project/details-work.html:46
 msgid "Prerequisites"
@@ -184,7 +183,6 @@ msgstr "Este ato não pode ser feito a distância"
 
 #: templates/atados_project/details-donation.html:34
 #: templates/atados_project/details-work.html:80
-#, fuzzy
 msgid "Addressline"
 msgstr "Logradouro"
 
@@ -365,7 +363,6 @@ msgstr ""
 #~ msgid "Address line"
 #~ msgstr "Logradouro"
 
-#, fuzzy
 #~ msgid "Address number"
 #~ msgstr "Logradouro"
 
