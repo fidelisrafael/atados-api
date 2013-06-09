@@ -425,10 +425,6 @@ fieldset + fieldset {
         left:0;
       }
 
-      & > a:hover {
-        text-decoration:none;
-      }
-
       .name {
         position:absolute;
         top:0;
@@ -470,39 +466,40 @@ fieldset + fieldset {
 }
 
 .project-list-filter-container {
-  height:170px;
+  height:152px;
 
   .project-list-filter {
     width:700px;
     position:relative;
     padding:20px 0;
-    height:130px;
+    height:112px;
     background:#f6f6f6;
     z-index:100;
 
-    & > a {
-      font-family:'Francois One', sans-serif;
-      font-size:18px;
-      position:absolute;
-      width:210px;
-      text-align:center;
-      background:#e9e9e9;
-      color:#fff;
-      display:block;
-      padding:10px;
-      text-transform:uppercase;
+    & > .nav {
+      margin-bottom:1px;
+      border-bottom:0;
 
-      & + a {
-        left:232px;
-      }
+      li {
+        a {
+          font-family:'Francois One', sans-serif;
+          font-size:18px;
+          width:210px;
+          text-align:center;
+          background:#e9e9e9;
+          color:#fff;
+          display:block;
+          padding:10px;
+          text-transform:uppercase;
+          border:none;
+        }
 
-      &:hover {
-        text-decoration:none;
-      }
-
-      &.active {
-        background:#fff;
-        color:$orange;
+        &.active {
+          a {
+            background:#fff;
+            color:$orange;
+          }
+        }
       }
     }
 
@@ -512,17 +509,34 @@ fieldset + fieldset {
     }
 
     .filters {
-      margin-top:40px;
       display:block;
       background:#fff;
       padding:10px;
-      height:70px;
-      overflow:hidden;
+      height:52px;
       display:block;
+      overflow:visible;
 
-      & > p {
-        margin:0 0 12px;
+      p {
+        margin:0 0 8px;
         font-size:12px;
+      }
+
+      a {
+        font-family:'Francois One';
+        color:#8a8a8a;
+      }
+
+      .dropdown-menu {
+        padding:10px;
+        width:220px;
+      }
+
+      .caret {
+        border-top-color:#dcdcdc;
+        border-top-width:9px;
+        border-right-width:5px;
+        border-left-width:5px;
+        margin-top:6px;
       }
     }
   }
@@ -670,7 +684,6 @@ fieldset + fieldset {
       &:hover {
         background:$blue;
         color:#fff;
-        text-decoration:none;
       }
     }
 
@@ -678,7 +691,6 @@ fieldset + fieldset {
       a {
         background:$darkBlue;
         color:#fff;
-        text-decoration:none;
       }
     }
 

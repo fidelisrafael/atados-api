@@ -50,6 +50,14 @@ def as_availabilities_field(field):
     )
 
 @register.filter
+def as_multi_select_list_field(field):
+    return get_template("atados_core/multi_select_list_field.html").render(
+        Context({
+            'field': field,
+        })
+    )
+
+@register.filter
 def as_select_button_list_field(field):
     return get_template("atados_core/select_button_list_field.html").render(
         Context({

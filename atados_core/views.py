@@ -25,29 +25,6 @@ def server_error(request, template_name='500.html'):
         return HttpResponseServerError('<h1>Server Error (500)</h1>')
     return HttpResponseServerError(template.render(RequestContext(request, {'request_path': request.path})))
 
-class HomeView(TemplateView):
-    template_name='atados_core/home.html'
-
-    def get_context_data(self):
-        projects = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:12]
-        recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
-        return {'form': RegistrationForm(),
-                'environ': os.environ,
-                'projects': projects,
-                'recommended': recommended}
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            try:
-                Nonprofit.objects.get(user=request.user)
-                from atados_nonprofit.views import NonprofitHomeView
-                return NonprofitHomeView.as_view()(request, *args, **kwargs)
-            except Nonprofit.DoesNotExist:
-                return VolunteerHomeView.as_view()(request, *args, **kwargs)
-
-        return super(HomeView, self).get(request, *args, **kwargs)
-
-
 def slug(request, *args, **kwargs):
     try:
         User.objects.get(username=kwargs['slug'])
@@ -150,3 +127,39 @@ class SearchView(FacetedSearchView):
             #'skill_list': self.get_skill_list(context),
         })
         return context
+
+class HomeView(SearchView, View):
+    template='atados_core/home.html'
+
+    def build_form(self, form_kwargs=None):
+        data = {u'types': [u'project']}
+        kwargs = {
+            'load_all': self.load_all,
+        }
+        if form_kwargs:
+            kwargs.update(form_kwargs)
+
+        if self.searchqueryset is not None:
+            kwargs['searchqueryset'] = self.searchqueryset
+
+        return self.form_class(data, **kwargs)
+
+    def extra_context(self):
+        context = super(HomeView, self).extra_context()
+        recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
+        context.update({
+            'recommended': recommended,
+            'address_form': AddressForm(),
+        })
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            try:
+                Nonprofit.objects.get(user=request.user)
+                from atados_nonprofit.views import NonprofitHomeView
+                return NonprofitHomeView.as_view()(request, *args, **kwargs)
+            except Nonprofit.DoesNotExist:
+                return VolunteerHomeView.as_view()(request, *args, **kwargs)
+
+        return self.__call__(request)

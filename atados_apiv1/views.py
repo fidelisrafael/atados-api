@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.views.generic import View
 from atados_core.views import JSONResponseMixin, SearchView
 from sorl.thumbnail import get_thumbnail
@@ -8,36 +9,40 @@ def get_thumb(image, size):
     try:
         return get_thumbnail(image, size, crop='center').url
     except:
-        return STATIC_URL + 'img/thumb/300.gif';
+        return STATIC_URL + 'img/thumb/300.gif'
 
 class ProjectApi(SearchView, JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return self.__call__(request);
+        return self.__call__(request)
 
     def create_response(self):
-        (paginator, page) = self.build_page()
+        try:
+            (paginator, page) = self.build_page()
 
-        context = [{
-            'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x270'),
-            'url': result.object.get_absolute_url(),
-            'name': result.object.name,
-            'details': result.object.get_description(),
-            'volunteers': 0,
-            'nonprofit': {
-                'image': get_thumb(result.object.nonprofit.image, '34x34'),
-                'url': result.object.nonprofit.get_absolute_url(),
-                'name': result.object.nonprofit.name,
-            }
-        } for result in page.object_list]
+            context = [{
+                'id': result.object.id,
+                'image': get_thumb(result.object.image, '270x270'),
+                'url': result.object.get_absolute_url(),
+                'name': result.object.name,
+                'details': result.object.get_description(),
+                'volunteers': 0,
+                'nonprofit': {
+                    'image': get_thumb(result.object.nonprofit.image, '34x34'),
+                    'url': result.object.nonprofit.get_absolute_url(),
+                    'name': result.object.nonprofit.name,
+                }
+            } for result in page.object_list]
+        except Http404:
+            context = []
+
         return self.render_to_response(context)
 
 
 class NonprofitApi(SearchView, JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return self.__call__(request);
+        return self.__call__(request)
 
     def build_form(self, form_kwargs=None):
         data = {u'types': [u'nonprofit']}
@@ -68,7 +73,7 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 class VolunteerApi(SearchView, JSONResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
-        return self.__call__(request);
+        return self.__call__(request)
 
     def build_form(self, form_kwargs=None):
         data = {u'types': [u'volunteer']}

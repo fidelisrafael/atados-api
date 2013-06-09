@@ -111,6 +111,37 @@
     return false;
   });
 
+  $('.project-list-filter .update').click(function() {
+    $('.project-list.infinite').empty();
+    $('.project-list.infinite').infinitescroll({
+      state: {
+        currPage: 0,
+      },
+      path: function(page) {
+        if ($('#filter-project').is(":visible")) {
+          var path = '/api/v1/project';
+          var forms = $('#filter-project :input[value][value!=""]');
+        } else {
+          var path = '/api/v1/nonprofit';
+          var forms = $('#filter-nonprofit :input[value][value!=""]');
+        }
+
+        path += '?page=' + page;
+
+        forms.each(function() {
+          var query = $(this).serialize();
+          if (query) path += '&' + query;
+        });
+
+        return path;
+      }
+    });
+    $('.project-list.infinite').infinitescroll('resume');
+    $('.project-list.infinite').scroll();
+    $('.infinite-navigation').hide();
+    return true;
+  });
+
   $('.project-list.infinite').infinitescroll({
     loading: {
       img: undefined,
@@ -122,6 +153,11 @@
     dataType: 'json',
     appendCallback: false,
   }, function(json, opts) {
+    if (json.length === 0) {
+      $('.project-list.infinite').infinitescroll('pause');
+      return false;
+    }
+
     if (opts.state.currPage == 3) {
       $('.project-list.infinite').infinitescroll('pause');
       $('.infinite-navigation').show();
@@ -135,21 +171,28 @@
         container.append(row);
         row = $('<div class="row"></div>');
       }
-      row.append(
+
+      var item = $(
         '<div class="span3 project-item">' + 
           '<a href="' + project.url + '">' + 
             '<img alt="' + project.name + '"  src="' + project.image + '" width="270" height="180">' +
           '</a>' +
           '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
           '<p class="description">' + project.details + '</p>' +
+        '</div>');
+
+      if (project.nonprofit) {
+        item.append(
           '<div class="nonprofit">' +
             '<a href="' + project.nonprofit.url + '" class="picture">' + 
               '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image + '" width="34" height="34">' +
             '</a>' +
             '<a href="' + project.nonprofit.url + '" class="name">' + project.nonprofit.name + '</a>' +
             '<div class="volunteers"><i class="icon icon-volunteer"></i> <span>' + project.volunteers + '</span></div>' +
-          '</div>' +
-        '</div>');
+          '</div>');
+      }
+
+      row.append(item);
     }
     container.append(row);
   });
