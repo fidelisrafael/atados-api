@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-07 14:22-0300\n"
+"POT-Creation-Date: 2013-06-09 03:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Search in"
 msgstr "Buscar em"
 
-#: forms.py:55 templates/403.html:17 templates/atados_core/base.html:76
+#: forms.py:59 templates/403.html:17 templates/atados_core/base.html:76
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:56 templates/403.html:21 templates/atados_core/base.html:80
+#: forms.py:60 templates/403.html:21 templates/atados_core/base.html:80
 msgid "Stay signed in"
 msgstr "Mantenha-me conectado "
 
@@ -178,9 +178,8 @@ msgid "Password"
 msgstr "Senha"
 
 #: templates/403.html:19 templates/atados_core/base.html:72
-#: templates/atados_core/sign-in.html:4 templates/atados_core/sign-in.html:7
-#: templates/atados_core/sign-in.html:14
-#: templates/atados_core/base.html:78
+#: templates/atados_core/base.html.py:78 templates/atados_core/sign-in.html:4
+#: templates/atados_core/sign-in.html:7 templates/atados_core/sign-in.html:14
 msgid "Sign in"
 msgstr "Entrar"
 
@@ -204,7 +203,7 @@ msgstr "Fique a vontade para encontrar atos, ONGs e voluntários:"
 
 #: templates/404.html:20 templates/404.html.py:21 templates/500.html:19
 #: templates/500.html.py:20 templates/atados_core/base.html:49
-#: templates/search/search.html:11 templates/search/search.html.py:15
+#: templates/search/search.html:13 templates/search/search.html.py:17
 msgid "Search"
 msgstr "Buscar"
 
@@ -317,7 +316,7 @@ msgstr "Social"
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/atados_core/base.html:173 templates/atados_core/home.html:251
+#: templates/atados_core/base.html:173 templates/atados_core/home.html:334
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -334,124 +333,150 @@ msgstr "Explore"
 msgid "Recommended"
 msgstr "Em destaque"
 
-#: templates/atados_core/home.html:194 templates/search/search.html:29
+#: templates/atados_core/home.html:198
 msgid "Projects"
 msgstr "Atos"
 
-#: templates/atados_core/home.html:195 templates/search/search.html:32
+#: templates/atados_core/home.html:201
 msgid "Nonprofits"
 msgstr "ONGs"
 
-#: templates/atados_core/home.html:197
+#: templates/atados_core/home.html:207
 msgid "Find projects by their..."
 msgstr "Encontre atos de acordo com sua..."
 
-#: templates/atados_core/home.html:201
-msgid "Cause"
-msgstr "Causa"
+#: templates/atados_core/home.html:211 templates/atados_core/home.html:271
+#, fuzzy
+msgid "cause"
+msgstr "causa"
 
-#: templates/atados_core/home.html:206
-msgid "Skill"
-msgstr "Habilidade"
+#: templates/atados_core/home.html:216 templates/atados_core/home.html:227
+#: templates/atados_core/home.html:248 templates/atados_core/home.html:259
+#: templates/atados_core/home.html:276 templates/atados_core/home.html:297
+msgid "Filter"
+msgstr "Filtrar"
 
-#: templates/atados_core/home.html:211
-msgid "Location"
-msgstr "Localização"
+#: templates/atados_core/home.html:222
+#, fuzzy
+msgid "skill"
+msgstr "habilidade"
 
-#: templates/atados_core/home.html:216
-msgid "Availability"
-msgstr "Disponibilidade"
+#: templates/atados_core/home.html:233 templates/atados_core/home.html:282
+#, fuzzy
+msgid "location"
+msgstr "localização"
 
-#: templates/atados_core/home.html:236
+#: templates/atados_core/home.html:254
+#, fuzzy
+msgid "availability"
+msgstr "disponibilidade"
+
+#: templates/atados_core/home.html:267
+#, fuzzy
+msgid "Find nonprofits by their..."
+msgstr "Encontre ONGs de acordo com sua..."
+
+#: templates/atados_core/home.html:319
 #, fuzzy
 msgid "Next page"
 msgstr "Próximo"
 
-#: templates/atados_core/home.html:240
+#: templates/atados_core/home.html:323
 msgid "Load more"
 msgstr "Carregar mais"
 
-#: templates/atados_core/home.html:245
+#: templates/atados_core/home.html:328
 msgid "/blog"
 msgstr "/blog"
 
-#: templates/atados_core/home.html:248
+#: templates/atados_core/home.html:331
 msgid "@movimentoatados"
 msgstr "@movimentoatados"
 
-#: templates/search/search.html:35
-msgid "Volunteers"
-msgstr "Voluntários"
+#: templates/search/search.html:31
+#, fuzzy
+msgid "projects"
+msgstr "Atos"
 
-#: templates/search/search.html:43
+#: templates/search/search.html:34
+#, fuzzy
+msgid "nonprofits"
+msgstr "ONGs"
+
+#: templates/search/search.html:37
+#, fuzzy
+msgid "volunteers"
+msgstr "voluntários"
+
+#: templates/search/search.html:45
 msgid "Causes"
 msgstr "Causas"
 
-#: templates/search/search.html:59
+#: templates/search/search.html:61
 msgid "Skills"
 msgstr "Habilidades"
 
-#: templates/search/search.html:83
+#: templates/search/search.html:84
 #, python-format
 msgid "We've found %(count)s projects"
 msgstr "Nós encontramos %(count)s atos"
 
-#: templates/search/search.html:85
+#: templates/search/search.html:86
 msgid "We've found 1 project"
 msgstr "Nós encontramos 1 ato"
 
-#: templates/search/search.html:90
+#: templates/search/search.html:91
 #, python-format
 msgid "We've found %(count)s nonprofits"
 msgstr "Nós encontramos %(count)s ONGs"
 
-#: templates/search/search.html:92
+#: templates/search/search.html:93
 msgid "We've found 1 nonprofit"
 msgstr "Nós encontramos 1 ONG"
 
-#: templates/search/search.html:97
+#: templates/search/search.html:98
 #, python-format
 msgid "We've found %(count)s volunteers"
 msgstr "Nós encontramos %(count)s voluntários"
 
-#: templates/search/search.html:99
+#: templates/search/search.html:100
 msgid "We've found 1 volunteer"
 msgstr "Nós encontramos 1 voluntário"
 
-#: templates/search/search.html:104
+#: templates/search/search.html:105
 #, python-format
 msgid "We've found %(count)s results"
 msgstr "Nós encontramos %(count)s resutados"
 
-#: templates/search/search.html:106
+#: templates/search/search.html:107
 msgid "We've found 1 result"
 msgstr "Nós encontramos 1 resultado"
 
-#: templates/search/search.html:128
+#: templates/search/search.html:134
 msgid "Previous"
 msgstr "Anterior"
 
-#: templates/search/search.html:131
+#: templates/search/search.html:137
 msgid "Next"
 msgstr "Próximo"
 
-#: templates/search/search.html:139
+#: templates/search/search.html:145
 #, python-format
 msgid "We couldn't find any projects matching '%(query)s'."
 msgstr "Nós não conseguimos encontrar nenhum ato ao buscar por '%(query)s'"
 
-#: templates/search/search.html:142
+#: templates/search/search.html:148
 #, python-format
 msgid "We couldn't find any nonprofits matching '%(query)s'."
 msgstr "Nós não conseguimos encontrar nenhuma ONG ao buscar por '%(query)s'"
 
-#: templates/search/search.html:145
+#: templates/search/search.html:151
 #, python-format
 msgid "We couldn't find any volunteers matching '%(query)s'."
 msgstr ""
 "Nós não conseguimos encontrar nenhum voluntário ao buscar por '%(query)s'"
 
-#: templates/search/search.html:148
+#: templates/search/search.html:154
 #, python-format
 msgid "We couldn't find any results matching '%(query)s'."
 msgstr ""

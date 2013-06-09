@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-07 14:47-0300\n"
+"POT-Creation-Date: 2013-06-09 03:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,7 +48,7 @@ msgstr "Detalhes"
 
 #: models.py:29
 msgid "Short description"
-msgstr ""
+msgstr "Descrição curta"
 
 #: models.py:31
 msgid "Responsible name"
@@ -104,43 +104,43 @@ msgstr "Pré-requisitos"
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: urls.py:23
+#: urls.py:19
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato$"
 
-#: urls.py:24
+#: urls.py:20
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/donation$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/doacao$"
 
-#: urls.py:25
+#: urls.py:21
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/work$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-recorrente$"
 
-#: urls.py:26
+#: urls.py:22
 msgid "^(?P<nonprofit>[-\\w]+)/add-new-project/job$"
 msgstr "^(?P<nonprofit>[-\\w]+)/adicionar-novo-ato/ato-pontual$"
 
-#: urls.py:27
+#: urls.py:23
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)$"
 msgstr ""
 
-#: urls.py:29
+#: urls.py:25
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/collaborators$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/colaboradores$"
 
-#: urls.py:30
+#: urls.py:26
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/delete$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/excluir$"
 
-#: urls.py:31
+#: urls.py:27
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/apply$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/atar$"
 
-#: urls.py:33
+#: urls.py:29
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/picture$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/imagem$"
 
-#: views.py:292
+#: views.py:260
 msgid "Project was successfully deleted."
 msgstr "Ato excluído com sucesso."
 
