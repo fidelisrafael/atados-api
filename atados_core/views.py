@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import Http404, HttpResponseServerError
 from django.template import RequestContext, TemplateDoesNotExist, loader
 from django.utils import simplejson as json
+from django.views.decorators.cache import cache_control, never_cache, cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View, TemplateView
 from django.views.generic.base import ContextMixin
@@ -56,6 +57,7 @@ class JSONResponseMixin(object):
 
 class CityView(JSONResponseMixin, View):
 
+    @cache_control(max_age=3600)
     def get(self, request, *args, **kwargs):
         context = [{
             'id': city.pk,
@@ -66,6 +68,7 @@ class CityView(JSONResponseMixin, View):
 
 class SuburbView(JSONResponseMixin, View):
 
+    @cache_control(max_age=3600)
     def get(self, request, *args, **kwargs):
         context = [{
             'id': suburb.pk,
@@ -85,6 +88,7 @@ class CauseMixin(object):
         context.update({'cause_list': self.cause_list})
         return context
 
+@never_cache()
 class SearchView(FacetedSearchView):
 
     def __init__(self, *args, **kwargs):

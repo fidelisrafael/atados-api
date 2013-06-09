@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.views.decorators.cache import cache_control, never_cache, cache_page
 from django.views.generic import View
 from atados_core.views import JSONResponseMixin, SearchView
 from sorl.thumbnail import get_thumbnail
@@ -13,6 +14,7 @@ def get_thumb(image, size):
 
 class ProjectApi(SearchView, JSONResponseMixin, View):
 
+    @never_cache
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
@@ -41,6 +43,7 @@ class ProjectApi(SearchView, JSONResponseMixin, View):
 
 class NonprofitApi(SearchView, JSONResponseMixin, View):
 
+    @never_cache
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
@@ -72,6 +75,7 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 
 class VolunteerApi(SearchView, JSONResponseMixin, View):
 
+    @never_cache
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
