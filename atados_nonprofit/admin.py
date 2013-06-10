@@ -12,4 +12,4 @@ class NonprofitAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-admin.site.register(Nonprofit)
+admin.site.register(Nonprofit, NonprofitAdmin)

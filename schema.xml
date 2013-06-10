@@ -146,15 +146,35 @@
     <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false"/>
 
 
+    <field name="city" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="city_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="skills_exact" type="string" indexed="true" stored="true" multiValued="true" />
+
+    <field name="suburb" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="skills" type="text_en" indexed="true" stored="true" multiValued="true" />
+
     <field name="text" type="text_en" indexed="true" stored="true" multiValued="false" />
 
-    <field name="published" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="has_image" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="availabilities" type="text_en" indexed="true" stored="true" multiValued="true" />
 
     <field name="causes_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
-    <field name="causes" type="text_en" indexed="true" stored="true" multiValued="true" />
+    <field name="availabilities_exact" type="string" indexed="true" stored="true" multiValued="true" />
 
-    <field name="has_image" type="boolean" indexed="true" stored="true" multiValued="false" />
+    <field name="state" type="text_en" indexed="true" stored="true" multiValued="false" />
+
+    <field name="published" type="boolean" indexed="true" stored="true" multiValued="false" />
+
+    <field name="suburb_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="state_exact" type="string" indexed="true" stored="true" multiValued="false" />
+
+    <field name="causes" type="text_en" indexed="true" stored="true" multiValued="true" />
 
   </fields>
 

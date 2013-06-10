@@ -105,7 +105,7 @@ class SearchView(FacetedSearchView, View):
 
     def __init__(self, *args, **kwargs):
         kwargs['form_class'] = SearchForm
-        kwargs['searchqueryset'] = SearchQuerySet().facet('causes').filter(published=True)
+        kwargs['searchqueryset'] = SearchQuerySet().facet('causes').facet('skills').facet('state').facet('city').facet('suburb').facet('availabilities').filter(published=True)
         super(FacetedSearchView, self).__init__(*args, **kwargs)
 
     def get_cause_list(self, context):
@@ -140,7 +140,7 @@ class SearchView(FacetedSearchView, View):
         context = super(SearchView, self).extra_context()
         context.update({
             'cause_list': self.get_cause_list(context),
-            #'skill_list': self.get_skill_list(context),
+            'skill_list': self.get_skill_list(context),
         })
         return context
 
