@@ -7,7 +7,17 @@ from sorl.thumbnail import ImageField
 from time import time
 
 
+class NonprofitManager(models.Manager):
+    use_for_related_fields = True
+
+    def active(self):
+        return self.get_query_set().filter(deleted=False)
+
+    def published(self):
+        return self.get_query_set().active(published=True)
+
 class Nonprofit(models.Model):
+    objects = NonprofitManager()
     user = models.ForeignKey(User)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=50)
@@ -19,6 +29,14 @@ class Nonprofit(models.Model):
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
     address = models.OneToOneField(Address, blank=True, null=True)
     published = models.BooleanField(_("Published"), default=False)
+    deleted = models.BooleanField(_("Deleted"), default=False)
+    deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
+                                        null=True)
+
+    def delete(self, *args, **kwargs):
+        self.deleted = True
+        self.deleted_date = datetime.now()
+        self.save()
 
     def get_description(self):
         return self.description if self.description else Truncator(
