@@ -159,10 +159,8 @@
     dataType: 'json',
     appendCallback: false,
   }, function(json, opts) {
-    if (json.length === 0) {
+    if (json.length < 15) {
       $('.project-list.infinite').infinitescroll('pause');
-      $('.project-list.infinite').removeClass('empty');
-      return false;
     }
 
     if (opts.state.currPage == 3) {
@@ -170,41 +168,45 @@
       $('.infinite-navigation').show();
     }
 
-    container = $(this);
-    var row;
-      
-    for (var key in json) {
-      project = json[key];
-      if (key % 3 == 0) {
-        if (key > 0)
-          row.hide().appendTo(container).fadeIn();
-        row = $('<div class="row"></div>');
-      }
+    if (json.length > 0) {
 
-      var item = $(
-        '<div class="span3 project-item">' + 
-          '<a href="' + project.url + '">' + 
-            '<img alt="' + project.name + '"  src="' + project.image + '" width="270" height="180">' +
-          '</a>' +
-          '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
-          '<p class="description">' + project.details + '</p>' +
-        '</div>');
+      container = $(this);
+      var row;
+        
+      for (var key in json) {
+        project = json[key];
+        if (key % 3 == 0) {
+          if (key > 0)
+            row.hide().appendTo(container).fadeIn();
+          row = $('<div class="row"></div>');
+        }
 
-      if (project.nonprofit) {
-        item.append(
-          '<div class="nonprofit">' +
-            '<a href="' + project.nonprofit.url + '" class="picture">' + 
-              '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image + '" width="34" height="34">' +
+        var item = $(
+          '<div class="span3 project-item">' + 
+            '<a href="' + project.url + '">' + 
+              '<img alt="' + project.name + '"  src="' + project.image + '" width="270" height="180">' +
             '</a>' +
-            '<a href="' + project.nonprofit.url + '" class="name">' + project.nonprofit.name + '</a>' +
-            '<div class="volunteers"><i class="icon icon-volunteer"></i> <span>' + project.volunteers + '</span></div>' +
+            '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
+            '<p class="description">' + project.details + '</p>' +
           '</div>');
+
+        if (project.nonprofit) {
+          item.append(
+            '<div class="nonprofit">' +
+              '<a href="' + project.nonprofit.url + '" class="picture">' + 
+                '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image + '" width="34" height="34">' +
+              '</a>' +
+              '<a href="' + project.nonprofit.url + '" class="name">' + project.nonprofit.name + '</a>' +
+              '<div class="volunteers"><i class="icon icon-volunteer"></i> <span>' + project.volunteers + '</span></div>' +
+            '</div>');
+        }
+
+        row.append(item);
       }
 
-      row.append(item);
-    }
+      row.hide().appendTo(container).fadeIn();
 
-    row.hide().appendTo(container).fadeIn();
+    }
 
     $('.project-list.infinite').removeClass('empty');
   });
