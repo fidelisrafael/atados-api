@@ -58,6 +58,9 @@ class JSONResponseMixin(object):
 class CityView(JSONResponseMixin, View):
 
     @cache_control(max_age=3600)
+    def dispatch(self, *args, **kwargs):
+        return super(CityView, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         context = [{
             'id': city.pk,
@@ -69,6 +72,9 @@ class CityView(JSONResponseMixin, View):
 class SuburbView(JSONResponseMixin, View):
 
     @cache_control(max_age=3600)
+    def dispatch(self, *args, **kwargs):
+        return super(SuburbView, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         context = [{
             'id': suburb.pk,
@@ -88,8 +94,14 @@ class CauseMixin(object):
         context.update({'cause_list': self.cause_list})
         return context
 
-@never_cache()
-class SearchView(FacetedSearchView):
+class SearchView(FacetedSearchView, View):
+
+    @never_cache
+    def dispatch(self, *args, **kwargs):
+        return super(SearchView, self).dispatch(*args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        return super(SearchView, self).__call__(*args, **kwargs)
 
     def __init__(self, *args, **kwargs):
         kwargs['form_class'] = SearchForm
@@ -166,4 +178,4 @@ class HomeView(SearchView, View):
             except Nonprofit.DoesNotExist:
                 return VolunteerHomeView.as_view()(request, *args, **kwargs)
 
-        return self.__call__(request)
+        return self.__call__(request, *args, **kwargs)

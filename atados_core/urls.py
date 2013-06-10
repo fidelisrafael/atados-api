@@ -21,7 +21,7 @@ urlpatterns = patterns(
     url(_(r'^sign-out$'), 'django.contrib.auth.views.logout',
         {'next_page': _('/sign-in')}, name='sign-out'),
 
-    url(_(r'^search$'), SearchView(), name='search'),
+    url(_(r'^search$'), SearchView.as_view(), name='search'),
 
     url(_(r'^terms$'), TemplateView.as_view(
         template_name='atados_core/terms.html'), name='terms'),

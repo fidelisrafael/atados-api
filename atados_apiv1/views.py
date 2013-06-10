@@ -15,6 +15,9 @@ def get_thumb(image, size):
 class ProjectApi(SearchView, JSONResponseMixin, View):
 
     @never_cache
+    def dispatch(self, *args, **kwargs):
+        return super(ProjectApi, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
@@ -44,6 +47,9 @@ class ProjectApi(SearchView, JSONResponseMixin, View):
 class NonprofitApi(SearchView, JSONResponseMixin, View):
 
     @never_cache
+    def dispatch(self, *args, **kwargs):
+        return super(NonprofitApi, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
@@ -76,6 +82,9 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 class VolunteerApi(SearchView, JSONResponseMixin, View):
 
     @never_cache
+    def dispatch(self, *args, **kwargs):
+        return super(VolunteerApi, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         return self.__call__(request)
 
