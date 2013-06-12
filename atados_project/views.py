@@ -17,7 +17,7 @@ from atados_volunteer.models import Volunteer
 from atados_project.models import (Project, Donation, Work, Apply,
                                    Availability)
 from atados_nonprofit.models import Nonprofit
-from atados_nonprofit.views import NonprofitMixin
+from atados_nonprofit.views import NonprofitMixin, only_nonprofit_owner
 from atados_project.forms import (DonationForm,
                                   WorkForm,
                                   ProjectForm,
@@ -190,6 +190,30 @@ class ProjectWorkCreateView(ProjectView):
 
 class ProjectJobCreateView(ProjectWorkCreateView):
     template_name='atados_project/new-job.html'
+
+class ProjectDonationUpdateView(ProjectDonationCreateView):
+    pass
+
+class ProjectWorkUpdateView(ProjectWorkCreateView):
+    pass
+
+class ProjectJobUpdateView(ProjectJobCreateView):
+    pass
+
+class ProjectUpdateView(ProjectMixin, View):
+
+    @only_nonprofit_owner
+    def dispatch(self, request, *args, **kwargs):
+        project = self.get_project()
+
+        if project.work:
+            view = ProjectWorkUpdateView()
+        elif project.donation:
+            view = ProjectDonationUpdateView()
+        else:
+            raise Http404()
+
+        return view.dispatch(request, *args, **kwargs)
 
 class ProjectDetailsView(ProjectMixin, DetailView):
     only_owner=False
