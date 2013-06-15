@@ -254,6 +254,40 @@ fieldset + fieldset {
   }
 }
 
+.sign-in-menu {
+  width:344px;
+  padding:10px;
+
+  .btn-facebook {
+    margin:0 0 20px;
+  }
+
+  form {
+    margin-bottom:0px;
+  }
+
+  label.checkbox {
+    margin:17px 0 0 8px;
+  }
+}
+
+.hr {
+  text-align:center;
+  display:block;
+  border-top:1px solid #eee;
+  position:relative;
+  height:20px;
+
+  & > div {
+    margin-top:-10px;
+
+    & > span {
+      background:white;
+      padding:0 10px;
+    }
+  }
+}
+
 #sign-in {
   margin:70px auto;
   width:300px;
