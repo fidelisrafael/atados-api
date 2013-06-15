@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib import messages
+from django.forms.models import inlineformset_factory
 from django.forms.formsets import formset_factory
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _, ugettext as __
@@ -18,6 +19,7 @@ from atados_project.models import (Project, Donation, Work, Apply,
                                    Availability)
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.views import NonprofitMixin
+from atados_project.models import Role, Project
 from atados_project.forms import (DonationForm,
                                   WorkForm,
                                   ProjectForm,
@@ -93,7 +95,6 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
                 'city': nonprofit.address.city,
                 'suburb': nonprofit.address.suburb,
             })
-
 
         return initial
 
@@ -176,9 +177,9 @@ class ProjectWorkCreateView(ProjectView):
     def get_role_formset(self):
         RoleFormset = formset_factory(RoleForm)
         if (self.request.method == 'POST'):
-            return RoleFormset(self.request.POST, self.request.FILES)
+            return RoleFormset(self.request.POST, self.request.FILES, prefix="role_set")
         else:
-            return RoleFormset()
+            return RoleFormset(prefix="role_set")
 
     def get_work_form(self):
         return WorkForm(**self.get_work_form_kwargs())
@@ -223,11 +224,19 @@ class ProjectUpdateMixin(ProjectMixin):
         self.project = self.get_project()
         return super(ProjectUpdateMixin, self).get(*args, **kwargs)
 
+    def post(self, *args, **kwargs):
+        self.project = self.get_project()
+        return super(ProjectUpdateMixin, self).post(*args, **kwargs)
+
 class ProjectDonationUpdateView(ProjectUpdateMixin, ProjectDonationCreateView):
 
     def get(self, *args, **kwargs):
         self.donation = self.get_project().donation
-        return super(ProjectDonationUpdateMixin, self).get(*args, **kwargs)
+        return super(ProjectDonationUpdateView, self).get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        self.donation = self.get_project().donation
+        return super(ProjectDonationUpdateView, self).post(*args, **kwargs)
 
     def get_donation_form_kwargs(self):
         kwargs = super(ProjectDonationUpdateView, self).get_form_kwargs()
@@ -245,27 +254,23 @@ class ProjectDonationUpdateView(ProjectUpdateMixin, ProjectDonationCreateView):
 
 
 class ProjectWorkUpdateView(ProjectUpdateMixin, ProjectWorkCreateView):
+    template_name='atados_project/update-work.html'
 
     def get(self, *args, **kwargs):
         self.work = self.get_project().work
-        return super(ProjectUpdateMixin, self).get(*args, **kwargs)
+        return super(ProjectWorkUpdateView, self).get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        self.work = self.get_project().work
+        return super(ProjectWorkUpdateView, self).post(*args, **kwargs)
 
     def get_role_formset(self):
+        RoleFormset = inlineformset_factory(Work, Role, extra=0, form=RoleForm)
         if (self.request.method == 'POST'):
-            RoleFormset = formset_factory(RoleForm)
-            return RoleFormset(self.request.POST, self.request.FILES)
+            return RoleFormset(self.request.POST, self.request.FILES, instance=self.work)
         else:
-            initial = []
-            RoleFormset = formset_factory(RoleForm, extra=0)
-            for role in self.work.role_set.all():
-                initial.append({
-                    'id': role.id,
-                    'name': role.name,
-                    'vacancies': role.vacancies,
-                    'prerequisites': role.prerequisites,
-                })
-            return RoleFormset(initial=initial)
-
+            return RoleFormset(instance=self.work)
+        
     def get_work_form_kwargs(self):
         kwargs = super(ProjectWorkUpdateView, self).get_form_kwargs()
         kwargs.update({

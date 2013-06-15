@@ -12,7 +12,7 @@
   <div class="row">
     <div class="span8">
       <form class="well" method="post" action="{{ project.get_edit_url }}">{% csrf_token %}
-        {% include form_template %}
+        {% include "atados_project/form-work.html" %}
         <div class="form-actions">
           <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
         </div>

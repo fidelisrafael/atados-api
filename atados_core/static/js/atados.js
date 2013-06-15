@@ -89,16 +89,19 @@
   $('.roles .add').click(function() {
     var roles = $(this).closest('.roles');
     var clone = $('.empty-form', roles).clone().removeClass('empty-form').removeClass('hide');
-    var total_forms = parseInt($('[name="form-TOTAL_FORMS"]', roles).val());
-    var max_num_forms = parseInt($('[name="form-MAX_NUM_FORMS"]', roles).val());
+    var total_forms = parseInt($('[name="role_set-TOTAL_FORMS"]', roles).val());
+    var max_num_forms = parseInt($('[name="role_set-MAX_NUM_FORMS"]', roles).val());
 
     if (total_forms++ > max_num_forms) return;
 
-    $('[name="form-TOTAL_FORMS"]', roles).val(total_forms);
+    $('[name="role_set-TOTAL_FORMS"]', roles).val(total_forms);
     
     $('input, textarea', clone).each(function(index, element) {
       $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
       $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
+    });
+    $('label', clone).each(function(index, element) {
+      $(element).attr('for', $(element).attr('for').replace('__prefix__', String(total_forms - 1)));
     });
 
     $('.role-forms', roles).append(clone);

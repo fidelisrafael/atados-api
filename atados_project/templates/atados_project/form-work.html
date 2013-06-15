@@ -17,6 +17,7 @@
     <div class="role-forms">
       {% for role_form in role_formset %}
       <div class="role-form">
+        {{ role_form.id|as_bootstrap }}
         <div class="row-fluid">
           <div class="span8">
             {{ role_form.name|as_bootstrap }}
