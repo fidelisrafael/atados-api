@@ -86,6 +86,16 @@ fieldset + fieldset {
   font-family:'Francois One', sans-serif;
 }
 
+.roles {
+  .role-forms {
+    .role-form + .role-form {
+      border-top:1px solid #e5e5e5;
+      margin-top:20px;
+      padding-top:20px;
+    }
+  }
+}
+
 .navbar {
   .brand {
     background:url('../img/atados.png') no-repeat 0 0;

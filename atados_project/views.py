@@ -67,7 +67,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         return self.render_to_response(self.get_context_data(**self.get_forms()))
 
     def post(self, request, *args, **kwargs):
-        forms = self.get_forms(request)
+        forms = self.get_forms()
         if all([form.is_valid() for key, form in forms.iteritems()]):
             return self.form_valid(**forms)
         else:
@@ -107,6 +107,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     def get_project_form_kwargs(self):
         kwargs = super(ProjectView, self).get_form_kwargs()
         kwargs.update({
+            'instance': self.project,
             'nonprofit': self.get_nonprofit(),
             'user': self.request.user,
         })
@@ -128,10 +129,22 @@ class ProjectDonationCreateView(ProjectView):
     def get_forms(self, request=None):
         forms = super(ProjectDonationCreateView, self).get_forms()
         forms.update({
-            'donation_form': self.get_form(DonationForm),
-            'address_form': self.get_form(AddressForm),
+            'donation_form': self.get_donation_form(),
+            'address_form': self.get_address_form(),
         })
         return forms
+
+    def get_donation_form(self):
+        return DonationForm(**self.get_donation_form_kwargs())
+
+    def get_donation_form_kwargs(self):
+        return super(ProjectDonationCreateView, self).get_form_kwargs()
+
+    def get_address_form(self):
+        return AddressForm(**self.get_address_form_kwargs())
+
+    def get_address_form_kwargs(self):
+        return super(ProjectDonationCreateView, self).get_form_kwargs()
 
     def form_valid(self, project_form, donation_form, address_form):
         if not self.request.user.is_authenticated():
@@ -151,21 +164,34 @@ class ProjectDonationCreateView(ProjectView):
 class ProjectWorkCreateView(ProjectView):
     template_name='atados_project/new-work.html'
 
-    def get_forms(self, request=None):
-        RoleFormset = formset_factory(RoleForm)
+    def get_forms(self):
         forms = super(ProjectWorkCreateView, self).get_forms()
         forms.update({
-            'work_form': self.get_form(WorkForm),
-            'address_form': self.get_form(AddressForm),
+            'work_form': self.get_work_form(),
+            'address_form': self.get_address_form(),
+            'role_formset': self.get_role_formset(),
         })
-
-        if (request):
-            forms.update({
-                'role_formset': RoleFormset(self.request.POST, self.request.FILES),
-            })
-        else:
-            forms.update({'role_formset': RoleFormset(),})
         return forms
+
+    def get_role_formset(self):
+        RoleFormset = formset_factory(RoleForm)
+        if (self.request.method == 'POST'):
+            return RoleFormset(self.request.POST, self.request.FILES)
+        else:
+            return RoleFormset()
+
+    def get_work_form(self):
+        return WorkForm(**self.get_work_form_kwargs())
+
+    def get_work_form_kwargs(self):
+        return super(ProjectWorkCreateView, self).get_form_kwargs()
+
+    def get_address_form(self):
+        return AddressForm(**self.get_address_form_kwargs())
+
+    def get_address_form_kwargs(self):
+        return super(ProjectWorkCreateView, self).get_form_kwargs()
+
 
     def form_valid(self, project_form, work_form, role_formset, address_form):
         if not self.request.user.is_authenticated():
@@ -191,13 +217,70 @@ class ProjectWorkCreateView(ProjectView):
 class ProjectJobCreateView(ProjectWorkCreateView):
     template_name='atados_project/new-job.html'
 
-class ProjectDonationUpdateView(ProjectDonationCreateView):
-    pass
+class ProjectUpdateMixin(ProjectMixin):
 
-class ProjectWorkUpdateView(ProjectWorkCreateView):
-    pass
+    def get(self, *args, **kwargs):
+        self.project = self.get_project()
+        return super(ProjectUpdateMixin, self).get(*args, **kwargs)
 
-class ProjectJobUpdateView(ProjectJobCreateView):
+class ProjectDonationUpdateView(ProjectUpdateMixin, ProjectDonationCreateView):
+
+    def get(self, *args, **kwargs):
+        self.donation = self.get_project().donation
+        return super(ProjectDonationUpdateMixin, self).get(*args, **kwargs)
+
+    def get_donation_form_kwargs(self):
+        kwargs = super(ProjectDonationUpdateView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': self.donation,
+        })
+        return kwargs
+
+    def get_address_form_kwargs(self):
+        kwargs = super(ProjectDonationUpdateView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': self.donation.delivery,
+        })
+        return kwargs
+
+
+class ProjectWorkUpdateView(ProjectUpdateMixin, ProjectWorkCreateView):
+
+    def get(self, *args, **kwargs):
+        self.work = self.get_project().work
+        return super(ProjectUpdateMixin, self).get(*args, **kwargs)
+
+    def get_role_formset(self):
+        if (self.request.method == 'POST'):
+            RoleFormset = formset_factory(RoleForm)
+            return RoleFormset(self.request.POST, self.request.FILES)
+        else:
+            initial = []
+            RoleFormset = formset_factory(RoleForm, extra=0)
+            for role in self.work.role_set.all():
+                initial.append({
+                    'id': role.id,
+                    'name': role.name,
+                    'vacancies': role.vacancies,
+                    'prerequisites': role.prerequisites,
+                })
+            return RoleFormset(initial=initial)
+
+    def get_work_form_kwargs(self):
+        kwargs = super(ProjectWorkUpdateView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': self.work,
+        })
+        return kwargs
+
+    def get_address_form_kwargs(self):
+        kwargs = super(ProjectWorkUpdateView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': self.work.address,
+        })
+        return kwargs
+
+class ProjectJobUpdateView(ProjectWorkUpdateView):
     pass
 
 def project_update(request, *args, **kwargs):

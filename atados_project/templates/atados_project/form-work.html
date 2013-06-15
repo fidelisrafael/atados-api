@@ -16,6 +16,7 @@
     {{ role_formset.management_form }}
     <div class="role-forms">
       {% for role_form in role_formset %}
+      <div class="role-form">
         <div class="row-fluid">
           <div class="span8">
             {{ role_form.name|as_bootstrap }}
@@ -25,6 +26,7 @@
           </div>
         </div>
         {{ role_form.prerequisites|as_bootstrap }}
+      </div>
       {% endfor %}
     </div>
     
@@ -32,8 +34,7 @@
       <button type="button" class="btn add"><i class="icon-plus"></i> {% trans "Add more roles" %}</button>
     </div>
 
-    <div class="hide empty-form">
-      <hr />
+    <div class="hide empty-form role-form">
       <div class="row-fluid">
         <div class="span8">
           {{ role_formset.empty_form.name|as_bootstrap }}
