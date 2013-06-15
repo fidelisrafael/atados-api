@@ -1,11 +1,10 @@
-from functools import wraps
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import UpdateView, FormMixin
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import available_attrs
+from django.utils.decorators import classonlymethod
 from atados_core.forms import AddressForm
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.forms import (NonprofitPictureForm,
@@ -13,22 +12,6 @@ from atados_nonprofit.forms import (NonprofitPictureForm,
                                     NonprofitSecondStepForm,
                                     NonprofitDetailsForm)
 
-
-def only_nonprofit_owner(function):
-
-    @wraps(function, assigned=available_attrs(function))
-    def wrapper(request, *args, **kwargs):
-        print request
-        """
-        if self.only_owner == True:
-            try:
-                self.nonprofit = Nonprofit.objects.get(slug=kwargs.get('nonprofit'),
-                                                       user=request.user)
-            except Nonprofit.DoesNotExist:
-                raise PermissionDenied
-        """
-        return function(request, *args, **kwargs)
-    return wrapper
 
 class NonprofitMixin(object):
     nonprofit = None
@@ -40,16 +23,15 @@ class NonprofitMixin(object):
         })
         return super(NonprofitMixin, self).get_context_data(**kwargs)
 
-    @only_nonprofit_owner
     def dispatch(self, request, *args, **kwargs):
+        self.nonprofit = get_object_or_404(Nonprofit,
+                                           slug=kwargs.get('nonprofit'))
+        if self.only_owner and self.nonprofit.user != request.user:
+            raise PermissionDenied
         return super(NonprofitMixin, self).dispatch(request,
                                                     *args, **kwargs)
 
     def get_nonprofit(self):
-        if self.nonprofit is None:
-            self.nonprofit = get_object_or_404(Nonprofit,
-                                               slug=kwargs.get('nonprofit'),
-                                               deleted=False)
         return self.nonprofit
 
 class NonprofitBaseView(NonprofitMixin, TemplateView):
