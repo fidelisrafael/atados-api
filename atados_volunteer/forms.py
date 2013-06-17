@@ -89,12 +89,9 @@ class VolunteerFirstStepForm(forms.ModelForm):
         self.fields['skills'].empty_label = ""
         self.fields['skills'].label = _("Select one or more skills")
 
-        self.prepare_location_fields()
-
     class Meta:
         model = Volunteer
-        fields = ('causes', 'skills', 'zipcode', 'addressline', 'addressnumber',
-                  'neighborhood', 'state', 'city', 'suburb',)
+        fields = ('causes', 'skills',)
         
 class VolunteerSecondStepForm(forms.ModelForm):
     class Meta:

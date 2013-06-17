@@ -1,10 +1,12 @@
+from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django.views.generic import TemplateView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormMixin
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import classonlymethod
+from atados_core.forms import AddressForm
 from atados_volunteer.models import Volunteer
 from atados_volunteer.forms import (VolunteerPictureForm,
                                     VolunteerFirstStepForm,
@@ -69,14 +71,74 @@ class VolunteerPictureUpdateView(VolunteerMixin, UpdateView):
     template_name='atados_volunteer/picture.html'
     get_object = VolunteerMixin.get_volunteer
 
-class VolunteerFirstStepView(VolunteerMixin, UpdateView):
-    model = Volunteer
-    form_class=VolunteerFirstStepForm
+class VolunteerFirstStepView(TemplateView, VolunteerMixin, FormMixin):
     template_name='atados_volunteer/first-step.html'
-    get_object = VolunteerMixin.get_volunteer
     
+    def get_forms(self):
+        return {
+            'volunteer_form': VolunteerFirstStepForm(**self.get_volunteer_form_kwargs()),
+            'address_form': AddressForm(**self.get_address_form_kwargs())
+        }
+
+    def get_address_form_kwargs(self):
+        kwargs = super(VolunteerFirstStepView, self).get_form_kwargs()
+        if self.object.address:
+            kwargs.update({'instance': self.object.address})
+        return kwargs
+
+    def get_volunteer_form_kwargs(self):
+        kwargs = super(VolunteerFirstStepView, self).get_form_kwargs()
+        kwargs.update({'instance': self.object})
+        return kwargs
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_volunteer()
+        return self.render_to_response(self.get_context_data(**self.get_forms()))
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_volunteer()
+        forms = self.get_forms()
+        if all([form.is_valid() for key, form in forms.iteritems()]):
+            return self.form_valid(**forms)
+        else:
+            return self.form_invalid(**forms)
+
+    def get_initial(self):
+        volunteer = self.object
+
+        initial = {
+            'causes': set([cause.id for cause in volunteer.causes.all()]),
+            'skills': set([skill.id for skill in volunteer.skills.all()]),
+            'phone': volunteer.phone,
+        };
+
+        if (volunteer.address):
+            initial.update({
+                'zipcode': volunteer.address.zipcode,
+                'addressline': volunteer.address.addressline,
+                'addressnumber': volunteer.address.addressnumber,
+                'neighborhood': volunteer.address.neighborhood,
+                'state': volunteer.address.state,
+                'city': volunteer.address.city,
+                'suburb': volunteer.address.suburb,
+            })
+
+        return initial
+
     def get_success_url(self):
         return reverse('volunteer:second-step', args=(self.object.user.username,))
+
+    def form_valid(self, volunteer_form, address_form):
+        volunteer = volunteer_form.save(commit=False)
+        volunteer.address = address_form.save()
+        volunteer.save()
+        volunteer_form.save_m2m()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def form_invalid(self, volunteer_form, address_form):
+        return self.render_to_response(self.get_context_data(
+                volunteer_form=volunteer_form,
+                address_form=address_form))
 
 class VolunteerSecondStepView(VolunteerMixin, UpdateView):
     model = Volunteer

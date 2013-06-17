@@ -1,5 +1,5 @@
 {% extends 'atados_volunteer/base.html' %}
-{% load i18n bootstrap_toolkit atados_core %}
+{% load i18n bootstrap_toolkit atados_tags %}
 
 {% block breadcrumb %}
 <li class="active">{% trans "Choose your causes" %}</li>
@@ -16,15 +16,15 @@
     <form class="well" action="{% url "volunteer:first-step" volunteer.user.username %}" method="post">{% csrf_token %}
       <fieldset>
         <legend>{% trans "Causes" %}</legend>
-        {{ form.causes|as_select_button_list_field }}
+        {{ volunteer_form.causes|as_select_button_list_field }}
       </fieldset>
       <fieldset>
         <legend>{% trans "Skills" %}</legend>
-        {{ form.skills|as_select_button_list_field }}
+        {{ volunteer_form.skills|as_select_button_list_field }}
       </fieldset>
       <fieldset>
         <legend>{% trans "Location" %}</legend>
-        {% include "atados_core/location-fields.html" %}
+        {% include "atados_core/address-fields.html" %}
       </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>
