@@ -5,7 +5,7 @@
     <ul class="select-button-list">
       {% for choice_id, choice_label in field.field.choices %}
       {% if choice_id %}
-      <li{% if choice_id|safe in field.value|safe %} class="active"{% endif %}>
+      <li{% if choice_id in field.value %} class="active"{% endif %}>
         <a href="#">{{ choice_label }}</a>
         <input
           type="checkbox"
