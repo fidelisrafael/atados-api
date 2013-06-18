@@ -165,6 +165,7 @@ INSTALLED_APPS = (
     'atados_nonprofit',
     'atados_volunteer',
     'atados_project',
+    'atados_legacy',
     'registration',
     'bootstrap_toolkit',
     'south',

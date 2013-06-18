@@ -16,28 +16,36 @@
   </div>
 </div>
 {% endif %}
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Causes" %}</h2>
-    {% for cause in  project.causes.all %}
-    <span class="tag">{{ cause }}</span>
-    {% endfor %}
+{% if project.causes.all %}
+  <div class="row">
+    <div class="span9">
+      <h2>{% trans "Causes" %}</h2>
+      {% for cause in  project.causes.all %}
+      <span class="tag">{{ cause }}</span>
+      {% endfor %}
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Skills" %}</h2>
-    {% for skill in  project.skills.all %}
-    <span class="label label-info">{{ skill }}</span>
-    {% endfor %}
+{% endif %}
+{% if project.skills.all %}
+  <div class="row">
+    <div class="span9">
+      <h2>{% trans "Skills" %}</h2>
+      {% for skill in project.skills.all %}
+      <span class="tag">{{ skill }}</span>
+      {% endfor %}
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Prerequisites" %}</h2>
-    {{ project.prerequisites }}
+{% endif %}
+{% if project.roles.all %}
+  <div class="row">
+    <div class="span9">
+      <h2>{% trans "Skills" %}</h2>
+      {% for skill in project.skills.all %}
+      <span class="tag">{{ skill }}</span>
+      {% endfor %}
+    </div>
   </div>
-</div>
+{% endif %}
 {% if project.weekly_hours %}
 <div class="row">
   <div class="span9">

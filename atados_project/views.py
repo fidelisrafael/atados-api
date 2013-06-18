@@ -328,8 +328,13 @@ class ProjectDetailsView(ProjectMixin, DetailView):
         return context
 
     def get_template_names(self):
-        return 'atados_project/details-donation.html'
-        return 'atados_project/details-work.html'
+        project = self.get_project()
+        if project.work:
+            return 'atados_project/details-work.html'
+        elif project.donation:
+            return 'atados_project/details-donation.html'
+        else:
+            raise Http404
 
     get_object = ProjectMixin.get_project
 
