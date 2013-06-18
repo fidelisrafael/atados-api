@@ -4,74 +4,57 @@
 {% block project %}
 
 <div class="row">
-  <div class="span2">
-    <h2>{% trans "About" %}</h2>
-  </div>
-  <div class="span6">
+  <div class="span9 details">
     {{ project.details|linebreaks }}
   </div>
 </div>
 {% if project.vacancies %}
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Vacancies" %}</h2>
-  </div>
-  <div class="span6">
     {{ project.vacancies }}
   </div>
 </div>
 {% endif %}
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Causes" %}</h2>
-  </div>
-  <div class="span6">
     {% for cause in  project.causes.all %}
-    <span class="label label-info">{{ cause }}</span>
+    <span class="tag">{{ cause }}</span>
     {% endfor %}
   </div>
 </div>
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Skills" %}</h2>
-  </div>
-  <div class="span6">
     {% for skill in  project.skills.all %}
     <span class="label label-info">{{ skill }}</span>
     {% endfor %}
   </div>
 </div>
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Prerequisites" %}</h2>
-  </div>
-  <div class="span6">
     {{ project.prerequisites }}
   </div>
 </div>
 {% if project.weekly_hours %}
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Weekly hours" %}</h2>
-  </div>
-  <div class="span6">
     {{ project.work.weekly_hours }}
   </div>
 </div>
 {% endif %}
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Availability" %}</h2>
-  </div>
-  <div class="span6">
     {{ project.work.availabilities|as_availabilities_table }}
   </div>
 </div>
 <div class="row">
-  <div class="span2">
+  <div class="span9">
     <h2>{% trans "Location" %}</h2>
-  </div>
-  <div class="span6">
     {% if project.can_be_done_remotely %}
     {% trans "This work can be done remotely." %}
     {% else %}

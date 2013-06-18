@@ -57,7 +57,7 @@ fieldset + fieldset {
 
 .tag {
   display:inline-block;
-  margin-right:18px;
+  margin:10px 18px 0 0;
   background:#fff;
   color:$orange;
   font-weight:bold;
@@ -99,7 +99,7 @@ fieldset + fieldset {
 .navbar {
   .brand {
     background:url('../img/atados.png') no-repeat 0 0;
-    width:136px;
+    width:145px;
     height:45px;
     overflow:hidden;
     text-indent:-999em;
@@ -366,45 +366,11 @@ fieldset + fieldset {
 }
 
 #project-details {
-  .page-header {
-    position:relative;
-
-    .project-actions {
-      position:absolute;
-      right:0;
-      top:0;
-      width:220px;
-    }
-  }
-
-  .project {
-    
-    .row {
-      margin-bottom:20px;
-
-      p {
-        text-align: justify;
-      }
-
-      h2 {
-        text-align:right;
-        font-weight:bold;
-        font-size:1em;
-
-        &:after {
-          content:":";
-        }
-      }
-    }
-  }
-
-  aside {
-    .row {
-      margin-bottom:20px;
-      
-      .well {
-        margin-bottom:0;
-      }
+  .details {
+    p {
+      font-size:18px;
+      line-height:1.5;
+      margin:0 0 20px;
     }
   }
 }

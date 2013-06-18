@@ -19,9 +19,65 @@ class Migration(DataMigration):
         site.domain = 'beta.atados.com.br'
         site.name = 'Atados'
         site.save()
+        
+        for name in ('Capacitação Profissional',
+                     'Combate à Pobreza',
+                     'Consumo Consciente',
+                     'Crianças e Jovens',
+                     'Cultura e Esporte',
+                     'Defesa de Direitos',
+                     'Educação',
+                     'Idosos',
+                     'Meio Ambiente',
+                     'Participação Cidadã',
+                     'Proteção Animal',
+                     'Saúde',):
+            cause = orm.Cause()
+            cause.name = name
+            cause.save()
 
-        from django.core.management import call_command
-        call_command("loaddata", "atados_core/fixtures/load_basics.json")
+        for name in ('Artes/Artesanato',
+                     'Comunicação',
+                     'Dança/Música',
+                     'Direito',
+                     'Educação',
+                     'Esportes',
+                     'Gastronomia',
+                     'Gestão',
+                     'Idiomas',
+                     'Informática/Eletrônicos',
+                     'Saúde/Psicologia',
+                     'Outros',):
+            skill = orm.Skill()
+            skill.name = name
+            skill.save()
+
+
+        for weekday in range(7):
+            for period in range(3):
+                availability = orm.Availability()
+                availability.weekday = weekday
+                availability.period = period
+                availability.save()
+
+        state = orm.State()
+        state.name = 'São Paulo'
+        state.save()
+
+        city = orm.City()
+        city.state = state
+        city.name = 'São Paulo'
+        city.save()
+
+        for name in ('Zona Leste',
+                     'Zona Oeste',
+                     'Zona Sul',
+                     'Zona Norte',
+                     'Centro',):
+            suburb = orm.Suburb()
+            suburb.city = city
+            suburb.name = name
+            suburb.save()
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")
