@@ -234,10 +234,7 @@
                       <div class="dropdown-menu">
                         <form>
                           <div class="location-fields">
-                            <div class="state-field">
-                              {{ address_form.state|as_bootstrap }}
-                            </div>
-                            <div class="city-field{% if address_form.city.field.choices|length_is:0 %} hide{% endif %}">
+                            <div class="city-field">
                               {{ address_form.city|as_bootstrap }}
                             </div>
                             <div class="suburb-field{% if address_form.suburb.field.choices|length_is:0 %} hide{% endif %}">
@@ -324,8 +321,8 @@
         </div>
       </div><!-- /.span9 -->
       <div class="span3" style="margin-top:55px">
-        <a href="{% url "volunteer:sign-up" %}">{% trans "Become a volunteer" %}</a>
-        <a href="{% url "nonprofit:sign-up" %}">{% trans "Nonprofit sign up" %}</a>
+        <a href="{% url "volunteer:sign-up" %}" class="btn input-block-level btn-primary btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Become a volunteer" %}</a>
+        <a href="{% url "nonprofit:sign-up" %}" class="btn input-block-level btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Nonprofit sign up" %}</a>
         <div class="well">
           <a href="http://blog.atados.com.br" class="well-title">{% trans "/blog" %}</a>
         </div>

@@ -93,6 +93,8 @@ class AddressForm(forms.ModelForm):
         model = Address
 
     def __init__(self, *args, **kwargs):
+        no_state = kwargs.pop('no_state', False)
+
         super(AddressForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
@@ -103,13 +105,16 @@ class AddressForm(forms.ModelForm):
         self.fields['city'].empty_label = ""
         self.fields['suburb'].empty_label = ""
 
-        if self.is_bound:
-            if 'state' in self.data and self.data['state']:
-                self.fields['city'].queryset = City.objects.filter(state=self.data['state'])
-            else:
-                self.fields['city'].queryset = City.objects.none()
+        if no_state:
+            self.fields['city'].queryset = City.objects.all()
         else:
-            self.fields['city'].queryset = City.objects.filter(state=self.initial.get('state'))
+            if self.is_bound:
+                if 'state' in self.data and self.data['state']:
+                    self.fields['city'].queryset = City.objects.filter(state=self.data['state'])
+                else:
+                    self.fields['city'].queryset = City.objects.none()
+            else:
+                self.fields['city'].queryset = City.objects.filter(state=self.initial.get('state'))
 
         if self.is_bound:
             if 'city' in self.data and self.data['city']:

@@ -58,7 +58,7 @@
                   <li><a href="#">Rio de Janeiro</a></li>
                   <li><a href="#">Curitiba</a></li>
                   <li class="divider"></li>
-                  <li><a href="#">{% trans "More city soon" %}</a></li>
+                  <li><a href="{% url "atados:more-cities-soon"%}">{% trans "More cities soon" %}</a></li>
                 </ul>
               </li>
               {% if not user.is_authenticated %}

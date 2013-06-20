@@ -13,7 +13,7 @@ urlpatterns = patterns(
 
     url(_(r'^sign-in$'), 'django.contrib.auth.views.login',
         {'authentication_form': AuthenticationForm,
-         'template_name': 'atados_core/sign-in.html'}, name='sign-in'),
+         'template_name': 'atados_core/sign_in.html'}, name='sign-in'),
 
     url(r'^sign-in$', RedirectView.as_view(url=_('/sign-in'),
         query_string=True), name='global-sign-in'),
@@ -22,6 +22,9 @@ urlpatterns = patterns(
         {'next_page': _('/sign-in')}, name='sign-out'),
 
     url(_(r'^search$'), SearchView.as_view(), name='search'),
+
+    url(_(r'^more-cities-soon$'), TemplateView.as_view(
+        template_name='atados_core/more_cities_soon.html'), name='more-cities-soon'),
 
     url(_(r'^terms$'), TemplateView.as_view(
         template_name='atados_core/terms.html'), name='terms'),

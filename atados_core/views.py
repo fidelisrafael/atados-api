@@ -165,7 +165,7 @@ class HomeView(SearchView, View):
         recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
         context.update({
             'recommended': recommended,
-            'address_form': AddressForm(),
+            'address_form': AddressForm(no_state=True),
         })
         return context
 

@@ -79,6 +79,16 @@ class Migration(DataMigration):
             suburb.name = name
             suburb.save()
 
+        parara = orm.State()
+        parana.name = 'Paraná'
+        parana.save()
+
+        curitiba = orm.City()
+        curitiba.state = state
+        curitiba.name = 'Curitiba'
+        curitiba.save()
+
+
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")
 
