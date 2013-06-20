@@ -63,20 +63,24 @@
   </div>
   <div class="row">
     <div class="span9">
-      <h2>{% trans "Who we are and what we do" %}</h2>
-      <p>
-      {% if nonprofit.details %}
-        {{ nonprofit.details }}
-      {% else %}
-        {% trans "Nothing about this nonprofit" %}
-      {% endif %}
-      </p>
+      <div class="details">
+        <h2>{% trans "Who we are and what we do" %}</h2>
+        <p>
+        {% if nonprofit.details %}
+          {{ nonprofit.details }}
+        {% else %}
+          {% trans "Nothing about this nonprofit" %}
+        {% endif %}
+        </p>
+      </div>
+      {% if nonprofit.causes.all %}
       <h2>{% trans "Causes" %}</h2>
       <div style="margin-bottom:40px">
         {% for cause in nonprofit.causes.all %}
         <span class="tag">{{ cause }}</span>
         {% endfor %}
       </div>
+      {% endif %}
       <h2>{% trans "Projects" %}</h2>
       <div class="project-list">
         <div class="row">

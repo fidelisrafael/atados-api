@@ -329,7 +329,7 @@ msgstr "Explore"
 
 #: templates/atados_core/home.html:183
 msgid "Recommended"
-msgstr "Em destaque"
+msgstr "Atos voluntários em destaque"
 
 #: templates/atados_core/home.html:198
 msgid "Projects"
