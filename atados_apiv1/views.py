@@ -10,7 +10,7 @@ def get_thumb(image, size):
     try:
         return get_thumbnail(image, size, crop='center').url
     except:
-        return STATIC_URL + 'img/thumb/300.gif'
+        return STATIC_URL + 'img/thumb/' + size + '.gif'
 
 class ProjectApi(SearchView, JSONResponseMixin, View):
 
@@ -27,7 +27,7 @@ class ProjectApi(SearchView, JSONResponseMixin, View):
 
             context = [{
                 'id': result.object.id,
-                'image': get_thumb(result.object.image, '270x270'),
+                'image': get_thumb(result.object.image, '270x180'),
                 'url': result.object.get_absolute_url(),
                 'name': result.object.name,
                 'details': result.object.get_description(),
@@ -71,7 +71,7 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x270'),
+            'image': get_thumb(result.object.image, '270x180'),
             'url': result.object.get_absolute_url(),
             'name': result.object.name,
             'details': result.object.get_description(),
@@ -106,7 +106,7 @@ class VolunteerApi(SearchView, JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x270'),
+            'image': get_thumb(result.object.image, '270x180'),
             'url': result.object.get_absolute_url(),
             'name': result.object.user.first_name + ' ' +
                     result.object.user.last_name ,

@@ -409,7 +409,7 @@ fieldset + fieldset {
     position:relative;
     text-align: center;
     background:#fff;
-    height:450px;
+    height:325px;
     overflow:hidden;
     max-width:270px;
 
@@ -482,7 +482,7 @@ fieldset + fieldset {
 
 #list {
   position:absolute;
-  top:835px;
+  top:796px;
 }
 
 .project-list-filter-container {
@@ -525,7 +525,7 @@ fieldset + fieldset {
 
     &.fixed {
       position:fixed;
-      top:66px;
+      top:-20px;
     }
 
     .filters {
