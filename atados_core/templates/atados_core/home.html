@@ -329,7 +329,7 @@
   ( function ( w , $ , undefined ) {
 
     $(w).scroll(function() {
-      if ($('.project-list-filter-container').offset().top < ($(window).scrollTop())) {
+      if ($('.project-list-filter-container').offset().top < ($(window).scrollTop() - 20)) {
         $('.project-list-filter').addClass('fixed');
       } else {
         $('.project-list-filter').removeClass('fixed');

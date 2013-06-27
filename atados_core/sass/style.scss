@@ -412,7 +412,6 @@ fieldset + fieldset {
     height:325px;
     overflow:hidden;
     max-width:270px;
-    border-color: #fff;
 
     .well-title {
       font-size:14px;
@@ -470,30 +469,6 @@ fieldset + fieldset {
         }
       }
     }
-
-    &:hover {
-      border:10px solid;
-      border-color: $orange;
-      margin:-10px -10px -10px 10px;
-      color:#fff;
-      background: $orange;
-      -webkit-transition: background 1s, border-color 1s ease;
-      -moz-transition: background 1s, border-color 1s ease;
-      -o-transition: background 1s, border-color 1s ease;
-      transition: background 1s, border-color 1s ease;
-
-      a, .nonprofit .name, .volunteers {
-        color:#fff;
-
-        &:hover {
-          color:#fff;
-        }
-      }
-
-      .icon-volunteer {
-        background-position:-34px -45px;
-      }
-    }
   }
 }
 
@@ -502,26 +477,23 @@ fieldset + fieldset {
     .row + .row {
       margin-top:30px;
     }
-
-    .project-item:hover {
-      border:10px solid $orange;
-      margin:-10px -10px -10px 20px;
-    }
   }
 }
 
 #list {
   position:absolute;
-  top:798px;
+  top:796px;
 }
 
 .project-list-filter-container {
-  margin:20px 0;
-  height:112px;
+  height:152px;
 
   .project-list-filter {
     width:700px;
     position:relative;
+    padding:20px 0;
+    height:112px;
+    background:#f6f6f6;
     z-index:100;
 
     & > .nav {
@@ -553,20 +525,7 @@ fieldset + fieldset {
 
     &.fixed {
       position:fixed;
-      top:0;
-      right:0;
-      left:0;
-      width:auto;
-      background:#fff;
-
-      & > .filters {
-        width:920px;
-        margin:0 auto;
-
-        & > .tab-pane {
-          width:680px;
-        }
-      }
+      top:-20px;
     }
 
     .filters {
@@ -613,15 +572,8 @@ fieldset + fieldset {
         }
       }
     }
-    .project-item {
-      &:hover {
-        border:none;
-        margin:0 auto;
-      }
-
-      & + .project-item {
-        margin-top:20px;
-      }
+    .project-item + .project-item {
+      margin-top:20px;
     }
   }
 
@@ -646,13 +598,8 @@ fieldset + fieldset {
       }
 
       &.fixed {
-        background:none;
         position:relative;
         top:0;
-
-        .filters {
-          width:auto;
-        }
       }
 
       .filters {
@@ -686,14 +633,6 @@ fieldset + fieldset {
       &.fixed {
         top:0;
         position:relative;
-        background:none;
-
-        .filters {
-          width:auto;
-          .tab-pane {
-            width:auto;
-          }
-        }
       }
     }
   }
@@ -712,16 +651,6 @@ fieldset + fieldset {
   .project-list-filter-container {
     .project-list-filter {
       width:870px;
-
-      &.fixed {
-        .filters {
-          width:1150px;
-
-          .tab-pane {
-            width:850px;
-          }
-        }
-      }
     }
   }
 }
