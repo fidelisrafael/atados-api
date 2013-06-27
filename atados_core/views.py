@@ -176,6 +176,7 @@ class HomeView(SearchView, View):
                 from atados_nonprofit.views import NonprofitHomeView
                 return NonprofitHomeView.as_view()(request, *args, **kwargs)
             except Nonprofit.DoesNotExist:
-                return VolunteerHomeView.as_view()(request, *args, **kwargs)
+                pass
+                #return VolunteerHomeView.as_view()(request, *args, **kwargs)
 
         return self.__call__(request, *args, **kwargs)

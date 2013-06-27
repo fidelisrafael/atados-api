@@ -107,6 +107,27 @@
     $('.role-forms', roles).append(clone);
   });
 
+  $('.materials .add').click(function() {
+    var materials = $(this).closest('.materials');
+    var clone = $('.empty-form', materials).clone().removeClass('empty-form').removeClass('hide');
+    var total_forms = parseInt($('[name="material_set-TOTAL_FORMS"]', materials).val());
+    var max_num_forms = parseInt($('[name="material_set-MAX_NUM_FORMS"]', materials).val());
+
+    if (total_forms++ > max_num_forms) return;
+
+    $('[name="material_set-TOTAL_FORMS"]', materials).val(total_forms);
+    
+    $('input, textarea', clone).each(function(index, element) {
+      $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
+      $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
+    });
+    $('label', clone).each(function(index, element) {
+      $(element).attr('for', $(element).attr('for').replace('__prefix__', String(total_forms - 1)));
+    });
+
+    $('.material-forms', materials).append(clone);
+  });
+
   $('.infinite-navigation .more').click(function() {
     $('.project-list.infinite').infinitescroll('resume');
     $('.project-list.infinite').scroll();

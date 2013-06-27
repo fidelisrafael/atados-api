@@ -89,10 +89,19 @@ class Work(models.Model):
     can_be_done_remotely = models.BooleanField(
             _('This work can be done remotely.'))
 
+class Material(models.Model):
+    donation = models.ForeignKey(Donation)
+    name = models.CharField(_('Material name'), max_length=50,
+                            blank=True, null=True, default=None)
+    quantity = models.PositiveSmallIntegerField(_('Quantity'),
+                                                blank=True,
+                                                null=True,
+                                                default=None)
+
 class Role(models.Model):
     work = models.ForeignKey(Work)
     name = models.CharField(_('Role name'), max_length=50,
-                                    blank=True, null=True, default=None)
+                            blank=True, null=True, default=None)
     prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
                                     blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),

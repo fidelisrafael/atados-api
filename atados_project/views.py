@@ -19,11 +19,12 @@ from atados_project.models import (Project, Donation, Work, Apply,
                                    Availability)
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.views import NonprofitMixin
-from atados_project.models import Role, Project
+from atados_project.models import Role, Material, Project
 from atados_project.forms import (DonationForm,
                                   WorkForm,
                                   ProjectForm,
                                   RoleForm,
+                                  MaterialForm,
                                   ProjectPictureForm)
 from haystack.query import SearchQuerySet
 from sorl.thumbnail import get_thumbnail
@@ -132,8 +133,16 @@ class ProjectDonationCreateView(ProjectView):
         forms.update({
             'donation_form': self.get_donation_form(),
             'address_form': self.get_address_form(),
+            'material_formset': self.get_material_formset(),
         })
         return forms
+
+    def get_material_formset(self):
+        MaterialFormset = formset_factory(MaterialForm)
+        if (self.request.method == 'POST'):
+            return MaterialFormset(self.request.POST, self.request.FILES, prefix="material_set")
+        else:
+            return MaterialFormset(prefix="material_set")
 
     def get_donation_form(self):
         return DonationForm(**self.get_donation_form_kwargs())
@@ -147,7 +156,7 @@ class ProjectDonationCreateView(ProjectView):
     def get_address_form_kwargs(self):
         return super(ProjectDonationCreateView, self).get_form_kwargs()
 
-    def form_valid(self, project_form, donation_form, address_form):
+    def form_valid(self, project_form, donation_form, material_formset, address_form):
         if not self.request.user.is_authenticated():
             forms.ValidationError("Authentication required")
 
@@ -158,7 +167,13 @@ class ProjectDonationCreateView(ProjectView):
         donation = donation_form.save(commit=False)
         donation.project = project
         donation.delivery = address
-        donation = donation.save()
+        donation = donation_form.save()
+
+        for material_form in material_formset.forms:
+            if material_form.has_changed():
+                material = material_form.save(commit=False)
+                material.donation = donation
+                material = material_form.save()
 
         return HttpResponseRedirect(self.get_success_url(project))
 
@@ -228,7 +243,11 @@ class ProjectUpdateMixin(ProjectMixin):
         self.project = self.get_project()
         return super(ProjectUpdateMixin, self).post(*args, **kwargs)
 
+    def get_initial(self):
+        return {}
+
 class ProjectDonationUpdateView(ProjectUpdateMixin, ProjectDonationCreateView):
+    template_name='atados_project/update-donation.html'
 
     def get(self, *args, **kwargs):
         self.donation = self.get_project().donation
@@ -238,6 +257,13 @@ class ProjectDonationUpdateView(ProjectUpdateMixin, ProjectDonationCreateView):
         self.donation = self.get_project().donation
         return super(ProjectDonationUpdateView, self).post(*args, **kwargs)
 
+    def get_material_formset(self):
+        MaterialFormset = inlineformset_factory(Donation, Material, extra=0, form=MaterialForm)
+        if (self.request.method == 'POST'):
+            return MaterialFormset(self.request.POST, self.request.FILES, instance=self.donation)
+        else:
+            return MaterialFormset(instance=self.donation)
+        
     def get_donation_form_kwargs(self):
         kwargs = super(ProjectDonationUpdateView, self).get_form_kwargs()
         kwargs.update({
@@ -294,12 +320,15 @@ def project_update(request, *args, **kwargs):
                                 slug=kwargs.get('project'),
                                 deleted=False)
 
-    if project.work:
+    try:
+        project.work
         return ProjectWorkUpdateView.as_view()(request, *args, **kwargs)
-    elif project.donation:
-        return ProjectDonationUpdateView.as_view()(request, *args, **kwargs)
-    else:
-        raise Http404()
+    except Work.DoesNotExist:
+        try:
+            project.donation
+            return ProjectDonationUpdateView.as_view()(request, *args, **kwargs)
+        except Donation.DoesNotExist:
+            raise Http404
 
 class ProjectDetailsView(ProjectMixin, DetailView):
     only_owner=False
@@ -329,12 +358,15 @@ class ProjectDetailsView(ProjectMixin, DetailView):
 
     def get_template_names(self):
         project = self.get_project()
-        if project.work:
+        try:
+            project.work
             return 'atados_project/details-work.html'
-        elif project.donation:
-            return 'atados_project/details-donation.html'
-        else:
-            raise Http404
+        except Work.DoesNotExist:
+            try:
+                project.donation
+                return 'atados_project/details-donation.html'
+            except Donation.DoesNotExist:
+                raise Http404
 
     get_object = ProjectMixin.get_project
 

@@ -28,7 +28,7 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
         if hasattr(obj, 'work') and obj.work.address:
             return obj.work.address
         if hasattr(obj, 'donation') and obj.donation.delivery:
-            return obj.work.address
+            return obj.donation.delivery
         return Address()
 
     def prepare_state(self, obj):

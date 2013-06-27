@@ -6,7 +6,8 @@ from atados_core.forms import AddressForm
 from atados_project.models import (Project,
                                    Donation,
                                    Work,
-                                   Role)
+                                   Role,
+                                   Material)
 
 
 class RoleForm(forms.ModelForm):
@@ -20,6 +21,19 @@ class RoleForm(forms.ModelForm):
         
         self.fields['prerequisites'].widget.attrs.update({'rows' : 3})
 
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class' : 'input-block-level'})
+        
+class MaterialForm(forms.ModelForm):
+
+    class Meta:
+        model = Material
+        exclude = ('donation',)
+
+    def __init__(self, *args, **kwargs):
+        super(MaterialForm, self).__init__(*args, **kwargs)
+        
         for field in self.fields:
             self.fields[field].widget.attrs.update({
                 'class' : 'input-block-level'})
