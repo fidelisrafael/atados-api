@@ -79,7 +79,7 @@ class Migration(DataMigration):
             suburb.name = name
             suburb.save()
 
-        parara = orm.State()
+        parana = orm.State()
         parana.name = 'Paraná'
         parana.save()
 
