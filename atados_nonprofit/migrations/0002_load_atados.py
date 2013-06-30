@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        user = User()
+        """user = User()
         user.id = 1
         user.username = 'guedes'
         user.first_name = 'Guedes'
@@ -23,7 +23,7 @@ class Migration(DataMigration):
         nonprofit.user = orm['auth.User'].objects.get(id=1)
         nonprofit.name = 'Atados'
         nonprofit.slug = 'atados'
-        nonprofit.save()
+        nonprofit.save()"""
 
     def backwards(self, orm):
         raise RuntimeError("Cannot reverse this migration.")

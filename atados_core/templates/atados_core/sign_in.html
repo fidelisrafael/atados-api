@@ -10,10 +10,21 @@
 {% block content %}
 <div id="sign-in">
   <form class="well" method="post" action="{% url "atados:sign-in" %}">{% csrf_token %}
+    <a href="{% url "socialauth_begin" "facebook" %}?next={{ next }}" class="btn btn-facebook input-block-level">{% trans "Connect using Facebook" %}</a>
+    <div class="hr"><div><span>{% trans "or" %}</span></div></div>
     {{ form|as_bootstrap }}
     <button type="submit" tabindex="6" class="btn btn-primary">{% trans "Sign in" %}</button>
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
+
+
+  <form class="well" method="get" action="{% url "volunteer:sign-up" %}">
+    <h2>{% trans "Not registered yet?" %}</h2>
+    <button type="submit" tabindex="6" class="btn btn-primary btn-block">{% trans "Sign up" %}</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+  </form>
+
+  
 </div>
 {% endblock %}
 

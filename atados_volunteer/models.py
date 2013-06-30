@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from atados_core.models import Cause, Skill, Address
 from sorl.thumbnail import ImageField
 from time import time
@@ -31,3 +32,8 @@ class Volunteer(models.Model):
     def __unicode__(self):
         return self.user.first_name
 
+def create_volunteer(sender, instance, created, **kwargs):  
+    if created:  
+       profile, created = Volunteer.objects.get_or_create(user=instance)
+
+post_save.connect(create_volunteer, sender=User)
