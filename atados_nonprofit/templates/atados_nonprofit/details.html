@@ -1,10 +1,7 @@
 {% extends 'atados_nonprofit/base.html' %}
 {% load i18n thumbnail %}
 
-{% block out_breadcrumb %}
-{% endblock %}
-
-{% block css %}
+{% block _css %}
 <style>
   body {
     padding-top:66px;
@@ -30,22 +27,18 @@
 </style>
 {% endblock %}
 
+{% block header %}
+<div id="nonprofit-header">
+  <div class="cover">
+    {% thumbnail nonprofit.cover "1170x285" crop="center" as im %}
+    <img alt="{{ nonprofit }}" src="{{ im.url }}" />
+    {% endthumbnail %}
 
-{% block content %}
-<div id="nonprofit-details">
-  <div class="row">
-    <div class="span12 top">
-        {% thumbnail nonprofit.cover "1170x285" crop="center" as im %}
-        <img class="cover" alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
-        {% if nonprofit in nonprofit_list %}
-        <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
-        {% endif %}
-        {% empty %}
-        {% if nonprofit in nonprofit_list %}
-        <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
-        {% endif %}
-        {% endthumbnail %}
+  </div><!-- /.cover -->
 
+  <div class="container">
+    <div class="row">
+      <div class="span12">
         <div class="nonprofit-image">
           {% thumbnail nonprofit.image "170x170" crop="center" as im %}
           <img class="img-rounded" alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
@@ -58,8 +51,28 @@
           <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
           {% endif %}
           {% endthumbnail %}
+        </div><!-- /.nonprofit-image -->
+
+        <h1>{{ nonprofit.name }}</h1>
+
+        {% if nonprofit in nonprofit_list %}
+        <div class="tools">
+          <a href="{% url "nonprofit:edit-nonprofit-cover" nonprofit.slug %}" class="btn">{% if nonprofit.cover %}{% trans "Edit nonprofit cover" %}{% else %}{% trans "Add a cover picture" %}{% endif %}</a>
         </div>
+        {% endif %}
+      </div>
     </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{{ nonprofit.name }}</li>
+{% endblock %}
+
+{% block content %}
+<div id="nonprofit-details">
+  <div class="row">
   </div>
   <div class="row">
     <div class="span9">

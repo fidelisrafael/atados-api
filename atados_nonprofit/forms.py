@@ -107,6 +107,11 @@ class NonprofitPictureForm(forms.ModelForm):
         model = Nonprofit
         fields = ('image',)
 
+class NonprofitCoverForm(forms.ModelForm):
+    class Meta:
+        model = Nonprofit
+        fields = ('cover',)
+
 class NonprofitFirstStepForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

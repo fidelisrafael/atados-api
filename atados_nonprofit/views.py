@@ -8,6 +8,7 @@ from django.utils.decorators import classonlymethod
 from atados_core.forms import AddressForm
 from atados_nonprofit.models import Nonprofit
 from atados_nonprofit.forms import (NonprofitPictureForm,
+                                    NonprofitCoverForm,
                                     NonprofitFirstStepForm,
                                     NonprofitSecondStepForm,
                                     NonprofitDetailsForm)
@@ -48,6 +49,12 @@ class NonprofitPictureUpdateView(NonprofitMixin, UpdateView):
     model = Nonprofit
     form_class=NonprofitPictureForm
     template_name='atados_nonprofit/picture.html'
+    get_object = NonprofitMixin.get_nonprofit
+
+class NonprofitCoverUpdateView(NonprofitMixin, UpdateView):
+    model = Nonprofit
+    form_class=NonprofitCoverForm
+    template_name='atados_nonprofit/cover.html'
     get_object = NonprofitMixin.get_nonprofit
 
 class NonprofitDetailsUpdateView(NonprofitMixin, UpdateView):

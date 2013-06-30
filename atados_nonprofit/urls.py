@@ -4,6 +4,7 @@ from django.views.generic import TemplateView, RedirectView
 from django.utils.translation import ugettext_lazy as _
 from atados_core.forms import AuthenticationForm
 from atados_nonprofit.views import (NonprofitPictureUpdateView,
+                                    NonprofitCoverUpdateView,
                                     NonprofitFirstStepView,
                                     NonprofitSecondStepView,
                                     NonprofitDetailsUpdateView)
@@ -33,6 +34,9 @@ urlpatterns = patterns(
 
     url(_(r'^(?P<nonprofit>[-\w]+)/edit-nonprofit-picture$'), NonprofitPictureUpdateView.as_view(),
         name='edit-nonprofit-picture'),
+
+    url(_(r'^(?P<nonprofit>[-\w]+)/edit-nonprofit-cover$'), NonprofitCoverUpdateView.as_view(),
+        name='edit-nonprofit-cover'),
 
     url(_(r'^(?P<nonprofit>[-\w]+)/edit$'), NonprofitDetailsUpdateView.as_view(),
         name='edit'),

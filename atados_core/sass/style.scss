@@ -376,6 +376,98 @@ fieldset + fieldset {
   }
 }
 
+#nonprofit-header {
+  position:relative;
+  margin-bottom:20px;
+  padding-bottom:0;
+
+  & > .cover {
+    position:absolute;
+    top:-20px;
+    left:0;
+    right:0;
+    height:210px;
+    background:#ccc;
+    display:block;
+    overflow:hidden;
+
+    & > img {
+      width:100%;
+    }
+  }
+
+  & > .container {
+    position:relative;
+    min-height:100px;
+
+    & > .row {
+      & > .span12 {
+        & > .nonprofit-image {
+          position:relative;
+          width:190px;
+
+          & > a {
+            position:absolute;
+            bottom:0;
+            z-index:100;
+            display:none;
+            width:146px;
+            left:10px;
+            bottom:10px;
+          }
+
+          &:hover > a {
+            display:inline;
+          }
+
+          & > img {
+            border:10px solid #fff;
+          }
+
+          & + h1 {
+            left:210px;
+          }
+        }
+
+        & > h1 {
+          position:absolute;
+          bottom:0;
+          display:inline;
+          padding:5px 20px;
+          background:#fff;
+          margin:0;
+        }
+
+        & > .tools {
+          position:absolute;
+          right:0;
+          top:0;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 979px) {
+  #nonprofit-header {
+    & > .cover {
+      & > img {
+        width:979px;
+        max-width:979px;
+      }
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  #nonprofit-header {
+    & > .cover {
+      left:-20px;
+      right:-20px;
+    }
+  }
+}
+
 #nonprofit-details {
   .top {
     position:relative;
@@ -416,10 +508,10 @@ fieldset + fieldset {
     &:hover {
       color:#fff;
       background: $orange;
-      -webkit-transition: background 1s ease;
-      -moz-transition: background 1s ease;
-      -o-transition: background 1s ease;
-      transition: background 1s ease;
+      -webkit-transition: background 0.3s ease;
+      -moz-transition: background 0.3s ease;
+      -o-transition: background 0.3s ease;
+      transition: background 0.3s ease;
 
       a,
       & > .nonprofit > .name,
