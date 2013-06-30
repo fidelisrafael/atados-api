@@ -314,9 +314,20 @@
         <a href="{% url "nonprofit:sign-up" %}" class="btn input-block-level btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Nonprofit sign up" %}</a>
         <div class="well">
           <a href="http://blog.atados.com.br" class="well-title">{% trans "/blog" %}</a>
+          <ul class="feed">
+            {% for feed in blog_feed %}
+            <li>
+            {{ feed.description|truncatechars:100 }}<br>
+            <a href="{{ feed.link }}">{% trans "Read more" %}</a>
+            </li>
+            {% endfor %}
+          <ul>
         </div>
         <div class="well">
           <a href="https://www.facebook.com/atadosjuntandogenteboa" class="well-title">{% trans "Facebook" %}</a>
+          <iframe src="http://www.facebook.com/plugins/facepile.php? 
+            app_id=430973993601792" scrolling="no" frameborder="0" style="border:none;  
+            overflow:hidden; width:230px;" allowTransparency="true"></iframe>
         </div>
       </div><!-- /.span3 -->
     </div><!-- /.row -->

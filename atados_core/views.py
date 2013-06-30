@@ -1,6 +1,7 @@
 import os
 from django import http
 from django.contrib.auth.models import User
+from django.core.cache import get_cache
 from django.http import Http404, HttpResponseServerError
 from django.template import RequestContext, TemplateDoesNotExist, loader
 from django.utils import simplejson as json
@@ -16,6 +17,7 @@ from atados_nonprofit.models import Nonprofit
 from atados_project.models import Project
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
+import feedparser
 
 
 @requires_csrf_token
@@ -163,11 +165,26 @@ class HomeView(SearchView, View):
     def extra_context(self):
         context = super(HomeView, self).extra_context()
         recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
+
+        
+
         context.update({
             'recommended': recommended,
             'address_form': AddressForm(no_state=True),
+            'blog_feed': self.get_blog_feed()
         })
         return context
+
+    def get_blog_feed(self):
+        cache = get_cache('default')
+        blog_feed = cache.get('blog_feed')
+
+        if not blog_feed:
+            blog_feed = feedparser.parse('http://www.atados.com.br/blog/feed/').entries[0:3]
+            if blog_feed:
+                cache.set('blog_feed', blog_feed, 300)
+
+        return blog_feed
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated():

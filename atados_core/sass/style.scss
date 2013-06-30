@@ -84,6 +84,7 @@ fieldset + fieldset {
   font-size:18px;
   color:$blue;
   font-family:'Francois One', sans-serif;
+  margin-bottom:10px;
 }
 
 .roles {
@@ -93,6 +94,16 @@ fieldset + fieldset {
       margin-top:20px;
       padding-top:20px;
     }
+  }
+}
+
+ul.feed {
+  margin:0;
+  font-size:12px;
+
+  & > li {
+    list-style:none;
+    margin-top:10px;
   }
 }
 

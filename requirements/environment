@@ -16,3 +16,4 @@ markdown==2.2.1
 python-memcached==1.48
 beautifulsoup==3.2.1
 django-social-auth==0.7.23
+feedparser==5.1.3
