@@ -376,6 +376,7 @@ fieldset + fieldset {
   }
 }
 
+#project-header,
 #nonprofit-header {
   position:relative;
   margin-bottom:20px;
@@ -398,11 +399,10 @@ fieldset + fieldset {
 
   & > .container {
     position:relative;
-    min-height:100px;
 
     & > .row {
       & > .span12 {
-        & > .nonprofit-image {
+        & > .image {
           position:relative;
           width:190px;
 

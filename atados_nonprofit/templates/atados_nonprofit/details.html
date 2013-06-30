@@ -1,31 +1,7 @@
 {% extends 'atados_nonprofit/base.html' %}
 {% load i18n thumbnail %}
 
-{% block _css %}
-<style>
-  body {
-    padding-top:66px;
-  }
-  @media (max-width: 979px) {
-    body {
-      padding-top: 20px;
-    }
-    .container.navbar-wrapper {
-      margin-bottom: 0;
-      width: auto;
-    }
-    .navbar-inner {
-      border-radius: 0;
-      margin: -20px 0;
-    }
-  }
-  @media (max-width: 767px) {
-    body {
-      padding-top: 20px;
-    }
-  }
-</style>
-{% endblock %}
+{% block title %}{{ nonprofit.name }}{% endblock %}
 
 {% block header %}
 <div id="nonprofit-header">
@@ -33,25 +9,24 @@
     {% thumbnail nonprofit.cover "1170x285" crop="center" as im %}
     <img alt="{{ nonprofit }}" src="{{ im.url }}" />
     {% endthumbnail %}
-
   </div><!-- /.cover -->
 
   <div class="container">
     <div class="row">
       <div class="span12">
-        <div class="nonprofit-image">
+        <div class="image">
           {% thumbnail nonprofit.image "170x170" crop="center" as im %}
-          <img class="img-rounded" alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
+          <img alt="{{ nonprofit }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
           {% if nonprofit in nonprofit_list %}
           <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
           {% endif %}
           {% empty %}
-          <div class="img-rounded icon nonprofit large"></div>
+          <img src="{{ STATIC_URL }}img/thumb/170x170.gif" width="170" height="170" />
           {% if nonprofit in nonprofit_list %}
           <a class="btn" href="{% url "nonprofit:edit-nonprofit-picture" nonprofit.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
           {% endif %}
           {% endthumbnail %}
-        </div><!-- /.nonprofit-image -->
+        </div><!-- /.image -->
 
         <h1>{{ nonprofit.name }}</h1>
 
@@ -78,13 +53,11 @@
     <div class="span9">
       <div class="details">
         <h2>{% trans "Who we are and what we do" %}</h2>
-        <p>
         {% if nonprofit.details %}
-          {{ nonprofit.details }}
+        {{ nonprofit.details|linebreaks }}
         {% else %}
-          {% trans "Nothing about this nonprofit" %}
+        <p>{% trans "Nothing about this nonprofit" %}</p>
         {% endif %}
-        </p>
       </div>
       {% if nonprofit.causes.all %}
       <h2>{% trans "Causes" %}</h2>
