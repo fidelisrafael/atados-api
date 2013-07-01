@@ -17,6 +17,31 @@
   </div>
 </div>
 {% endif %}
+{% if project.work.role_set.all %}
+<div class="row">
+  <div class="span9">
+    <h2>{% trans "Roles" %}</h2>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>{% trans "Role" %}</th>
+          <th>{% trans "Prerequisites" %}</th>
+          <th style="text-align:right">{% trans "Vacancies" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for role in project.work.role_set.all %}
+        <tr>
+          <td>{{ role.name }}</td>
+          <td>{{ role.prerequisites|default_if_none:"" }}</td>
+          <td style="text-align:right">{{ role.vacancies }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
 {% if project.causes.all %}
   <div class="row">
     <div class="span9">

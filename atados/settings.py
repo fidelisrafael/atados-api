@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.markup',
+    'django.contrib.humanize',
     'flatblocks',
     'atados_core',
     'atados_nonprofit',

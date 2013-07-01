@@ -1,5 +1,5 @@
 {% extends 'atados_project/details.html' %}
-{% load i18n thumbnail %}
+{% load i18n thumbnail humanize %}
 
 {% block project %}
 
@@ -9,6 +9,29 @@
     {{ project.details|linebreaks }}
   </div>
 </div>
+{% if project.donation.material_set.all %}
+<div class="row">
+  <div class="span9">
+    <h2>{% trans "Materials" %}</h2>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>{% trans "Material" %}</th>
+          <th style="text-align:right">{% trans "Quantity" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for material in project.donation.material_set.all %}
+      <tr>
+        <td>{{ material.name }}</td>
+        <td style="text-align:right">{{ material.quantity|intcomma }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
 <div class="row">
   <div class="span9">
     <h2>{% trans "Causes" %}</h2>
