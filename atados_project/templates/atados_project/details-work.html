@@ -34,7 +34,7 @@
         <tr>
           <td>{{ role.name }}</td>
           <td>{{ role.prerequisites|default_if_none:"" }}</td>
-          <td style="text-align:right">{{ role.vacancies }}</td>
+          <td style="text-align:right">{{ role.vacancies|default_if_none:"" }}</td>
         </tr>
         {% endfor %}
       </tbody>
