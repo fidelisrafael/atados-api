@@ -4,18 +4,13 @@
 {% block title %}{% trans "Voluntary work: " %}{{ project.name }}{% endblock %}
 
 {% block header %}
-<div id="nonprofit-header">
-  <div class="cover">
-    {% thumbnail nonprofit.cover "1170x285" crop="center" as im %}
-    <img alt="{{ nonprofit }}" src="{{ im.url }}" />
-    {% endthumbnail %}
-  </div><!-- /.cover -->
+<div id="project-header">
 
   <div class="container">
     <div class="row">
-      <div class="span12">
+      <div class="span6">
         <div class="image">
-          {% thumbnail project.image "170x170" crop="center" as im %}
+          {% thumbnail project.image "570x280" crop="center" as im %}
           <img alt="{{ project }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
           {% if nonprofit in nonprofit_list %}
           <a class="btn" href="{% url "project:edit-project-picture" nonprofit.slug project.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
@@ -27,9 +22,12 @@
           {% endif %}
           {% endthumbnail %}
         </div><!-- /.image -->
+      </div>
 
+      <div class="span6">
         <h1>{{ project.name }}</h1>
-
+        <p class="location">Zona Leste - São Paulo - SP</p>
+        <p class="description">{{ project.get_description }}</p>
       </div>
     </div>
   </div>
