@@ -31,7 +31,7 @@ class ProjectApi(SearchView, JSONResponseMixin, View):
                 'url': result.object.get_absolute_url(),
                 'name': result.object.name,
                 'details': result.object.get_description(),
-                'volunteers': 0,
+                'volunteers': len(result.object.apply_set.all()),
                 'nonprofit': {
                     'image': get_thumb(result.object.nonprofit.image, '34x34'),
                     'url': result.object.nonprofit.get_absolute_url(),

@@ -315,8 +315,7 @@
       <div class="span3" style="margin-top:55px">
 
         {% if not request.user.is_authenticated %}
-        <a href="{% url "volunteer:sign-up" %}" class="btn input-block-level btn-primary btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Become a volunteer" %}</a>
-        <a href="{% url "nonprofit:sign-up" %}" class="btn input-block-level btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Nonprofit sign up" %}</a>
+        <a href="{% url "atados:sign-up" %}" class="btn input-block-level btn-primary btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Sign up" %}</a>
         {% endif %}
 
         <div class="well">

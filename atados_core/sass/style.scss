@@ -215,15 +215,9 @@ ul.feed {
   }
 }
 
-#sign-up,
-#project-new-work,
-#project-new-donation,
-#volunteer-sign-up,
-#nonprofit-sign-up {
-  & > .page-header {
-    & > h1 {
-      text-align:center;
-    }
+.page-header.centered {
+  & > h1 {
+    text-align:center;
   }
 }
 

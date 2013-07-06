@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from atados_core.models import Cause, Address
+from atados_volunteer.models import Volunteer
 from sorl.thumbnail import ImageField
 from time import time
 
@@ -55,6 +56,9 @@ class Nonprofit(models.Model):
 
     cover = ImageField(upload_to=cover_name, blank=True,
                        null=True, default=None)
+
+    def get_volunteers(self):
+        return Volunteer.objects.all()[:10]
 
     @models.permalink
     def get_absolute_url(self):

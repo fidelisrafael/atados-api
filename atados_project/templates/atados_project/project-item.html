@@ -20,7 +20,7 @@
     </a>
 
     <a href="{{ project.nonprofit.get_absolute_url }}" class="name">{{ project.nonprofit.name }}</a>
-    <div class="volunteers"><i class="icon icon-volunteer"></i> <span>0</span></div>
+    <div class="volunteers"><i class="icon icon-volunteer"></i> <span>{{ project.apply_set.all|length }}</span></div>
 
   </div>
 

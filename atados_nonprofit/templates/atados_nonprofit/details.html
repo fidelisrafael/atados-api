@@ -92,7 +92,18 @@
       </div>
       <div class="well">
         <span class="well-title">{% trans "Volunteers" %}</span>
-        <p>...</p>
+        {% for volunteer in nonprofit.get_volunteers %}
+        <div class="media">
+          {% thumbnail volunteer.image "34x34" crop="center" as im %}
+          <a href="{{ volunteer.get_absolute_url }}" class="pull-left"><img class="media-object" alt="{{ volunteer }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"></a>
+          {% empty %}
+          <a href="{{ volunteer.get_absolute_url }}" class="pull-left"><img class="media-object" src="{{ STATIC_URL }}img/thumb/34x34.gif" alt="" width="34" height="34"></a>
+          {% endthumbnail %}
+          <div class="media-body">
+            <a href="{{ volunteer.get_absolute_url }}">{{ volunteer.user.first_name }}</a>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </div>
