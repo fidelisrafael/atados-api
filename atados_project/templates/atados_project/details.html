@@ -8,9 +8,9 @@
 
   <div class="container">
     <div class="row">
-      <div class="span6">
+      <div class="span4">
         <div class="image">
-          {% thumbnail project.image "570x280" crop="center" as im %}
+          {% thumbnail project.image "370x247" crop="center" as im %}
           <img alt="{{ project }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" />
           {% if nonprofit in nonprofit_list %}
           <a class="btn" href="{% url "project:edit-project-picture" nonprofit.slug project.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
@@ -24,10 +24,20 @@
         </div><!-- /.image -->
       </div>
 
-      <div class="span6">
+      <div class="span8">
         <h1>{{ project.name }}</h1>
         <p class="location">Zona Leste - São Paulo - SP</p>
         <p class="description">{{ project.get_description }}</p>
+
+        {% if request.user.is_authenticated %}
+        {% if apply %}
+        <span class="btn btn-primary btn-large disable">{% trans "You're already applied" %}</span>
+        {% else %}
+        <a role="button" class="btn btn-primary btn-large btn-apply-confirm" href="#applyModal" data-toggle="modal">{% trans "Apply" %}</a>
+        {% endif %}
+        {% else %}
+        <a class="btn btn-primary btn-large" href="{% url "atados:sign-in" %}?next={{ request.path }}">{% trans "Apply" %}</a>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -52,25 +62,20 @@
       <aside>
         <div class="row">
           <div class="span3">
-            {% if request.user.is_authenticated %}
-            {% if apply %}
-            <span class="btn btn-primary btn-large btn-block disable">{% trans "Already applied" %}</span>
-            {% else %}
-            <a role="button" class="btn btn-primary btn-large btn-block btn-apply-confirm" href="#applyModal" data-toggle="modal">{% trans "Apply" %}</a>
-            {% endif %}
-            {% else %}
-            <a class="btn btn-primary btn-large btn-block" href="{% url "atados:sign-in" %}?next={{ request.path }}">{% trans "Apply" %}</a>
-            {% endif %}
+            <div class="well">
+              <a class="well-title" title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{{ nonprofit.name }}</a>
+              <p>{{ nonprofit.details }}</p>
+              <p><a title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{% trans "read more" %}</a></p>
+            </div>
           </div>
         </div>
         <div class="row">
           <div class="span3">
             <div class="well">
-              <h2>{% trans "Volunteers" %}</h2>
+              <span class="well-title">{% trans "Volunteers" %}</span>
             </div>
           </div>
         </div>
-
       </aside>
     </div>
   </div>
@@ -119,7 +124,7 @@
       type: 'post',
       success: function(data) {
         $('#applyModal').modal('hide')
-        $('.btn-apply-confirm').html("{% trans "Already applied" %}").prop("disabled", true).addClass("ui-state-disabled");
+        $('.btn-apply-confirm').html("{% trans "You're already applied" %}").prop("disabled", true).addClass("ui-state-disabled");
       },
       error: function(error) {
         btn.button('reset');

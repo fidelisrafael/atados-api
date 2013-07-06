@@ -138,6 +138,8 @@
 
 {% block out_content %}
 <div id="home">
+
+  {% if not request.user.is_authenticated %}
   <!-- Carousel
   ================================================== -->
   <div id="myCarousel" class="carousel slide">
@@ -176,6 +178,7 @@
     <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
     <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
   </div><!-- /.carousel -->
+  {% endif %}
 
   <div class="container">
     <div class="row">
@@ -310,8 +313,12 @@
         </div>
       </div><!-- /.span9 -->
       <div class="span3" style="margin-top:55px">
+
+        {% if not request.user.is_authenticated %}
         <a href="{% url "volunteer:sign-up" %}" class="btn input-block-level btn-primary btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Become a volunteer" %}</a>
         <a href="{% url "nonprofit:sign-up" %}" class="btn input-block-level btn-large" style="margin-bottom:20px; font-size:15px">{% trans "Nonprofit sign up" %}</a>
+        {% endif %}
+
         <div class="well">
           <a href="http://blog.atados.com.br" class="well-title">{% trans "/blog" %}</a>
           <ul class="feed">
