@@ -69,13 +69,27 @@
             </div>
           </div>
         </div>
+        {% if project.apply_set.all %}
         <div class="row">
           <div class="span3">
             <div class="well">
               <span class="well-title">{% trans "Volunteers" %}</span>
+              {% for apply in project.apply_set.all %}
+              <div class="media">
+                {% thumbnail apply.volunteer.image "34x34" crop="center" as im %}
+                <a href="{{ apply.volunteer.get_absolute_url }}" class="pull-left"><img class="media-object" alt="{{ apply.volunteer }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"></a>
+                {% empty %}
+                <a href="{{ apply.volunteer.get_absolute_url }}" class="pull-left"><img class="media-object" src="{{ STATIC_URL }}img/thumb/34x34.gif" alt="" width="34" height="34"></a>
+                {% endthumbnail %}
+                <div class="media-body">
+                  <a href="{{ apply.volunteer.get_absolute_url }}">{{ apply.volunteer.user.first_name }}</a>
+                </div>
+              </div>
+              {% endfor %}
             </div>
           </div>
         </div>
+        {% endif %}
       </aside>
     </div>
   </div>

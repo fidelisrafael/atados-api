@@ -60,15 +60,16 @@
                   <li><a href="{% url "atados:more-cities-soon"%}">{% trans "More cities soon" %}</a></li>
                 </ul>
               </li>
-              {% if not user.is_authenticated %}
-              <li><a href="{% url "volunteer:sign-up" %}">{% trans "Become a volunteer" %}</a></li>
-              {% endif %}
             </ul>
 
             {% if not user.is_authenticated %}
             <ul class="nav pull-right">
+              <li>
+                <a href="{% url "atados:sign-up" %}">{% trans "Sign up" %}</a>
+              </li>
+              <li class="divider-vertical"></li>
               <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{% trans "Sign in" %} <span class="caret"></span></a>
+                <a class="dropdown-toggle" data-toggle="dropdown" data-toggle="#" href="{% url "atados:sign-in" %}">{% trans "Sign in" %} <span class="caret"></span></a>
                 <div class="dropdown-menu sign-in-menu">
                   <a href="{% url "socialauth_begin" "facebook" %}?next={{ request.path }}" class="btn btn-facebook input-block-level">{% trans "Connect using Facebook" %}</a>
 

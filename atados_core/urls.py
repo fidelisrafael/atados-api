@@ -11,6 +11,9 @@ urlpatterns = patterns(
 
     url(r'^$', HomeView.as_view(), name='home'),
 
+    url(_(r'^sign-up$'), TemplateView.as_view(
+        template_name='atados_core/sign_up.html'), name='sign-up'),
+
     url(_(r'^sign-in$'), 'django.contrib.auth.views.login',
         {'authentication_form': AuthenticationForm,
          'template_name': 'atados_core/sign_in.html'}, name='sign-in'),

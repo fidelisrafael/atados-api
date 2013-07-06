@@ -2,7 +2,8 @@
 {% load i18n bootstrap_toolkit %}
 
 {% block breadcrumb %}
-<li class="active">{% trans "Become a volunteer" %}</li>
+<li><a href="{% url "atados:sign-up" %}">{% trans "Sign up" %}</a></li>
+<li class="active">{% trans "Volunteer sign up" %}</li>
 {% endblock %}
 
 {% block content %}

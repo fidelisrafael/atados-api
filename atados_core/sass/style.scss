@@ -215,14 +215,20 @@ ul.feed {
   }
 }
 
-#volunteer-sign-up, #nonprofit-sign-up {
-
+#sign-up,
+#project-new-work,
+#project-new-donation,
+#volunteer-sign-up,
+#nonprofit-sign-up {
   & > .page-header {
     & > h1 {
       text-align:center;
     }
   }
+}
 
+#volunteer-sign-up,
+#nonprofit-sign-up {
   .add-on {
     padding:4px 5px;
     width:178px;
