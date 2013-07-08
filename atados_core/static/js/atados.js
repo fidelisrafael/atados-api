@@ -211,8 +211,10 @@
               '<img alt="' + project.name + '"  src="' + project.image + '" width="270" height="180">' +
             '</a>' +
             '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
-            '<p class="description">' + project.details + '</p>' +
           '</div>');
+
+        if (project.details)
+          item.append('<p class="description">' + project.details + '</p>');
 
         if (project.nonprofit) {
           item.append(

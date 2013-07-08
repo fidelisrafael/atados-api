@@ -71,10 +71,9 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x180'),
+            'image': get_thumb(result.object.image, '270x270'),
             'url': result.object.get_absolute_url(),
             'name': result.object.name,
-            'details': result.object.get_description(),
         } for result in page.object_list]
         return self.render_to_response(context)
 

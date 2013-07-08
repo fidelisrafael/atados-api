@@ -24,7 +24,7 @@
       {% for material in project.donation.material_set.all %}
       <tr>
         <td>{{ material.name }}</td>
-        <td style="text-align:right">{{ material.quantity|intcomma }}</td>
+        <td style="text-align:right">{{ material.quantity|default_if_none:""|intcomma }}</td>
       </tr>
       {% endfor %}
       </tbody>
