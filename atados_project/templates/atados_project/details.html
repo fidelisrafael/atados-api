@@ -68,7 +68,7 @@
           <div class="span3">
             <div class="well">
               <a class="well-title" title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{{ nonprofit.name }}</a>
-              <p>{{ nonprofit.details }}</p>
+              <p>{{ nonprofit.details|truncatechars:250 }}</p>
               <p><a title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{% trans "read more" %}</a></p>
             </div>
           </div>
