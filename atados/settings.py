@@ -13,7 +13,8 @@ DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    '.atados.com.br',
+    '*',
+    #'.atados.com.br',
 )
 
 ADMINS = (
