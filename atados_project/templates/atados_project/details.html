@@ -16,7 +16,7 @@
           <a class="btn" href="{% url "project:edit-project-picture" nonprofit.slug project.slug %}"><i class="icon-edit"></i> {% trans "Edit profile picture" %}</a>
           {% endif %}
           {% empty %}
-          <img src="{{ STATIC_URL }}img/thumb/170x170.gif" width="170" height="170" />
+          <img src="{{ STATIC_URL }}img/thumb/370x247.gif" width="370" height="247" />
           {% if nonprofit in nonprofit_list %}
           <a class="btn" href="{% url "project:edit-project-picture" nonprofit.slug project.slug %}"><i class="icon-edit"></i> {% trans "Add profile picture" %}</a>
           {% endif %}

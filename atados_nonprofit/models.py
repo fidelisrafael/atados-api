@@ -58,7 +58,7 @@ class Nonprofit(models.Model):
                        null=True, default=None)
 
     def get_volunteers(self):
-        return Volunteer.objects.all()[:10]
+        return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
 
     @models.permalink
     def get_absolute_url(self):
