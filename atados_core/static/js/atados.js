@@ -232,6 +232,9 @@
 
       row.hide().appendTo(container).fadeIn();
 
+    } else if(opts.state.currPage == 1) {
+      row = $('<div class="row"><div class="span9"><div class="no-search-results">' + $('#no-search-results').val() + '</div></div></div>');
+      row.hide().appendTo(container).fadeIn();
     }
 
     $('.project-list.infinite').removeClass('empty');
