@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.views.generic.edit import UpdateView, FormMixin
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import classonlymethod
@@ -148,3 +148,8 @@ class VolunteerSecondStepView(VolunteerMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('atados:home',)
+
+class SocialNewUserView(RedirectView):
+
+    def get_redirect_url(self):
+        return reverse('volunteer:first-step', args=(self.request.user.username,))

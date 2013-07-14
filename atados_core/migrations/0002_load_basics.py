@@ -36,17 +36,17 @@ class Migration(DataMigration):
             cause.name = name
             cause.save()
 
-        for name in ('Artes/Artesanato',
+        for name in ('Artes / Artesanato',
                      'Comunicação',
-                     'Dança/Música',
+                     'Dança / Música',
                      'Direito',
                      'Educação',
                      'Esportes',
                      'Gastronomia',
                      'Gestão',
                      'Idiomas',
-                     'Informática/Eletrônicos',
-                     'Saúde/Psicologia',
+                     'Informática / Eletrônicos',
+                     'Saúde / Psicologia',
                      'Outros',):
             skill = orm.Skill()
             skill.name = name

@@ -5,7 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from atados_core.forms import AuthenticationForm
 from atados_volunteer.views import (VolunteerPictureUpdateView,
                                     VolunteerFirstStepView,
-                                    VolunteerSecondStepView)
+                                    VolunteerSecondStepView,
+                                    SocialNewUserView)
 from registration.views import register, activate
 
 urlpatterns = patterns(
@@ -35,6 +36,8 @@ urlpatterns = patterns(
 
     url(_(r'^(?P<username>[-\w]+)/volunteer/second-step$'), VolunteerSecondStepView.as_view(),
         name='second-step'),
+
+    url(r'^social-new-user-redirect$', SocialNewUserView.as_view(), name='social-new-user-redirect'),
 
 )
 

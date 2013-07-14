@@ -3,7 +3,7 @@
 import os
 
 AWS_EB = []
-if 'PARAM1' in os.environ:
+if 'PARAM1' in os.environ and os.environ['PARAM1']:
     import json
     def decode_param1(data):
         return dict([(key.encode('utf-8'), value) for key, value in data.iteritems()])
@@ -325,3 +325,6 @@ if 'facebook_application_id' in AWS_EB:
     INSTALLED_APPS = INSTALLED_APPS + ('social_auth',)
     FACEBOOK_APP_ID = AWS_EB['facebook_application_id']
     FACEBOOK_API_SECRET = AWS_EB['facebook_application_secret']
+
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/social-new-user-redirect'
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
