@@ -24,6 +24,13 @@ urlpatterns = patterns(
     url(_(r'^sign-out$'), 'django.contrib.auth.views.logout',
         {'next_page': _('/sign-in')}, name='sign-out'),
 
+    url(_(r'^password-change$'), 'django.contrib.auth.views.password_change',
+        {'template_name': 'atados_core/password_change.html',
+         'post_change_redirect': '/password-change-done'}, name='password-change'),
+
+    url(_(r'^password-change-done$'), TemplateView.as_view(
+        template_name='atados_core/password_change_done.html'), name='password-change-done'),
+
     url(_(r'^search$'), SearchView.as_view(), name='search'),
 
     url(_(r'^more-cities-soon$'), TemplateView.as_view(

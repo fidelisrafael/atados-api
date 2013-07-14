@@ -1,13 +1,15 @@
 {% extends 'atados_nonprofit/base.html' %}
 {% load i18n bootstrap_toolkit %}
 
+{% block title %}{% trans "Sign up successful" %}{% endblock %}
+
 {% block breadcrumb %}
 <li class="active">{% trans "Sign up successful" %}</li>
 {% endblock %}
 
 {% block content %}
 
-<div class="page-header">
+<div class="centered page-header">
   <h1>{% trans "Thanks for signing up!" %}</h1>
 </div>
 
