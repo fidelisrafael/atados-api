@@ -13,8 +13,7 @@ DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    'beta.atados.com.br',
-    'www.atados.com.br',
+    '.atados.com.br',
 )
 
 ADMINS = (
@@ -241,7 +240,7 @@ if all(var in AWS_EB for var in('email_user', 'email_password')):
     EMAIL_HOST_USER = AWS_EB['email_user']
     EMAIL_HOST_PASSWORD = AWS_EB['email_password']
     EMAIL_USE_TLS = True
-    DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
+    DEFAULT_FROM_EMAIL = AWS_EB['email_user']
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
