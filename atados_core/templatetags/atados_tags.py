@@ -3,8 +3,12 @@ from django import template
 from django.template import Context
 from django.template.defaulttags import kwarg_re
 from django.template.loader import get_template
+from django.utils import formats
 from django.utils.encoding import smart_str
+from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
 from atados_core.models import Availability, WEEKDAYS, PERIODS
+from atados_project.models import Apply
 import re
 
 
@@ -104,3 +108,16 @@ def search_query(parser, token):
             kwargs[name] = parser.compile_filter(value)
 
     return SearchQueryNode(kwargs)
+
+@register.filter
+def as_activity_li(model):
+    if isinstance(model, Apply):
+        icon='heart'
+        date=model.date
+        html=_('Applied to <a href="%(url)s">%(name)s</a>.') % {'url': model.project.get_absolute_url(),
+                                                                'name': model.project.name}
+
+    if icon and date and html:
+        date = formats.date_format(date, "DATE_FORMAT")
+        return mark_safe('<li><i class="icon icon-%s"></i> <span class="date">%s</span> - %s</li>' % (icon, date, html))
+    return ''

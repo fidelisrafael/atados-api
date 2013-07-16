@@ -110,3 +110,4 @@ class Role(models.Model):
 class Apply(models.Model):
     volunteer = models.ForeignKey(Volunteer)
     project = models.ForeignKey(Project)
+    date = models.DateTimeField(auto_now_add=True, blank=True)

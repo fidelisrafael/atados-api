@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import classonlymethod
 from atados_core.forms import AddressForm
 from atados_volunteer.models import Volunteer
+from atados_project.models import Apply
 from atados_volunteer.forms import (VolunteerPictureForm,
                                     VolunteerFirstStepForm,
                                     VolunteerSecondStepForm)
@@ -64,6 +65,15 @@ class VolunteerHomeView(TemplateView):
 class VolunteerDetailsView(VolunteerBaseView):
     only_owner = False
     template_name = 'atados_volunteer/details.html'
+
+    def get_activities(self):
+        activities = Apply.objects.filter(volunteer=self.get_volunteer())
+        return activities
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(VolunteerDetailsView, self).get_context_data(*args, **kwargs)
+        context.update({'activities': self.get_activities()})
+        return context
 
 class VolunteerPictureUpdateView(VolunteerMixin, UpdateView):
     model = Volunteer

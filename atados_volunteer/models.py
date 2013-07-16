@@ -32,6 +32,7 @@ class Volunteer(models.Model):
     def __unicode__(self):
         return self.user.first_name
 
+
 def create_volunteer(sender, instance, created, **kwargs):  
     if created:  
        profile, created = Volunteer.objects.get_or_create(user=instance)
