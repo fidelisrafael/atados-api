@@ -28,6 +28,9 @@ urlpatterns = patterns(
     url(_(r'^volunteer/profile$'), TemplateView.as_view(template_name='atados_volunteer/sign-up-complete.html'),
         name='profile'),
 
+    url(_(r'^(?P<username>[-\w]+)/edit$'), VolunteerPictureUpdateView.as_view(),
+        name='edit'),
+
     url(_(r'^(?P<username>[-\w]+)/edit-volunteer-picture$'), VolunteerPictureUpdateView.as_view(),
         name='edit-volunteer-picture'),
 
