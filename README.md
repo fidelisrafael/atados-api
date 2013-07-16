@@ -32,6 +32,6 @@ faz muito bem!
     python manage.py runserver
 
 
-## Licença
+## License
 
-Apache License, Version 2.0
+MIT License (See LICENSE file).
