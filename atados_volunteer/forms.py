@@ -91,7 +91,7 @@ class VolunteerFirstStepForm(forms.ModelForm):
 
     class Meta:
         model = Volunteer
-        fields = ('causes', 'skills',)
+        fields = ('causes', 'skills', 'phone',)
         
 class VolunteerSecondStepForm(forms.ModelForm):
     class Meta:

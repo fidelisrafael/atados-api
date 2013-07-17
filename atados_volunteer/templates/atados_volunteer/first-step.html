@@ -26,6 +26,10 @@
         <legend>{% trans "Location" %}</legend>
         {% include "atados_core/address-fields.html" %}
       </fieldset>
+      <fieldset>
+        <legend>{% trans "Phone" %}</legend>
+        {{ volunteer_form.phone }}
+      </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">{% trans "Next step" %}</button>
         <a class="btn" href="{% url "volunteer:second-step" volunteer.user.username %}">{% trans "Skip this step" %}</a>
