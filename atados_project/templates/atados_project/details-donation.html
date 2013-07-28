@@ -1,5 +1,5 @@
 {% extends 'atados_project/details.html' %}
-{% load i18n thumbnail humanize %}
+{% load i18n thumbnail humanize atados_tags %}
 
 {% block project %}
 
@@ -30,7 +30,7 @@
     {% endif %}
     
     {% if project.donation.collection_by_nonprofit %}
-    {% trans "Collection made by the nonprofit." %}
+    {% trans "Collection made by the nonprofit" %}
     {% endif %}
   </div>
 </div>
