@@ -1,5 +1,5 @@
 {% extends 'atados_core/base.html' %}
-{% load i18n bootstrap_toolkit thumbnail %}
+{% load i18n bootstrap_toolkit thumbnail atados_tags %}
 
 {% block title %}{% trans "Voluntary work: " %}{{ project.name }}{% endblock %}
 
@@ -26,7 +26,12 @@
 
       <div class="span8">
         <h1>{{ project.name }}</h1>
-        <p class="location">{{ project.get_location_string }}</p>
+        {% if project.work %}
+        <p class="location">{{ project.work.address|as_location_string }}</p>
+        {% endif %}
+        {% if project.donation %}
+        <p class="location">{{ project.donation.delivery|as_location_string }}</p>
+        {% endif %}
         <p class="description">{{ project.get_description }}</p>
 
         {% if project.closed %}

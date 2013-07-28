@@ -1,5 +1,5 @@
 {% extends 'atados_nonprofit/base.html' %}
-{% load i18n thumbnail %}
+{% load i18n thumbnail atados_tags %}
 
 {% block title %}{{ nonprofit.name }}{% endblock %}
 
@@ -67,6 +67,8 @@
         {% endfor %}
       </div>
       {% endif %}
+      
+      {% if nonprofit.project_set.published %}
       <h2>{% trans "Projects" %}</h2>
       <div class="project-list">
         <div class="row">
@@ -79,17 +81,24 @@
           {% endfor %}
         </div>
       </div><!-- /.project-list -->
+      {% endif %}
+
     </div>
     <div class="span3" style="margin-top:55px;">
-      <a href="#" class="btn btn-info btn-block">Compartilhe com os amigos</a>
-      <a href="#" class="btn btn-primary btn-block" style="margin-bottom:20px">Envie uma mensagem</a>
       <div class="well">
-        Mapa?
+        <span class="well-title">{% trans "Location" %}</span>
+        {% if nonprofit.address.addressline %}
+        <p>{{ nonprofit.address.addressline }}</p>
+        {% endif %}
+        <p>{{ nonprofit.address|as_location_string }}</p>
       </div>
       <div class="well">
         <span class="well-title">{% trans "Contact" %}</span>
-        <p>...</p>
+        <p>{{ nonprofit.user.first_name }}</p>
+        <p>{{ nonprofit.user.email }}</p>
+        <p>{{ nonprofit.phone }}</p>
       </div>
+      {% if nonprofit.get_volunteers %}
       <div class="well">
         <span class="well-title">{% trans "Volunteers" %}</span>
         {% for volunteer in nonprofit.get_volunteers %}
@@ -105,6 +114,7 @@
         </div>
         {% endfor %}
       </div>
+      {% endif %}
     </div>
   </div>
 </div>
