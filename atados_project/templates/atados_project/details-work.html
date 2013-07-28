@@ -94,9 +94,9 @@
     {% else %}
     {% trans "This work can't be done remotely." %}
     {% endif %} <br />
-    {% trans "Addressline" %} {{ project.addressline }} <br />
-    {% trans "Neighborhood" %} {{ project.neighborhood }} <br />
-    {% trans "City" %} {{ project.city }} <br />
+    {% trans "Addressline" %} {{ project.work.address.addressline }} <br />
+    {% trans "Neighborhood" %} {{ project.work.address.neighborhood }} <br />
+    {% trans "City" %} {{ project.work.address.city }} <br />
   </div>
 </div>
 {% endblock %}
