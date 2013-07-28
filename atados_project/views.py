@@ -56,6 +56,10 @@ class ProjectMixin(NonprofitMixin):
                                              nonprofit=self.get_nonprofit(),
                                              slug=self.kwargs.get('project'),
                                              deleted=False)
+
+        if not self.project.published and not self.only_owner:
+            raise Http404
+
         return self.project
 
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):

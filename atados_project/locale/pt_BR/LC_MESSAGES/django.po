@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-27 22:01-0300\n"
+"POT-Creation-Date: 2013-07-28 00:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,12 +153,12 @@ msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/atar$"
 msgid "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/picture$"
 msgstr "^(?P<nonprofit>[-\\w]+)/(?P<project>[-\\w]+)/imagem$"
 
-#: views.py:407
+#: views.py:411
 msgid "Project was successfully deleted."
 msgstr "Ato excluído com sucesso."
 
 #: templates/atados_project/collaborators.html:7
-#: templates/atados_project/details.html:80
+#: templates/atados_project/details.html:82
 #: templates/atados_project/nonprofit.html:20
 msgid "Volunteers"
 msgstr "Voluntários"
@@ -247,35 +247,32 @@ msgid "Add profile picture"
 msgstr "Editar imagem do ato"
 
 #: templates/atados_project/details.html:37
-#: templates/atados_project/details.html:145
+#: templates/atados_project/details.html:131
 msgid "You're already applied"
 msgstr "Já se atou"
 
 #: templates/atados_project/details.html:39
 #: templates/atados_project/details.html:42
-#: templates/atados_project/details.html:120
-#: templates/atados_project/details.html:127
+#: templates/atados_project/details.html:106
+#: templates/atados_project/details.html:113
 msgid "Apply"
 msgstr "Inscreva-se"
 
-#: templates/atados_project/details.html:72
-msgid "Read more"
-msgstr "Leia mais"
+#: templates/atados_project/details.html:74
+#, fuzzy
+msgid "View details"
+msgstr "Detalhes"
 
-#: templates/atados_project/details.html:102
-msgid "More projects"
-msgstr "Mais atos"
-
-#: templates/atados_project/details.html:123
+#: templates/atados_project/details.html:109
 #, python-format
 msgid "You are applying for &quot;%(project_name)s&quot;."
 msgstr "Você está se atando ao ato &quot;%(project_name)s&quot;."
 
-#: templates/atados_project/details.html:126
+#: templates/atados_project/details.html:112
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/atados_project/details.html:127
+#: templates/atados_project/details.html:113
 msgid "Appying..."
 msgstr "Atando..."
 
@@ -395,6 +392,12 @@ msgstr "Editar"
 #: templates/atados_project/update-work.html:17
 msgid "Save"
 msgstr "Salvar"
+
+#~ msgid "Read more"
+#~ msgstr "Leia mais"
+
+#~ msgid "More projects"
+#~ msgstr "Mais atos"
 
 #~ msgid "About"
 #~ msgstr "Sobre"

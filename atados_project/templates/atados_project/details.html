@@ -68,8 +68,10 @@
           <div class="span3">
             <div class="well">
               <a class="well-title" title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{{ nonprofit.name }}</a>
-              <p>{{ nonprofit.details|truncatechars:250 }}</p>
-              <p><a title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{% trans "Read more" %}</a></p>
+              {% if nonprofit.details %}
+                <p>{{ nonprofit.details|truncatechars:250 }}</p>
+              {% endif %}
+              <p><a title="{{ nonprofit.name }}" href="{{ nonprofit.get_absolute_url }}">{% trans "View details" %}</a></p>
             </div>
           </div>
         </div>
@@ -95,22 +97,6 @@
         </div>
         {% endif %}
       </aside>
-    </div>
-  </div>
-  <div class="row">
-    <div class="span9">
-      <h2>{% trans "More projects" %}</h2>
-      <div class="project-list">
-        <div class="row">
-          {% for project in nonprofit.project_set.active %}
-          {% include "atados_project/project-item.html" with project=project %}
-          {% if forloop.counter|divisibleby:3 and not forloop.last  %}
-        </div>
-        <div class="row">
-          {% endif %}
-          {% endfor %}
-        </div>
-      </div><!-- /.project-list -->
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
@@ -27,6 +27,10 @@ class NonprofitMixin(object):
     def dispatch(self, request, *args, **kwargs):
         self.nonprofit = get_object_or_404(Nonprofit,
                                            slug=kwargs.get('nonprofit'))
+
+        if not self.nonprofit.published and not self.only_owner:
+            raise Http404
+
         if self.only_owner and self.nonprofit.user != request.user:
             raise PermissionDenied
         return super(NonprofitMixin, self).dispatch(request,

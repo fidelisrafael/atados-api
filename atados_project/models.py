@@ -16,7 +16,7 @@ class ProjectManager(models.Manager):
         return self.get_query_set().filter(deleted=False)
 
     def published(self):
-        return self.get_query_set().active(published=True)
+        return self.active().filter(published=True)
 
 
 class Project(models.Model):

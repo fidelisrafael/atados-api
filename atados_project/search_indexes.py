@@ -14,7 +14,7 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
     suburb = indexes.CharField(faceted=True)
     availabilities = indexes.MultiValueField(faceted=True)
     has_image = indexes.BooleanField()
-    published = indexes.BooleanField(model_attr='published')
+    published = indexes.BooleanField()
 
     def prepare_causes(self, obj):
         return [cause.id for cause in obj.causes.all()]
@@ -50,6 +50,9 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_has_image(self, obj):
         return True if obj.image else False
+
+    def prepare_published(self, obj):
+        return True if obj.published and obj.nonprofit.published else False
 
     def get_model(self):
         return Project
