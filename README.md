@@ -1,5 +1,7 @@
 <div style="margin:0 auto; width:420px;">
-[![Atados](https://secure.gravatar.com/avatar/d44dbba16d720920d866efb038bfc41f?s=420&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png)](http://beta.atados.com.br)
+  <a href="http://beta.atados.com.br">
+    <img src="https://secure.gravatar.com/avatar/d44dbba16d720920d866efb038bfc41f?s=420&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png" alt="Atados">
+  </a>
 </div>
 
 # [Atados v0.3.0](http://www.atados.com.br) [![Build Status](https://travis-ci.org/atados/atados.png?branch=master)](https://travis-ci.org/atados/atados) [![Coverage Status](https://coveralls.io/repos/atados/atados/badge.png?branch=master)](https://coveralls.io/r/atados/atados)
