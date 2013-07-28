@@ -28,13 +28,13 @@
         <div class="span3">
           <ul class="nav nav-tabs nav-stacked nav-model">
             <li{% if 'project' in form.types.value or not form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='project' %}">{% trans "projects" %}</a>
+            <a href="{% search_query types='project' %}">{% trans "Projects" %}</a>
             </li>
             <li{% if 'nonprofit' in form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='nonprofit' %}">{% trans "nonprofits" %}</a>
+            <a href="{% search_query types='nonprofit' %}">{% trans "Nonprofits" %}</a>
             </li>
             <li{% if 'volunteer' in form.types.value %} class="active"{% endif %}>
-            <a href="{% search_query types='volunteer' %}">{% trans "volunteers" %}</a>
+            <a href="{% search_query types='volunteer' %}">{% trans "Volunteers" %}</a>
             </li>
           </ul>
         </div>

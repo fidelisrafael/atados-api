@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 23:44-0300\n"
+"POT-Creation-Date: 2013-07-27 21:16-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Search in"
 msgstr "Buscar em"
 
-#: forms.py:86 templates/403.html:17 templates/atados_core/base.html:79
+#: forms.py:86 templates/403.html:17 templates/atados_core/base.html:80
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:87 templates/403.html:21 templates/atados_core/base.html:83
+#: forms.py:87 templates/403.html:21 templates/atados_core/base.html:84
 msgid "Stay signed in"
 msgstr "Mantenha-me conectado "
 
@@ -128,38 +128,50 @@ msgid "Suburb"
 msgstr "Zona"
 
 #: urls.py:14
+msgid "^sign-up$"
+msgstr "^cadatro$"
+
+#: urls.py:17
 msgid "^sign-in$"
 msgstr "^entrar"
 
-#: urls.py:18 urls.py:22
+#: urls.py:21 urls.py:25
 msgid "/sign-in"
 msgstr "/entrar"
 
-#: urls.py:21
+#: urls.py:24
 msgid "^sign-out$"
 msgstr "^sair"
 
-#: urls.py:24
+#: urls.py:27
+msgid "^password-change$"
+msgstr "^alteracao-de-senha$"
+
+#: urls.py:31
+msgid "^password-change-done$"
+msgstr "^alteracao-de-senha-concluida$"
+
+#: urls.py:34
 msgid "^search$"
 msgstr "^buscar"
 
-#: urls.py:26
+#: urls.py:36
 msgid "^more-cities-soon$"
 msgstr "^mais-cidades-em-breve$"
 
-#: urls.py:29
+#: urls.py:39
 msgid "^terms$"
 msgstr "^termos"
 
-#: urls.py:32
+#: urls.py:42
 msgid "^privacy$"
 msgstr "^privacidade"
 
-#: urls.py:35
+#: urls.py:45
 msgid "^security$"
 msgstr "^seguranca"
 
-#: urls.py:38
+#: urls.py:48
 msgid "^about$"
 msgstr "^sobre"
 
@@ -175,13 +187,13 @@ msgstr ""
 "Desculpe, mas a página que você está tentando acessar é privada. Se você tem "
 "uma conta com permissão para vê-la, por favor identifique-se:"
 
-#: templates/403.html:18 templates/atados_core/base.html:80
+#: templates/403.html:18 templates/atados_core/base.html:81
 msgid "Password"
 msgstr "Senha"
 
-#: templates/403.html:19 templates/atados_core/base.html:72
-#: templates/atados_core/base.html.py:81 templates/atados_core/sign-in.html:4
-#: templates/atados_core/sign-in.html:7 templates/atados_core/sign-in.html:14
+#: templates/403.html:19 templates/atados_core/base.html:73
+#: templates/atados_core/base.html.py:82 templates/atados_core/sign_in.html:4
+#: templates/atados_core/sign_in.html:7 templates/atados_core/sign_in.html:16
 msgid "Sign in"
 msgstr "Entrar"
 
@@ -204,7 +216,7 @@ msgid "Feel free to find projects, nonprofits and volunteers:"
 msgstr "Fique a vontade para encontrar atos, ONGs e voluntários:"
 
 #: templates/404.html:20 templates/404.html.py:21 templates/500.html:19
-#: templates/500.html.py:20 templates/atados_core/base.html:49
+#: templates/500.html.py:20 templates/atados_core/base.html:50
 #: templates/search/search.html:13 templates/search/search.html.py:17
 msgid "Search"
 msgstr "Buscar"
@@ -224,192 +236,222 @@ msgstr ""
 #: templates/atados_core/about.html:4 templates/atados_core/about.html.py:7
 #: templates/atados_core/about_base.html:10
 #: templates/atados_core/about_base.html:18
-#: templates/atados_core/base.html:158
+#: templates/atados_core/base.html:162
 msgid "About us"
 msgstr "Sobre nós"
 
 #: templates/atados_core/about_base.html:21
-#: templates/atados_core/base.html:184 templates/atados_core/terms.html:4
+#: templates/atados_core/base.html:188 templates/atados_core/terms.html:4
 #: templates/atados_core/terms.html.py:7
 msgid "Terms of service"
 msgstr "Termos de uso"
 
 #: templates/atados_core/about_base.html:24
-#: templates/atados_core/base.html:185 templates/atados_core/privacy.html:4
+#: templates/atados_core/base.html:189 templates/atados_core/privacy.html:4
 #: templates/atados_core/privacy.html:7
 msgid "Privacy"
 msgstr "Privacidade"
 
 #: templates/atados_core/about_base.html:27
-#: templates/atados_core/base.html:186 templates/atados_core/security.html:4
+#: templates/atados_core/base.html:190 templates/atados_core/security.html:4
 #: templates/atados_core/security.html:7
 msgid "Security"
 msgstr "Segurança"
 
-#: templates/atados_core/base.html:55
+#: templates/atados_core/base.html:56
 msgid "Explore your city"
 msgstr "Explore sua cidade"
 
 #: templates/atados_core/base.html:61
-#: templates/atados_core/more-cities-soon.html:4
-#: templates/atados_core/more-cities-soon.html:7
+#: templates/atados_core/more_cities_soon.html:4
+#: templates/atados_core/more_cities_soon.html:7
+#: templates/atados_core/more_cities_soon.html:12
 msgid "More cities soon"
 msgstr "Mais cidades em breve."
 
-#: templates/atados_core/base.html:65 templates/atados_core/home.html:324
-msgid "Become a volunteer"
-msgstr "Torne-se um voluntário"
+#: templates/atados_core/base.html:69 templates/atados_core/home.html:319
+#: templates/atados_core/sign_in.html:23 templates/atados_core/sign_up.html:4
+#: templates/atados_core/sign_up.html:7 templates/atados_core/sign_up.html:23
+#: templates/atados_core/sign_up.html:32
+msgid "Sign up"
+msgstr "Cadastro"
 
-#: templates/atados_core/base.html:74
+#: templates/atados_core/base.html:75 templates/atados_core/sign_in.html:13
 msgid "Connect using Facebook"
 msgstr "Conecte-se usando Facebook"
 
-#: templates/atados_core/base.html:76
+#: templates/atados_core/base.html:77 templates/atados_core/sign_in.html:14
 msgid "or"
 msgstr "ou"
 
-#: templates/atados_core/base.html:101
+#: templates/atados_core/base.html:102
 msgid "My profile"
 msgstr "Meu perfil"
 
-#: templates/atados_core/base.html:103
+#: templates/atados_core/base.html:104
 msgid "Edit my information"
 msgstr "Editar minhas informações"
 
-#: templates/atados_core/base.html:104
+#: templates/atados_core/base.html:105
 msgid "Change password"
 msgstr "Mudar senha"
 
-#: templates/atados_core/base.html:106
+#: templates/atados_core/base.html:107
 msgid "Sign out"
 msgstr "Sair"
 
-#: templates/atados_core/base.html:121
+#: templates/atados_core/base.html:125
 msgid "Home"
 msgstr "Início"
 
-#: templates/atados_core/base.html:134
+#: templates/atados_core/base.html:138
 msgid "Well done!"
 msgstr "Boa!"
 
-#: templates/atados_core/base.html:159
+#: templates/atados_core/base.html:163
 msgid "Colabore"
 msgstr "Colabore"
 
-#: templates/atados_core/base.html:160
+#: templates/atados_core/base.html:164
 msgid "Contact"
 msgstr "Contato"
 
-#: templates/atados_core/base.html:161
+#: templates/atados_core/base.html:165
 msgid "News"
 msgstr "Novidades"
 
-#: templates/atados_core/base.html:165
+#: templates/atados_core/base.html:169
 msgid "Services"
 msgstr "Serviços"
 
-#: templates/atados_core/base.html:167
+#: templates/atados_core/base.html:171
 msgid "For nonprofits"
 msgstr "Para ONGs"
 
-#: templates/atados_core/base.html:168
+#: templates/atados_core/base.html:172
 msgid "For schools"
 msgstr "Para universidades"
 
-#: templates/atados_core/base.html:169
+#: templates/atados_core/base.html:173
 msgid "For business"
 msgstr "Para empresas"
 
-#: templates/atados_core/base.html:173
+#: templates/atados_core/base.html:177
 msgid "Social"
 msgstr "Social"
 
-#: templates/atados_core/base.html:175
+#: templates/atados_core/base.html:179
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/atados_core/base.html:176 templates/atados_core/home.html:330
+#: templates/atados_core/base.html:180 templates/atados_core/home.html:334
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/atados_core/base.html:188
+#: templates/atados_core/base.html:192
 #, python-format
 msgid "&copy; 2013 %(site_name)s"
 msgstr "&copy; 2013 %(site_name)s"
 
-#: templates/atados_core/home.html:151
+#: templates/atados_core/home.html:153
 msgid "Explore"
 msgstr "Explore"
 
-#: templates/atados_core/home.html:183
+#: templates/atados_core/home.html:186
 msgid "Recommended"
 msgstr "Atos voluntários em destaque"
 
-#: templates/atados_core/home.html:198
+#: templates/atados_core/home.html:201 templates/search/search.html:31
 msgid "Projects"
 msgstr "Atos"
 
-#: templates/atados_core/home.html:201
+#: templates/atados_core/home.html:204 templates/search/search.html:34
 msgid "Nonprofits"
 msgstr "ONGs"
 
-#: templates/atados_core/home.html:207
+#: templates/atados_core/home.html:210
 msgid "Find projects by their..."
 msgstr "Encontre atos de acordo com sua..."
 
-#: templates/atados_core/home.html:211 templates/atados_core/home.html:268
+#: templates/atados_core/home.html:214 templates/atados_core/home.html:260
 msgid "cause"
 msgstr "causa"
 
-#: templates/atados_core/home.html:216 templates/atados_core/home.html:227
-#: templates/atados_core/home.html:245 templates/atados_core/home.html:256
-#: templates/atados_core/home.html:273 templates/atados_core/home.html:294
+#: templates/atados_core/home.html:219 templates/atados_core/home.html:230
+#: templates/atados_core/home.html:248 templates/atados_core/home.html:265
+#: templates/atados_core/home.html:286
 msgid "Filter"
 msgstr "Filtrar"
 
-#: templates/atados_core/home.html:222
+#: templates/atados_core/home.html:225
 msgid "skill"
 msgstr "habilidade"
 
-#: templates/atados_core/home.html:233 templates/atados_core/home.html:279
+#: templates/atados_core/home.html:236 templates/atados_core/home.html:271
 msgid "location"
 msgstr "localização"
 
-#: templates/atados_core/home.html:251
-msgid "availability"
-msgstr "disponibilidade"
-
-#: templates/atados_core/home.html:264
+#: templates/atados_core/home.html:256
 msgid "Find nonprofits by their..."
 msgstr "Encontre ONGs de acordo com sua..."
 
-#: templates/atados_core/home.html:316
+#: templates/atados_core/home.html:308
+msgid "No search results found"
+msgstr "Nenhum resultado encontrado"
+
+#: templates/atados_core/home.html:309
 msgid "Next page"
 msgstr "Próximo"
 
-#: templates/atados_core/home.html:320
+#: templates/atados_core/home.html:313
 msgid "Load more"
 msgstr "Carregar mais"
 
-#: templates/atados_core/home.html:325
-msgid "Nonprofit sign up"
-msgstr "Registro de ONGs"
-
-#: templates/atados_core/home.html:327
+#: templates/atados_core/home.html:323
 msgid "/blog"
 msgstr "/blog"
 
-#: templates/search/search.html:31
-msgid "projects"
-msgstr "atos"
+#: templates/atados_core/home.html:328
+msgid "Read more"
+msgstr "Leia mais"
 
-#: templates/search/search.html:34
-msgid "nonprofits"
-msgstr "ONGs"
+#: templates/atados_core/password_change.html:4
+#: templates/atados_core/password_change.html:7
+msgid "Password change"
+msgstr "Alteração de senha"
+
+#: templates/atados_core/password_change.html:14
+msgid "Save"
+msgstr "Salvar"
+
+#: templates/atados_core/password_change_done.html:7
+#: templates/atados_core/password_change_done.html:13
+msgid "Password change successfully"
+msgstr "Senha alterada com sucesso"
+
+#: templates/atados_core/password_change_done.html:17
+msgid "Your password has been successfully change!"
+msgstr "Sua senha foi alterada com sucesso!"
+
+#: templates/atados_core/sign_in.html:22
+msgid "Not registered yet?"
+msgstr "Ainda não é regitrado?"
+
+#: templates/atados_core/sign_up.html:14
+msgid "Sign up! But before, tell us more abou you."
+msgstr "Cadastre-se! Mas antes, nos conte um pouco sobre você."
+
+#: templates/atados_core/sign_up.html:20
+msgid "I am a volunteer"
+msgstr "Eu sou um voluntário"
+
+#: templates/atados_core/sign_up.html:29
+msgid "I am a nonprofit"
+msgstr "Eu sou uma ONG"
 
 #: templates/search/search.html:37
-msgid "volunteers"
-msgstr "voluntários"
+msgid "Volunteers"
+msgstr "Voluntários"
 
 #: templates/search/search.html:45
 msgid "Causes"
@@ -484,6 +526,17 @@ msgstr ""
 msgid "We couldn't find any results matching '%(query)s'."
 msgstr ""
 "Nós não conseguimos encontrar nenhum resultado ao buscar por '%(query)s'"
+
+#: templatetags/atados_tags.py:117
+#, python-format
+msgid "Applied to <a href=\"%(url)s\">%(name)s</a>."
+msgstr "Applicou-se à <a href=\"%(url)s\">%(name)s</a>."
+
+#~ msgid "availability"
+#~ msgstr "disponibilidade"
+
+#~ msgid "Nonprofit sign up"
+#~ msgstr "Registro de ONGs"
 
 #~ msgid "@movimentoatados"
 #~ msgstr "@movimentoatados"
