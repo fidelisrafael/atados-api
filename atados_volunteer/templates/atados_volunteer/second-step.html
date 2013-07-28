@@ -17,7 +17,7 @@
     <form class="well" action="{% url "volunteer:second-step" volunteer.user.username %}" method="post" enctype="multipart/form-data">{% csrf_token %}
       {{ form|as_bootstrap }}
       <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{% trans "Upload and Finish" %}</button>
+        <button type="submit" class="btn btn-primary">{% trans "Upload and finish" %}</button>
         <a class="btn" href="{% url "atados:home" %}">{% trans "Skip this step" %}</a>
       </div>
     </form>

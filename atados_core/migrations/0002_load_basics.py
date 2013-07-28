@@ -60,12 +60,12 @@ class Migration(DataMigration):
                 availability.period = period
                 availability.save()
 
-        state = orm.State()
-        state.name = 'São Paulo'
-        state.save()
+        saopaulo = orm.State()
+        saopaulo.name = 'São Paulo'
+        saopaulo.save()
 
         city = orm.City()
-        city.state = state
+        city.state = saopaulo
         city.name = 'São Paulo'
         city.save()
 
@@ -84,7 +84,7 @@ class Migration(DataMigration):
         parana.save()
 
         curitiba = orm.City()
-        curitiba.state = state
+        curitiba.state = parana
         curitiba.name = 'Curitiba'
         curitiba.save()
 
