@@ -19,20 +19,23 @@
     </div>
   </div>
 {% endif %}
+
+{% if project.work.address or project.work.can_be_done_remotely %}
 <div class="row">
   <div class="span9">
     <h2>{% trans "Location" %}</h2>
+    {% if project.work.address %}
     {{ project.work.address.addressline }} {{ project.work.address.addressnumber }}<br />
     {{ project.work.address|as_location_string }} <br />
-
-    {% if project.can_be_done_remotely %}
-    {% trans "This work can be done remotely." %}
-    {% else %}
-    {% trans "This work can't be done remotely." %}
     {% endif %}
 
+    {% if project.work.can_be_done_remotely %}
+    {% trans "This work can be done remotely." %}
+    {% endif %}
   </div>
 </div>
+{% endif %}
+
 {% if project.vacancies %}
 <div class="row">
   <div class="span9">

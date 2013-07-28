@@ -9,6 +9,33 @@
     {{ project.details|linebreaks }}
   </div>
 </div>
+{% if project.causes.all %}
+  <div class="row">
+    <div class="span9">
+      <h2>{% trans "Causes" %}</h2>
+      {% for cause in  project.causes.all %}
+      <span class="tag">{{ cause }}</span>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% if project.donation.delivery or project.donation.collection_by_nonprofit %}
+<div class="row">
+  <div class="span9">
+    <h2>{% trans "Delivery" %}</h2>
+    {% if project.donation.delivery %}
+    {{ project.donation.delivery.addressline }} {{ project.donation.delivery.addressnumber }}<br />
+    {{ project.donation.delivery|as_location_string }} <br />
+    {% endif %}
+    
+    {% if project.donation.collection_by_nonprofit %}
+    {% trans "Collection made by the nonprofit." %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
 {% if project.donation.material_set.all %}
 <div class="row">
   <div class="span9">
@@ -32,26 +59,5 @@
   </div>
 </div>
 {% endif %}
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Causes" %}</h2>
-    {% for cause in  project.causes.all %}
-    <span class="tag">{{ cause }}</span>
-    {% endfor %}
-  </div>
-</div>
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Location" %}</h2>
-    {% if project.can_be_done_remotely %}
-    {% trans "This work can be done remotely." %}
-    {% else %}
-    {% trans "This work can't be done remotely." %}
-    {% endif %} <br />
-    {% trans "Addressline" %} {{ project.addressline }} <br />
-    {% trans "Neighborhood" %} {{ project.neighborhood }} <br />
-    {% trans "City" %} {{ project.city }} <br />
-  </div>
-</div>
 {% endblock %}
 
