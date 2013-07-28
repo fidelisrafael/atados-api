@@ -85,6 +85,8 @@
 
     </div>
     <div class="span3" style="margin-top:55px;">
+
+      {% if nonprofit.address %}
       <div class="well">
         <span class="well-title">{% trans "Location" %}</span>
         {% if nonprofit.address.addressline %}
@@ -92,6 +94,8 @@
         {% endif %}
         <p>{{ nonprofit.address|as_location_string }}</p>
       </div>
+      {% endif %}
+
       <div class="well">
         <span class="well-title">{% trans "Contact" %}</span>
         <p>{{ nonprofit.user.first_name }}</p>
