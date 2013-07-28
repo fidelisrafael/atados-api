@@ -274,7 +274,7 @@ msgstr "Mais cidades em breve."
 #: templates/atados_core/sign_up.html:7 templates/atados_core/sign_up.html:23
 #: templates/atados_core/sign_up.html:32
 msgid "Sign up"
-msgstr "Cadastro"
+msgstr "Cadastre-se"
 
 #: templates/atados_core/base.html:75 templates/atados_core/sign_in.html:13
 msgid "Connect using Facebook"
