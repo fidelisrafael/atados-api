@@ -73,6 +73,28 @@ class Project(models.Model):
     def get_project_type(self):
         return self.project_type
 
+    def get_address(self):
+        if self.work:
+            return self.work.address
+        elif self.donation:
+            return self.donation.delivery
+        else:
+            raise Exception("Project without address")
+
+    def get_location_string(self):
+        locations = []
+
+        address = self.get_address()
+
+        if address.state:
+            if address.city:
+                if address.suburb:
+                    locations.append(str(address.suburb))
+                locations.append(str(address.city))
+            locations.append(str(address.state))
+        
+        return ' - '.join(locations)
+
 class Donation(models.Model):
     project = models.OneToOneField(Project)
     delivery = models.OneToOneField(Address)

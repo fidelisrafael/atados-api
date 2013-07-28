@@ -26,7 +26,7 @@
 
       <div class="span8">
         <h1>{{ project.name }}</h1>
-        <p class="location">Zona Leste - São Paulo - SP</p>
+        <p class="location">{{ project.get_location_string }}</p>
         <p class="description">{{ project.get_description }}</p>
 
         {% if project.closed %}
