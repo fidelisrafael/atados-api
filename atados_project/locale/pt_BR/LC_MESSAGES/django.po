@@ -259,9 +259,8 @@ msgid "Apply"
 msgstr "Inscreva-se"
 
 #: templates/atados_project/details.html:74
-#, fuzzy
 msgid "View details"
-msgstr "Detalhes"
+msgstr "Ver vetalhes"
 
 #: templates/atados_project/details.html:109
 #, python-format
