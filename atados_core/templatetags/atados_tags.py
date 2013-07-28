@@ -22,6 +22,9 @@ def active(request, href):
 
 @register.filter
 def as_location_string(address):
+    if address == None:
+        return ''
+
     locations = []
 
     if address.state:
