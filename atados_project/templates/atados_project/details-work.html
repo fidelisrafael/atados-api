@@ -9,6 +9,30 @@
     {{ project.details|linebreaks }}
   </div>
 </div>
+{% if project.causes.all %}
+  <div class="row">
+    <div class="span9">
+      <h2>{% trans "Causes" %}</h2>
+      {% for cause in  project.causes.all %}
+      <span class="tag">{{ cause }}</span>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+<div class="row">
+  <div class="span9">
+    <h2>{% trans "Location" %}</h2>
+    {{ project.work.address.addressline }} {{ project.work.address.addressnumber }}<br />
+    {{ project.work.address|as_location_string }} <br />
+
+    {% if project.can_be_done_remotely %}
+    {% trans "This work can be done remotely." %}
+    {% else %}
+    {% trans "This work can't be done remotely." %}
+    {% endif %}
+
+  </div>
+</div>
 {% if project.vacancies %}
 <div class="row">
   <div class="span9">
@@ -42,16 +66,6 @@
   </div>
 </div>
 {% endif %}
-{% if project.causes.all %}
-  <div class="row">
-    <div class="span9">
-      <h2>{% trans "Causes" %}</h2>
-      {% for cause in  project.causes.all %}
-      <span class="tag">{{ cause }}</span>
-      {% endfor %}
-    </div>
-  </div>
-{% endif %}
 {% if project.skills.all %}
   <div class="row">
     <div class="span9">
@@ -84,19 +98,6 @@
   <div class="span9">
     <h2>{% trans "Availability" %}</h2>
     {{ project.work.availabilities|as_availabilities_table }}
-  </div>
-</div>
-<div class="row">
-  <div class="span9">
-    <h2>{% trans "Location" %}</h2>
-    {% if project.can_be_done_remotely %}
-    {% trans "This work can be done remotely." %}
-    {% else %}
-    {% trans "This work can't be done remotely." %}
-    {% endif %} <br />
-    {% trans "Addressline" %} {{ project.work.address.addressline }} <br />
-    {% trans "Neighborhood" %} {{ project.work.address.neighborhood }} <br />
-    {% trans "City" %} {{ project.work.address.city }} <br />
   </div>
 </div>
 {% endblock %}
