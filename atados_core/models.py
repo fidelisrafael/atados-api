@@ -40,6 +40,7 @@ class Skill(models.Model):
 
 class State(models.Model):
     name = models.CharField(_('name'), max_length=30)
+    code = models.CharField(_('code'), max_length=2)
 
     def __unicode__(self):
         return self.name
