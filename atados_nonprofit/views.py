@@ -14,6 +14,10 @@ from atados_nonprofit.forms import (NonprofitPictureForm,
                                     NonprofitDetailsForm)
 
 
+class NonprofitAwaitingModeration(Exception):
+    pass
+
+
 class NonprofitMixin(object):
     nonprofit = None
     only_owner = True
@@ -29,7 +33,7 @@ class NonprofitMixin(object):
                                            slug=kwargs.get('nonprofit'))
 
         if not self.nonprofit.published and not self.only_owner:
-            raise Http404
+            raise NonprofitAwaitingModeration
 
         if self.only_owner and self.nonprofit.user != request.user:
             raise PermissionDenied
@@ -38,6 +42,11 @@ class NonprofitMixin(object):
 
     def get_nonprofit(self):
         return self.nonprofit
+
+
+class AwaitingModerationView(TemplateView):
+    template_name='atados_nonprofit/awaiting-moderation.html'
+
 
 class NonprofitBaseView(NonprofitMixin, TemplateView):
     pass

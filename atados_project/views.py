@@ -42,6 +42,11 @@ class AvailabilityMixin(object):
         context.update({'availability_list': self.availability_list})
         return context
 
+
+class ProjectAwaitingModeration(Exception):
+    pass
+
+
 class ProjectMixin(NonprofitMixin):
     project = None
 
@@ -58,9 +63,15 @@ class ProjectMixin(NonprofitMixin):
                                              deleted=False)
 
         if not self.project.published and not self.only_owner:
-            raise Http404
+            raise ProjectAwaitingModeration()
 
         return self.project
+
+
+class AwaitingModerationView(NonprofitMixin, TemplateView):
+    only_owner=False
+    template_name='atados_project/awaiting-moderation.html'
+
 
 class ProjectView(TemplateView, NonprofitMixin, FormMixin):
     project=None

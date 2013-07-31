@@ -1,0 +1,21 @@
+{% extends 'atados_core/base.html' %}
+{% load i18n bootstrap_toolkit thumbnail atados_tags %}
+
+{% block title %}{% trans "Nonprofit awaiting moderation" %}{% endblock %}
+
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{% trans "Nonprofit awaiting moderation" %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="centered page-header">
+  <h1>{% trans "Nonprofit awaiting moderation" %}</h1>
+</div>
+
+<p class="block-message">
+  {% trans "This page is related to a nonprofit awaiting moderation." %}
+</p>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'atados_core/base.html' %}
+{% load i18n bootstrap_toolkit thumbnail atados_tags %}
+
+{% block title %}{% trans "Voluntary work awaiting moderation" %}{% endblock %}
+
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="{{ nonprofit.get_absolute_url }}">{{ nonprofit.name }}</a></li>
+<li class="active">{% trans "Voluntary work awaiting moderation" %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="centered page-header">
+  <h1>{% trans "Project awaiting moderation" %}</h1>
+</div>
+
+<p class="block-message">
+  {% trans "This page is related to a project awaiting moderation." %}
+</p>
+
+{% endblock %}

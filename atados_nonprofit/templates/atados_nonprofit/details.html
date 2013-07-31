@@ -1,7 +1,7 @@
 {% extends 'atados_nonprofit/base.html' %}
 {% load i18n thumbnail atados_tags %}
 
-{% block title %}{{ nonprofit.name }}{% endblock %}
+{% block title %}{% trans "Nonprofit: " %}{{ nonprofit.name }}{% endblock %}
 
 {% block header %}
 <div id="nonprofit-header">
