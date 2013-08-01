@@ -67,6 +67,10 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
         if form_kwargs:
             kwargs.update(form_kwargs)
 
+        if len(self.request.GET):
+            get = dict(self.request.GET.iterlists())
+            data = dict(data.items() + get.items())
+
         if self.searchqueryset is not None:
             kwargs['searchqueryset'] = self.searchqueryset
 
@@ -94,12 +98,16 @@ class VolunteerApi(SearchView, JSONResponseMixin, View):
         return self.__call__(request)
 
     def build_form(self, form_kwargs=None):
-        data = {u'types': [u'volunteer']}
+        data = {u'types': [u'nonprofit']}
         kwargs = {
             'load_all': self.load_all,
         }
         if form_kwargs:
             kwargs.update(form_kwargs)
+
+        if len(self.request.GET):
+            get = dict(self.request.GET.iterlists())
+            data = dict(data.items() + get.items())
 
         if self.searchqueryset is not None:
             kwargs['searchqueryset'] = self.searchqueryset
