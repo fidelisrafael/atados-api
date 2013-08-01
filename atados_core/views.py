@@ -2,6 +2,7 @@ import os
 from django import http
 from django.contrib.auth.models import User
 from django.core.cache import get_cache
+from django.db.models import Q
 from django.http import Http404, HttpResponseServerError
 from django.template import RequestContext, TemplateDoesNotExist, loader
 from django.utils import simplejson as json
@@ -166,16 +167,22 @@ class HomeView(SearchView, View):
         context = super(HomeView, self).extra_context()
         recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
 
-        
+        project_address_form = AddressForm(no_state=True)
+        project_address_form.fields['city'].queryset = City.objects.filter(Q(address__work__project__published=True) | Q(address__donation__project__published=True)).distinct().order_by('name')
+        nonprofit_address_form = AddressForm(no_state=True)
+        nonprofit_address_form.fields['city'].queryset = City.objects.filter(address__nonprofit__published=True).distinct().order_by('name')
 
         context.update({
             'recommended': recommended,
-            'address_form': AddressForm(no_state=True),
+            'project_address_form': project_address_form,
+            'nonprofit_address_form': nonprofit_address_form,
             'blog_feed': self.get_blog_feed()
         })
+
         return context
 
     def get_blog_feed(self):
+        return None
         cache = get_cache('default')
         blog_feed = cache.get('blog_feed')
 

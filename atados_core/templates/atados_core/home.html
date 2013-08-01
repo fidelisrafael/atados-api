@@ -238,10 +238,10 @@
                         <form>
                           <div class="location-fields">
                             <div class="city-field">
-                              {{ address_form.city|as_bootstrap }}
+                              {{ project_address_form.city|as_bootstrap }}
                             </div>
-                            <div class="suburb-field{% if address_form.suburb.field.choices|length_is:0 %} hide{% endif %}">
-                              {{ address_form.suburb|as_bootstrap }}
+                            <div class="suburb-field{% if project_address_form.suburb.field.choices|length_is:0 %} hide{% endif %}">
+                              {{ project_address_form.suburb|as_bootstrap }}
                             </div>
                           </div>
                         </form>
@@ -272,14 +272,11 @@
                       <div class="dropdown-menu">
                         <form>
                           <div class="location-fields">
-                            <div class="state-field">
-                              {{ address_form.state|as_bootstrap }}
+                            <div class="city-field">
+                              {{ nonprofit_address_form.city|as_bootstrap }}
                             </div>
-                            <div class="city-field{% if address_form.city.field.choices|length_is:0 %} hide{% endif %}">
-                              {{ address_form.city|as_bootstrap }}
-                            </div>
-                            <div class="suburb-field{% if address_form.suburb.field.choices|length_is:0 %} hide{% endif %}">
-                              {{ address_form.suburb|as_bootstrap }}
+                            <div class="suburb-field{% if nonprofit_address_form.suburb.field.choices|length_is:0 %} hide{% endif %}">
+                              {{ nonprofit_address_form.suburb|as_bootstrap }}
                             </div>
                           </div>
                         </form>
