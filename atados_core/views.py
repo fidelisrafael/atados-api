@@ -182,7 +182,6 @@ class HomeView(SearchView, View):
         return context
 
     def get_blog_feed(self):
-        return None
         cache = get_cache('default')
         blog_feed = cache.get('blog_feed')
 
