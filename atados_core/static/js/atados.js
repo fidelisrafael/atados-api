@@ -208,7 +208,7 @@
         var item = $(
           '<div class="span3 project-item">' + 
             '<a href="' + project.url + '">' + 
-              '<img alt="' + project.name + '"  src="' + project.image + '" width="270" height="180">' +
+              '<img alt="' + project.name + '"  src="' + project.image.url + '" width="' + project.image.width + '" height="' + project.image.height + '">' +
             '</a>' +
             '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
           '</div>');
@@ -220,7 +220,7 @@
           item.append(
             '<div class="nonprofit">' +
               '<a href="' + project.nonprofit.url + '" class="picture">' + 
-                '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image + '" width="34" height="34">' +
+                '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image.url + '" width="' + project.nonprofit.image.width + '" height="' + project.nonprofit.image.height + '">' +
               '</a>' +
               '<a href="' + project.nonprofit.url + '" class="name">' + project.nonprofit.name + '</a>' +
               '<div class="volunteers"><i class="icon icon-volunteer"></i> <span>' + project.volunteers + '</span></div>' +

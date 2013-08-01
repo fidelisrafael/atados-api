@@ -6,11 +6,17 @@ from sorl.thumbnail import get_thumbnail
 from atados.settings import STATIC_URL
 
 
-def get_thumb(image, size):
+def get_thumb(image, width, height):
+    size = "%sx%s" % (width, height)
+
     try:
-        return get_thumbnail(image, size, crop='center').url
+        url = get_thumbnail(image, size, crop='center').url
     except:
-        return STATIC_URL + 'img/thumb/' + size + '.gif'
+        url = STATIC_URL + 'img/thumb/' + size + '.gif'
+
+    return {'url': url,
+            'width': width,
+            'height': height,}
 
 class ProjectApi(SearchView, JSONResponseMixin, View):
 
@@ -27,13 +33,13 @@ class ProjectApi(SearchView, JSONResponseMixin, View):
 
             context = [{
                 'id': result.object.id,
-                'image': get_thumb(result.object.image, '270x180'),
+                'image': get_thumb(result.object.image, 270, 180),
                 'url': result.object.get_absolute_url(),
                 'name': result.object.name,
                 'details': result.object.get_description(),
                 'volunteers': len(result.object.apply_set.all()),
                 'nonprofit': {
-                    'image': get_thumb(result.object.nonprofit.image, '34x34'),
+                    'image': get_thumb(result.object.nonprofit.image, 34, 34),
                     'url': result.object.nonprofit.get_absolute_url(),
                     'name': result.object.nonprofit.name,
                 }
@@ -71,7 +77,7 @@ class NonprofitApi(SearchView, JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x270'),
+            'image': get_thumb(result.object.image, 270, 270),
             'url': result.object.get_absolute_url(),
             'name': result.object.name,
         } for result in page.object_list]
@@ -105,7 +111,7 @@ class VolunteerApi(SearchView, JSONResponseMixin, View):
 
         context = [{
             'id': result.object.id,
-            'image': get_thumb(result.object.image, '270x180'),
+            'image': get_thumb(result.object.image, 270, 180),
             'url': result.object.get_absolute_url(),
             'name': result.object.user.first_name + ' ' +
                     result.object.user.last_name ,
