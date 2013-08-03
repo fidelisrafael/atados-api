@@ -130,8 +130,10 @@ def as_activity_li(model):
     if isinstance(model, Apply):
         icon='heart'
         date=model.date
-        html=_('Applied to <a href="%(url)s">%(name)s</a>.') % {'url': model.project.get_absolute_url(),
-                                                                'name': model.project.name}
+        html=_('<a href="%(volunteer_url)s">%(volunteer)s</a> applied to <a href="%(project_url)s">%(project)s</a>.') % {'project_url': model.project.get_absolute_url(),
+                                                                'volunteer': model.volunteer.user.first_name,
+                                                                'volunteer_url': model.volunteer.get_absolute_url(),
+                                                                'project': model.project.name}
 
     if icon and date and html:
         date = formats.date_format(date, "DATE_FORMAT")

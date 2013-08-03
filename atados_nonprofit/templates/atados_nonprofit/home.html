@@ -1,5 +1,5 @@
 {% extends 'atados_nonprofit/base.html' %}
-{% load i18n bootstrap_toolkit thumbnail %}
+{% load i18n bootstrap_toolkit thumbnail atados_tags %}
 
 {% block out_breadcrumb %}
 {% endblock %}
@@ -28,7 +28,16 @@
   </div>
   <div class="row">
     <div class="span8">
-      ...
+      <h2>{% trans "Recent activities" %}</h2>
+      {% if activities %}
+      <ul class="activities">
+        {% for activity in activities %}
+        {{ activity|as_activity_li }}
+        {% endfor %}
+      </ul>
+      {% else %}
+      {% trans "No activity yet." %}
+      {% endif %}
     </div>
     <div class="span4">
       <div class="row">

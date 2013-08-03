@@ -12,6 +12,7 @@ from atados_nonprofit.forms import (NonprofitPictureForm,
                                     NonprofitFirstStepForm,
                                     NonprofitSecondStepForm,
                                     NonprofitDetailsForm)
+from atados_project.models import Apply
 
 
 class NonprofitAwaitingModeration(Exception):
@@ -53,6 +54,20 @@ class NonprofitBaseView(NonprofitMixin, TemplateView):
 
 class NonprofitHomeView(TemplateView):
     template_name = 'atados_nonprofit/home.html'
+
+    def get_activities(self):
+        activities = []
+        if self.request.user.is_authenticated():
+            nonprofits = Nonprofit.objects.filter(user=self.request.user)
+            for nonprofit in nonprofits:
+                for apply in Apply.objects.filter(project__nonprofit=nonprofit):
+                    activities.append(apply)
+        return activities
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(NonprofitHomeView, self).get_context_data(*args, **kwargs)
+        context.update({'activities': self.get_activities()})
+        return context
 
 class NonprofitDetailsView(NonprofitBaseView):
     only_owner = False

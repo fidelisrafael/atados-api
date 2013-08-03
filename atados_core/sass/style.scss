@@ -219,6 +219,31 @@ ul.feed {
   }
 }
 
+.activities {
+  list-style:none;
+  padding:0;
+  margin:20px 0;
+
+  & > li {
+    padding-left:25px;
+    position: relative;
+
+    & > i {
+      position: absolute;
+      left:0;
+    }
+
+    & + li {
+      margin-top: 12px;
+    }
+
+    & > .date {
+      color:$grayLight;
+      font-style:italic;
+    }
+  }
+}
+
 .page-header.centered {
   & > h1 {
     text-align:center;
@@ -525,30 +550,6 @@ ul.feed {
     }
   }
 
-  .activities {
-    list-style:none;
-    padding:0;
-    margin:20px 0;
-
-    & > li {
-      padding-left:25px;
-      position: relative;
-
-      & > i {
-        position: absolute;
-        left:0;
-      }
-
-      & + li {
-        margin-top: 12px;
-      }
-
-      & > .date {
-        color:$grayLight;
-        font-style:italic;
-      }
-    }
-  }
 }
 
 @media (min-width: 1200px) {
