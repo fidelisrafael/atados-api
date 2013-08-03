@@ -167,7 +167,7 @@ class HomeView(SearchView, View):
         recommendations = []
         
         for recommendation in Recommendation.objects.order_by('-sort'):
-            recommendations.append(recommendation)
+            recommendations.append(recommendation.project)
 
         rand = 3 - len(recommendations) 
         if rand > 0:
