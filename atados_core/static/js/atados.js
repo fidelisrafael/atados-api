@@ -192,9 +192,10 @@
       $('.infinite-navigation').show();
     }
 
+    var container = $(this);
+
     if (json.length > 0) {
 
-      container = $(this);
       var row;
         
       for (var key in json) {
@@ -232,7 +233,7 @@
 
       row.hide().appendTo(container).fadeIn();
 
-    } else if(opts.state.currPage == 1) {
+    } else if ($('project-item', container).length == 0) {
       row = $('<div class="row"><div class="span9"><div class="no-search-results">' + $('#no-search-results').val() + '</div></div></div>');
       row.hide().appendTo(container).fadeIn();
     }
