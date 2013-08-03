@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
-from atados_core.models import Availability, Cause, Skill, Address
+from atados_core.models import Availability, Cause, Skill, Address, State, City
 from atados_nonprofit.models import Nonprofit
 from atados_volunteer.models import Volunteer
 from sorl.thumbnail import ImageField
@@ -112,3 +112,12 @@ class Apply(models.Model):
     volunteer = models.ForeignKey(Volunteer)
     project = models.ForeignKey(Project)
     date = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+class Recommendation(models.Model):
+    project = models.ForeignKey(Project)
+    sort = models.PositiveSmallIntegerField(_('Sort'),
+            blank=True, null=True, default=None)
+    state = models.ForeignKey(State, blank=True, null=True, default=None)
+    city = models.ForeignKey(City, blank=True, null=True, default=None)
+
