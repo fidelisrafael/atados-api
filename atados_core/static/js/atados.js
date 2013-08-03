@@ -233,7 +233,7 @@
 
       row.hide().appendTo(container).fadeIn();
 
-    } else if ($('project-item', container).length == 0) {
+    } else if ($('.project-item', container).length == 0) {
       row = $('<div class="row"><div class="span9"><div class="no-search-results">' + $('#no-search-results').val() + '</div></div></div>');
       row.hide().appendTo(container).fadeIn();
     }
