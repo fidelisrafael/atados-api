@@ -186,8 +186,8 @@
         <h2>{% trans "Recommended" %}</h2>
         <div class="project-list">
           <div class="row">
-            {% for result in recommended %}
-            {% include "atados_project/project-item.html" with project=result.object %}
+            {% for recommendation in recommendations %}
+            {% include "atados_project/project-item.html" with project=recommendation %}
             {% endfor %}
           </div>
         </div>

@@ -15,7 +15,7 @@ from atados_core.forms import SearchForm, AddressForm
 from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
 from atados_volunteer.forms import RegistrationForm
 from atados_nonprofit.models import Nonprofit
-from atados_project.models import Project
+from atados_project.models import Project, Recommendation
 from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
 import feedparser
@@ -163,9 +163,23 @@ class HomeView(SearchView, View):
 
         return self.form_class(data, **kwargs)
 
+    def get_recommendations(self):
+        recommendations = []
+        
+        for recommendation in Recommendation.objects.order_by('-sort'):
+            recommendations.append(recommendation)
+
+        rand = 3 - len(recommendations) 
+        if rand > 0:
+            results = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:rand]
+            for result in results:
+                recommendations.append(result.object)
+
+        return recommendations
+
+
     def extra_context(self):
         context = super(HomeView, self).extra_context()
-        recommended = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:3]
 
         project_address_form = AddressForm(no_state=True)
         project_address_form.fields['city'].queryset = City.objects.filter(Q(address__work__project__published=True) | Q(address__donation__project__published=True)).distinct().order_by('name')
@@ -173,7 +187,7 @@ class HomeView(SearchView, View):
         nonprofit_address_form.fields['city'].queryset = City.objects.filter(address__nonprofit__published=True).distinct().order_by('name')
 
         context.update({
-            'recommended': recommended,
+            'recommendations': self.get_recommendations(),
             'project_address_form': project_address_form,
             'nonprofit_address_form': nonprofit_address_form,
             'blog_feed': self.get_blog_feed()
