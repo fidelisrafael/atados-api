@@ -11,7 +11,15 @@
 <div id="project-collaborators">
   <div class="row">
     <div class="span9">
-      Collab
+      {% if project.apply_set.all %}
+      <ul>
+      {% for apply in project.apply_set.all %}
+        <li><a href="{{ apply.volunteer.get_absolute_url }}">{{ apply.volunteer }}</a></li>
+      {% endfor %}
+      </ul>
+      {% else %}
+      {% trans "No volunteers" %}
+      {% endif %}
     </div>
   </div>
 </div>
