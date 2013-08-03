@@ -115,7 +115,7 @@ class ProjectView(TemplateView, NonprofitMixin, FormMixin):
         return initial
 
     def get_success_url(self, project):
-        return reverse('project:details',
+        return reverse('project:edit-project-picture',
                        args=[self.get_nonprofit().slug, project.slug])
 
     def get_project_form(self):
@@ -413,6 +413,11 @@ class ProjectPictureUpdateView(ProjectMixin, UpdateView):
     form_class=ProjectPictureForm
     template_name='atados_project/picture.html'
     get_object = ProjectMixin.get_project
+
+    def get_success_url(self):
+        messages.info(self.request, _('Picture was successfully updated.'))
+        return reverse('project:edit',
+                       args=[self.get_nonprofit().slug, self.object.slug])
 
 class ProjectDeleteView(ProjectMixin, DeleteView):
     get_object = ProjectMixin.get_project
