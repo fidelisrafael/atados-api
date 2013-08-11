@@ -4,7 +4,7 @@
     {% thumbnail volunteer.image "270x270" crop="center" as im %}
     <img alt="{{ volunteer }}" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
     {% empty %}
-    <img src="{{ STATIC_URL }}img/thumb/300.gif" alt="">
+    <img src="{{ STATIC_URL }}img/thumb/270x270.gif" alt="">
     {% endthumbnail %}
   </a>
   <a class="well-title" href="{{ volunteer.get_absolute_url }}">{{ volunteer.user.first_name }} {{ volunteer.user.last_name }}</a>
