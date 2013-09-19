@@ -19,6 +19,7 @@ ALLOWED_HOSTS = (
 
 ADMINS = (
     ('Rogério Yokomizo', 'me@ro.ger.io'),
+    ('Marjori Pomarole', 'marjoripomarole@gmail.com'),
 )
 
 MANAGERS = ADMINS
