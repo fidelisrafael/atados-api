@@ -2,14 +2,7 @@
 # Django settings for atados project.
 import os
 
-AWS_EB = []
-if 'PARAM1' in os.environ and os.environ['PARAM1']:
-    import json
-    def decode_param1(data):
-        return dict([(key.encode('utf-8'), value) for key, value in data.iteritems()])
-    AWS_EB = json.loads(os.environ['PARAM1'], object_hook=decode_param1)
-
-DEBUG = False if 'debug' in AWS_EB and not AWS_EB['debug'] else True
+DEBUG = os.environ.get('ATADOS_DEBUG', False)
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
@@ -24,28 +17,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-if 'RDS_HOSTNAME' in os.environ:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['RDS_DB_NAME'],
-            'USER': os.environ['RDS_USERNAME'],
-            'PASSWORD': os.environ['RDS_PASSWORD'],
-            'HOST': os.environ['RDS_HOSTNAME'],
-            'PORT': os.environ['RDS_PORT'],
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql' if 'RDS_HOSTNAME' in os.environ else 'django.db.backends.sqlite3',
+        'NAME': os.environ.get('RDS_DB_NAME', 'atados.sqlite'),
+        'USER': os.environ.get('RDS_USERNAME', ''),
+        'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
+        'HOST': os.environ.get('RDS_HOSTNAME', ''),
+        'PORT': os.environ.get('RDS_PORT', ''),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'atados.sqlite',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': '',
-            'PORT': '',
-        }
-    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -237,17 +218,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "atados_volunteer.context_processors.volunteer",
 )
 
-if all(var in AWS_EB for var in('email_user', 'email_password')):
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.gmail.com'
-    EMAIL_PORT = 587
-    EMAIL_HOST_USER = AWS_EB['email_user']
-    EMAIL_HOST_PASSWORD = AWS_EB['email_password']
-    EMAIL_USE_TLS = True
-    DEFAULT_FROM_EMAIL = AWS_EB['email_user']
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'no-reply@atados.com.br'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'no-reply@atados.com.br')
+EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 THUMBNAIL_DEBUG = DEBUG
 
@@ -269,28 +246,13 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
         'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
     }
 
-"""HAYSTACK_SITECONF = 'atados.search_indexes'
-
-if '_solr_endpoint' in AWS_EB:
-    HAYSTACK_SOLR_URL = 'http://%s/solr' % (AWS_EB['solr_endpoint'])
-    HAYSTACK_SEARCH_ENGINE = 'atados_core.search'
-else:
-    HAYSTACK_SEARCH_ENGINE = 'simple'"""
-
-if 'solr_endpoint' in AWS_EB:
-    HAYSTACK_CONNECTIONS = {
-            'default': {
-                #'ENGINE': 'atados_core.search_backend.SearchEngine',
-                'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
-                'URL': 'http://%s/solr' % (AWS_EB['solr_endpoint']),
-                },
-            }
-else:
-    HAYSTACK_CONNECTIONS = {
-            'default': {
-                'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
-                },
-            }
+HAYSTACK_CONNECTIONS = {
+        'default': {
+            #'ENGINE': 'atados_core.search_backend.SearchEngine',
+            'ENGINE': 'haystack.backends.solr_backend.SolrEngine' if 'ATADOS_SOLR_ENDPOINT' in os.environ else 'haystack.backends.simple_backend.SimpleEngine',
+            'URL': 'http://%s/solr' % (os.environ.get('ATADOS_SOLR_ENDPOINT', 'localhost:8983')),
+            },
+        }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
@@ -300,34 +262,26 @@ SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-if 'memcached_endpoint' in AWS_EB:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': AWS_EB['memcached_endpoint']
-        },
-    }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache' if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ else 'django.core.cache.backends.dummy.DummyCache',
+        'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
+    },
+}
 
+if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
     SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-else:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-            #'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-            #'LOCATION': 'unique-snowflake'
-        },
-    }
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-if 'facebook_application_id' in AWS_EB:
+if 'ATADOS_FACEBOOK_APPLICATION_ID' in os.environ:
     AUTHENTICATION_BACKENDS =  ('social_auth.backends.facebook.FacebookBackend',) + AUTHENTICATION_BACKENDS
     INSTALLED_APPS = INSTALLED_APPS + ('social_auth',)
-    FACEBOOK_APP_ID = AWS_EB['facebook_application_id']
-    FACEBOOK_API_SECRET = AWS_EB['facebook_application_secret']
+    FACEBOOK_APP_ID = os.environ.get('ATADOS_FACEBOOK_APPLICATION_ID', '')
+    FACEBOOK_API_SECRET = os.environ.get('ATADOS_FACEBOOK_APPLICATION_SECRET', '')
 
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/social-new-user-redirect'
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
