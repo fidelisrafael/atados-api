@@ -16,6 +16,9 @@ install:
 	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
+run:
+	@python ./manage.py runserver
+
 pep8:
 	@pep8 --exclude 'migrations' .
 	
