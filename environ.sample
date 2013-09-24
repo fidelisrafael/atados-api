@@ -1,4 +1,4 @@
-export DEBUG=True
+export ATADOS_DEBUG=True
 
 export AWS_STORAGE_BUCKET_NAME=atadosapp
 export AWS_ACCESS_KEY_ID=
@@ -13,7 +13,7 @@ export RDS_PORT=3306
 export ATADOS_EMAIL_USER=no-reply@atados.com.br
 export ATADOS_EMAIL_PASSWORD=
 
-export ATADOS_SOLR_ENDPOINT=localhost:8983
+export ATADOS_SEARCH_ENDPOINT=127.0.0.1:9200
 
 export ATADOS_MEMCACHED_ENDPOINT=localhost:11211
 

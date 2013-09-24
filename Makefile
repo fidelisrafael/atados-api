@@ -1,18 +1,12 @@
 clean:
 	@find . -name "*.pyc" -delete
 
-development:
-	@pip install -r requirements/development
-
-environment:
-	@pip install -r requirements/environment
-
 db:
 	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
 install:
-	@pip install -r requirements/development -q --use-mirrors
+	@pip install -r requirements.txt -q --use-mirrors
 	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
@@ -28,11 +22,8 @@ sass:
 test:
 	@coverage run --source=atados ./manage.py test
 
-solr-rebuild:
+rebuild_index:
 	@python ./manage.py rebuild_index
-
-solr-schema:
-	@python ./manage.py build_solr_schema > schema.xml
 
 dump:
 	@python ./manage.py dumpdata core > atados_core/fixtures/initial_data.json
