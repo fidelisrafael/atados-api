@@ -247,12 +247,12 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
     }
 
 HAYSTACK_CONNECTIONS = {
-        'default': {
-            #'ENGINE': 'atados_core.search_backend.SearchEngine',
-            'ENGINE': 'haystack.backends.solr_backend.SolrEngine' if 'ATADOS_SOLR_ENDPOINT' in os.environ else 'haystack.backends.simple_backend.SimpleEngine',
-            'URL': 'http://%s/solr' % (os.environ.get('ATADOS_SOLR_ENDPOINT', 'localhost:8983')),
-            },
-        }
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://%s/' % (os.environ.get('ATADOS_SEARCH_ENDPOINT', '127.0.0.1:9200')),
+        'INDEX_NAME': 'haystack',
+    },
+}
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
