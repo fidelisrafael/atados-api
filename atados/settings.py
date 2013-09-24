@@ -151,17 +151,17 @@ INSTALLED_APPS = (
     'atados_volunteer',
     'atados_project',
     'atados_legacy',
-    'registration',
     'bootstrap_toolkit',
     'south',
     'sorl.thumbnail',
     'haystack',
     'django_nose',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
     'grappelli', # needs to come before django.contrib.admin
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -194,7 +194,10 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'atados_core.backends.AuthenticationBackend',
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 LOGIN_REDIRECT_URL = "/"
@@ -217,6 +220,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "atados_core.context_processors.site",
     "atados_nonprofit.context_processors.nonprofit",
     "atados_volunteer.context_processors.volunteer",
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
@@ -278,11 +283,9 @@ CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-if 'ATADOS_FACEBOOK_APPLICATION_ID' in os.environ:
-    AUTHENTICATION_BACKENDS =  ('social_auth.backends.facebook.FacebookBackend',) + AUTHENTICATION_BACKENDS
-    INSTALLED_APPS = INSTALLED_APPS + ('social_auth',)
-    FACEBOOK_APP_ID = os.environ.get('ATADOS_FACEBOOK_APPLICATION_ID', '')
-    FACEBOOK_API_SECRET = os.environ.get('ATADOS_FACEBOOK_APPLICATION_SECRET', '')
-
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/social-new-user-redirect'
-SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIALACCOUNT_PROVIDERS = \
+    { 'facebook':
+        { 'SCOPE': ['email', 'publish_stream'],
+            'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
+            'METHOD': 'oauth2' ,
+            'LOCALE_FUNC': 'path.to.callable'} }

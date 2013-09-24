@@ -11,7 +11,7 @@ urlpatterns = patterns(
     '',
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('social_auth.urls')),
+    url('', include('allauth.urls')),
     url('', include('atados_core.urls', namespace='atados')),
     url('', include('atados_nonprofit.urls', namespace='nonprofit')),
     url('', include('atados_volunteer.urls', namespace='volunteer')),

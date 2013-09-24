@@ -8,20 +8,19 @@ from atados_nonprofit.views import (NonprofitPictureUpdateView,
                                     NonprofitFirstStepView,
                                     NonprofitSecondStepView,
                                     NonprofitDetailsUpdateView)
-from registration.views import register, activate
 
 urlpatterns = patterns(
     '',
 
-    url(_(r'^nonprofit/sign-up$'), register,
-        {'backend': 'atados_nonprofit.backends.RegistrationBackend',
-         'template_name': 'atados_nonprofit/sign-up.html'},
-        name='sign-up'),
+#url(_(r'^nonprofit/sign-up$'), register,
+#       {'backend': 'atados_nonprofit.backends.RegistrationBackend',
+#        'template_name': 'atados_nonprofit/sign-up.html'},
+#      name='sign-up'),
 
-    url(_(r'^nonprofit/sign-up-confirmartion/(?P<activation_key>\w+)$'), activate,
-        {'backend': 'atados_nonprofit.backends.RegistrationBackend',
-         'template_name': 'atados_nonprofit/sign-up-activation.html'},
-        name='sign-up-confirmation'),
+#    url(_(r'^nonprofit/sign-up-confirmartion/(?P<activation_key>\w+)$'), activate,
+#       {'backend': 'atados_nonprofit.backends.RegistrationBackend',
+#        'template_name': 'atados_nonprofit/sign-up-activation.html'},
+#       name='sign-up-confirmation'),
 
     url(_(r'^(?P<nonprofit>[-\w]+)/nonprofit/first-step$'), NonprofitFirstStepView.as_view(),
         name='first-step'),

@@ -7,20 +7,18 @@ from atados_volunteer.views import (VolunteerPictureUpdateView,
                                     VolunteerFirstStepView,
                                     VolunteerSecondStepView,
                                     SocialNewUserView)
-from registration.views import register, activate
-
 urlpatterns = patterns(
     '',
 
-    url(_(r'^volunteer/sign-up$'), register,
-        {'backend': 'atados_volunteer.backends.RegistrationBackend',
-         'template_name': 'atados_volunteer/sign-up.html'},
-        name='sign-up'),
+#    url(_(r'^volunteer/sign-up$'), register,
+#        {'backend': 'atados_volunteer.backends.RegistrationBackend',
+#         'template_name': 'atados_volunteer/sign-up.html'},
+#        name='sign-up'),
 
-    url(_(r'^volunteer/sign-up-confirmartion/(?P<activation_key>\w+)$'), activate,
-        {'backend': 'atados_volunteer.backends.RegistrationBackend',
-         'template_name': 'atados_volunteer/sign-up-activation.html'},
-        name='sign-up-confirmation'),
+#    url(_(r'^volunteer/sign-up-confirmartion/(?P<activation_key>\w+)$'), activate,
+#        {'backend': 'atados_volunteer.backends.RegistrationBackend',
+#         'template_name': 'atados_volunteer/sign-up-activation.html'},
+#        name='sign-up-confirmation'),
 
     url(_(r'^volunteer/sign-up-complete$'), TemplateView.as_view(template_name='atados_volunteer/sign-up-complete.html'),
         name='sign-up-complete'),
