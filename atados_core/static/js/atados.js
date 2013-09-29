@@ -2,6 +2,9 @@
 
   $('html').removeClass('no-js').addClass('js');
 
+  // Alert panels will disppear after a while.
+  $('.alert').fadeOut(5000);
+
   function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

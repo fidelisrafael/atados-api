@@ -12,12 +12,6 @@
         {% endblock %}
 
         <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
-        <style type="text/css">
-            body {
-                padding-top: 86px;
-                padding-bottom: 40px;
-            }
-        </style>
         <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" />
         <link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.min.css" />
         <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
@@ -50,35 +44,35 @@
                         <div class="nav-collapse collapse">
 
                             {% block search %}
-                            <form class="navbar-search pull-left" action="{% url "atados:search" %}" method="get">
-                                <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Start searching for good causes!" %}">
-                            </form>
+                                <form class="navbar-search pull-left" action="{% url "atados:search" %}" method="get">
+                                    <input type="text" class="search-query" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Start searching for good causes!" %}">
+                                </form>
                             {% endblock %}
 
                             {% if not user.is_authenticated %}
-                            {% providers_media_js %}
-                            <div  class="nav pull-right">
-                                <a data-toggle="modal" href="#loginModal" class="btn btn-primary">{% trans "Sign in" %}</a>
-                            </div>
+                                {% providers_media_js %}
+                                <div  class="nav pull-right">
+                                    <a data-toggle="modal" href="#loginModal" class="btn btn-primary">{% trans "Sign in" %}</a>
+                                </div>
                             {% else %}
-                            <ul class="nav pull-right">
-                                <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.username }} <span class="caret"></span></a>
-                                <ul class="dropdown-menu" style="left:auto; right:0">
-                                    <li>
-                                    <div style="padding:3px 15px; margin-bottom:12px">
-                                        <span style="display:block; text-transform:uppercase">{{ user.first_name }}</span>
-                                        <span style="display:block">{{ user.email }}</span>
-                                    </div>
+                                <ul class="nav pull-right">
+                                    <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ user.username }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu" style="left:auto; right:0">
+                                        <li>
+                                        <div style="padding:3px 15px; margin-bottom:12px">
+                                            <span style="display:block; text-transform:uppercase">{{ user.first_name }}</span>
+                                            <span style="display:block">{{ user.email }}</span>
+                                        </div>
+                                        </li>
+                                        <li><a href="{{ volunteer_session.get_absolute_url }}">{% trans "My profile" %}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="{% url "volunteer:edit" user.username %}">{% trans "Edit my information" %}</a></li>
+                                        <li class="divider"></li>
+                                        <li><a data-toggle="modal" href="#logoutModal">{% trans "Sign out" %}</a></li>
+                                    </ul>
                                     </li>
-                                    <li><a href="{{ volunteer_session.get_absolute_url }}">{% trans "My profile" %}</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="{% url "volunteer:edit" user.username %}">{% trans "Edit my information" %}</a></li>
-                                    <li class="divider"></li>
-                                    <li><a data-toggle="modal" href="#logoutModal">{% trans "Sign out" %}</a></li>
                                 </ul>
-                                </li>
-                            </ul>
                             {% endif %}
                         </div>
                     </div>
@@ -119,8 +113,6 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3>{% trans "Are you sure you want to sign out?" %}</h3>
-                </div>
-                <div class="modal-footer">
                     <form method="post" action="{% url 'account_logout' %}">
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">{% trans "Sign Out" %}</button>
@@ -129,34 +121,37 @@
             </div>
 
             {% block out_breadcrumb %}
-            <div class="container">
-                <div class="row">
-                    <div class="span12">
-                        <ul class="breadcrumb">
-                            <li><a href="{% url "atados:home" %}">{% trans "Home" %}</a></li>
-                            {% block breadcrumb %}
-                            {% endblock %}
-                        </ul>
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <ul class="breadcrumb">
+                                <li><a href="{% url "atados:home" %}">{% trans "Home" %}</a></li>
+                                {% block breadcrumb %}
+                                {% endblock %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
             {% endblock %}
 
             {% if messages %}
-            <div class="container">
-                <div class="messages">
-                    {% for message in messages %}
-                    <div class="alert alert-success"><strong>{% trans "Well done!" %}</strong> {{ message }}</div>
-                    {% endfor %}
+                <div class="container">
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div class="alert alert-success alert-dismissable">
+                            <strong>{% trans "Success! " %}</strong> {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endif %}
 
             {% block out_content %}
-            <div class="container">
-                {% block content %}
-                {% endblock %}
-            </div>
+                <div class="container">
+                    {% block content %}
+                    {% endblock %}
+                </div>
             {% endblock %}
 
             <div class="container">
@@ -197,7 +192,7 @@
 
         </div>
 
-      <script src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery-1.8.3.min.js"></script>
         <script src="{{ STATIC_URL }}js/jquery.infinitescroll.min.js"></script>
         <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
         <script src="{{ STATIC_URL }}js/atados.js"></script>
