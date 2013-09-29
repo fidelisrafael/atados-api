@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-28 00:44-0300\n"
+"POT-Creation-Date: 2013-09-29 15:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-
-#: backends.py:57
-#, python-format
-msgid "Welcome to %s"
-msgstr "Bem-vindo ap %s"
 
 #: forms.py:17
 msgid "Your first name"
@@ -75,37 +70,30 @@ msgstr "Selecione uma ou mais habilidades"
 msgid "Phone"
 msgstr "Telefone"
 
-#: urls.py:15
-msgid "^volunteer/sign-up$"
-msgstr "^voluntario/cadastro$"
-
-#: urls.py:20
-msgid "^volunteer/sign-up-confirmartion/(?P<activation_key>\\w+)$"
-msgstr "^voluntario/confirmacao-de-cadastro/(?P<activation_key>\\w+)$"
-
-#: urls.py:25
-msgid "^volunteer/sign-up-complete$"
+#: urls.py:12
+#, fuzzy
+msgid "^volunteer/signup-complete$"
 msgstr "^voluntario/cadastro-concluido"
 
-#: urls.py:28
+#: urls.py:16
 msgid "^volunteer/profile$"
 msgstr "^voluntario/perfil"
 
-#: urls.py:31
+#: urls.py:20
 #, fuzzy
 msgid "^(?P<username>[-\\w]+)/edit$"
 msgstr "^(?P<username>[-\\w]+)/editar-imagem-do-voluntario$"
 
-#: urls.py:34
+#: urls.py:24
 msgid "^(?P<username>[-\\w]+)/edit-volunteer-picture$"
 msgstr "^(?P<username>[-\\w]+)/editar-imagem-do-voluntario$"
 
-#: urls.py:37
+#: urls.py:28
 #, fuzzy
 msgid "^(?P<username>[-\\w]+)/volunteer/first-step$"
 msgstr "^(?P<username>[-\\w]+)/editar-imagem-do-voluntario$"
 
-#: urls.py:40
+#: urls.py:32
 #, fuzzy
 msgid "^(?P<username>[-\\w]+)/volunteer/second-step$"
 msgstr "^(?P<username>[-\\w]+)/editar-imagem-do-voluntario$"
@@ -211,6 +199,15 @@ msgstr ""
 "concorda com os <a tabindex=\"-1\"href=\"%(terms_url)s\">Termos de uso</a> e "
 "<a tabindex=\"-1\" href=\"%(privacy_url)s\">Políticas de privacidade</a>.\n"
 "          "
+
+#~ msgid "Welcome to %s"
+#~ msgstr "Bem-vindo ap %s"
+
+#~ msgid "^volunteer/sign-up$"
+#~ msgstr "^voluntario/cadastro$"
+
+#~ msgid "^volunteer/sign-up-confirmartion/(?P<activation_key>\\w+)$"
+#~ msgstr "^voluntario/confirmacao-de-cadastro/(?P<activation_key>\\w+)$"
 
 #~ msgid "^volunteer/sign-up-activation-complete$"
 #~ msgstr "^voluntario/ativacao-de-cadastro-concluida"

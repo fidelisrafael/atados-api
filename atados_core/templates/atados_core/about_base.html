@@ -22,10 +22,6 @@
 
       {% url "atados:privacy" as href %}
       <li class="{% active request href %}"><a href="{{ href }}">{% trans "Privacy" %}</a></li>
-
-      {% url "atados:security" as href %}
-      <li class="{% active request href %}"><a href="{{ href }}">{% trans "Security" %}</a></li>
-
     </ul>
   </div>
   <div class="span8">

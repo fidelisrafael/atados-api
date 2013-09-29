@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.contrib.auth.forms import (
-    AuthenticationForm as ContribAuthenticationForm)
 from django.utils.translation import ugettext_lazy as _
 from haystack.forms import FacetedSearchForm, model_choices
 from atados_nonprofit.models import Nonprofit
@@ -81,11 +79,6 @@ class SearchForm(FacetedSearchForm):
                 sqs = sqs.narrow(u'availabilities_exact:(%s)' % ' OR '.join([sqs.query.clean(availability) for availability in self.cleaned_data['availabilities']]))
 
         return sqs.models(*self.get_models())
-
-class AuthenticationForm(ContribAuthenticationForm):
-    username = forms.CharField(label=_('E-mail'), max_length=30)
-    rememberme = forms.BooleanField(label=_('Stay signed in'),
-                                    initial=True, required=False)
 
 class AddressForm(forms.ModelForm):
 

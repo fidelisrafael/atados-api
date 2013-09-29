@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-28 00:44-0300\n"
+"POT-Creation-Date: 2013-09-29 15:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-
-#: backends.py:63
-#, python-format
-msgid "Welcome to %s"
-msgstr "Bem-vindo ao %s"
 
 #: forms.py:15
 msgid "Nonprofit name"
@@ -103,38 +98,41 @@ msgstr ""
 msgid "Deleted date"
 msgstr ""
 
-#: urls.py:16
-msgid "^nonprofit/sign-up$"
-msgstr "^ong/cadastro$"
-
-#: urls.py:21
-msgid "^nonprofit/sign-up-confirmartion/(?P<activation_key>\\w+)$"
-msgstr "^ong/confirmacao-de-cadastro/(?P<activation_key>\\w+)$"
-
-#: urls.py:26
+#: urls.py:14
 msgid "^(?P<nonprofit>[-\\w]+)/nonprofit/first-step$"
 msgstr "^(?P<nonprofit>[-\\w]+)/ong/primeiro-passo$"
 
-#: urls.py:29
+#: urls.py:18
 msgid "^(?P<nonprofit>[-\\w]+)/nonprofit/second-step$"
 msgstr "^(?P<nonprofit>[-\\w]+)/ong/segundo-passo$"
 
-#: urls.py:32
+#: urls.py:22
 msgid "^nonprofit/sign-up-complete$"
 msgstr "^ong/cadastro-concluido"
 
-#: urls.py:35
+#: urls.py:26
 msgid "^(?P<nonprofit>[-\\w]+)/edit-nonprofit-picture$"
 msgstr "^(?P<nonprofit>[-\\w]+)/editar-imagem-da-ong$"
 
-#: urls.py:38
+#: urls.py:30
 #, fuzzy
 msgid "^(?P<nonprofit>[-\\w]+)/edit-nonprofit-cover$"
 msgstr "^(?P<nonprofit>[-\\w]+)/editar-imagem-da-ong$"
 
-#: urls.py:41
+#: urls.py:34
 msgid "^(?P<nonprofit>[-\\w]+)/edit$"
 msgstr "^(?P<nonprofit>[-\\w]+)/editar$"
+
+#: templates/atados_nonprofit/awaiting-moderation.html:4
+#: templates/atados_nonprofit/awaiting-moderation.html:9
+#: templates/atados_nonprofit/awaiting-moderation.html:14
+#, fuzzy
+msgid "Nonprofit awaiting moderation"
+msgstr "Endereço da ONG"
+
+#: templates/atados_nonprofit/awaiting-moderation.html:18
+msgid "This page is related to a nonprofit awaiting moderation."
+msgstr ""
 
 #: templates/atados_nonprofit/cover.html:6
 #: templates/atados_nonprofit/details.html:35
@@ -146,6 +144,11 @@ msgstr "Editar imagem da ONG"
 #: templates/atados_nonprofit/picture.html:13
 msgid "Upload"
 msgstr "Enviar"
+
+#: templates/atados_nonprofit/details.html:4
+#, fuzzy
+msgid "Nonprofit: "
+msgstr "ONG"
 
 #: templates/atados_nonprofit/details.html:21
 msgid "Edit profile picture"
@@ -173,18 +176,23 @@ msgstr "Nada sobre esta ONG"
 msgid "Causes"
 msgstr "Causas"
 
-#: templates/atados_nonprofit/details.html:70
-#: templates/atados_nonprofit/home.html:36
+#: templates/atados_nonprofit/details.html:72
+#: templates/atados_nonprofit/home.html:45
 msgid "Projects"
 msgstr "Atos"
 
-#: templates/atados_nonprofit/details.html:90
+#: templates/atados_nonprofit/details.html:91
+#: templates/atados_nonprofit/first-step.html:22
+msgid "Location"
+msgstr "Localização"
+
+#: templates/atados_nonprofit/details.html:100
 #: templates/atados_nonprofit/first-step.html:26
 #, fuzzy
 msgid "Contact"
 msgstr "Contato"
 
-#: templates/atados_nonprofit/details.html:94
+#: templates/atados_nonprofit/details.html:107
 #, fuzzy
 msgid "Volunteers"
 msgstr "Voluntários"
@@ -206,10 +214,6 @@ msgstr "Selecione suas causas"
 msgid "First step: choose your causes"
 msgstr "Primeiro passo: selecione suas causas"
 
-#: templates/atados_nonprofit/first-step.html:22
-msgid "Location"
-msgstr "Localização"
-
 #: templates/atados_nonprofit/first-step.html:30
 msgid "Next step"
 msgstr "Próximo passo"
@@ -219,11 +223,19 @@ msgstr "Próximo passo"
 msgid "Skip this step"
 msgstr "Pular este passo"
 
+#: templates/atados_nonprofit/home.html:31
+msgid "Recent activities"
+msgstr ""
+
 #: templates/atados_nonprofit/home.html:39
+msgid "No activity yet."
+msgstr ""
+
+#: templates/atados_nonprofit/home.html:48
 msgid "New project"
 msgstr "Novo ato"
 
-#: templates/atados_nonprofit/home.html:46
+#: templates/atados_nonprofit/home.html:55
 msgid "Your nonprofit does not have any project"
 msgstr "Sua ONG não possui nenhum ato"
 
@@ -299,9 +311,14 @@ msgid ""
 "          "
 msgstr ""
 
-#, fuzzy
-#~ msgid "Nonprofit registration"
-#~ msgstr "Endereço da ONG"
+#~ msgid "Welcome to %s"
+#~ msgstr "Bem-vindo ao %s"
+
+#~ msgid "^nonprofit/sign-up$"
+#~ msgstr "^ong/cadastro$"
+
+#~ msgid "^nonprofit/sign-up-confirmartion/(?P<activation_key>\\w+)$"
+#~ msgstr "^ong/confirmacao-de-cadastro/(?P<activation_key>\\w+)$"
 
 #~ msgid "Zip code"
 #~ msgstr "CEP"
@@ -327,9 +344,6 @@ msgstr ""
 
 #~ msgid "This nonprofit doesn't have any projects."
 #~ msgstr "Esta ONG não tem nenhum ato"
-
-#~ msgid "Nonprofit"
-#~ msgstr "ONG"
 
 #~ msgid "Edit"
 #~ msgstr "Editar"

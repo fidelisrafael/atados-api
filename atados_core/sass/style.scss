@@ -87,7 +87,7 @@ fieldset + fieldset {
   text-transform:uppercase;
   font-size:18px;
   color:$blue;
-  font-family:'Francois One', sans-serif;
+  // font-family:'Francois One', sans-serif;
   margin-bottom:10px;
 }
 
@@ -303,10 +303,6 @@ ul.feed {
 .sign-in-menu {
   width:344px;
   padding:10px;
-
-  .btn-facebook {
-    margin-top:0;
-  }
 
   form {
     margin-bottom:0;
@@ -834,7 +830,7 @@ ul.feed {
 
       li {
         a {
-          font-family:'Francois One', sans-serif;
+          // font-family:'Francois One', sans-serif;
           font-size:18px;
           width:210px;
           text-align:center;
@@ -874,7 +870,7 @@ ul.feed {
       }
 
       a {
-        font-family:'Francois One';
+        // font-family:'Francois One';
         color:#8a8a8a;
       }
 
@@ -999,7 +995,7 @@ ul.feed {
 .no-search-results,
 .infinite-preloader {
   font-size:60px;
-  font-family:'Francois One';
+  // font-family:'Francois One';
   display:block;
   text-align:center;
   line-height:160px;

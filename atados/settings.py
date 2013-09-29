@@ -2,6 +2,8 @@
 # Django settings for atados project.
 import os
 
+PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
+
 DEBUG = os.environ.get('ATADOS_DEBUG', False)
 TEMPLATE_DEBUG = DEBUG
 
@@ -133,7 +135,7 @@ TEMPLATE_DIRS = (
     # "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -200,13 +202,25 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-LOGIN_REDIRECT_URL = "/"
-
 HTTPS_SUPPORT = True
 
-ACCOUNT_ACTIVATION_DAYS = 7
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/"
 
-LOGIN_URL = '/sign-in'
+# django-allauth setting
+# ACCOUNT_ADAPTER=
+ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+
+SOCIALACCOUNT_PROVIDERS = \
+    { 'facebook':
+        { 'SCOPE': ['email', 'publish_stream'],
+          'METHOD': 'js_sdk',
+          'LOCALE_FUNC': lambda request: 'pt-BR'
+        }
+    }
+# end django-allauth settings
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -282,10 +296,3 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
-
-SOCIALACCOUNT_PROVIDERS = \
-    { 'facebook':
-        { 'SCOPE': ['email', 'publish_stream'],
-            'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
-            'METHOD': 'oauth2' ,
-            'LOCALE_FUNC': 'path.to.callable'} }
