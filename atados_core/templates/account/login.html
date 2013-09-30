@@ -1,31 +1,19 @@
-{% extends "atados_core/base.html" %}
-{% load i18n bootstrap_toolkit socialaccount %}
-{% load %}
-
-{% block title %}{% trans "Sign in" %}{% endblock %}
-
-{% block breadcrumb %}
-<li class="active">{% trans "Sign in" %}</li>
-{% endblock %}
+{% load i18n socialaccount %}
+{% providers_media_js %}
 
 {% block content %}
-<div id="sign-in" style="text-align:center">
-  <a href="{% provider_login_url "facebook" method="js_sdk" %}" class="btn btn-facebook"><i class="icon-facebook"></i> | {% trans "Log in with Facebook" %}</a>
-  <div class="hr"><div><span>{% trans "or" %}</span></div></div>
+  <div class="modal-content centered">
+    <div class="modal-body">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-  <form class="well" method="post" action="{% url "account_login" %}">
-    {% csrf_token %}
-    {{ form|as_bootstrap }}
-    <button type="submit" tabindex="6" class="btn btn-primary">{% trans "Sign in" %}</button>
-   <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-
-
-  <form class="well" method="get" action="{% url "account_signup" %}">
-    <h2>{% trans "Not registered yet?" %}</h2>
-    <button type="submit" tabindex="6" class="btn btn-primary btn-block">{% trans "Sign up" %}</button>
-    <input type="hidden" name="next" value="{{ next }}" />
-  </form>
-
-</div>
+      <form id="foginForm" method="post" action="{% url "account_login" %}">
+        {% csrf_token %}
+        <a href="{% provider_login_url "facebook" method="js_sdk" %}" class="btn btn-facebook"><i class="icon-facebook"></i> | {% trans "Log in with Facebook" %}</a>
+        <div class="hr"><div><span>{% trans "or" %}</span></div></div>
+        {{ form }}
+        <a class="btn" href="{% url "account_reset_password" %}">{% trans "Forgot Password?" %}</a>                                                                                                                                               
+        <button type="submit" tabindex="6" class="btn btn-primary">{% trans "Sign in" %}</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

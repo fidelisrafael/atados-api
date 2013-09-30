@@ -1,24 +1,23 @@
-{% extends 'atados_core/basic.html' %}
+{% extends "atados_core/basic.html" %}
 {% load i18n %}
 
 {% block title %}{% trans "Sorry, but something's wrong" %}{% endblock %}
 {% block robots %}noindex,nofollow{% endblock %}
 
 {% block content %}
-<div class="page-header">
-  <h1>{% trans "Sorry, but something's wrong" %}</h1>
-</div>
+  <div class="page-header">
+    <h1>{% trans "Sorry, but something's wrong" %}</h1>
+  </div>
 
-<p class="block-message">
-{% trans "It look as though we've broken something on our system. Our team will get to it as soon as they can. So again, we are sorry :(" %}
-</p>
+  <p class="block-message">
+    {% trans "It look as though we've broken something on our system. Our team will get to it as soon as they can. So again, we are sorry :(" %}
+  </p>
 
-<div class="well">
-<form action="{% url "atados:search" %}" method="get" style="margin-bottom:0">
-  <label>{% trans "Feel free to find projects, nonprofits and volunteers:" %}</label>
-  <input type="text" class="search-query input-append" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Search" %}" />
-  <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
-</form>
-</div>
-
+  <div class="well">
+    <form action="{% url "atados:search" %}" method="get" style="margin-bottom:0">
+      <label>{% trans "Feel free to find projects, nonprofits and volunteers:" %}</label>
+      <input type="text" class="search-query input-append" name="q" value="{{ form.q.value|default_if_none:"" }}" placeholder="{% trans "Search" %}" />
+      <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+    </form>
+  </div>
 {% endblock %}

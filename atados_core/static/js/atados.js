@@ -1,10 +1,5 @@
 ( function ( w , $ , undefined ) {
 
-  $('html').removeClass('no-js').addClass('js');
-
-  // Alert panels will disppear after a while.
-  $('.alert').fadeOut(5000);
-
   function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -26,6 +21,7 @@
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
   }
+
   $.ajaxSetup({
     crossDomain: false, // obviates need for sameOrigin test
     beforeSend: function(xhr, settings) {
@@ -34,6 +30,11 @@
       }
     }
   });
+
+  $('html').removeClass('no-js').addClass('js');
+
+  // Alert panels will disppear after a while.
+  $('.alert').fadeOut(3000);
 
   $('.select-button-list li a').click(function(){
     li = $(this).parent('li');
@@ -65,28 +66,32 @@
     var suburb = city.closest('.location-fields').find('select[name="suburb"]');
     city.closest('.city-field').hide().find('option').remove();
     suburb.closest('.suburb-field').hide().find('option').remove();
-    if (state.val()) $.get('/city/' + state.val(), function(data) {
-      if (data.length > 1) {
-        $.each(data, function() {
-          city.append('<option value="' + this.id + '">' + this.name + '</option>')
-        });
-        city.closest('.city-field').show();
-      }
-    });
+    if (state.val()) {
+      $.get('/city/' + state.val(), function(data) {
+        if (data.length > 1) {
+          $.each(data, function() {
+            city.append('<option value="' + this.id + '">' + this.name + '</option>')
+          });
+          city.closest('.city-field').show();
+        }
+      });
+    }
   });
 
   $('select[name="city"]').change(function(){
     var city = $(this)
     var suburb = city.closest('.location-fields').find('select[name="suburb"]');
     suburb.closest('.suburb-field').hide().find('option').remove();
-    if (city.val()) $.get('/suburb/' + city.val(), function(data) {
-      if (data.length > 1) {
-        $.each(data, function() {
-          suburb.append('<option value="' + this.id + '">' + this.name + '</option>')
-        });
-        suburb.closest('.suburb-field').show();
-      }
-    });
+    if (city.val()) {
+      $.get('/suburb/' + city.val(), function(data) {
+        if (data.length > 1) {
+          $.each(data, function() {
+            suburb.append('<option value="' + this.id + '">' + this.name + '</option>')
+          });
+          suburb.closest('.suburb-field').show();
+        }
+      });
+    }
   });
 
   $('.roles .add').click(function() {
@@ -98,7 +103,7 @@
     if (total_forms++ > max_num_forms) return;
 
     $('[name="role_set-TOTAL_FORMS"]', roles).val(total_forms);
-    
+
     $('input, textarea', clone).each(function(index, element) {
       $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
       $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
@@ -119,7 +124,7 @@
     if (total_forms++ > max_num_forms) return;
 
     $('[name="material_set-TOTAL_FORMS"]', materials).val(total_forms);
-    
+
     $('input, textarea', clone).each(function(index, element) {
       $(element).attr('id', $(element).attr('id').replace('__prefix__', String(total_forms - 1)));
       $(element).attr('name', $(element).attr('name').replace('__prefix__', String(total_forms - 1)));
@@ -148,26 +153,26 @@
 
     $('.project-list.infinite').infinitescroll({
       state: {
-        currPage: 0,
-      },
+               currPage: 0,
+             },
       path: function(page) {
-        if ($('#filter-project').is(":visible")) {
-          var path = '/api/v1/project';
-          var forms = $('#filter-project :input[value][value!=""]');
-        } else {
-          var path = '/api/v1/nonprofit';
-          var forms = $('#filter-nonprofit :input[value][value!=""]');
-        }
+              if ($('#filter-project').is(":visible")) {
+                var path = '/api/v1/project';
+                var forms = $('#filter-project :input[value][value!=""]');
+              } else {
+                var path = '/api/v1/nonprofit';
+                var forms = $('#filter-nonprofit :input[value][value!=""]');
+              }
 
-        path += '?page=' + page;
+              path += '?page=' + page;
 
-        forms.each(function() {
-          var query = $(this).serialize();
-          if (query) path += '&' + query;
-        });
+              forms.each(function() {
+                var query = $(this).serialize();
+                if (query) path += '&' + query;
+              });
 
-        return path;
-      }
+              return path;
+            }
     });
     $('.project-list.infinite').infinitescroll('resume');
     $('.project-list.infinite').scroll();
@@ -177,12 +182,12 @@
 
   $('.project-list.infinite').infinitescroll({
     loading: {
-      msg: $('<span>...</span>'),
-      selector: '.infinite-preloader',
-    },
+               msg: $('<span>...</span>'),
+    selector: '.infinite-preloader',
+             },
     path: function(page) {
-      return '/api/v1/project?page=' + page;
-    },
+            return '/api/v1/project?page=' + page;
+          },
     dataType: 'json',
     appendCallback: false,
   }, function(json, opts) {
@@ -200,7 +205,7 @@
     if (json.length > 0) {
 
       var row;
-        
+
       for (var key in json) {
         project = json[key];
         if (key % 3 == 0) {
@@ -210,25 +215,25 @@
         }
 
         var item = $(
-          '<div class="span3 project-item">' + 
+            '<div class="span3 project-item">' + 
             '<a href="' + project.url + '">' + 
-              '<img alt="' + project.name + '"  src="' + project.image.url + '" width="' + project.image.width + '" height="' + project.image.height + '">' +
+            '<img alt="' + project.name + '"  src="' + project.image.url + '" width="' + project.image.width + '" height="' + project.image.height + '">' +
             '</a>' +
             '<a class="well-title" href="' + project.url + '">' + project.name + '</a>' +
-          '</div>');
+            '</div>');
 
         if (project.details)
           item.append('<p class="description">' + project.details + '</p>');
 
         if (project.nonprofit) {
           item.append(
-            '<div class="nonprofit">' +
+              '<div class="nonprofit">' +
               '<a href="' + project.nonprofit.url + '" class="picture">' + 
-                '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image.url + '" width="' + project.nonprofit.image.width + '" height="' + project.nonprofit.image.height + '">' +
+              '<img alt="' + project.nonprofit.name + '" src="' + project.nonprofit.image.url + '" width="' + project.nonprofit.image.width + '" height="' + project.nonprofit.image.height + '">' +
               '</a>' +
               '<a href="' + project.nonprofit.url + '" class="name">' + project.nonprofit.name + '</a>' +
               '<div class="volunteers"><i class="icon icon-volunteer"></i> <span>' + project.volunteers + '</span></div>' +
-            '</div>');
+              '</div>');
         }
 
         row.append(item);
@@ -244,4 +249,19 @@
     $('.project-list.infinite').removeClass('empty');
   });
 
+  $(".logout").click( function(ev) { 
+    ev.preventDefault(); // prevent navigation
+    $("#logoutModal").load("logout/", function() {
+      $(this).modal('show');
+    });
+    return false;
+  });
+
+  $(".login").click( function(e) {
+    e.preventDefault(); // prevent navigation
+    $("#loginModal").load("login/", function() { 
+      $(this).modal('show');
+    });
+    return false;
+  });
 }( window , window.jQuery ));

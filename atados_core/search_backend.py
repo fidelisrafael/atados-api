@@ -1,7 +1,7 @@
 from haystack.backends.solr_backend import SolrSearchBackend, SolrSearchQuery
 from haystack.backends import BaseEngine, log_query
 
-# TODO(mpomarole): Replace Solr backend to ElasticSearch
+ # TODO(mpomarole): Replace Solr backend to ElasticSearch
 
 class SearchBackend(SolrSearchBackend):
 

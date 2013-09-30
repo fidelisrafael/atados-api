@@ -97,19 +97,19 @@ SECRET_KEY = '#7j@g*f*nufizr04s!f8_3+h&amp;1x!l04!q@0u@28ppkl)5kuy2^'
 
 # List of callables that know how to import templates from various sources.
 if DEBUG:
-    TEMPLATE_LOADERS = (
+  TEMPLATE_LOADERS = (
+      'django.template.loaders.filesystem.Loader',
+      'django.template.loaders.app_directories.Loader',
+      # 'django.template.loaders.eggs.Loader',
+    )
+else:
+  TEMPLATE_LOADERS = (
+      ('django.template.loaders.cached.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
         # 'django.template.loaders.eggs.Loader',
-    )
-else:
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-            # 'django.template.loaders.eggs.Loader',
-        )),
-    )
+      )),
+  )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
@@ -204,7 +204,7 @@ AUTHENTICATION_BACKENDS = (
 
 HTTPS_SUPPORT = True
 
-LOGIN_URL = "/login"
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 
 # django-allauth setting

@@ -10,7 +10,6 @@ urlpatterns = patterns(
     '',
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url('', include('allauth.urls')),
     url('', include('atados_core.urls', namespace='atados')),
     url('', include('atados_nonprofit.urls', namespace='nonprofit')),
     url('', include('atados_volunteer.urls', namespace='volunteer')),
@@ -18,6 +17,7 @@ urlpatterns = patterns(
     url('', include('atados_project.urls', namespace='project')),
     url(r'^api/v1/', include('atados_apiv1.urls', namespace='apiv1')),
     url(_(r'^(?P<slug>[-\w]+)$'), slug, name='slug'),
+    url(r'', include('allauth.urls')),
 )
 
 handler500 = "atados_core.views.server_error"

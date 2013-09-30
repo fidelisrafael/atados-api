@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-29 15:00-0300\n"
+"POT-Creation-Date: 2013-10-01 11:17-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,11 +117,11 @@ msgstr "Causas"
 msgid "Skills"
 msgstr "Habilidades"
 
-#: templates/atados_volunteer/details.html:67
+#: templates/atados_volunteer/details.html:73
 msgid "Recent activities"
 msgstr "Atividades recentes"
 
-#: templates/atados_volunteer/details.html:75
+#: templates/atados_volunteer/details.html:81
 msgid "No activity yet."
 msgstr "Nenhuma atividade."
 

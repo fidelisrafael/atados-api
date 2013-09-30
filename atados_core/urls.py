@@ -10,8 +10,6 @@ urlpatterns = patterns(
 
     url(r'^$', HomeView.as_view(), name='home'),
 
-    url(r'^$', include('allauth.urls')),
-
     url(_(r'^search$'), SearchView.as_view(), name='search'),
 
     url(_(r'^more-cities-soon$'), TemplateView.as_view(
