@@ -156,6 +156,7 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'south',
     'sorl.thumbnail',
+    'rest_framework',
     'haystack',
     'django_nose',
     'allauth',
