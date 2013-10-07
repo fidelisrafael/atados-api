@@ -27,27 +27,11 @@ rebuild_index:
 
 dump:
 	@python ./manage.py dumpdata core > atados_core/fixtures/initial_data.json
-	@python ./manage.py dumpdata volunteer > atados_volunteer/fixtures/initial_data.json
-	@python ./manage.py dumpdata nonprofit > atados_nonprofit/fixtures/initial_data.json
-	@python ./manage.py dumpdata project > atados_project/fixtures/initial_data.json
 
 makemessages:
 	@cd atados_core; \
-	django-admin.py makemessages --all
-	@cd atados_nonprofit; \
-	django-admin.py makemessages --all
-	@cd atados_project; \
-	django-admin.py makemessages --all
-	@cd atados_volunteer; \
 	django-admin.py makemessages --all
 	
 compilemessages:
 	@cd atados_core; \
 	django-admin.py compilemessages
-	@cd atados_nonprofit; \
-	django-admin.py compilemessages
-	@cd atados_project; \
-	django-admin.py compilemessages
-	@cd atados_volunteer; \
-	django-admin.py compilemessages
-	

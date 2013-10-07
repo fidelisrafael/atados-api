@@ -1,7 +1,6 @@
 from django.views.generic import TemplateView, RedirectView
 from django.shortcuts import get_object_or_404
-from atados_nonprofit.models import Nonprofit
-from atados_project.models import Project
+from atados_core.models import Nonprofit, Project
 from django.contrib.auth.models import User
 
 

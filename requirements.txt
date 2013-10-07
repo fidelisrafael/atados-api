@@ -7,7 +7,6 @@ South==0.8.2
 boto==2.13.3
 coverage==3.6
 coveralls==0.2
-django-allauth==0.13.0
 django-bootstrap-toolkit==2.15.0
 django-flatblocks==0.7.1
 django-grappelli==2.4.6

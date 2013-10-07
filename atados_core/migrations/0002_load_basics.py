@@ -17,7 +17,7 @@ class Migration(DataMigration):
 
         site = Site.objects.get(pk=1)
         site.domain = 'beta.atados.com.br'
-        site.name = 'Atados'
+        site.name = 'Atados - Juntando Gente Boa'
         site.save()
         
         for name in ('Capacitação Profissional',

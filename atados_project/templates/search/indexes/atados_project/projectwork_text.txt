@@ -1,1 +1,0 @@
-{% extends 'search/indexes/project/project_text.txt' %}

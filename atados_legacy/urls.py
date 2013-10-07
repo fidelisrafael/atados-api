@@ -3,9 +3,7 @@ from atados_legacy.views import (LegacyBlogView,
                                  LegacyProjectView,
                                  LegacyNonprofitView)
 
-
-urlpatterns = patterns(
-    '',
+urlpatterns = patterns('',
 
     # Legacy redirects
     url(r'^blog/(?P<path>.*)$', LegacyBlogView.as_view()),

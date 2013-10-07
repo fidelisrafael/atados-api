@@ -6,18 +6,12 @@ from atados_core.views import slug
 
 admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
+urlpatterns = patterns('',
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url('', include('atados_core.urls', namespace='atados')),
-    url('', include('atados_nonprofit.urls', namespace='nonprofit')),
-    url('', include('atados_volunteer.urls', namespace='volunteer')),
-    url('', include('atados_project.urls', namespace='project')),
     url('', include('atados_legacy.urls', namespace='legacy')),
-    url(_(r'^(?P<slug>[-\w]+)$'), slug, name='slug'),
-    url('', include('allauth.urls')),
-    # url(r'api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 )
 
 handler500 = "atados_core.views.server_error"

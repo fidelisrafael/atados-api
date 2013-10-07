@@ -118,8 +118,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'atados_project.middleware.ProjectAwaitingModerationMiddleware',
-    'atados_nonprofit.middleware.NonprofitAwaitingModerationMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -149,9 +147,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'flatblocks',
     'atados_core',
-    'atados_nonprofit',
-    'atados_volunteer',
-    'atados_project',
     'atados_legacy',
     'bootstrap_toolkit',
     'south',
@@ -159,10 +154,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'haystack',
     'django_nose',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.facebook',
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
 )
@@ -197,31 +188,13 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 HTTPS_SUPPORT = True
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
-
-# django-allauth setting
-# ACCOUNT_ADAPTER=
-ACCOUNT_ACTIVATION_DAYS = 7
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
-
-SOCIALACCOUNT_PROVIDERS = \
-    { 'facebook':
-        { 'SCOPE': ['email', 'publish_stream'],
-          'METHOD': 'js_sdk',
-          'LOCALE_FUNC': lambda request: 'pt-BR'
-        }
-    }
-# end django-allauth settings
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -233,10 +206,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "atados_core.context_processors.site",
-    "atados_nonprofit.context_processors.nonprofit",
-    "atados_volunteer.context_processors.volunteer",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
@@ -253,7 +222,6 @@ THUMBNAIL_DEBUG = DEBUG
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
-
 
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
@@ -297,3 +265,11 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+REST_FRAMEWORK = {
+  'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework.authentication.SessionAuthentication',
+  ),
+  'PAGINATE_BY': 10
+}

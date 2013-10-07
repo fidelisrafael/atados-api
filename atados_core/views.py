@@ -1,4 +1,9 @@
+import feedparser
 import os
+
+from atados_core.models import City, Suburb, Cause, Skill, Nonprofit, Project, Recommendation, Volunteer
+from atados_core.permissions import IsOwnerOrReadOnly
+from atados_core.serializers import NonprofitSerializer, VolunteerSerializer, UserSerializer, ProjectSerializer
 from django import http
 from django.contrib.auth.models import User
 from django.core.cache import get_cache
@@ -10,16 +15,51 @@ from django.views.decorators.cache import cache_control, never_cache, cache_page
 from django.views.decorators.csrf import requires_csrf_token
 from django.views.generic import View, TemplateView
 from django.views.generic.base import ContextMixin
-from atados_core.models import City, Suburb, Cause, Skill
-from atados_core.forms import SearchForm, AddressForm
-from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
-from atados_volunteer.forms import RegistrationForm
-from atados_nonprofit.models import Nonprofit
-from atados_project.models import Project, Recommendation
-from haystack.views import FacetedSearchView
 from haystack.query import SearchQuerySet
-import feedparser
+from haystack.views import FacetedSearchView
+from rest_framework import generics, mixins, permissions, renderers, viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
+@api_view(('GET',))
+def api_root(request, format=None):
+  return Response({
+    'users': reverse('user-list', request=request, format=format),
+    'nonprofits': reverse('nonprofit-list', request=request, format=format),
+    'projects': reverse('project-list', request=request, format=format)
+  })
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  This viewset automatically provides `list` and `detail` actions.
+  """
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+
+class NonprofitViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  This viewset automatically provides `list` and `detail` actions.
+  """
+  queryset = Nonprofit.objects.all()
+  serializer_class = NonprofitSerializer
+
+  def pre_save(self, obj):
+    obj.user = self.request.user
+
+class VolunteerViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  This viewset automatically provides `list` and `detail` actions.
+  """
+  queryset = Volunteer.objects.all()
+  serializer_class = VolunteerSerializer
+
+class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
+  """
+  This viewset automatically provides `list` and `detail` actions.
+  """
+  queryset = Project.objects.all()
+  serializer_class = ProjectSerializer
 
 @requires_csrf_token
 def server_error(request, template_name='500.html'):
@@ -46,174 +86,3 @@ def slug(request, *args, **kwargs):
             return NonprofitDetailsView.as_view()(request, *args, **kwargs)
         except Nonprofit.DoesNotExist:
             raise Http404
-
-class JSONResponseMixin(object):
-
-    def render_to_response(self, context):
-        return self.get_json_response(self.convert_context_to_json(context))
-
-    def get_json_response(self, content, **httpresponse_kwargs):
-        return http.HttpResponse(content, content_type='application/json', **httpresponse_kwargs)
-
-    def convert_context_to_json(self, context):
-        return json.dumps(context)
-
-class CityView(JSONResponseMixin, View):
-
-    @cache_control(max_age=3600)
-    def dispatch(self, *args, **kwargs):
-        return super(CityView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        context = [{
-            'id': city.pk,
-            'name': city.name,
-        } for city in City.objects.filter(state=kwargs['state'])]
-        context.insert(0, {'id': '', 'name': ''})
-        return self.render_to_response(context)
-
-class SuburbView(JSONResponseMixin, View):
-
-    @cache_control(max_age=3600)
-    def dispatch(self, *args, **kwargs):
-        return super(SuburbView, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        context = [{
-            'id': suburb.pk,
-            'name': suburb.name,
-        } for suburb in Suburb.objects.filter(city=kwargs['city'])]
-        context.insert(0, {'id': '', 'name': ''})
-        return self.render_to_response(context)
-
-class CauseMixin(object):
-    cause_list = None
-
-    def __init__(self, *args, **kwargs):
-        super(CauseMixin, self).__init__(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(CauseMixin, self).get_context_data(**kwargs)
-        context.update({'cause_list': self.cause_list})
-        return context
-
-class SearchView(FacetedSearchView, View):
-
-    @never_cache
-    def dispatch(self, *args, **kwargs):
-        return super(SearchView, self).dispatch(*args, **kwargs)
-
-    def get(self, *args, **kwargs):
-        return super(SearchView, self).__call__(*args, **kwargs)
-
-    def __init__(self, *args, **kwargs):
-        kwargs['form_class'] = SearchForm
-        kwargs['searchqueryset'] = SearchQuerySet().facet('causes').facet('skills').facet('state').facet('city').facet('suburb').facet('availabilities').filter(published=True)
-        super(FacetedSearchView, self).__init__(*args, **kwargs)
-
-    def get_cause_list(self, context):
-        cause_list = []
-        for cause in Cause.objects.all():
-            if 'fields' in context['facets']:
-                total = dict(context['facets']['fields']['causes']).get(unicode(cause.id), 0)
-            else:
-                total = 0
-            cause_list.append({
-                'id': cause.id,
-                'label': cause.name,
-                'total': total,
-            })
-        return cause_list
-
-    def get_skill_list(self, context):
-        skill_list = []
-        for skill in Skill.objects.all():
-            if 'fields' in context['facets']:
-                total = dict(context['facets']['fields']['skills']).get(unicode(skill.id), 0)
-            else:
-                total = 0
-            skill_list.append({
-                'id': skill.id,
-                'label': skill.name,
-                'total': total,
-            })
-        return skill_list
-
-    def extra_context(self):
-        context = super(SearchView, self).extra_context()
-        context.update({
-            'cause_list': self.get_cause_list(context),
-            'skill_list': self.get_skill_list(context),
-        })
-        return context
-
-class HomeView(SearchView, View):
-    template='atados_core/home.html'
-
-    def build_form(self, form_kwargs=None):
-        data = {u'types': [u'project']}
-        kwargs = {
-            'load_all': self.load_all,
-        }
-        if form_kwargs:
-            kwargs.update(form_kwargs)
-
-        if self.searchqueryset is not None:
-            kwargs['searchqueryset'] = self.searchqueryset
-
-        return self.form_class(data, **kwargs)
-
-    def get_recommendations(self):
-        recommendations = []
-        
-        for recommendation in Recommendation.objects.order_by('-sort'):
-            recommendations.append(recommendation.project)
-
-        rand = 3 - len(recommendations) 
-        if rand > 0:
-            results = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:rand]
-            for result in results:
-                recommendations.append(result.object)
-
-        return recommendations
-
-
-    def extra_context(self):
-        context = super(HomeView, self).extra_context()
-
-        project_address_form = AddressForm(no_state=True)
-        project_address_form.fields['city'].queryset = City.objects.filter(Q(address__work__project__published=True) | Q(address__donation__project__published=True)).distinct().order_by('name')
-        nonprofit_address_form = AddressForm(no_state=True)
-        nonprofit_address_form.fields['city'].queryset = City.objects.filter(address__nonprofit__published=True).distinct().order_by('name')
-
-        context.update({
-            'recommendations': self.get_recommendations(),
-            'project_address_form': project_address_form,
-            'nonprofit_address_form': nonprofit_address_form,
-            'blog_feed': self.get_blog_feed()
-        })
-
-        return context
-
-    def get_blog_feed(self):
-        cache = get_cache('default')
-        blog_feed = cache.get('blog_feed')
-
-        if not blog_feed:
-            blog_feed = feedparser.parse('http://www.atados.com.br/blog/feed/').entries[0:3]
-            if blog_feed:
-                cache.set('blog_feed', blog_feed, 300)
-
-        return blog_feed
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            try:
-                Nonprofit.objects.get(user=request.user)
-                from atados_nonprofit.views import NonprofitHomeView
-                return NonprofitHomeView.as_view()(request, *args, **kwargs)
-            except Nonprofit.DoesNotExist:
-                pass
-                #return VolunteerHomeView.as_view()(request, *args, **kwargs)
-
-        return self.__call__(request, *args, **kwargs)
