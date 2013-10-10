@@ -1,9 +1,9 @@
-from datetime import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
+from datetime import datetime
 from sorl.thumbnail import ImageField
 from time import time
 
@@ -22,7 +22,6 @@ PERIODS = (
         (1, _('Afternoon')),
         (2, _('Evening')),
 )
-
 
 class Availability(models.Model):
     weekday = models.PositiveSmallIntegerField(_('weekday'), choices=WEEKDAYS)
@@ -151,7 +150,8 @@ class Nonprofit(models.Model):
 
 #### Volunteer ### 
 class Volunteer(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='volunteer')
+    # username = user.username == slug
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     skills = models.ManyToManyField(Skill, blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
@@ -174,7 +174,6 @@ class Volunteer(models.Model):
 
     def __unicode__(self):
         return self.user.first_name
-
 
 def create_volunteer(sender, instance, created, **kwargs):  
     if created:  
@@ -296,4 +295,3 @@ class Recommendation(models.Model):
             blank=True, null=True, default=None)
     state = models.ForeignKey(State, blank=True, null=True, default=None)
     city = models.ForeignKey(City, blank=True, null=True, default=None)
-

@@ -16,9 +16,6 @@ run: makemessages compilemessages
 pep8:
 	@pep8 --exclude 'migrations' .
 	
-sass:
-	@sass --style compressed --watch atados_core/sass:atados_core/static/css
-
 test:
 	@coverage run --source=atados ./manage.py test
 

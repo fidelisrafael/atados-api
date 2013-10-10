@@ -1,5 +1,4 @@
-from atados_core.models import (Nonprofit, Volunteer, Project,
-                                Donation, Work, Role, Apply, Recommendation)
+from atados_core.models import Nonprofit, Volunteer, Project
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -8,6 +7,11 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
+#class PasswordSerializer(serializers.Serializer):
+#  class Meta:
+#    model = password
+#    # probably need to decrypt password that clients passes
+#
 class VolunteerSerializer(serializers.ModelSerializer):
   class Meta:
     model = Volunteer
@@ -24,28 +28,3 @@ class ProjectSerializer(serializers.ModelSerializer):
     model = Project
     fields = ('id', 'name', 'nonprofit', 'causes', 'slug', 'details', 'description',
               'responsible', 'phone', 'email', 'published', 'closed', 'deleted', 'deleted_date')
-
-class DonationSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Donation
-    fields = ('id', 'project', 'delivery', 'collection_by_nonprofit')
-
-class WorkSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Work
-    fields = ('id', 'project', 'address', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
-
-class RoleSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Role
-    fields = {'id', 'work', 'name', 'prerequisites', 'vacancies'}
-
-class ApplySerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Apply
-    fields = {'id', 'volunteer', 'project', 'date'}
-
-class RecommendationSerializer(serializers.ModelSerializer):
-  class Meat:
-    model = Recommendation
-    fields = {'project', 'sort', 'state', 'city'}

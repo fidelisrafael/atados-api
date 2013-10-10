@@ -145,17 +145,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.markup',
     'django.contrib.humanize',
-    'flatblocks',
+    'grappelli', # needs to come before django.contrib.admin
+    'django.contrib.admin',
     'atados_core',
-    'atados_legacy',
-    'bootstrap_toolkit',
+    'flatblocks',
     'south',
     'sorl.thumbnail',
     'rest_framework',
     'haystack',
     'django_nose',
-    'grappelli', # needs to come before django.contrib.admin
-    'django.contrib.admin',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -267,9 +265,24 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 REST_FRAMEWORK = {
-  'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework.authentication.BasicAuthentication',
-    'rest_framework.authentication.SessionAuthentication',
-  ),
-  'PAGINATE_BY': 10
-}
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+      'rest_framework.authentication.SessionAuthentication',
+      ],
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS': [
+      'rest_framework.serializers.HyperlinkedModelSerializer',
+      ],
+
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+      'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+      'atados_core.permissions.IsOwnerOrReadOnly',
+      'rest_framework.permissions.IsAuthenticated',
+      ],
+
+    'PAGINATE_BY': 10,
+    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+    'MAX_PAGINATE_BY': 100
+    }

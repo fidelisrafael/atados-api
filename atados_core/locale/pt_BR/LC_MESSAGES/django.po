@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-06 00:11-0300\n"
+"POT-Creation-Date: 2013-10-10 11:02-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,164 +58,146 @@ msgstr "Tarde"
 msgid "Evening"
 msgstr "Noite"
 
-#: models.py:28
+#: models.py:27
 msgid "weekday"
 msgstr "dia da semana"
 
-#: models.py:29
+#: models.py:28
 msgid "period"
 msgstr "período"
 
-#: models.py:32
+#: models.py:31
 #, python-format
 msgid "%(weekday)s at %(period)s"
 msgstr "%(weekday)s -  %(period)s"
 
-#: models.py:35 models.py:41 models.py:47 models.py:57 models.py:67
+#: models.py:34 models.py:40 models.py:46 models.py:56 models.py:66
 msgid "name"
 msgstr "nome"
 
-#: models.py:48
+#: models.py:47
 #, fuzzy
 msgid "code"
 msgstr "CEP"
 
-#: models.py:54
+#: models.py:53
 msgid "state"
 msgstr "estado"
 
-#: models.py:64
+#: models.py:63
 msgid "city"
 msgstr "cidade"
 
-#: models.py:74
+#: models.py:73
 msgid "suburb"
 msgstr "zona"
 
-#: models.py:77
+#: models.py:76
 msgid "Zip code"
 msgstr "CEP"
 
-#: models.py:79
+#: models.py:78
 msgid "Address line"
 msgstr "Logradouro"
 
-#: models.py:81
+#: models.py:80
 msgid "Address number"
 msgstr "Número"
 
-#: models.py:83
+#: models.py:82
 msgid "Neighborhood"
 msgstr "Bairro"
 
-#: models.py:85
+#: models.py:84
 msgid "State"
 msgstr "Estado"
 
-#: models.py:87
+#: models.py:86
 msgid "City"
 msgstr "Cidade"
 
-#: models.py:89
+#: models.py:88
 msgid "Suburb"
 msgstr "Zona"
 
-#: models.py:105
+#: models.py:104
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:107 models.py:204
+#: models.py:106 models.py:203
 msgid "Details"
 msgstr "Detalhes"
 
-#: models.py:109 models.py:205
+#: models.py:108 models.py:204
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:111 models.py:158 models.py:209
+#: models.py:110 models.py:158 models.py:208
 msgid "Phone"
 msgstr "Telefone"
 
-#: models.py:113 models.py:211
+#: models.py:112 models.py:210
 msgid "Published"
 msgstr "Publicado"
 
-#: models.py:114 models.py:213
+#: models.py:113 models.py:212
 msgid "Deleted"
 msgstr "Deletado"
 
-#: models.py:115 models.py:214
+#: models.py:114 models.py:213
 msgid "Deleted date"
 msgstr "Data deletado"
 
-#: models.py:202
+#: models.py:201
 #, fuzzy
 msgid "Project name"
 msgstr "Atos"
 
-#: models.py:207
+#: models.py:206
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:210
+#: models.py:209
 msgid "E-mail"
 msgstr "E-mail"
 
-#: models.py:212
+#: models.py:211
 msgid "Closed"
 msgstr "Fechado"
 
-#: models.py:257
+#: models.py:256
 msgid "Collection made by the nonprofit"
 msgstr "Coleção feita pela ONG"
 
-#: models.py:264
+#: models.py:263
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:267
+#: models.py:266
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:271
+#: models.py:270
 msgid "Material name"
 msgstr "Nomde do material"
 
-#: models.py:273
+#: models.py:272
 msgid "Quantity"
 msgstr "Quantidade"
 
-#: models.py:280
+#: models.py:279
 #, fuzzy
 msgid "Role name"
 msgstr "nome"
 
-#: models.py:282
+#: models.py:281
 msgid "Prerequisites"
 msgstr "Prerequisitos"
 
-#: models.py:284
+#: models.py:283
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:295
+#: models.py:294
 msgid "Sort"
 msgstr "Ordenar"
-
-#~ msgid "Search in"
-#~ msgstr "Buscar em"
-
-#~ msgid "^search$"
-#~ msgstr "^buscar"
-
-#~ msgid "^more-cities-soon$"
-#~ msgstr "^mais-cidades-em-breve$"
-
-#~ msgid "^terms$"
-#~ msgstr "^termos"
-
-#~ msgid "^privacy$"
-#~ msgstr "^privacidade"
-
-#~ msgid "^about$"
-#~ msgstr "^sobre"

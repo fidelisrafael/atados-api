@@ -28,8 +28,7 @@ faz muito bem!
 
     git clone git@github.com:atados/atados.git
     cd atados
-    make install
-    make run
+    make install && make run
 
 ## License
 

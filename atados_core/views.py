@@ -1,88 +1,107 @@
-import feedparser
-import os
-
-from atados_core.models import City, Suburb, Cause, Skill, Nonprofit, Project, Recommendation, Volunteer
-from atados_core.permissions import IsOwnerOrReadOnly
-from atados_core.serializers import NonprofitSerializer, VolunteerSerializer, UserSerializer, ProjectSerializer
-from django import http
 from django.contrib.auth.models import User
-from django.core.cache import get_cache
-from django.db.models import Q
-from django.http import Http404, HttpResponseServerError
-from django.template import RequestContext, TemplateDoesNotExist, loader
-from django.utils import simplejson as json
-from django.views.decorators.cache import cache_control, never_cache, cache_page
-from django.views.decorators.csrf import requires_csrf_token
-from django.views.generic import View, TemplateView
-from django.views.generic.base import ContextMixin
-from haystack.query import SearchQuerySet
-from haystack.views import FacetedSearchView
-from rest_framework import generics, mixins, permissions, renderers, viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
+from atados_core.models import Nonprofit, Volunteer, Project
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer
 
-@api_view(('GET',))
-def api_root(request, format=None):
-  return Response({
-    'users': reverse('user-list', request=request, format=format),
-    'nonprofits': reverse('nonprofit-list', request=request, format=format),
-    'projects': reverse('project-list', request=request, format=format)
-  })
+# Views the API need to provide
+#
+# 1. For unauthenticated/public users to view
+#   - View a list of all open Projects
+#   - View a list of all approved Nonprofits
+#   - View a list of all approved 
+#
+# 2. Authenticated Volunteer
+#   - update his Volunteer Profile
+#   - view all open Projects
+#   - view all Projects he has under his profile
+#   - view all Nonprofits he has associations with 
+#
+# 3. Authenticated Nonprofit
+#   - update Nonprofit Profile
+#     - open projects
+#     - closed projects
+#   - create a Project
+#   - view all open projects by all nonprofits
+#   - view all open projects still on going for the non
+
+@api_view(['GET'])
+def current_user(request, format=None):
+  if request.user.is_authenticated():
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+  else:
+    content = {'error': 'No user logged in.'}
+    return Response(content, status.HTTP_400_BAD_REQUEST)
+
+# ERROR User could already be logged in
+# ERRRO wrong credentials
+# SUCCESS log in user
+@api_view(['GET'])
+def login(request, format=None):
+  if request.user.is_authenticated():
+    return Response({"User already logged in"}, status.HTTP_404_NOT_FOUND)
+  else:
+    # TODO actually login the user
+    if susccess:
+      return Response({"User logged in."}, status.HTTP_HTTP_200_OK)
+    else:
+      return Response({"Wrong credentials, could not login"}, status.HTTP_404_NOT_FOUND)
+
+# ERROR No user logged in 
+# LOGOUT User and expiry session?
+@api_view(['GET'])
+def logout(request, format=None):
+  if not request.user.is_authenticated():
+    return Response({"User already logged out"}, status.HTTP_404_NOT_FOUND)
+  else:
+    # TODO actually log out the user
+    return Response({"User logged out."}, status.HTTP_HTTP_200_OK)
+
+# Class based view alternative
+#class CurrentUserView(APIView):
+#    def get(self, request):
+#        serializer = UserSerializer(request.user)
+#        return Response(serializer.data)
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
-  """
-  This viewset automatically provides `list` and `detail` actions.
-  """
   queryset = User.objects.all()
   serializer_class = UserSerializer
 
-class NonprofitViewSet(viewsets.ReadOnlyModelViewSet):
-  """
-  This viewset automatically provides `list` and `detail` actions.
-  """
+#  @action(permission_classes=[IsAdminOrIsSelf])
+#  def set_password(self, request, pk=None): # TODO should I change this to username instead of 
+#    user = self.get_object()
+#    serializer = PasswordSerializer(data=request.DATA)
+#    if serializer.is_valid():
+#      user.set_password(serializer.data['password'])
+#      user.save()
+#      return Response({'status': 'password set'})
+#    else:
+#      return Response(serializer.errors,
+#                      status=status.HTTP_400_BAD_REQUEST)
+#
+class NonprofitViewSet(viewsets.ModelViewSet):
   queryset = Nonprofit.objects.all()
   serializer_class = NonprofitSerializer
+  # permission_classes = [IsOwnerOrReadOnly]
 
-  def pre_save(self, obj):
-    obj.user = self.request.user
-
-class VolunteerViewSet(viewsets.ReadOnlyModelViewSet):
-  """
-  This viewset automatically provides `list` and `detail` actions.
-  """
+class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
+  # permission_classes = [IsOwnerOrReadOnly]
 
-class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-  """
-  This viewset automatically provides `list` and `detail` actions.
-  """
+  def get_queryset(self):
+    """
+    This view should return a list of all the purchases for the currently authenticated user.
+    """
+    user = self.request.user
+    if (user.is_authenticated()):
+      return Volunteer.objects.filter(user=user)
+    else:
+      return Volunteer.objects.all()
+
+class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()
   serializer_class = ProjectSerializer
-
-@requires_csrf_token
-def server_error(request, template_name='500.html'):
-    try:
-        template = loader.get_template(template_name)
-    except TemplateDoesNotExist:
-        return HttpResponseServerError('<h1>Server Error (500)</h1>')
-    return HttpResponseServerError(template.render(RequestContext(request, {'request_path': request.path})))
-
-def slug(request, *args, **kwargs):
-    try:
-        User.objects.get(username=kwargs['slug'])
-        kwargs.update({
-            'username': kwargs.pop('slug')
-        })
-        return VolunteerDetailsView.as_view()(request, *args, **kwargs)
-    except User.DoesNotExist:
-        try:
-            Nonprofit.objects.get(slug=kwargs['slug'])
-            kwargs.update({
-                'nonprofit': kwargs.pop('slug')
-            })
-            from atados_nonprofit.views import NonprofitDetailsView
-            return NonprofitDetailsView.as_view()(request, *args, **kwargs)
-        except Nonprofit.DoesNotExist:
-            raise Http404
+  # permissions_classes = [IsOwnerOrReadOnly]
