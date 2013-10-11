@@ -8,6 +8,7 @@ boto==2.13.3
 coverage==3.6
 coveralls==0.2
 django-bootstrap-toolkit==2.15.0
+django-cors-headers==0.12
 django-flatblocks==0.7.1
 django-grappelli==2.4.6
 django-haystack==2.1.0

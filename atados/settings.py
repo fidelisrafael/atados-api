@@ -119,6 +119,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -147,11 +148,18 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'atados_core',
+    'corsheaders',
     'flatblocks',
     'south',
     'sorl.thumbnail',
+    'provider',
+    'provider.oauth2',
     'rest_framework',
+    'rest_framework.authtoken',
     'haystack',
     'django_nose',
 )
@@ -187,6 +195,8 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 HTTPS_SUPPORT = True
@@ -204,6 +214,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "atados_core.context_processors.site",
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
@@ -265,24 +277,23 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-      'rest_framework.authentication.SessionAuthentication',
-      ],
-    # Use hyperlinked styles by default.
-    # Only used if the `serializer_class` attribute is not set on a view.
-    'DEFAULT_MODEL_SERIALIZER_CLASS': [
-      'rest_framework.serializers.HyperlinkedModelSerializer',
-      ],
-
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-      'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-      'atados_core.permissions.IsOwnerOrReadOnly',
-      'rest_framework.permissions.IsAuthenticated',
-      ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ),
 
     'PAGINATE_BY': 10,
     'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
     'MAX_PAGINATE_BY': 100
-    }
+}
+
+CORS_ORIGIN_WHITELIST = (
+    'myproject.localhacks.com:9000',
+    'localhost:9000',
+    'localhost:8000',
+    'localhost',
+    # 'atados.com.br'
+)
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True

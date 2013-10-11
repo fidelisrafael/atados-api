@@ -147,11 +147,8 @@ class Nonprofit(models.Model):
     def __unicode__(self):
         return self.name
 
-
-#### Volunteer ### 
 class Volunteer(models.Model):
-    user = models.ForeignKey(User, related_name='volunteer')
-    # username = user.username == slug
+    user = models.ForeignKey(User)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     skills = models.ManyToManyField(Skill, blank=True, null=True)
     address = models.OneToOneField(Address, blank=True, null=True)
@@ -170,7 +167,7 @@ class Volunteer(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('slug', (self.user.username,))
+        return ('slug', (self.user.username))
 
     def __unicode__(self):
         return self.user.first_name
@@ -180,9 +177,6 @@ def create_volunteer(sender, instance, created, **kwargs):
        profile, created = Volunteer.objects.get_or_create(user=instance)
 
 post_save.connect(create_volunteer, sender=User)
-
-
-### Project ###
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True
