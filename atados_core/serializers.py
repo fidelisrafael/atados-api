@@ -6,18 +6,22 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = User
     fields = ( 'email', 'username', 'first_name', 'last_name')
+    lookup_field = 'username'
 
 class VolunteerSerializer(serializers.HyperlinkedModelSerializer):
   user = UserSerializer(many=False)
+  username = serializers.Field(source='user.username')
 
   class Meta:
     model = Volunteer
-    fields = ('user', 'causes', 'skills', 'address', 'phone')
+    lookup_field = 'username'
+    fields = ('url', 'username', 'user', 'causes', 'skills', 'address', 'phone')
 
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Nonprofit
     fields = ('slug', 'causes', 'details', 'description',  'phone', 'address')
+    lookup_field = 'slug'
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -33,7 +37,7 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
 class CauseSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Cause
-    fields = ('name')
+    fields = ('name', 'url')
 
 class SkillSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:

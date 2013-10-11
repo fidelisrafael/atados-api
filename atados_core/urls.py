@@ -20,8 +20,12 @@ router.register(r'availabilities', views.AvailabilityViewSet)
 
 urlpatterns = patterns('atados_core.views',
     url(r'^current-user/', 'current_user'),
+    url(r'^check-username/', 'check_username'),
+    url(r'^check-email/', 'check_email'),
     url(r'^logout/', 'logout'),
+    url(r'^login/', 'login'),
     url(r'^v1/', include(router.urls)),
+    url(r'^accounts/', include('allauth.urls')),
 )
 
 urlpatterns += patterns('',
