@@ -63,11 +63,11 @@ def check_email(request, format=None):
 @api_view(['POST'])
 def logout(request, format=None):
   if not request.user.is_authenticated():
-    return Response({"User already logged out"}, status.HTTP_404_NOT_FOUND)
+    return Response({'detail': 'User already logged out.'}, status.HTTP_404_NOT_FOUND)
   else:
     token = AccessToken.objects.get(token=request.auth)
     token.delete()
-    return Response({"User logged out."}, status.HTTP_200_OK)
+    return Response({'detail': 'User logged out.'}, status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def create_volunteer(request, format=None):

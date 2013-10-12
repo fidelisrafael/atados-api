@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-12 04:10-0300\n"
+"POT-Creation-Date: 2013-10-12 15:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -124,80 +124,80 @@ msgstr "Zona"
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:106 models.py:191
+#: models.py:106 models.py:195
 msgid "Details"
 msgstr "Detalhes"
 
-#: models.py:108 models.py:192
+#: models.py:108 models.py:196
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:110 models.py:155 models.py:196
+#: models.py:110 models.py:155 models.py:200
 msgid "Phone"
 msgstr "Telefone"
 
-#: models.py:112 models.py:198
+#: models.py:112 models.py:202
 msgid "Published"
 msgstr "Publicado"
 
-#: models.py:113 models.py:200
+#: models.py:113 models.py:204
 msgid "Deleted"
 msgstr "Deletado"
 
-#: models.py:114 models.py:201
+#: models.py:114 models.py:205
 msgid "Deleted date"
 msgstr "Data deletado"
 
-#: models.py:189
+#: models.py:193
 #, fuzzy
 msgid "Project name"
 msgstr "Atos"
 
-#: models.py:194
+#: models.py:198
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:197
+#: models.py:201
 msgid "E-mail"
 msgstr "E-mail"
 
-#: models.py:199
+#: models.py:203
 msgid "Closed"
 msgstr "Fechado"
 
-#: models.py:244
+#: models.py:248
 msgid "Collection made by the nonprofit"
 msgstr "Coleção feita pela ONG"
 
-#: models.py:251
+#: models.py:255
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:254
+#: models.py:258
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:258
+#: models.py:262
 msgid "Material name"
 msgstr "Nomde do material"
 
-#: models.py:260
+#: models.py:264
 msgid "Quantity"
 msgstr "Quantidade"
 
-#: models.py:267
+#: models.py:271
 #, fuzzy
 msgid "Role name"
 msgstr "nome"
 
-#: models.py:269
+#: models.py:273
 msgid "Prerequisites"
 msgstr "Prerequisitos"
 
-#: models.py:271
+#: models.py:275
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:282
+#: models.py:286
 msgid "Sort"
 msgstr "Ordenar"

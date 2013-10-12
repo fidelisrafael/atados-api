@@ -19,15 +19,15 @@ router.register(r'suburbs', views.SuburbViewSet)
 router.register(r'availabilities', views.AvailabilityViewSet)
 
 urlpatterns = patterns('atados_core.views',
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
-    url(r'^v1/current-user/', 'current_user'),
-    url(r'^v1/check-username/', 'check_username'),
-    url(r'^v1/check-email/', 'check_email'),
+    url(r'^v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+    url(r'^v1/current_user/', 'current_user'),
+    url(r'^v1/check_username/', 'check_username'),
+    url(r'^v1/check_email/', 'check_email'),
     url(r'^v1/logout/', 'logout'),
     url(r'^v1/create/volunteer/', 'create_volunteer'),
 )
 
 urlpatterns += patterns('',
-    url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^v1/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^v1/', include(router.urls)),
 )

@@ -70,7 +70,7 @@ class Migration(SchemaMigration):
         # Adding model 'Nonprofit'
         db.create_table(u'atados_core_nonprofit', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='nonprofit_created_by', to=orm['auth.User'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50)),
             ('details', self.gf('django.db.models.fields.TextField')(default=None, max_length=1024, null=True, blank=True)),
@@ -359,7 +359,7 @@ class Migration(SchemaMigration):
             'phone': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'nonprofit_created_by'", 'to': u"orm['auth.User']"})
         },
         u'atados_core.project': {
             'Meta': {'object_name': 'Project'},
