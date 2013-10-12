@@ -8,8 +8,7 @@ DEBUG = os.environ.get('ATADOS_DEBUG', False)
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    '*',
-    #'.atados.com.br',
+  'atados.com.br',
 )
 
 ADMINS = (
@@ -114,6 +113,7 @@ else:
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -147,9 +147,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'atados_core',
     'corsheaders',
     'flatblocks',
@@ -158,7 +155,6 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'rest_framework',
-    'rest_framework.authtoken',
     'haystack',
     'django_nose',
 )
@@ -194,8 +190,6 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
 HTTPS_SUPPORT = True
@@ -213,8 +207,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "atados_core.context_processors.site",
-    "allauth.account.context_processors.account",
-    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
@@ -277,8 +269,7 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication'
+      'rest_framework.authentication.OAuth2Authentication',
     ),
 
     'PAGINATE_BY': 10,
@@ -287,16 +278,11 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'myproject.localhacks.com:9000',
-    'localhost:9000',
-    'localhost:8000',
-    'localhost',
-    # 'atados.com.br'
+    'atados.com.br'
 )
-CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_DOMAIN = "myproject.localhacks.com:9000"
-SESSION_COOKIE_DOMAIN = "myproject.localhacks.com:9000"
-
+CSRF_COOKIE_DOMAIN = ".atados.com.br"
+SESSION_COOKIE_DOMAIN = ".atados.com.br"

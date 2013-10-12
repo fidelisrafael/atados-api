@@ -165,18 +165,16 @@ class Volunteer(models.Model):
     image = ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
+    @classmethod
+    def create(cls, user):
+      return cls(user=user)
+
     @models.permalink
     def get_absolute_url(self):
         return ('slug', (self.user.username))
 
     def __unicode__(self):
-        return self.user.first_name
-
-def create_volunteer(sender, instance, created, **kwargs):  
-    if created:  
-       profile, created = Volunteer.objects.get_or_create(user=instance)
-
-post_save.connect(create_volunteer, sender=User)
+        return self.user.first_name or self.user.username
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True

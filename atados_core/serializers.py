@@ -5,17 +5,18 @@ from rest_framework import serializers
 class UserSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = User
-    fields = ( 'email', 'username', 'first_name', 'last_name')
+    fields = ( 'url', 'email', 'username', 'first_name', 'last_name')
     lookup_field = 'username'
 
 class VolunteerSerializer(serializers.HyperlinkedModelSerializer):
-  user = UserSerializer(many=False)
   username = serializers.Field(source='user.username')
+  email = serializers.Field(source='user.email')
+  first_name = serializers.Field(source='user.first_name')
+  last_name = serializers.Field(source='user.last_name')
 
   class Meta:
     model = Volunteer
-    lookup_field = 'username'
-    fields = ('url', 'username', 'user', 'causes', 'skills', 'address', 'phone')
+    fields = ('url', 'username', 'email', 'first_name', 'last_name', 'causes', 'skills', 'address', 'phone')
 
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -42,7 +43,7 @@ class CauseSerializer(serializers.HyperlinkedModelSerializer):
 class SkillSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Skill
-    fields = ('name')
+    fields = ('name', 'url')
 
 class StateSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:

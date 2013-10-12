@@ -7,7 +7,7 @@ from atados_core.models import Nonprofit, Volunteer, Project, Availability, Caus
 from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
-from allauth.account.forms import LoginForm
+from provider.oauth2.views import AccessToken
 
 # Views the API need to provide
 #
@@ -29,16 +29,6 @@ from allauth.account.forms import LoginForm
 #   - create a Project
 #   - view all open projects by all nonprofits
 #   - view all open projects still on going for the non
-
-@api_view(['POST'])
-def login(request, format=None):
-  form = LoginForm({'login': request.DATA['username'], 'password': request.DATA['password'], 'remember': request.DATA['remember']})
-  form.login(request, None)
-  if form.is_valid():
-    print "is valid!"
-  else:
-    print "isnot"
-  return Response("what", status.HTTP_200_OK)
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -70,31 +60,35 @@ def check_email(request, format=None):
   except User.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
 
-
 @api_view(['POST'])
 def logout(request, format=None):
   if not request.user.is_authenticated():
     return Response({"User already logged out"}, status.HTTP_404_NOT_FOUND)
   else:
-    # TODO actually log out the user
+    token = AccessToken.objects.get(token=request.auth)
+    token.delete()
     return Response({"User logged out."}, status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def create_volunteer(request, format=None):
-   password = request.DATA['username']
-   password = request.DATA['email']
+   username = request.DATA['username']
+   email = request.DATA['email']
    password = request.DATA['password']
    try:
      user = User.objects.get(username=username, email=email)
-   except Person.DoesNotExist:
+   except User.DoesNotExist:
      user = User.objects.create_user(username, email, password)
-     user.save()
-   Volunteer.objects.create_volutneer
+   if Volunteer.objects.filter(user=user):
+     return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
+   volunteer = Volunteer(user=user)
+   volunteer.save()
+   return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_200_OK) 
    # send activation email
 
 @api_view(['PUT'])
 def create_nonprofit(request, format=None):
   pass # TODO
+
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
@@ -110,7 +104,6 @@ class NonprofitViewSet(viewsets.ModelViewSet):
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
-  lookup_field = 'username'
   permission_classes = [IsOwnerOrReadOnly]
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -129,6 +122,7 @@ class SkillViewSet(viewsets.ModelViewSet):
 class AddressViewSet(viewsets.ModelViewSet):
   queryset = Address.objects.all()
   serializer_class = AddressSerializer
+  permission_classes = [IsAdminUser]
 
 class StateViewSet(viewsets.ModelViewSet):
   queryset = State.objects.all()
