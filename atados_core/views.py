@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, action
@@ -84,6 +86,19 @@ def create_volunteer(request, format=None):
    volunteer.save()
    return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_200_OK) 
    # send activation email
+
+@api_view(['POST'])
+def password_reset(request, format=None):
+  email = request.DATA['email']
+  user = User.objects.get(email=email)
+  password = User.objects.make_random_password()
+  user.set_password(password)
+  user.save()
+  message = "Sua nova senha: "
+  message += password
+  message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
+  send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
+  return Response({"Senha foi mandada"}, status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def create_nonprofit(request, format=None):
