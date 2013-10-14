@@ -19,16 +19,18 @@ router.register(r'suburbs', views.SuburbViewSet)
 router.register(r'availabilities', views.AvailabilityViewSet)
 
 urlpatterns = patterns('atados_core.views',
-    url(r'^v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
-    url(r'^v1/current_user/', 'current_user'),
-    url(r'^v1/check_username/', 'check_username'),
-    url(r'^v1/check_email/', 'check_email'),
-    url(r'^v1/password_reset/', 'password_reset'),
-    url(r'^v1/logout/', 'logout'),
-    url(r'^v1/create/volunteer/', 'create_volunteer'),
+  url(r'^v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+  url(r'v1/facebook', 'facebook_auth'),
+  url(r'^v1/current_user/', 'current_user'),
+  url(r'^v1/check_username/', 'check_username'),
+  url(r'^v1/check_email/', 'check_email'),
+  url(r'^v1/password_reset/', 'password_reset'),
+  url(r'^v1/logout/', 'logout'),
+  url(r'^v1/create/volunteer/', 'create_volunteer'),
+  url(r'^v1/create/nonprofit/', 'create_nonprofit'),
 )
 
 urlpatterns += patterns('',
-    url(r'^v1/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^v1/', include(router.urls)),
+  url(r'^v1/', include('rest_framework.urls', namespace='rest_framework')),
+  url(r'^v1/', include(router.urls)),
 )

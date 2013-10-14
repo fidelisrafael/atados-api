@@ -155,6 +155,10 @@ class Volunteer(models.Model):
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True,
                              default=None)
 
+    facebook_uid = models.PositiveIntegerField(blank=True, null=True)
+    facebook_access_token = models.CharField(blank=True, max_length=255)
+    facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
+
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'volunteer/%s/%s/%s.%s' % (self.user.username,

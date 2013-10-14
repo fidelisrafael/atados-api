@@ -9,34 +9,18 @@ from atados_core.models import Nonprofit, Volunteer, Project, Availability, Caus
 from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
-from provider.oauth2.views import AccessToken
+import facepy as facebook
+from provider.oauth2.views import AccessToken, Client
 
-# Views the API need to provide
-#
-# 1. For unauthenticated/public users to view
-#   - View a list of all open Projects
-#   - View a list of all approved Nonprofits
-#   - View a list of all approved 
-#
-# 2. Authenticated Volunteer
-#   - update his Volunteer Profile
-#   - view all open Projects
-#   - view all Projects he has under his profile
-#   - view all Nonprofits he has associations with 
-#
-# 3. Authenticated Nonprofit
-#   - update Nonprofit Profile
-#     - open projects
-#     - closed projects
-#   - create a Project
-#   - view all open projects by all nonprofits
-#   - view all open projects still on going for the non
 
 @api_view(['GET'])
 def current_user(request, format=None):
-  print request.user
   if request.user.is_authenticated():
-    volunteer = Volunteer.objects.get(user=request.user)
+    try:
+      volunteer = Volunteer.objects.get(user=request.user)
+    except:
+     return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
+
     if volunteer:
       return Response(VolunteerSerializer(volunteer).data)
     else:
@@ -63,13 +47,63 @@ def check_email(request, format=None):
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['POST'])
+def facebook_auth(request, format=None):
+  accessToken = request.DATA['accessToken']
+  userID = request.DATA['userID']
+  expiresIn = request.DATA['expiresIn']
+
+  try:
+    graph = facebook.GraphAPI(accessToken)
+    me = graph.get("me")
+  except facebook.FacepyError, e:
+    return Response({"Could not talk to Facebook to log you in."}, status.HTTP_400_BAD_REQUEST)
+
+  volunteer = Volunteer.objects.filter(facebook_uid=userID)
+
+  if volunteer:
+    volunteer = volunteer[0]
+    user = volunteer.user
+  else:
+    user = User.objects.get(email=me['email'])
+
+    try:
+      volunteer = Volunteer.objects.get(user=user)
+    except:
+      user = User.objects.create_user(username=me['username'], email=me['email'])
+      volunteer = Volunteer(user=user)
+
+    if not user.first_name:
+      user.first_name = me['first_name']
+      user.save()
+    if not user.last_name:
+      user.last_name = me['last_name']
+      user.save()
+    
+    # TODO(mpomarole): get photo later
+    volunteer.facebook_uid = userID
+    volunteer.facebook_access_token = accessToken
+    volunteer.facebook_access_tolen_expires = expiresIn
+    volunteer.save()
+
+  if not volunteer: 
+    return Response({"Could not get user through facebook login."}, status.HTTP_404_NOT_FOUND)
+    
+  client = Client.objects.get(id=1)
+  token = AccessToken.objects.create(user=user, client=client)
+  data = {
+    'access_token': token.token,
+    'user': VolunteerSerializer(volunteer).data
+  }
+  return Response(data, status.HTTP_200_OK)
+
+@api_view(['POST'])
 def logout(request, format=None):
   if not request.user.is_authenticated():
-    return Response({'detail': 'User already logged out.'}, status.HTTP_404_NOT_FOUND)
+    return Response({"User not authenticated."}, status.HTTP_404_NOT_FOUND)
   else:
     token = AccessToken.objects.get(token=request.auth)
     token.delete()
-    return Response({'detail': 'User logged out.'}, status.HTTP_200_OK)
+    return Response({"User logged out."}, status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def create_volunteer(request, format=None):

@@ -119,8 +119,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
@@ -145,18 +143,20 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.markup',
     'django.contrib.humanize',
+
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
-    'atados_core',
+
+    'haystack',
+    'rest_framework',
+    'facepy',
     'corsheaders',
-    'flatblocks',
     'south',
     'sorl.thumbnail',
     'provider',
     'provider.oauth2',
-    'rest_framework',
-    'haystack',
-    'django_nose',
+
+    'atados_core',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -283,3 +283,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 CSRF_COOKIE_DOMAIN = ".atados.com.br"
 SESSION_COOKIE_DOMAIN = ".atados.com.br"
+
+FACEBOOK_APP_ID = "307143646092582"
