@@ -154,6 +154,16 @@ class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
   permission_classes = [IsOwnerOrReadOnly]
+  lookup_field = 'username'
+
+  def get_object(self):
+    print self.kwargs
+    queryset = self.get_queryset()
+    for volunteer in queryset:
+      volunteer.username = volunteer.user.username
+      if self.kwargs['username'] == volunteer.user.username:
+        return volunteer
+    return Response({"Could not find volunteer"}, status.HTTP_404_NOT_FOUND)
 
 class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()

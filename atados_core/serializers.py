@@ -13,10 +13,12 @@ class VolunteerSerializer(serializers.HyperlinkedModelSerializer):
   email = serializers.Field(source='user.email')
   first_name = serializers.Field(source='user.first_name')
   last_name = serializers.Field(source='user.last_name')
+  type = serializers.Field(source='type')
 
   class Meta:
     model = Volunteer
-    fields = ('url', 'username', 'email', 'first_name', 'last_name', 'causes', 'skills', 'address', 'phone')
+    lookup_field = 'username'
+    fields = ('url', 'username', 'email', 'first_name', 'last_name', 'causes', 'skills', 'address', 'phone', 'type')
 
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:

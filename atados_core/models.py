@@ -119,6 +119,9 @@ class Nonprofit(models.Model):
         self.deleted_date = datetime.now()
         self.save()
 
+    def type(self):
+      return "NONPROFIT";
+
     def get_description(self):
         return self.description if self.description else Truncator(
                 self.details).chars(100)
@@ -175,7 +178,10 @@ class Volunteer(models.Model):
 
     @models.permalink
     def get_absolute_url(self):
-        return ('slug', (self.user.username))
+      return ('slug', (self.user.username))
+
+    def type(self):
+      return "VOLUNTEER";
 
     def __unicode__(self):
         return self.user.first_name or self.user.username
