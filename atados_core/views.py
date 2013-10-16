@@ -157,7 +157,6 @@ class VolunteerViewSet(viewsets.ModelViewSet):
   lookup_field = 'username'
 
   def get_object(self):
-    print self.kwargs
     queryset = self.get_queryset()
     for volunteer in queryset:
       volunteer.username = volunteer.user.username
