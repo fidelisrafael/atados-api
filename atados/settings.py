@@ -20,12 +20,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('RDS_DB_NAME', 'atados'),
-        'USER': os.environ.get('RDS_USERNAME', 'atados'),
+        'ENGINE': 'django.db.backends.mysql' if 'RDS_HOSTNAME' in os.environ else 'django.db.backends.sqlite3',
+        'NAME': os.environ.get('RDS_DB_NAME', 'atados.sqlite'),
+        'USER': os.environ.get('RDS_USERNAME', ''),
         'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
-        'HOST': os.environ.get('RDS_HOSTNAME', 'localhost'),
-        'PORT': os.environ.get('RDS_PORT', '3306'),
+        'HOST': os.environ.get('RDS_HOSTNAME', ''),
+        'PORT': os.environ.get('RDS_PORT', ''),
     }
 }
 
