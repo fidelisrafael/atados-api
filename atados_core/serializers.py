@@ -2,23 +2,11 @@ from atados_core.models import Nonprofit, Volunteer, Project, Availability, Caus
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ( 'url', 'email', 'username', 'first_name', 'last_name')
+    fields = ('email', 'username', 'first_name', 'last_name')
     lookup_field = 'username'
-
-class VolunteerSerializer(serializers.HyperlinkedModelSerializer):
-  username = serializers.Field(source='user.username')
-  email = serializers.Field(source='user.email')
-  first_name = serializers.Field(source='user.first_name')
-  last_name = serializers.Field(source='user.last_name')
-  type = serializers.Field(source='type')
-
-  class Meta:
-    model = Volunteer
-    lookup_field = 'username'
-    fields = ('url', 'username', 'email', 'first_name', 'last_name', 'causes', 'skills', 'address', 'phone', 'type')
 
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -37,15 +25,15 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
     model  = Availability
     fields = ('weekday', 'period')
 
-class CauseSerializer(serializers.HyperlinkedModelSerializer):
+class CauseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Cause
-    fields = ('name', 'url')
+    fields = ['name']
 
-class SkillSerializer(serializers.HyperlinkedModelSerializer):
+class SkillSerializer(serializers.ModelSerializer):
   class Meta:
     model = Skill
-    fields = ('name', 'url')
+    fields = ['name']
 
 class StateSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -97,3 +85,16 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Recommendation
     fields = ('project', 'sort', 'state', 'city')
+
+class VolunteerSerializer(serializers.ModelSerializer):
+  user = UserSerializer()
+  causes = CauseSerializer()
+  skills = SkillSerializer()
+  username = serializers.Field(source='user.username')
+  role = serializers.Field(source='get_role')
+  image_url = serializers.CharField(source='get_image_url')
+
+  class Meta:
+    model = Volunteer
+    lookup_field = 'username'
+    fields = ('user', 'username', 'image_url', 'causes', 'skills', 'phone', 'address', 'role')

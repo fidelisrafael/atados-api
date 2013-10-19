@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
-from sorl.thumbnail import ImageField
+from atados import settings
 from time import time
+from sorl.thumbnail import ImageField
+from sorl.thumbnail import get_thumbnail
 
 WEEKDAYS = (
         (1, _('Monday')),
@@ -130,14 +133,14 @@ class Nonprofit(models.Model):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit/%s/%s.%s' % (time(), self.slug, extension)
 
-    image = ImageField(upload_to=image_name, blank=True,
+    image = models.ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit-cover/%s/%s.%s' % (time(), self.slug, extension)
 
-    cover = ImageField(upload_to=cover_name, blank=True,
+    cover = models.ImageField(upload_to=cover_name, blank=True,
                        null=True, default=None)
 
     def get_volunteers(self):
@@ -151,40 +154,40 @@ class Nonprofit(models.Model):
         return self.name
 
 class Volunteer(models.Model):
-    user = models.ForeignKey(User)
-    causes = models.ManyToManyField(Cause, blank=True, null=True)
-    skills = models.ManyToManyField(Skill, blank=True, null=True)
-    address = models.OneToOneField(Address, blank=True, null=True)
-    phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True,
-                             default=None)
+  user = models.ForeignKey(User)
+  causes = models.ManyToManyField(Cause, blank=True, null=True)
+  skills = models.ManyToManyField(Skill, blank=True, null=True)
+  address = models.OneToOneField(Address, blank=True, null=True)
+  phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True,
+                           default=None)
 
-    facebook_uid = models.PositiveIntegerField(blank=True, null=True)
-    facebook_access_token = models.CharField(blank=True, max_length=255)
-    facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
+  facebook_uid = models.PositiveIntegerField(blank=True, null=True)
+  facebook_access_token = models.CharField(blank=True, max_length=255)
+  facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
 
-    def image_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'volunteer/%s/%s/%s.%s' % (self.user.username,
-                                          time(),
-                                          self.user.username,
-                                          extension)
+  def image_name(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'volunteer/%s/%s.%s' % (self.user.username,
+                                      self.user.username,
+                                      extension)
 
-    image = ImageField(upload_to=image_name, blank=True,
-                       null=True, default=None)
+  image = ImageField(upload_to=image_name, blank=True,
+                     null=True, default=None)
 
-    @classmethod
-    def create(cls, user):
-      return cls(user=user)
+  @classmethod
+  def create(cls, user):
+    return cls(user=user)
 
-    @models.permalink
-    def get_absolute_url(self):
-      return ('slug', (self.user.username))
+  def get_role(self):
+    return "VOLUNTEER"
 
-    def type(self):
-      return "VOLUNTEER";
+  def get_image_url(self):
+    if (self.image):
+      return self.image.url
+    return None
 
-    def __unicode__(self):
-        return self.user.first_name or self.user.username
+  def __unicode__(self):
+    return self.user.first_name or self.user.username
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True
@@ -194,7 +197,6 @@ class ProjectManager(models.Manager):
 
     def published(self):
         return self.active().filter(published=True)
-
 
 class Project(models.Model):
     objects = ProjectManager()
@@ -229,7 +231,7 @@ class Project(models.Model):
         return 'project/%s/%s/%s.%s' % (self.nonprofit.slug,
                                         time(), self.slug, extension)
 
-    image = ImageField(upload_to=image_name, blank=True,
+    image = models.ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
     def __unicode__(self):

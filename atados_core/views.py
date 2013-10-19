@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.http import Http404
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation
@@ -11,7 +12,6 @@ from atados_core.permissions import IsOwnerOrReadOnly
 
 import facepy as facebook
 from provider.oauth2.views import AccessToken, Client
-
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -132,12 +132,20 @@ def password_reset(request, format=None):
   message += password
   message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
   send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
-  return Response({"Senha foi mandada"}, status.HTTP_200_OK)
+  return Response({"Password was sent."}, status.HTTP_200_OK)
 
 @api_view(['PUT'])
 def create_nonprofit(request, format=None):
   pass # TODO
 
+@api_view(['POST'])
+def upload_volunteer_image(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    volunteer.image = request.FILES.get('file')
+    volunteer.save()
+    return Response({"file": volunteer.get_image_url()}, status.HTTP_200_OK)
+  return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
@@ -153,16 +161,17 @@ class NonprofitViewSet(viewsets.ModelViewSet):
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
-  permission_classes = [IsOwnerOrReadOnly]
+  permission_classes = [IsAuthenticatedOrReadOnly]
   lookup_field = 'username'
 
   def get_object(self):
-    queryset = self.get_queryset()
-    for volunteer in queryset:
+    try:
+      volunteer = self.get_queryset().get(user__username=self.kwargs['username'])
       volunteer.username = volunteer.user.username
-      if self.kwargs['username'] == volunteer.user.username:
-        return volunteer
-    return Response({"Could not find volunteer"}, status.HTTP_404_NOT_FOUND)
+      self.check_object_permissions(self.request, volunteer)
+      return volunteer
+    except:
+      raise Http404
 
 class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()

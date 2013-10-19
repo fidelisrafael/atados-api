@@ -26,6 +26,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'^v1/check_email/', 'check_email'),
   url(r'^v1/password_reset/', 'password_reset'),
   url(r'^v1/logout/', 'logout'),
+  url(r'^v1/upload_volunteer_image/', 'upload_volunteer_image'),
   url(r'^v1/create/volunteer/', 'create_volunteer'),
   url(r'^v1/create/nonprofit/', 'create_nonprofit'),
 )

@@ -20,12 +20,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql' if 'RDS_HOSTNAME' in os.environ else 'django.db.backends.sqlite3',
-        'NAME': os.environ.get('RDS_DB_NAME', 'atados.sqlite'),
-        'USER': os.environ.get('RDS_USERNAME', ''),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('RDS_DB_NAME', 'atados'),
+        'USER': os.environ.get('RDS_USERNAME', 'atados'),
         'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
-        'HOST': os.environ.get('RDS_HOSTNAME', ''),
-        'PORT': os.environ.get('RDS_PORT', ''),
+        'HOST': os.environ.get('RDS_HOSTNAME', 'localhost'),
+        'PORT': os.environ.get('RDS_PORT', '3306'),
     }
 }
 
@@ -40,8 +40,8 @@ TIME_ZONE = 'America/Sao_Paulo'
 LANGUAGE_CODE = 'pt-BR'
 
 LANGUAGES = (
-    ('en-US', 'English'),
     ('pt-BR', 'Português'),
+    ('en-US', 'English'),
 )
 
 SITE_ID = 1
@@ -206,20 +206,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "atados_core.context_processors.site",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'no-reply@atados.com.br')
+EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'marjori@atados.com.br')
 EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-THUMBNAIL_DEBUG = DEBUG
-
-# Drupal legacy sucks :/
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-)
 
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
@@ -242,7 +235,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
 
 SOUTH_AUTO_FREEZE_APP = True
@@ -266,11 +258,16 @@ CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-      'rest_framework.authentication.OAuth2Authentication',
+      'rest_framework.authentication.SessionAuthentication',
+      'rest_framework.authentication.OAuth2Authentication'
     ),
-
+    'DEFAULT_PARSER_CLASSES': (
+      'rest_framework.parsers.JSONParser',
+      'rest_framework.parsers.MultiPartParser',
+    ),
     'PAGINATE_BY': 10,
-    'PAGINATE_BY_PARAM': 'page_size',  # Allow client to override, using `?page_size=xxx`.
+    # Allow client to override, using `?page_size=xxx`.
+    'PAGINATE_BY_PARAM': 'page_size',  
     'MAX_PAGINATE_BY': 100
 }
 

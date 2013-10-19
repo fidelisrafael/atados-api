@@ -23,12 +23,12 @@ class NonprofitAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
-admin.site.register(models.Nonprofit, NonprofitAdmin)
+admin.site.register(models.Nonprofit)
 admin.site.register(models.Apply)
 admin.site.register(models.Availability)
 admin.site.register(models.Cause)
 admin.site.register(models.Skill)
-admin.site.register(models.Project, ProjectAdmin)
+admin.site.register(models.Project)
 admin.site.register(models.Donation)
 admin.site.register(models.Work)
 admin.site.register(models.Role)
