@@ -203,7 +203,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "atados_core.context_processors.site",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
@@ -265,7 +264,7 @@ REST_FRAMEWORK = {
       'rest_framework.parsers.JSONParser',
       'rest_framework.parsers.MultiPartParser',
     ),
-    'PAGINATE_BY': 10,
+    'PAGINATE_BY': 20,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',  
     'MAX_PAGINATE_BY': 100

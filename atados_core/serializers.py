@@ -8,18 +8,6 @@ class UserSerializer(serializers.ModelSerializer):
     fields = ('email', 'username', 'first_name', 'last_name')
     lookup_field = 'username'
 
-class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Nonprofit
-    fields = ('slug', 'causes', 'details', 'description',  'phone', 'address')
-    lookup_field = 'slug'
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Project
-    fields = ('name', 'nonprofit', 'causes', 'slug', 'details', 'description',
-              'responsible', 'phone', 'email', 'published', 'closed')
-
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model  = Availability
@@ -28,38 +16,38 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
 class CauseSerializer(serializers.ModelSerializer):
   class Meta:
     model = Cause
-    fields = ['name']
+    fields = ('id', 'name')
 
 class SkillSerializer(serializers.ModelSerializer):
   class Meta:
     model = Skill
-    fields = ['name']
+    fields = ('id', 'name')
 
-class StateSerializer(serializers.HyperlinkedModelSerializer):
+class StateSerializer(serializers.ModelSerializer):
   class Meta:
     model = State
-    fields = ('name', 'code')
+    fields = ('id', 'name', 'code')
 
-class CitySerializer(serializers.HyperlinkedModelSerializer):
+class CitySerializer(serializers.ModelSerializer):
   class Meta:
     model = City
-    fields = ('name', 'state')
+    fields = ('id', 'name', 'state')
 
-class SuburbSerializer(serializers.HyperlinkedModelSerializer):
+class SuburbSerializer(serializers.ModelSerializer):
   class Meta:
     model = Suburb
-    fields = ('name', 'city')
+    fields = ('id', 'name', 'city')
 
-class AddressSerializer(serializers.HyperlinkedModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
   class Meta:
     model = Address
-    fields = ('zipcode', 'addressline', 'addressnumber', 'neighborhood', 'state',
+    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'state',
               'city', 'suburb')
 
-class DonationSerializer(serializers.HyperlinkedModelSerializer):
+class DonationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Donation
-    fields = ('project', 'delivery')
+    fields = ('id', 'project', 'delivery')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -85,6 +73,25 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Recommendation
     fields = ('project', 'sort', 'state', 'city')
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = Project
+    fields = ('name', 'nonprofit', 'causes', 'slug', 'details', 'description',
+              'responsible', 'phone', 'email', 'published', 'closed')
+
+class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
+  user = UserSerializer()
+  causes = CauseSerializer()
+  role = serializers.Field(source='get_role')
+  image_url = serializers.CharField(source='get_image_url', required=False)
+  cover_url = serializers.CharField(source='get_cover_url')
+
+  class Meta:
+    model = Nonprofit
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description',  'phone', 'address', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()

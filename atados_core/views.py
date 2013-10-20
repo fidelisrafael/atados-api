@@ -18,17 +18,15 @@ def current_user(request, format=None):
   if request.user.is_authenticated():
     try:
       volunteer = Volunteer.objects.get(user=request.user)
-    except:
-     return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
-
-    if volunteer:
       return Response(VolunteerSerializer(volunteer).data)
-    else:
-      nonprofit = Nonprofit.objects.get(user=request.user)
-      return Response(NonprofitSerializer(nonprofit).data)
-  else:
-    content = {'detail': 'No user logged in.'}
-    return Response(content, status.HTTP_400_BAD_REQUEST)
+    except:
+      try:
+        nonprofit = Nonprofit.objects.get(user=request.user)
+        return Response(NonprofitSerializer(nonprofit).data)
+      except:
+       return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
+
+  return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def check_username(request, format=None):
@@ -36,6 +34,14 @@ def check_username(request, format=None):
     user = User.objects.get(username=request.QUERY_PARAMS['username'])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except User.DoesNotExist:
+    return Response({"OK."}, status.HTTP_200_OK)
+
+@api_view(['GET'])
+def check_slug(request, format=None):
+  try:
+    nonprofit = Nonprofit.objects.get(slug=request.QUERY_PARAMS['slug'])
+    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+  except Nonprofit.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -105,7 +111,7 @@ def logout(request, format=None):
     token.delete()
     return Response({"User logged out."}, status.HTTP_200_OK)
 
-@api_view(['PUT'])
+@api_view(['POST'])
 def create_volunteer(request, format=None):
    username = request.DATA['username']
    email = request.DATA['email']
@@ -114,12 +120,55 @@ def create_volunteer(request, format=None):
      user = User.objects.get(username=username, email=email)
    except User.DoesNotExist:
      user = User.objects.create_user(username, email, password)
+
    if Volunteer.objects.filter(user=user):
      return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
    volunteer = Volunteer(user=user)
    volunteer.save()
    return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_200_OK) 
-   # send activation email
+   # TODO send activation email
+
+@api_view(['POST'])
+def create_nonprofit(request, format=None):
+   obj = request.DATA
+   username = obj['user']['username']
+   email = obj['user']['email']
+
+   try:
+     user = User.objects.get(username=username, email=email)
+   except User.DoesNotExist:
+     password = obj['user']['password']
+     user = User.objects.create_user(username, email, password)
+     user.first_name = obj['user']['first_name']
+     user.last_name = obj['user']['last_name']
+     user.save()
+
+   if Nonprofit.objects.filter(user=user):
+     return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
+
+   obja = obj['address']
+   address = Address()
+   address.zipcode = obja['zipcode']
+   address.addressline = obja['addressline']
+   address.addressnumber = obja['addressnumber']
+   address.neighborhood = obja['neighborhood']
+   address.state = State.objects.get(id=obja['state']['id'])
+   address.city = City.objects.get(id=obja['city']['id'])
+   address.suburb = Suburb.objects.get(id=obja['suburbs']['id'])
+   address.save()
+
+   nonprofit = Nonprofit(user=user)
+   nonprofit.address = address
+   nonprofit.name = obj['name']
+   nonprofit.details = obj['details']
+   nonprofit.description = obj['description']
+   nonprofit.slug = obj['slug']
+   nonprofit.phone = obj['phone']
+   nonprofit.save()
+
+   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
+   # TODO send activation email
+   # TODO send  email to administradors to accept this Nonprofit and remove it from moderation
 
 @api_view(['POST'])
 def password_reset(request, format=None):
@@ -134,10 +183,6 @@ def password_reset(request, format=None):
   send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
   return Response({"Password was sent."}, status.HTTP_200_OK)
 
-@api_view(['PUT'])
-def create_nonprofit(request, format=None):
-  pass # TODO
-
 @api_view(['POST'])
 def upload_volunteer_image(request, format=None):
   if request.user.is_authenticated():
@@ -150,13 +195,14 @@ def upload_volunteer_image(request, format=None):
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
-  lookup_field = 'username'
   permission_classes = [IsAdminUser]
+  lookup_field = 'username'
 
 class NonprofitViewSet(viewsets.ModelViewSet):
   queryset = Nonprofit.objects.all()
   serializer_class = NonprofitSerializer
   permission_classes = [IsOwnerOrReadOnly]
+  lookup_field = 'slug'
 
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()

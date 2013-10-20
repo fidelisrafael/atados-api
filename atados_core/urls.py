@@ -23,6 +23,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/facebook', 'facebook_auth'),
   url(r'^v1/current_user/', 'current_user'),
   url(r'^v1/check_username/', 'check_username'),
+  url(r'^v1/check_slug/', 'check_slug'),
   url(r'^v1/check_email/', 'check_email'),
   url(r'^v1/password_reset/', 'password_reset'),
   url(r'^v1/logout/', 'logout'),
@@ -32,6 +33,6 @@ urlpatterns = patterns('atados_core.views',
 )
 
 urlpatterns += patterns('',
-  url(r'^v1/', include('rest_framework.urls', namespace='rest_framework')),
+  url(r'^v1/api/', include('rest_framework.urls', namespace='rest_framework')),
   url(r'^v1/', include(router.urls)),
 )

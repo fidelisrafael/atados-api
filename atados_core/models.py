@@ -122,7 +122,7 @@ class Nonprofit(models.Model):
         self.deleted_date = datetime.now()
         self.save()
 
-    def type(self):
+    def get_role(self):
       return "NONPROFIT";
 
     def get_description(self):
@@ -131,24 +131,26 @@ class Nonprofit(models.Model):
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit/%s/%s.%s' % (time(), self.slug, extension)
+        return 'nonprofit/%s.%s' % (self.slug, extension)
 
     image = models.ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
+    def get_image_url(self):
+      return self.image.url if self.image else None
+
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit-cover/%s/%s.%s' % (time(), self.slug, extension)
+        return 'nonprofit-cover/%s.%s' % (time(), self.slug, extension)
 
     cover = models.ImageField(upload_to=cover_name, blank=True,
                        null=True, default=None)
 
+    def get_cover_url(self):
+      return self.cover.url if self.cover else None
+
     def get_volunteers(self):
         return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('slug', (self.slug,))
 
     def __unicode__(self):
         return self.name
@@ -182,9 +184,7 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_image_url(self):
-    if (self.image):
-      return self.image.url
-    return None
+    return self.image.url if self.image else None
 
   def __unicode__(self):
     return self.user.first_name or self.user.username
