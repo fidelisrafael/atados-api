@@ -41,6 +41,7 @@ class SuburbSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
   class Meta:
     model = Address
+    depth = 1
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'state',
               'city', 'suburb')
 
@@ -90,8 +91,9 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
-    depth = 1
-    fields = ('user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description',  'phone', 'address', 'role')
+    depth = 2
+    fields = ('user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
+              'phone', 'facebook_page', 'google_page', 'twitter_handle', 'address', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()

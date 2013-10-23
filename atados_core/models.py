@@ -111,7 +111,12 @@ class Nonprofit(models.Model):
     description = models.TextField(_('Short description'), max_length=100,
                                    blank=True, null=True)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
+    facebook_page = models.URLField(blank=True, null=True, default=None)
+    google_page = models.URLField(blank=True, null=True, default=None)
+    twitter_handle = models.CharField(max_length=50, blank=True, null=True, default=None)
+
     address = models.OneToOneField(Address, blank=True, null=True)
+
     published = models.BooleanField(_("Published"), default=False)
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True,

@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from django.http import Http404
 
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation
@@ -223,31 +223,37 @@ class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()
   serializer_class = ProjectSerializer
   permissions_classes = [IsOwnerOrReadOnly]
+  permission_classes = [AllowAny]
  
 class CauseViewSet(viewsets.ModelViewSet):
   queryset = Cause.objects.all()
   serializer_class = CauseSerializer
+  permission_classes = [AllowAny]
 
 class SkillViewSet(viewsets.ModelViewSet):
   queryset = Skill.objects.all()
   serializer_class = SkillSerializer
+  permission_classes = [AllowAny]
  
 class AddressViewSet(viewsets.ModelViewSet):
   queryset = Address.objects.all()
   serializer_class = AddressSerializer
-  permission_classes = [IsAdminUser]
+  permission_classes = (IsOwnerOrReadOnly, IsAdminUser)
 
 class StateViewSet(viewsets.ModelViewSet):
   queryset = State.objects.all()
   serializer_class = StateSerializer
+  permission_classes = [AllowAny]
 
 class CityViewSet(viewsets.ModelViewSet):
   queryset = City.objects.all()
   serializer_class = CitySerializer
+  permission_classes = [AllowAny]
 
 class SuburbViewSet(viewsets.ModelViewSet):
   queryset = Suburb.objects.all()
   serializer_class = SuburbSerializer
+  permission_classes = [AllowAny]
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
   queryset = Availability.objects.all()
