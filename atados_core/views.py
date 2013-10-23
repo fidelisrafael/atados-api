@@ -150,12 +150,17 @@ def create_nonprofit(request, format=None):
    address = Address()
    address.zipcode = obja['zipcode']
    address.addressline = obja['addressline']
+   address.addressline2 = obja.get('addressline2')
    address.addressnumber = obja['addressnumber']
    address.neighborhood = obja['neighborhood']
    address.state = State.objects.get(id=obja['state']['id'])
    address.city = City.objects.get(id=obja['city']['id'])
    address.suburb = Suburb.objects.get(id=obja['suburbs']['id'])
    address.save()
+
+   FACEBOOK_KEY = 'facebook_page'
+   GOOGLE_KEY = 'google_page'
+   TWITTER_KEY = 'twitter_handle'
 
    nonprofit = Nonprofit(user=user)
    nonprofit.address = address
@@ -164,6 +169,14 @@ def create_nonprofit(request, format=None):
    nonprofit.description = obj['description']
    nonprofit.slug = obj['slug']
    nonprofit.phone = obj['phone']
+
+   if FACEBOOK_KEY in obj:
+     nonprofit.facebook_page = obj[FACEBOOK_KEY]
+   if GOOGLE_KEY in obj:
+     nonprofit.google_page = obj[GOOGLE_KEY]
+   if TWITTER_KEY in obj:
+     nonprofit.twitter_handle = obj[TWITTER_KEY]
+
    nonprofit.save()
 
    return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 

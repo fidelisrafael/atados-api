@@ -78,9 +78,11 @@ class Suburb(models.Model):
 class Address(models.Model):
     zipcode = models.CharField(_('Zip code'), max_length=10,
                                blank=True, null=True, default=None)
-    addressline = models.CharField(_('Address line'), max_length=200,
+    addressline = models.CharField(_('Street'), max_length=200,
                                   blank=True, null=True, default=None)
     addressnumber = models.CharField(_('Address number'), max_length=10,
+                                  blank=True, null=True, default=None)
+    addressline2 = models.CharField(_('Apt, PO Box, block'), max_length=200,
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
@@ -113,7 +115,7 @@ class Nonprofit(models.Model):
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
-    twitter_handle = models.CharField(max_length=50, blank=True, null=True, default=None)
+    twitter_handle = models.CharField(max_length=51, blank=True, null=True, default=None)
 
     address = models.OneToOneField(Address, blank=True, null=True)
 
@@ -123,16 +125,16 @@ class Nonprofit(models.Model):
                                         null=True)
 
     def delete(self, *args, **kwargs):
-        self.deleted = True
-        self.deleted_date = datetime.now()
-        self.save()
+      self.deleted = True
+      self.deleted_date = datetime.now()
+      self.save()
 
     def get_role(self):
       return "NONPROFIT";
 
     def get_description(self):
-        return self.description if self.description else Truncator(
-                self.details).chars(100)
+      return self.description if self.description else Truncator(
+              self.details).chars(100)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
