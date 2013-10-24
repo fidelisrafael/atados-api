@@ -248,17 +248,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()
   serializer_class = ProjectSerializer
   permissions_classes = [IsOwnerOrReadOnly]
-  permission_classes = [AllowAny]
  
 class CauseViewSet(viewsets.ModelViewSet):
   queryset = Cause.objects.all()
   serializer_class = CauseSerializer
   permission_classes = [AllowAny]
+  lookup_field = 'id'
 
 class SkillViewSet(viewsets.ModelViewSet):
   queryset = Skill.objects.all()
   serializer_class = SkillSerializer
   permission_classes = [AllowAny]
+  lookup_field = 'id'
  
 class AddressViewSet(viewsets.ModelViewSet):
   queryset = Address.objects.all()

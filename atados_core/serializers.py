@@ -13,15 +13,17 @@ class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
     model  = Availability
     fields = ('weekday', 'period')
 
-class CauseSerializer(serializers.ModelSerializer):
+class CauseSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Cause
-    fields = ('id', 'name')
+    lookup_field = 'id'
+    fields = ('url', 'name')
 
-class SkillSerializer(serializers.ModelSerializer):
+class SkillSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Skill
-    fields = ('id', 'name')
+    lookup_field = 'id'
+    fields = ('url', 'name')
 
 class StateSerializer(serializers.ModelSerializer):
   class Meta:
@@ -97,11 +99,11 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()
-  causes = CauseSerializer()
-  skills = SkillSerializer()
+  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
+  skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
   username = serializers.Field(source='user.username')
   role = serializers.Field(source='get_role')
-  image_url = serializers.CharField(source='get_image_url')
+  image_url = serializers.CharField(source='get_image_url', required=False)
 
   class Meta:
     model = Volunteer
