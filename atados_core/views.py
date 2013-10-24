@@ -196,6 +196,18 @@ def password_reset(request, format=None):
   send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
   return Response({"Password was sent."}, status.HTTP_200_OK)
 
+@api_view(['PUT'])
+def change_password(request, format=None):
+  email = request.DATA['email']
+  user = User.objects.get(email=email)
+  password = request.DATA['password']
+  if email and password and user:
+    user.set_password(password)
+    user.save()
+    return Response({"Password set successfuly"}, status.HTTP_200_OK)
+  else:
+    return Response({"There was a problem setting your password"}, status.HTTP_403_FORBIDDEN)
+
 @api_view(['POST'])
 def upload_volunteer_image(request, format=None):
   if request.user.is_authenticated():
