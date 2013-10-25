@@ -191,7 +191,7 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_image_url(self):
-    return self.image.url if self.image else None
+    return self.image.url if self.image else 'http://atadosapp.s3.amazonaws.com/volunteer/default.png'
 
   def __unicode__(self):
     return self.user.first_name or self.user.username
