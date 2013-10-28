@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-24 13:41-0200\n"
+"POT-Creation-Date: 2013-10-28 15:01-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -169,40 +169,40 @@ msgstr "E-mail"
 msgid "Closed"
 msgstr "Fechado"
 
-#: models.py:267
+#: models.py:269
 msgid "Collection made by the nonprofit"
 msgstr "Coleção feita pela ONG"
 
-#: models.py:274
+#: models.py:277
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:277
+#: models.py:280
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:281
+#: models.py:292
 msgid "Material name"
 msgstr "Nomde do material"
 
-#: models.py:283
+#: models.py:294
 msgid "Quantity"
 msgstr "Quantidade"
 
-#: models.py:290
+#: models.py:301
 #, fuzzy
 msgid "Role name"
 msgstr "nome"
 
-#: models.py:292
+#: models.py:303
 msgid "Prerequisites"
 msgstr "Prerequisitos"
 
-#: models.py:294
+#: models.py:305
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:305
+#: models.py:318
 msgid "Sort"
 msgstr "Ordenar"
 

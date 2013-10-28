@@ -123,6 +123,8 @@ class Nonprofit(models.Model):
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
                                         null=True)
+    created_date = models.DateTimeField(auto_now_add=True, blank=True)
+    last_modified_date = models.DateTimeField(auto_now=True, blank=True)
 
     def delete(self, *args, **kwargs):
       self.deleted = True
@@ -169,6 +171,9 @@ class Volunteer(models.Model):
   address = models.OneToOneField(Address, blank=True, null=True)
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True,
                            default=None)
+  created_date = models.DateTimeField(auto_now_add=True, blank=True)
+  last_modified_date = models.DateTimeField(auto_now=True, blank=True)
+
 
   facebook_uid = models.PositiveIntegerField(blank=True, null=True)
   facebook_access_token = models.CharField(blank=True, max_length=255)
@@ -205,6 +210,7 @@ class ProjectManager(models.Manager):
     def published(self):
         return self.active().filter(published=True)
 
+
 class Project(models.Model):
     objects = ProjectManager()
     nonprofit = models.ForeignKey(Nonprofit)
@@ -214,6 +220,7 @@ class Project(models.Model):
     details = models.TextField(_('Details'), max_length=1024)
     description = models.TextField(_('Short description'), max_length=75,
                                    blank=True, null=True)
+    facebook_event = models.URLField(blank=True, null=True, default=None)
     responsible = models.CharField(_('Responsible name'), max_length=50,
                                    blank=True, null=True)
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
@@ -223,6 +230,8 @@ class Project(models.Model):
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
                                         null=True)
+    created_date = models.DateTimeField(auto_now_add=True, blank=True)
+    last_modified_date = models.DateTimeField(auto_now=True, blank=True)
 
     def get_description(self):
         return self.description if self.description else Truncator(
@@ -259,13 +268,13 @@ class Project(models.Model):
     def get_project_type(self):
         return self.project_type
 
-
 class Donation(models.Model):
     project = models.OneToOneField(Project)
     delivery = models.OneToOneField(Address)
     collection_by_nonprofit = models.BooleanField(
             _('Collection made by the nonprofit'))
 
+# Ato Recorrente
 class Work(models.Model):
     project = models.OneToOneField(Project)
     address = models.OneToOneField(Address)
@@ -276,6 +285,27 @@ class Work(models.Model):
     can_be_done_remotely = models.BooleanField(
             _('This work can be done remotely.'))
 
+# Ato Pontual
+class Job(models.Model):
+  project = models.OneToOneField(Project)
+  address = models.OneToOneField(Address)
+  skills = models.ManyToManyField(Skill)
+  start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
+  end_date = models.DateTimeField(_("End date"), blank=True, null=True)
+
+# Cargo para um Ato pontual ou recorrente
+class Role(models.Model):
+    name = models.CharField(_('Role name'), max_length=50,
+                            blank=True, null=True, default=None)
+    prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
+                                    blank=True, null=True, default=None)
+    vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
+                                    blank=True, null=True, default=None)
+    start_date = models.DateTimeField(_("Start date"), blank=True, null=True)
+    end_date = models.DateTimeField(_("End date"), blank=True, null=True)
+    work = models.ForeignKey(Work)
+    job = models.ForeignKey(Job)
+
 class Material(models.Model):
     donation = models.ForeignKey(Donation)
     name = models.CharField(_('Material name'), max_length=50,
@@ -285,19 +315,13 @@ class Material(models.Model):
                                                 null=True,
                                                 default=None)
 
-class Role(models.Model):
-    work = models.ForeignKey(Work)
-    name = models.CharField(_('Role name'), max_length=50,
-                            blank=True, null=True, default=None)
-    prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
-                                    blank=True, null=True, default=None)
-    vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
-                                    blank=True, null=True, default=None)
-
 class Apply(models.Model):
-    volunteer = models.ForeignKey(Volunteer)
-    project = models.ForeignKey(Project)
-    date = models.DateTimeField(auto_now_add=True, blank=True)
+  volunteer = models.ForeignKey(Volunteer)
+  project = models.ForeignKey(Project)
+  role = models.ForeignKey(Role)
+  date = models.DateTimeField(auto_now_add=True, blank=True)
+  canceled = models.BooleanField(_("Published"), default=False)
+  canceled_date = models.DateTimeField(_("Canceled date"), blank=True, null=True)
 
 
 class Recommendation(models.Model):
