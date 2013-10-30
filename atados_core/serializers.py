@@ -1,4 +1,4 @@
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation, Job
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -47,25 +47,54 @@ class AddressSerializer(serializers.ModelSerializer):
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'state',
               'city', 'suburb')
 
+class WorkSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    depth = 1
+    model = Work
+    fields = ('address', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+  causes = CauseSerializer()
+  work = WorkSerializer(required=False)
+  # image_url = serializers.CharField(source='get_image_url', required=False)
+
+  class Meta:
+    model = Project
+    lookup_field = 'slug'
+    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
+              'responsible', 'phone', 'email', 'published', 'closed', 'deleted', 'work')
+
 class DonationSerializer(serializers.ModelSerializer):
   class Meta:
     model = Donation
-    fields = ('id', 'project', 'delivery')
+    fields = ('project', 'delivery', 'collection_by_nonprofit')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Donation
-    fields = ('project', 'address', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
+    fields = ('project', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
+    lookup_field = 'project_id'
+
+class RoleSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = Role
+    lookup_field = 'id'
+    fields = ('url', 'name', 'prerequisites', 'vacancies')
+
+class JobSerializer(serializers.HyperlinkedModelSerializer):
+  roles = RoleSerializer()
+
+  class Meta:
+    model = Job
+    depth = 1
+    lookup_field = 'slug'
+    fields = ('project', 'address', 'availabilities', 'skills', 'weekly_hours',
+              'can_be_done_remotely', 'roles', 'start_date', 'end_date')
 
 class MaterialSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Material
     fields = ('donation', 'name', 'quantity')
-
-class RoleSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Role
-    fields = ('work', 'name', 'prerequisited', 'vacancies')
 
 class ApplySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -77,16 +106,10 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
     model = Recommendation
     fields = ('project', 'sort', 'state', 'city')
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Project
-    fields = ('name', 'nonprofit', 'causes', 'slug', 'details', 'description',
-              'responsible', 'phone', 'email', 'published', 'closed')
-
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   user = UserSerializer()
   causes = CauseSerializer()
-  role = serializers.Field(source='get_role')
+  role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url')
 
@@ -102,7 +125,7 @@ class VolunteerSerializer(serializers.ModelSerializer):
   causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
   skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
   username = serializers.Field(source='user.username')
-  role = serializers.Field(source='get_role')
+  role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
 
   class Meta:

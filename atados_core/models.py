@@ -131,7 +131,7 @@ class Nonprofit(models.Model):
       self.deleted_date = datetime.now()
       self.save()
 
-    def get_role(self):
+    def get_type(self):
       return "NONPROFIT";
 
     def get_description(self):
@@ -192,7 +192,7 @@ class Volunteer(models.Model):
   def create(cls, user):
     return cls(user=user)
 
-  def get_role(self):
+  def get_type(self):
     return "VOLUNTEER"
 
   def get_image_url(self):
@@ -227,9 +227,9 @@ class Project(models.Model):
     email = models.EmailField(_('E-mail'), blank=True, null=True)
     published = models.BooleanField(_("Published"), default=False)
     closed = models.BooleanField(_("Closed"), default=False)
+    closed_date = models.DateTimeField(_("Closed date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
-    deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
-                                        null=True)
+    deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True, blank=True)
     last_modified_date = models.DateTimeField(auto_now=True, blank=True)
 
@@ -244,26 +244,16 @@ class Project(models.Model):
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'project/%s/%s/%s.%s' % (self.nonprofit.slug,
-                                        time(), self.slug, extension)
+        return 'project/%s/%s.%s' % (self.nonprofit.slug, self.slug, extension)
 
     image = models.ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
+    def get_image_url(self):
+      return self.image.url if self.image else None
+
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('project:details', (self.nonprofit.slug, self.slug))
-
-    @models.permalink
-    def get_edit_url(self):
-        return ('project:edit', (self.nonprofit.slug, self.slug))
-
-    @models.permalink
-    def get_delete_url(self):
-        return ('project:delete', (self.nonprofit.slug, self.slug))
 
     def get_project_type(self):
         return self.project_type
@@ -274,24 +264,14 @@ class Donation(models.Model):
     collection_by_nonprofit = models.BooleanField(
             _('Collection made by the nonprofit'))
 
-# Ato Recorrente
-class Work(models.Model):
-    project = models.OneToOneField(Project)
-    address = models.OneToOneField(Address)
-    availabilities = models.ManyToManyField(Availability)
-    skills = models.ManyToManyField(Skill)
-    weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
-                                        blank=True, null=True)
-    can_be_done_remotely = models.BooleanField(
-            _('This work can be done remotely.'))
-
-# Ato Pontual
-class Job(models.Model):
-  project = models.OneToOneField(Project)
-  address = models.OneToOneField(Address)
-  skills = models.ManyToManyField(Skill)
-  start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
-  end_date = models.DateTimeField(_("End date"), blank=True, null=True)
+class Material(models.Model):
+    donation = models.ForeignKey(Donation)
+    name = models.CharField(_('Material name'), max_length=50,
+                            blank=True, null=True, default=None)
+    quantity = models.PositiveSmallIntegerField(_('Quantity'),
+                                                blank=True,
+                                                null=True,
+                                                default=None)
 
 # Cargo para um Ato pontual ou recorrente
 class Role(models.Model):
@@ -303,17 +283,28 @@ class Role(models.Model):
                                     blank=True, null=True, default=None)
     start_date = models.DateTimeField(_("Start date"), blank=True, null=True)
     end_date = models.DateTimeField(_("End date"), blank=True, null=True)
-    work = models.ForeignKey(Work)
-    job = models.ForeignKey(Job)
 
-class Material(models.Model):
-    donation = models.ForeignKey(Donation)
-    name = models.CharField(_('Material name'), max_length=50,
-                            blank=True, null=True, default=None)
-    quantity = models.PositiveSmallIntegerField(_('Quantity'),
-                                                blank=True,
-                                                null=True,
-                                                default=None)
+
+# Ato Recorrente
+class Work(models.Model):
+    project = models.OneToOneField(Project)
+    address = models.OneToOneField(Address)
+    availabilities = models.ManyToManyField(Availability)
+    roles = models.ManyToManyField(Role, blank=True, null=True)
+    skills = models.ManyToManyField(Skill)
+    weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
+                                        blank=True, null=True)
+    can_be_done_remotely = models.BooleanField(
+            _('This work can be done remotely.'))
+
+# Ato Pontual
+class Job(models.Model):
+  project = models.OneToOneField(Project)
+  address = models.OneToOneField(Address)
+  skills = models.ManyToManyField(Skill)
+  roles = models.ManyToManyField(Role, blank=True, null=True)
+  start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
+  end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
 class Apply(models.Model):
   volunteer = models.ForeignKey(Volunteer)
@@ -322,7 +313,6 @@ class Apply(models.Model):
   date = models.DateTimeField(auto_now_add=True, blank=True)
   canceled = models.BooleanField(_("Published"), default=False)
   canceled_date = models.DateTimeField(_("Canceled date"), blank=True, null=True)
-
 
 class Recommendation(models.Model):
     project = models.ForeignKey(Project)

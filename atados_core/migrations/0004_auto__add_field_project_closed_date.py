@@ -8,136 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Job'
-        db.create_table(u'atados_core_job', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Project'], unique=True)),
-            ('address', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Address'], unique=True)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Job'])
-
-        # Adding M2M table for field skills on 'Job'
-        m2m_table_name = db.shorten_name(u'atados_core_job_skills')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('job', models.ForeignKey(orm[u'atados_core.job'], null=False)),
-            ('skill', models.ForeignKey(orm[u'atados_core.skill'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['job_id', 'skill_id'])
-
-        # Adding field 'Role.start_date'
-        db.add_column(u'atados_core_role', 'start_date',
-                      self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True),
-                      keep_default=False)
-
-        # Adding field 'Role.end_date'
-        db.add_column(u'atados_core_role', 'end_date',
-                      self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True),
-                      keep_default=False)
-
-        # Adding field 'Role.job'
-        db.add_column(u'atados_core_role', 'job',
-                      self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['atados_core.Job']),
-                      keep_default=False)
-
-        # Adding field 'Nonprofit.created_date'
-        db.add_column(u'atados_core_nonprofit', 'created_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Nonprofit.last_modified_date'
-        db.add_column(u'atados_core_nonprofit', 'last_modified_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Project.facebook_event'
-        db.add_column(u'atados_core_project', 'facebook_event',
-                      self.gf('django.db.models.fields.URLField')(default=None, max_length=200, null=True, blank=True),
-                      keep_default=False)
-
-        # Adding field 'Project.created_date'
-        db.add_column(u'atados_core_project', 'created_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Project.last_modified_date'
-        db.add_column(u'atados_core_project', 'last_modified_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Volunteer.created_date'
-        db.add_column(u'atados_core_volunteer', 'created_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Volunteer.last_modified_date'
-        db.add_column(u'atados_core_volunteer', 'last_modified_date',
-                      self.gf('django.db.models.fields.DateTimeField')(auto_now=True, default=datetime.datetime(2013, 10, 28, 0, 0), blank=True),
-                      keep_default=False)
-
-        # Adding field 'Apply.role'
-        db.add_column(u'atados_core_apply', 'role',
-                      self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['atados_core.Role']),
-                      keep_default=False)
-
-        # Adding field 'Apply.canceled'
-        db.add_column(u'atados_core_apply', 'canceled',
-                      self.gf('django.db.models.fields.BooleanField')(default=False),
-                      keep_default=False)
-
-        # Adding field 'Apply.canceled_date'
-        db.add_column(u'atados_core_apply', 'canceled_date',
+        # Adding field 'Project.closed_date'
+        db.add_column(u'atados_core_project', 'closed_date',
                       self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting model 'Job'
-        db.delete_table(u'atados_core_job')
-
-        # Removing M2M table for field skills on 'Job'
-        db.delete_table(db.shorten_name(u'atados_core_job_skills'))
-
-        # Deleting field 'Role.start_date'
-        db.delete_column(u'atados_core_role', 'start_date')
-
-        # Deleting field 'Role.end_date'
-        db.delete_column(u'atados_core_role', 'end_date')
-
-        # Deleting field 'Role.job'
-        db.delete_column(u'atados_core_role', 'job_id')
-
-        # Deleting field 'Nonprofit.created_date'
-        db.delete_column(u'atados_core_nonprofit', 'created_date')
-
-        # Deleting field 'Nonprofit.last_modified_date'
-        db.delete_column(u'atados_core_nonprofit', 'last_modified_date')
-
-        # Deleting field 'Project.facebook_event'
-        db.delete_column(u'atados_core_project', 'facebook_event')
-
-        # Deleting field 'Project.created_date'
-        db.delete_column(u'atados_core_project', 'created_date')
-
-        # Deleting field 'Project.last_modified_date'
-        db.delete_column(u'atados_core_project', 'last_modified_date')
-
-        # Deleting field 'Volunteer.created_date'
-        db.delete_column(u'atados_core_volunteer', 'created_date')
-
-        # Deleting field 'Volunteer.last_modified_date'
-        db.delete_column(u'atados_core_volunteer', 'last_modified_date')
-
-        # Deleting field 'Apply.role'
-        db.delete_column(u'atados_core_apply', 'role_id')
-
-        # Deleting field 'Apply.canceled'
-        db.delete_column(u'atados_core_apply', 'canceled')
-
-        # Deleting field 'Apply.canceled_date'
-        db.delete_column(u'atados_core_apply', 'canceled_date')
+        # Deleting field 'Project.closed_date'
+        db.delete_column(u'atados_core_project', 'closed_date')
 
 
     models = {
@@ -229,6 +108,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Project'},
             'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Cause']", 'symmetrical': 'False'}),
             'closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'closed_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'deleted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),

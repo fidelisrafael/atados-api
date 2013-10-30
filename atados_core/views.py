@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, I
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
 import facepy as facebook
@@ -248,7 +248,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()
   serializer_class = ProjectSerializer
   permissions_classes = [IsOwnerOrReadOnly]
- 
+  lookup_field = 'slug'
+
+class WorkViewSet(viewsets.ModelViewSet):
+  queryset = Project.objects.all()
+  serializer_class = WorkSerializer
+  permission_classes = [IsOwnerOrReadOnly]
+
 class CauseViewSet(viewsets.ModelViewSet):
   queryset = Cause.objects.all()
   serializer_class = CauseSerializer
