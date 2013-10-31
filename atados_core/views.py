@@ -6,8 +6,8 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
 import facepy as facebook
@@ -37,11 +37,19 @@ def check_username(request, format=None):
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['GET'])
-def check_slug(request, format=None):
+def check_nonprofit_slug(request, format=None):
   try:
     nonprofit = Nonprofit.objects.get(slug=request.QUERY_PARAMS['slug'])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except Nonprofit.DoesNotExist:
+    return Response({"OK."}, status.HTTP_200_OK)
+
+@api_view(['GET'])
+def check_project_slug(request, format=None):
+  try:
+    project = Project.objects.get(slug=request.QUERY_PARAMS['slug'])
+    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+  except Project.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -250,10 +258,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
   permissions_classes = [IsOwnerOrReadOnly]
   lookup_field = 'slug'
 
-class WorkViewSet(viewsets.ModelViewSet):
-  queryset = Project.objects.all()
-  serializer_class = WorkSerializer
-  permission_classes = [IsOwnerOrReadOnly]
+class RoleViewSet(viewsets.ModelViewSet):
+  queryset = Role.objects.all()
+  serializer_class = RoleSerializer
+  permissions_classes = [IsOwnerOrReadOnly]
 
 class CauseViewSet(viewsets.ModelViewSet):
   queryset = Cause.objects.all()

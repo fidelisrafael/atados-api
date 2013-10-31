@@ -49,52 +49,56 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
-    depth = 1
     model = Work
-    fields = ('address', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-  causes = CauseSerializer()
-  work = WorkSerializer(required=False)
-  # image_url = serializers.CharField(source='get_image_url', required=False)
-
-  class Meta:
-    model = Project
-    lookup_field = 'slug'
-    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
-              'responsible', 'phone', 'email', 'published', 'closed', 'deleted', 'work')
-
-class DonationSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Donation
-    fields = ('project', 'delivery', 'collection_by_nonprofit')
-
-class WorkSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Donation
-    fields = ('project', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
-    lookup_field = 'project_id'
-
-class RoleSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Role
-    lookup_field = 'id'
-    fields = ('url', 'name', 'prerequisites', 'vacancies')
-
-class JobSerializer(serializers.HyperlinkedModelSerializer):
-  roles = RoleSerializer()
-
-  class Meta:
-    model = Job
     depth = 1
-    lookup_field = 'slug'
-    fields = ('project', 'address', 'availabilities', 'skills', 'weekly_hours',
-              'can_be_done_remotely', 'roles', 'start_date', 'end_date')
+    fields = ('address', 'availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
 
 class MaterialSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Material
     fields = ('donation', 'name', 'quantity')
+
+class DonationSerializer(serializers.ModelSerializer):
+  materials = MaterialSerializer(required=True)
+  class Meta:
+    model = Donation
+    depth = 1
+    fields = ('delivery', 'collection_by_nonprofit', 'materials')
+
+class RoleSerializer(serializers.HyperlinkedModelSerializer):
+
+  def __init__(self, *args, **kwargs):
+    many = kwargs.pop('many', True)
+    super(RoleSerializer, self).__init__(*args, **kwargs)
+
+  class Meta:
+    model = Role
+    fields = ('url', 'name', 'prerequisites', 'vacancies')
+
+class JobSerializer(serializers.HyperlinkedModelSerializer):
+  roles = serializers.PrimaryKeyRelatedField(many=True, read_only=False)
+  skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
+
+  class Meta:
+    model = Job
+    depth = 1
+    fields = ('address', 'skills','roles', 'start_date', 'end_date')
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
+  nonprofit = serializers.HyperlinkedRelatedField(many=False, view_name='nonprofit-detail', lookup_field='slug')
+  work = WorkSerializer(required=False)
+  job = JobSerializer(required=False)
+  donation = DonationSerializer(required=False)
+  # image_url = serializers.CharField(source='get_image_url', required=False)
+
+  class Meta:
+    model = Project
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
+              'responsible', 'phone', 'email', 'published', 'closed', 'deleted',
+              'job', 'work', 'donation')
 
 class ApplySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -117,7 +121,7 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
     model = Nonprofit
     lookup_field = 'slug'
     depth = 2
-    fields = ('user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
+    fields = ('url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'phone', 'facebook_page', 'google_page', 'twitter_handle', 'address', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
