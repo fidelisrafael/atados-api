@@ -1,14 +1,13 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.signals import post_save
+from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 from atados import settings
 from time import time
-from sorl.thumbnail import ImageField
-from sorl.thumbnail import get_thumbnail
 
 WEEKDAYS = (
         (1, _('Monday')),
@@ -104,15 +103,13 @@ class NonprofitManager(models.Manager):
 
 class Nonprofit(models.Model):
     objects = NonprofitManager()
-    user = models.ForeignKey(User, related_name='nonprofit_created_by')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=50)
-    slug = models.SlugField(max_length=50)
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
     description = models.TextField(_('Short description'), max_length=100,
                                    blank=True, null=True)
-    phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
     twitter_handle = models.CharField(max_length=51, blank=True, null=True, default=None)
@@ -120,11 +117,9 @@ class Nonprofit(models.Model):
     address = models.OneToOneField(Address, blank=True, null=True)
 
     published = models.BooleanField(_("Published"), default=False)
+    published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
-    deleted_date = models.DateTimeField(_("Deleted date"), blank=True,
-                                        null=True)
-    created_date = models.DateTimeField(auto_now_add=True, blank=True)
-    last_modified_date = models.DateTimeField(auto_now=True, blank=True)
+    deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
 
     def delete(self, *args, **kwargs):
       self.deleted = True
@@ -165,15 +160,9 @@ class Nonprofit(models.Model):
         return self.name
 
 class Volunteer(models.Model):
-  user = models.ForeignKey(User)
+  user = models.OneToOneField(settings.AUTH_USER_MODEL)
   causes = models.ManyToManyField(Cause, blank=True, null=True)
   skills = models.ManyToManyField(Skill, blank=True, null=True)
-  address = models.OneToOneField(Address, blank=True, null=True)
-  phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True,
-                           default=None)
-  created_date = models.DateTimeField(auto_now_add=True, blank=True)
-  last_modified_date = models.DateTimeField(auto_now=True, blank=True)
-
 
   facebook_uid = models.PositiveIntegerField(blank=True, null=True)
   facebook_access_token = models.CharField(blank=True, max_length=255)
@@ -181,11 +170,11 @@ class Volunteer(models.Model):
 
   def image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
-    return 'volunteer/%s/%s.%s' % (self.user.username,
-                                      self.user.username,
-                                      extension)
+    return 'volunteer/%s/%s.%s' % (self.user.slug,
+                                   self.user.slug,
+                                   extension)
 
-  image = ImageField(upload_to=image_name, blank=True,
+  image = models.ImageField(upload_to=image_name, blank=True,
                      null=True, default=None)
 
   @classmethod
@@ -199,7 +188,7 @@ class Volunteer(models.Model):
     return self.image.url if self.image else 'http://atadosapp.s3.amazonaws.com/volunteer/default.png'
 
   def __unicode__(self):
-    return self.user.first_name or self.user.username
+    return self.user.first_name or self.user.slug
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True
@@ -216,7 +205,7 @@ class Project(models.Model):
     nonprofit = models.ForeignKey(Nonprofit)
     causes = models.ManyToManyField(Cause)
     name = models.CharField(_('Project name'), max_length=50)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
     details = models.TextField(_('Details'), max_length=1024)
     description = models.TextField(_('Short description'), max_length=75,
                                    blank=True, null=True)
@@ -230,8 +219,8 @@ class Project(models.Model):
     closed_date = models.DateTimeField(_("Closed date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
-    created_date = models.DateTimeField(auto_now_add=True, blank=True)
-    last_modified_date = models.DateTimeField(auto_now=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
 
     def get_description(self):
         return self.description if self.description else Truncator(
@@ -320,3 +309,60 @@ class Recommendation(models.Model):
             blank=True, null=True, default=None)
     state = models.ForeignKey(State, blank=True, null=True, default=None)
     city = models.ForeignKey(City, blank=True, null=True, default=None)
+
+class UserManager(BaseUserManager):
+  # TODO(set slug)
+  def create_user(self, email, password=None, **extra_fields):
+    now = timezone.now()
+    if not email:
+        raise ValueError('The given email address must be set')
+    email = UserManager.normalize_email(email)
+    user = self.model(email=email,
+                      is_staff=False, is_active=True,
+                      last_login=now, joined_date=now, **extra_fields)
+
+    user.set_password(password)
+    user.save()
+    return user
+
+  def create_superuser(self, email, password, **extra_fields):
+    user = self.create_user(email, password, **extra_fields)
+    user.is_staff = True
+    user.is_active = True
+    user.is_superuser = True
+    user.save()
+    return user
+
+class User(AbstractBaseUser):
+  email = models.EmailField(_('email address'), max_length=254, unique=True)
+  first_name = models.CharField(_('first name'), max_length=30, blank=True)
+  last_name = models.CharField(_('last name'), max_length=30, blank=True)
+  slug = models.SlugField(_('Slug'), max_length=50, unique=True)
+
+  is_staff = models.BooleanField(_('Staff'), default=False)
+  is_active = models.BooleanField(_('Active'), default=True)
+  is_email_verified = models.BooleanField(_('Email verified'), default=False)
+
+  joined_date = models.DateTimeField(auto_now_add=True)
+  modified_date = models.DateTimeField(auto_now=True)
+
+  address = models.OneToOneField(Address, blank=True, null=True)
+  phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
+
+  objects = UserManager()
+
+  class Meta:
+    verbose_name = _('user')
+    verbose_name_plural = _('users')
+
+  def get_full_name(self):
+    full_name = '%s %s' % (self.first_name, self.last_name)
+    return full_name.strip()
+
+  def get_short_name():
+    return self.first_name
+
+  def email_user(self, subject, message, from_email=None):
+    send_mail(subject, message, from_email, [self.email])
+
+  USERNAME_FIELD = 'email'

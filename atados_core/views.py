@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import Http404
 
@@ -6,7 +5,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role, User
 from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
@@ -17,31 +16,23 @@ from provider.oauth2.views import AccessToken, Client
 def current_user(request, format=None):
   if request.user.is_authenticated():
     try:
-      volunteer = Volunteer.objects.get(user=request.user)
-      return Response(VolunteerSerializer(volunteer).data)
+      v = VolunteerSerializer(request.user.volunteer)
+      return Response(v.data)
     except:
       try:
-        nonprofit = Nonprofit.objects.get(user=request.user)
-        return Response(NonprofitSerializer(nonprofit).data)
-      except:
-       return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
+        return Response(NonprofitSerializer(request.user.nonprofit).data)
+      except Exception as inst:
+        print inst
+        return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def check_username(request, format=None):
+def check_slug(request, format=None):
   try:
-    user = User.objects.get(username=request.QUERY_PARAMS['username'])
+    user = User.objects.get(slug=request.QUERY_PARAMS['slug'])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except User.DoesNotExist:
-    return Response({"OK."}, status.HTTP_200_OK)
-
-@api_view(['GET'])
-def check_nonprofit_slug(request, format=None):
-  try:
-    nonprofit = Nonprofit.objects.get(slug=request.QUERY_PARAMS['slug'])
-    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
-  except Nonprofit.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -83,7 +74,7 @@ def facebook_auth(request, format=None):
     try:
       volunteer = Volunteer.objects.get(user=user)
     except:
-      user = User.objects.create_user(username=me['username'], email=me['email'])
+      user = User.objects.create_user(slug=me['slug'], email=me['email'])
       volunteer = Volunteer(user=user)
 
     if not user.first_name:
@@ -121,13 +112,13 @@ def logout(request, format=None):
 
 @api_view(['POST'])
 def create_volunteer(request, format=None):
-   username = request.DATA['username']
+   slug = request.DATA['slug']
    email = request.DATA['email']
    password = request.DATA['password']
    try:
-     user = User.objects.get(username=username, email=email)
+     user = User.objects.get(email=email)
    except User.DoesNotExist:
-     user = User.objects.create_user(username, email, password)
+     user = User.objects.create_user(email, password, slug=slug)
 
    if Volunteer.objects.filter(user=user):
      return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
@@ -139,14 +130,14 @@ def create_volunteer(request, format=None):
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
    obj = request.DATA
-   username = obj['user']['username']
+   slug = obj['user']['slug']
    email = obj['user']['email']
 
    try:
-     user = User.objects.get(username=username, email=email)
+     user = User.objects.get(email=email)
    except User.DoesNotExist:
      password = obj['user']['password']
-     user = User.objects.create_user(username, email, password)
+     user = User.objects.create_user(email, password, slug=obj['user']['slug'])
      user.first_name = obj['user']['first_name']
      user.last_name = obj['user']['last_name']
      user.save()
@@ -229,7 +220,7 @@ class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
   permission_classes = [IsAdminUser]
-  lookup_field = 'username'
+  lookup_field = 'slug'
 
 class NonprofitViewSet(viewsets.ModelViewSet):
   queryset = Nonprofit.objects.all()
@@ -241,12 +232,12 @@ class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
   permission_classes = [IsAuthenticatedOrReadOnly]
-  lookup_field = 'username'
+  lookup_field = 'slug'
 
   def get_object(self):
     try:
-      volunteer = self.get_queryset().get(user__username=self.kwargs['username'])
-      volunteer.username = volunteer.user.username
+      volunteer = self.get_queryset().get(user__slug=self.kwargs['slug'])
+      volunteer.slug = volunteer.user.slug
       self.check_object_permissions(self.request, volunteer)
       return volunteer
     except:

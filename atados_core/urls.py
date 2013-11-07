@@ -30,8 +30,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'^v1/create/volunteer/', 'create_volunteer'),
   url(r'^v1/create/nonprofit/', 'create_nonprofit'),
 
-  url(r'^v1/check_username/', 'check_username'),
-  url(r'^v1/check_nonprofit_slug/', 'check_nonprofit_slug'),
+  url(r'^v1/check_slug/', 'check_slug'),
   url(r'^v1/check_project_slug/', 'check_project_slug'),
   url(r'^v1/check_email/', 'check_email'),
 

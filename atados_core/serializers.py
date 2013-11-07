@@ -1,12 +1,13 @@
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Donation, Work, Material, Role, Apply, Recommendation, Job
-from django.contrib.auth.models import User
+from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cause,
+  Skill, State, City, Suburb, Address, Donation, Work, Material, Role,
+  Apply, Recommendation, Job, User)
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ('email', 'username', 'first_name', 'last_name')
-    lookup_field = 'username'
+    lookup_field = 'slug'
+    fields = ('email', 'slug', 'first_name', 'last_name', 'phone', 'address')
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -122,17 +123,17 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
     lookup_field = 'slug'
     depth = 2
     fields = ('url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
-              'phone', 'facebook_page', 'google_page', 'twitter_handle', 'address', 'role')
+              'facebook_page', 'google_page', 'twitter_handle', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()
   causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
   skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
-  username = serializers.Field(source='user.username')
+  slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
 
   class Meta:
     model = Volunteer
-    lookup_field = 'username'
-    fields = ('user', 'username', 'image_url', 'causes', 'skills', 'phone', 'address', 'role')
+    lookup_field = 'slug'
+    fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role')

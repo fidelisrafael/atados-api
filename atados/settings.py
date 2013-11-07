@@ -141,9 +141,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.markup',
     'django.contrib.humanize',
-
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
 
@@ -152,9 +150,9 @@ INSTALLED_APPS = (
     'facepy',
     'corsheaders',
     'south',
-    'sorl.thumbnail',
     'provider',
     'provider.oauth2',
+    'django_nose',
 
     'atados_core',
 )
@@ -191,6 +189,8 @@ LOGGING = {
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
 )
+
+AUTH_USER_MODEL = 'atados_core.User'
 
 HTTPS_SUPPORT = True
 
@@ -281,4 +281,4 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
 SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
 
-FACEBOOK_APP_ID = "307143646092582"
+FACEBOOK_APP_ID = "307143646092582" #TODO: do I need this?

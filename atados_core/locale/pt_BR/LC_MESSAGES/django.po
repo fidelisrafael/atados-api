@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-04 21:24-0200\n"
+"POT-Creation-Date: 2013-11-07 16:03-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,212 +18,255 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: models.py:14
+#: models.py:13
 msgid "Monday"
 msgstr "Segunda"
 
-#: models.py:15
+#: models.py:14
 msgid "Tuesday"
 msgstr "Terça"
 
-#: models.py:16
+#: models.py:15
 msgid "Wednesday"
 msgstr "Quarta"
 
-#: models.py:17
+#: models.py:16
 msgid "Thursday"
 msgstr "Quinta"
 
-#: models.py:18
+#: models.py:17
 msgid "Friday"
 msgstr "Sexta"
 
-#: models.py:19
+#: models.py:18
 msgid "Saturday"
 msgstr "Sábado"
 
-#: models.py:20
+#: models.py:19
 msgid "Sunday"
 msgstr "Domingo"
 
-#: models.py:24
+#: models.py:23
 msgid "Morning"
 msgstr "Manhã"
 
-#: models.py:25
+#: models.py:24
 msgid "Afternoon"
 msgstr "Tarde"
 
-#: models.py:26
+#: models.py:25
 msgid "Evening"
 msgstr "Noite"
 
-#: models.py:30
+#: models.py:29
 msgid "weekday"
 msgstr "dia da semana"
 
-#: models.py:31
+#: models.py:30
 msgid "period"
 msgstr "período"
 
-#: models.py:34
+#: models.py:33
 #, python-format
 msgid "%(weekday)s at %(period)s"
 msgstr "%(weekday)s -  %(period)s"
 
-#: models.py:37 models.py:43 models.py:49 models.py:59 models.py:69
+#: models.py:36 models.py:42 models.py:48 models.py:58 models.py:68
 msgid "name"
 msgstr "nome"
 
-#: models.py:50
+#: models.py:49
 #, fuzzy
 msgid "code"
 msgstr "CEP"
 
-#: models.py:56
+#: models.py:55
 msgid "state"
 msgstr "estado"
 
-#: models.py:66
+#: models.py:65
 msgid "city"
 msgstr "cidade"
 
-#: models.py:76
+#: models.py:75
 msgid "suburb"
 msgstr "zona"
 
-#: models.py:79
+#: models.py:78
 msgid "Zip code"
 msgstr "CEP"
 
-#: models.py:81
+#: models.py:80
 msgid "Street"
 msgstr ""
 
-#: models.py:83
+#: models.py:82
 msgid "Address number"
 msgstr "Número"
 
-#: models.py:85
+#: models.py:84
 msgid "Apt, PO Box, block"
 msgstr ""
 
-#: models.py:87
+#: models.py:86
 msgid "Neighborhood"
 msgstr "Bairro"
 
-#: models.py:89
+#: models.py:88
 msgid "State"
 msgstr "Estado"
 
-#: models.py:91
+#: models.py:90
 msgid "City"
 msgstr "Cidade"
 
-#: models.py:93
+#: models.py:92
 msgid "Suburb"
 msgstr "Zona"
 
-#: models.py:109
+#: models.py:108
 msgid "Name"
 msgstr "Nome"
 
-#: models.py:111 models.py:220
+#: models.py:109 models.py:209
 msgid "Details"
 msgstr "Detalhes"
 
-#: models.py:113 models.py:221
+#: models.py:111 models.py:210
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:115 models.py:172 models.py:226
-msgid "Phone"
-msgstr "Telefone"
-
-#: models.py:122 models.py:228 models.py:314
+#: models.py:119 models.py:217 models.py:303
 msgid "Published"
 msgstr "Publicado"
 
-#: models.py:123 models.py:231
+#: models.py:120
+#, fuzzy
+msgid "Published date"
+msgstr "Publicado"
+
+#: models.py:121 models.py:220
 msgid "Deleted"
 msgstr "Deletado"
 
-#: models.py:124 models.py:232
+#: models.py:122 models.py:221
 msgid "Deleted date"
 msgstr "Data deletado"
 
-#: models.py:218
+#: models.py:207
 #, fuzzy
 msgid "Project name"
 msgstr "Atos"
 
-#: models.py:224
+#: models.py:213
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:227
+#: models.py:215 models.py:350
+msgid "Phone"
+msgstr "Telefone"
+
+#: models.py:216
 msgid "E-mail"
 msgstr "E-mail"
 
-#: models.py:229
+#: models.py:218
 msgid "Closed"
 msgstr "Fechado"
 
-#: models.py:230
+#: models.py:219
 #, fuzzy
 msgid "Closed date"
 msgstr "Data deletado"
 
-#: models.py:265
+#: models.py:254
 msgid "Collection made by the nonprofit"
 msgstr "Coleção feita pela ONG"
 
-#: models.py:269
+#: models.py:258
 msgid "Material name"
 msgstr "Nomde do material"
 
-#: models.py:271
+#: models.py:260
 msgid "Quantity"
 msgstr "Quantidade"
 
-#: models.py:278
+#: models.py:267
 #, fuzzy
 msgid "Role name"
 msgstr "nome"
 
-#: models.py:280
+#: models.py:269
 msgid "Prerequisites"
 msgstr "Prerequisitos"
 
-#: models.py:282
+#: models.py:271
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:284 models.py:306
+#: models.py:273 models.py:295
 msgid "Start date"
 msgstr ""
 
-#: models.py:285 models.py:307
+#: models.py:274 models.py:296
 #, fuzzy
 msgid "End date"
 msgstr "Data deletado"
 
-#: models.py:295
+#: models.py:284
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:298
+#: models.py:287
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:315
+#: models.py:304
 #, fuzzy
 msgid "Canceled date"
 msgstr "Data deletado"
 
-#: models.py:319
+#: models.py:308
 msgid "Sort"
 msgstr "Ordenar"
+
+#: models.py:337
+msgid "email address"
+msgstr ""
+
+#: models.py:338
+#, fuzzy
+msgid "first name"
+msgstr "Atos"
+
+#: models.py:339
+#, fuzzy
+msgid "last name"
+msgstr "nome"
+
+#: models.py:340
+msgid "Slug"
+msgstr ""
+
+#: models.py:342
+msgid "Staff"
+msgstr ""
+
+#: models.py:343
+msgid "Active"
+msgstr ""
+
+#: models.py:344
+msgid "Email verified"
+msgstr ""
+
+#: models.py:355
+msgid "user"
+msgstr ""
+
+#: models.py:356
+msgid "users"
+msgstr ""
 
 #~ msgid "Address line"
 #~ msgstr "Logradouro"
