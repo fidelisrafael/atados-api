@@ -10,27 +10,27 @@ from atados import settings
 from time import time
 
 WEEKDAYS = (
-        (1, _('Monday')),
-        (2, _('Tuesday')),
-        (3, _('Wednesday')),
-        (4, _('Thursday')),
-        (5, _('Friday')),
-        (6, _('Saturday')),
-        (0, _('Sunday')),
+  (1, _('Monday')),
+  (2, _('Tuesday')),
+  (3, _('Wednesday')),
+  (4, _('Thursday')),
+  (5, _('Friday')),
+  (6, _('Saturday')),
+  (0, _('Sunday')),
 )
 
 PERIODS = (
-        (0, _('Morning')),
-        (1, _('Afternoon')),
-        (2, _('Evening')),
+  (0, _('Morning')),
+  (1, _('Afternoon')),
+  (2, _('Evening')),
 )
 
 class Availability(models.Model):
-    weekday = models.PositiveSmallIntegerField(_('weekday'), choices=WEEKDAYS)
-    period = models.PositiveSmallIntegerField(_('period'), choices=PERIODS)
+  weekday = models.PositiveSmallIntegerField(_('weekday'), choices=WEEKDAYS)
+  period = models.PositiveSmallIntegerField(_('period'), choices=PERIODS)
 
-    def __unicode__(self):
-        return _('%(weekday)s at %(period)s') % {'weekday': self.get_weekday_display(), 'period': self.get_period_display()}
+  def __unicode__(self):
+    return _('%(weekday)s at %(period)s') % {'weekday': self.get_weekday_display(), 'period': self.get_period_display()}
 
 class Cause(models.Model):
     name = models.CharField(_('name'), max_length=30)
@@ -59,7 +59,7 @@ class City(models.Model):
     state = models.ForeignKey(State)
 
     def __unicode__(self):
-        return self.name
+        return '%s, %s' % (self.name, self.state.code)
 
     class Meta:
         verbose_name = _('city')
@@ -69,7 +69,7 @@ class Suburb(models.Model):
     city = models.ForeignKey(City)
 
     def __unicode__(self):
-        return self.name
+        return '%s - %s' % (self.name, self.city)
 
     class Meta:
         verbose_name = _('suburb')
@@ -91,6 +91,9 @@ class Address(models.Model):
                              null=True, default=None)
     suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
                                null=True, default=None)
+
+    def __unicode__(self):
+      return '%s, %s, %s - %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood, self.suburb)
 
 class NonprofitManager(models.Manager):
     use_for_related_fields = True
