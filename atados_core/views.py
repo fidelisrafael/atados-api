@@ -1,5 +1,6 @@
 from django.core.mail import send_mail
 from django.http import Http404
+from django.template.defaultfilters import slugify
 
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
@@ -69,12 +70,16 @@ def facebook_auth(request, format=None):
     volunteer = volunteer[0]
     user = volunteer.user
   else:
-    user = User.objects.get(email=me['email'])
-
     try:
+      user = User.objects.get(email=me['email'])
       volunteer = Volunteer.objects.get(user=user)
     except:
-      user = User.objects.create_user(slug=me['slug'], email=me['email'])
+      try:
+        slug = me['username']
+      except:
+        slug = slugify(me['first_name'] + me['last_name'])
+
+      user = User.objects.create_user(slug=slug, email=me['email'])
       volunteer = Volunteer(user=user)
 
     if not user.first_name:
@@ -87,7 +92,7 @@ def facebook_auth(request, format=None):
     # TODO(mpomarole): get photo later
     volunteer.facebook_uid = userID
     volunteer.facebook_access_token = accessToken
-    volunteer.facebook_access_tolen_expires = expiresIn
+    volunteer.facebook_access_token_expires = expiresIn
     volunteer.save()
 
   if not volunteer: 

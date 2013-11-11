@@ -167,7 +167,7 @@ class Volunteer(models.Model):
   causes = models.ManyToManyField(Cause, blank=True, null=True)
   skills = models.ManyToManyField(Skill, blank=True, null=True)
 
-  facebook_uid = models.PositiveIntegerField(blank=True, null=True)
+  facebook_uid = models.CharField(blank=True, max_length=255)
   facebook_access_token = models.CharField(blank=True, max_length=255)
   facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
 

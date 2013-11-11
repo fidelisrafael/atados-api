@@ -105,15 +105,15 @@ class AddressTest(TestCase):
     self.assertEqual(a.__unicode__(),
                      "Rua Hello World, 123, apt 1101 - Copacabana - Zona Norte - Rio de Janeiro, RJ")
 
-#class NonprofitTest(TestCase):
-#
-#  def create_nonprofit(self,):
-#    return Nonprofit.objects.create()
-#
-#  def test_nonprofit_creation(self):
-#    """
-#    Tests Nonprofit.
-#    """
-#    n = self.create_nonprofit()
-#    self.assertTrue(isinstance(n, Nonprofit))
-#    self.assertEqual(n.__unicode__(), "")
+class NonprofitTest(TestCase):
+
+  def create_nonprofit(self,):
+    return Nonprofit.objects.create()
+
+  def test_nonprofit_creation(self):
+    """
+    Tests Nonprofit.
+    """
+    n = self.create_nonprofit()
+    self.assertTrue(isinstance(n, Nonprofit))
+    self.assertEqual(n.__unicode__(), "")
