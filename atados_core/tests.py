@@ -114,22 +114,31 @@ class AddressTest(TestCase):
     self.assertEqual(a.__unicode__(),
                      "Rua Hello World, 123, apt 1101 - Copacabana - Zona Norte - Rio de Janeiro, RJ")
 
-
 # Views
 class VolunteerTests(APITestCase):
 
-  def test_create_volunteer(self):
+  email = "test@test.com"
+  slug = "testtest"
+  password = "hello world"
+
+  def test_volunteer_creation(self):
+    """
+    Test Volunteer Model.
+    """
+    u = User(email=self.email, slug=self.slug)
+    v = Volunteer(user=u)
+    self.assertTrue(isinstance(v, Volunteer))
+    self.assertEqual(v.__unicode__(), self.slug)
+
+  def test_create_volunteer_view(self):
     """
     Ensure we can create a new volunteer.
     """
-    email = "test@test.com"
-    slug = "testtest"
-    password = "hello world"
     factory = APIRequestFactory()
-    request = factory.post("/create/volunteer/", {"slug": slug, "email": email, "password": password})
+    request = factory.post("/create/volunteer/", {"slug": self.slug, "email": self.email, "password": self.password})
     response = views.create_volunteer(request)
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     self.assertEqual(response.data, {'detail': 'Volunteer succesfully created.'})
-    user = User.objects.get(email=email)
+    user = User.objects.get(email=self.email)
     volunteer = user.volunteer
     self.assertEqual(volunteer.user.email, user.email)
