@@ -126,9 +126,13 @@ class VolunteerTests(APITestCase):
     Test Volunteer Model.
     """
     u = User(email=self.email, slug=self.slug)
-    v = Volunteer(user=u)
+    v = Volunteer.create(u)
     self.assertTrue(isinstance(v, Volunteer))
     self.assertEqual(v.__unicode__(), self.slug)
+    self.assertEqual(v.get_type(), "VOLUNTEER");
+    self.assertEqual(v.get_image_url(), "http://atadosapp.s3.amazonaws.com/volunteer/default.png")
+    self.assertEqual(v.image_name("teste.jpg"), "volunteer/" + self.slug + "/" + self.slug + ".jpg")
+
 
   def test_create_volunteer_view(self):
     """
