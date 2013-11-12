@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Django settings for atados project.
 import os
+import sys
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,6 +29,9 @@ DATABASES = {
         'PORT': os.environ.get('RDS_PORT', ''),
     }
 }
+
+if 'test' in sys.argv:
+  DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -260,14 +264,18 @@ REST_FRAMEWORK = {
       'rest_framework.authentication.SessionAuthentication',
       'rest_framework.authentication.OAuth2Authentication'
     ),
+
     'DEFAULT_PARSER_CLASSES': (
       'rest_framework.parsers.JSONParser',
       'rest_framework.parsers.MultiPartParser',
     ),
+
     'PAGINATE_BY': 20,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',  
-    'MAX_PAGINATE_BY': 100
+    'MAX_PAGINATE_BY': 100,
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
 CORS_ORIGIN_WHITELIST = (

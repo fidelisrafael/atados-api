@@ -17,7 +17,7 @@ pep8:
 	@pep8 --exclude 'migrations' .
 	
 test:
-	@coverage run --source=. manage.py test -v 2
+	@coverage run --source=. manage.py test -s -v 2
 
 rebuild_index:
 	@python ./manage.py rebuild_index

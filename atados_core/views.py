@@ -129,7 +129,7 @@ def create_volunteer(request, format=None):
      return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
    volunteer = Volunteer(user=user)
    volunteer.save()
-   return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_200_OK) 
+   return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
    # TODO send activation email
 
 @api_view(['POST'])

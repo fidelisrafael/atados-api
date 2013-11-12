@@ -1,7 +1,16 @@
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
-from atados_core.models import Availability, Cause, Skill, State, City, Suburb, Address, Nonprofit
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.test import APIRequestFactory
+from rest_framework.test import APIClient
+from rest_framework.test import APITestCase
 
+from atados_core.models import Availability, Cause, Skill, State, City, Suburb, Address, Nonprofit, User, Volunteer
+from atados_core import views
+
+# Models
 class AvailabilityTest(TestCase):
 
   def create_availability(self, weekday=1, period=2):
@@ -48,7 +57,7 @@ class SKillTest(TestCase):
 class StateTest(TestCase):
 
   def create_state(self, name="Rio de Janeiro", code="RJ"):
-    return State.objects.create(name=name, code=code)
+    return State(name=name, code=code)
 
   def test_state_creation(self):
     """
@@ -61,8 +70,8 @@ class StateTest(TestCase):
 class CityTest(TestCase):
 
   def create_city(self, name="Rio de Janeiro"):
-    state = State.objects.create(name="Rio de Janeiro", code="RJ")
-    return City.objects.create(name=name, state=state)
+    state = State(name="Rio de Janeiro", code="RJ")
+    return City(name=name, state=state)
 
   def test_city_creation(self):
     """
@@ -75,9 +84,9 @@ class CityTest(TestCase):
 class SuburbTest(TestCase):
 
   def create_suburb(self, name="Zona Norte"):
-    state = State.objects.create(name="Rio de Janeiro", code="RJ")
-    city = City.objects.create(name="Rio de Janeiro", state=state)
-    return Suburb.objects.create(name=name, city=city)
+    state = State(name="Rio de Janeiro", code="RJ")
+    city = City(name="Rio de Janeiro", state=state)
+    return Suburb(name=name, city=city)
 
   def test_suburb_creation(self):
     """
@@ -91,9 +100,9 @@ class AddressTest(TestCase):
 
   def create_address(self, zipcode="05432-001", addressline="Rua Hello World", addressnumber="123", addressline2="apt 1101",
                      neighborhood="Copacabana"):
-    state = State.objects.create(name="Rio de Janeiro", code="RJ")
-    city = City.objects.create(name="Rio de Janeiro", state=state)
-    suburb = Suburb.objects.create(name="Zona Norte", city=city)
+    state = State(name="Rio de Janeiro", code="RJ")
+    city = City(name="Rio de Janeiro", state=state)
+    suburb = Suburb(name="Zona Norte", city=city)
     return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, state=state, city=city, suburb=suburb)
 
   def test_address_creation(self):
@@ -105,15 +114,22 @@ class AddressTest(TestCase):
     self.assertEqual(a.__unicode__(),
                      "Rua Hello World, 123, apt 1101 - Copacabana - Zona Norte - Rio de Janeiro, RJ")
 
-class NonprofitTest(TestCase):
 
-  def create_nonprofit(self,):
-    return Nonprofit.objects.create()
+# Views
+class VolunteerTests(APITestCase):
 
-  def test_nonprofit_creation(self):
+  def test_create_volunteer(self):
     """
-    Tests Nonprofit.
+    Ensure we can create a new volunteer.
     """
-    n = self.create_nonprofit()
-    self.assertTrue(isinstance(n, Nonprofit))
-    self.assertEqual(n.__unicode__(), "")
+    email = "test@test.com"
+    slug = "testtest"
+    password = "hello world"
+    factory = APIRequestFactory()
+    request = factory.post("/create/volunteer/", {"slug": slug, "email": email, "password": password})
+    response = views.create_volunteer(request)
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    self.assertEqual(response.data, {'detail': 'Volunteer succesfully created.'})
+    user = User.objects.get(email=email)
+    volunteer = user.volunteer
+    self.assertEqual(volunteer.user.email, user.email)
