@@ -7,6 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
     lookup_field = 'slug'
+    depth = 1
     fields = ('email', 'slug', 'first_name', 'last_name', 'phone', 'address')
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
@@ -32,6 +33,8 @@ class StateSerializer(serializers.ModelSerializer):
     fields = ('id', 'name', 'code')
 
 class CitySerializer(serializers.ModelSerializer):
+  state = StateSerializer()
+
   class Meta:
     model = City
     fields = ('id', 'name', 'state')
@@ -42,6 +45,7 @@ class SuburbSerializer(serializers.ModelSerializer):
     fields = ('id', 'name', 'city')
 
 class AddressSerializer(serializers.ModelSerializer):
+  city = CitySerializer()
   class Meta:
     model = Address
     depth = 1
@@ -79,27 +83,12 @@ class RoleSerializer(serializers.HyperlinkedModelSerializer):
 class JobSerializer(serializers.HyperlinkedModelSerializer):
   roles = serializers.PrimaryKeyRelatedField(many=True, read_only=False)
   skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
+  address = AddressSerializer()
 
   class Meta:
     model = Job
     depth = 1
     fields = ('address', 'skills','roles', 'start_date', 'end_date')
-
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
-  nonprofit = serializers.HyperlinkedRelatedField(many=False, view_name='nonprofit-detail', lookup_field='slug')
-  work = WorkSerializer(required=False)
-  job = JobSerializer(required=False)
-  donation = DonationSerializer(required=False)
-  # image_url = serializers.CharField(source='get_image_url', required=False)
-
-  class Meta:
-    model = Project
-    lookup_field = 'slug'
-    depth = 1
-    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
-              'responsible', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'donation')
 
 class ApplySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -114,6 +103,7 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   user = UserSerializer()
   causes = CauseSerializer()
+  slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url')
@@ -121,9 +111,25 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
-    depth = 2
+    depth = 1
     fields = ('url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'facebook_page', 'google_page', 'twitter_handle', 'role')
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
+  nonprofit = NonprofitSerializer()
+  work = WorkSerializer(required=False)
+  job = JobSerializer(required=False)
+  donation = DonationSerializer(required=False)
+  image_url = serializers.CharField(source='get_image_url', required=False)
+
+  class Meta:
+    model = Project
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
+              'responsible', 'phone', 'email', 'published', 'closed', 'deleted',
+              'job', 'work', 'donation', 'image_url')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()

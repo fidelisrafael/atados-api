@@ -210,7 +210,7 @@ class Project(models.Model):
     name = models.CharField(_('Project name'), max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
     details = models.TextField(_('Details'), max_length=1024)
-    description = models.TextField(_('Short description'), max_length=75,
+    description = models.TextField(_('Short description'), max_length=100,
                                    blank=True, null=True)
     facebook_event = models.URLField(blank=True, null=True, default=None)
     responsible = models.CharField(_('Responsible name'), max_length=50,

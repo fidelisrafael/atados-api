@@ -233,10 +233,19 @@ class NonprofitViewSet(viewsets.ModelViewSet):
   permission_classes = [IsOwnerOrReadOnly]
   lookup_field = 'slug'
 
+  def get_object(self):
+    try:
+      nonprofit = self.get_queryset().get(user__slug=self.kwargs['slug'])
+      nonprofit.slug = nonprofit.user.slug
+      self.check_object_permissions(self.request, nonprofit)
+      return nonprofit
+    except:
+      raise Http404
+
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
-  permission_classes = [IsAuthenticatedOrReadOnly]
+  permission_classes = [IsOwnerOrReadOnly]
   lookup_field = 'slug'
 
   def get_object(self):
