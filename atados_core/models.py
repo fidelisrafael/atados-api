@@ -85,10 +85,6 @@ class Address(models.Model):
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
-    state = models.ForeignKey(State, verbose_name=_('State'), blank=True,
-                              null=True, default=None)
-    city = models.ForeignKey(City, verbose_name=_('City'), blank=True,
-                             null=True, default=None)
     suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
                                null=True, default=None)
 
@@ -144,7 +140,7 @@ class Nonprofit(models.Model):
                        null=True, default=None)
 
     def get_image_url(self):
-      return self.image.url if self.image else None
+      return 'http://api.atadoslocal.com.br:8000/static' + self.image.url if self.image else None
 
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
@@ -188,7 +184,7 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_image_url(self):
-    return self.image.url if self.image else 'http://atadosapp.s3.amazonaws.com/volunteer/default.png'
+    return self.image.url if self.image else settings.STATIC_ROOT + '/volunteer/default.png'
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
@@ -242,7 +238,8 @@ class Project(models.Model):
                        null=True, default=None)
 
     def get_image_url(self):
-      return self.image.url if self.image else None
+      # TODO (mpomarole)
+      return 'http://api.atadoslocal.com.br:8000/static' + self.image.url if self.image else None
 
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)

@@ -157,8 +157,6 @@ def create_nonprofit(request, format=None):
    address.addressline2 = obja.get('addressline2')
    address.addressnumber = obja['addressnumber']
    address.neighborhood = obja['neighborhood']
-   address.state = State.objects.get(id=obja['state']['id'])
-   address.city = City.objects.get(id=obja['city']['id'])
    address.suburb = Suburb.objects.get(id=obja['suburbs']['id'])
    address.save()
 

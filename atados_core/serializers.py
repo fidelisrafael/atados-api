@@ -40,17 +40,20 @@ class CitySerializer(serializers.ModelSerializer):
     fields = ('id', 'name', 'state')
 
 class SuburbSerializer(serializers.ModelSerializer):
+  city = CitySerializer()
+
   class Meta:
     model = Suburb
+    depth = 1
     fields = ('id', 'name', 'city')
 
 class AddressSerializer(serializers.ModelSerializer):
-  city = CitySerializer()
+  suburb = SuburbSerializer()
+
   class Meta:
     model = Address
     depth = 1
-    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'state',
-              'city', 'suburb')
+    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'suburb')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
