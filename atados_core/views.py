@@ -289,7 +289,7 @@ class StateViewSet(viewsets.ModelViewSet):
   permission_classes = [AllowAny]
 
 class CityViewSet(viewsets.ModelViewSet):
-  queryset = City.objects.all()
+  queryset = City.objects.filter(active=True)
   serializer_class = CitySerializer
   permission_classes = [AllowAny]
 

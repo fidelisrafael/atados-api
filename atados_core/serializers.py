@@ -119,7 +119,7 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
               'facebook_page', 'google_page', 'twitter_handle', 'role')
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
-  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
+  causes = CauseSerializer()
   nonprofit = NonprofitSerializer()
   work = WorkSerializer(required=False)
   job = JobSerializer(required=False)
