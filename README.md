@@ -28,9 +28,7 @@ faz muito bem!
 
     git clone git@github.com:atados/atados.git
     cd atados
-    make install
-    python manage.py runserver
-
+    make install && make run
 
 ## License
 

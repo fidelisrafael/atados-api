@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 # Django settings for atados project.
 import os
+import sys
+
+PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
 DEBUG = os.environ.get('ATADOS_DEBUG', False)
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    '*',
-    #'.atados.com.br',
+  'atados.com.br',
 )
 
 ADMINS = (
@@ -28,6 +30,9 @@ DATABASES = {
     }
 }
 
+if 'test' in sys.argv:
+  DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -39,8 +44,8 @@ TIME_ZONE = 'America/Sao_Paulo'
 LANGUAGE_CODE = 'pt-BR'
 
 LANGUAGES = (
-    ('en-US', 'English'),
     ('pt-BR', 'Português'),
+    ('en-US', 'English'),
 )
 
 SITE_ID = 1
@@ -95,32 +100,29 @@ SECRET_KEY = '#7j@g*f*nufizr04s!f8_3+h&amp;1x!l04!q@0u@28ppkl)5kuy2^'
 
 # List of callables that know how to import templates from various sources.
 if DEBUG:
-    TEMPLATE_LOADERS = (
+  TEMPLATE_LOADERS = (
+      'django.template.loaders.filesystem.Loader',
+      'django.template.loaders.app_directories.Loader',
+      # 'django.template.loaders.eggs.Loader',
+    )
+else:
+  TEMPLATE_LOADERS = (
+      ('django.template.loaders.cached.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
         # 'django.template.loaders.eggs.Loader',
-    )
-else:
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-            # 'django.template.loaders.eggs.Loader',
-        )),
-    )
+      )),
+  )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'atados_project.middleware.ProjectAwaitingModerationMiddleware',
-    'atados_nonprofit.middleware.NonprofitAwaitingModerationMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
@@ -133,7 +135,7 @@ TEMPLATE_DIRS = (
     # "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.path.dirname(__file__), 'templates'),
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -143,25 +145,20 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.markup',
     'django.contrib.humanize',
-    'flatblocks',
-    'atados_core',
-    'atados_nonprofit',
-    'atados_volunteer',
-    'atados_project',
-    'atados_legacy',
-    'registration',
-    'bootstrap_toolkit',
-    'south',
-    'sorl.thumbnail',
-    'haystack',
-    'django_nose',
     'grappelli', # needs to come before django.contrib.admin
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+
+    'haystack',
+    'rest_framework',
+    'facepy',
+    'corsheaders',
+    'south',
+    'provider',
+    'provider.oauth2',
+    'django_nose',
+
+    'atados_core',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -194,16 +191,12 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'atados_core.backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
 )
 
-LOGIN_REDIRECT_URL = "/"
+AUTH_USER_MODEL = 'atados_core.User'
 
 HTTPS_SUPPORT = True
-
-ACCOUNT_ACTIVATION_DAYS = 7
-
-LOGIN_URL = '/sign-in'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
@@ -214,31 +207,22 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
-    "atados_core.context_processors.site",
-    "atados_nonprofit.context_processors.nonprofit",
-    "atados_volunteer.context_processors.volunteer",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else  'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'no-reply@atados.com.br')
+EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'marjori@atados.com.br')
 EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-THUMBNAIL_DEBUG = DEBUG
-
-# Drupal legacy sucks :/
-PASSWORD_HASHERS = (
-    'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
-)
-
+if not DEBUG: 
+  DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
                                       'AWS_SECRET_KEY')):
-    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
     AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_KEY']
     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
@@ -256,7 +240,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
 
 SOUTH_AUTO_FREEZE_APP = True
@@ -278,11 +261,34 @@ CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
-if 'ATADOS_FACEBOOK_APPLICATION_ID' in os.environ:
-    AUTHENTICATION_BACKENDS =  ('social_auth.backends.facebook.FacebookBackend',) + AUTHENTICATION_BACKENDS
-    INSTALLED_APPS = INSTALLED_APPS + ('social_auth',)
-    FACEBOOK_APP_ID = os.environ.get('ATADOS_FACEBOOK_APPLICATION_ID', '')
-    FACEBOOK_API_SECRET = os.environ.get('ATADOS_FACEBOOK_APPLICATION_SECRET', '')
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+      'rest_framework.authentication.SessionAuthentication',
+      'rest_framework.authentication.OAuth2Authentication'
+    ),
 
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/social-new-user-redirect'
-SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+    'DEFAULT_PARSER_CLASSES': (
+      'rest_framework.parsers.JSONParser',
+      'rest_framework.parsers.MultiPartParser',
+    ),
+
+    'PAGINATE_BY': 20,
+    # Allow client to override, using `?page_size=xxx`.
+    'PAGINATE_BY_PARAM': 'page_size',  
+    'MAX_PAGINATE_BY': 100,
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
+
+CORS_ORIGIN_WHITELIST = (
+    'atados.com.br',
+    'atadoslocal.com.br'
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
+SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
+
+FACEBOOK_APP_ID = "307143646092582" #TODO: do I need this?

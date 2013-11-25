@@ -1,53 +1,43 @@
-from django.conf.urls import patterns, include, url
-from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, RedirectView
-from django.utils.translation import ugettext_lazy as _
-from atados_core.forms import AuthenticationForm
-from atados_core.views import HomeView, CityView, SuburbView, SearchView
+from django.conf import settings
+from django.conf.urls import patterns, url, include
 
+from atados_core import views
+from rest_framework.routers import DefaultRouter
+from rest_framework.urlpatterns import format_suffix_patterns
 
-urlpatterns = patterns(
-    '',
+router = DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'volunteers', views.VolunteerViewSet)
+router.register(r'nonprofits', views.NonprofitViewSet)
+router.register(r'projects', views.ProjectViewSet)
+router.register(r'roles', views.RoleViewSet)
+router.register(r'causes', views.CauseViewSet)
+router.register(r'skills', views.SkillViewSet)
+router.register(r'addresses', views.AddressViewSet)
+router.register(r'states', views.StateViewSet)
+router.register(r'cities', views.CityViewSet)
+router.register(r'suburbs', views.SuburbViewSet)
+router.register(r'availabilities', views.AvailabilityViewSet)
 
-    url(r'^$', HomeView.as_view(), name='home'),
+urlpatterns = patterns('atados_core.views',
+  url(r'^v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
+  url(r'v1/facebook', 'facebook_auth'),
+  url(r'^v1/current_user/', 'current_user'),
+  url(r'^v1/password_reset/', 'password_reset'),
+  url(r'^v1/change_password/', 'change_password'),
+  url(r'^v1/logout/', 'logout'),
 
-    url(_(r'^sign-up$'), TemplateView.as_view(
-        template_name='atados_core/sign_up.html'), name='sign-up'),
+  url(r'^v1/create/volunteer/', 'create_volunteer'),
+  url(r'^v1/create/nonprofit/', 'create_nonprofit'),
 
-    url(_(r'^sign-in$'), 'django.contrib.auth.views.login',
-        {'authentication_form': AuthenticationForm,
-         'template_name': 'atados_core/sign_in.html'}, name='sign-in'),
+  url(r'^v1/check_slug/', 'check_slug'),
+  url(r'^v1/check_project_slug/', 'check_project_slug'),
+  url(r'^v1/check_email/', 'check_email'),
 
-    url(r'^sign-in$', RedirectView.as_view(url=_('/sign-in'),
-        query_string=True), name='global-sign-in'),
+  url(r'^v1/upload_volunteer_image/', 'upload_volunteer_image'),
+)
 
-    url(_(r'^sign-out$'), 'django.contrib.auth.views.logout',
-        {'next_page': _('/sign-in')}, name='sign-out'),
-
-    url(_(r'^password-change$'), 'django.contrib.auth.views.password_change',
-        {'template_name': 'atados_core/password_change.html',
-         'post_change_redirect': '/password-change-done'}, name='password-change'),
-
-    url(_(r'^password-change-done$'), TemplateView.as_view(
-        template_name='atados_core/password_change_done.html'), name='password-change-done'),
-
-    url(_(r'^search$'), SearchView.as_view(), name='search'),
-
-    url(_(r'^more-cities-soon$'), TemplateView.as_view(
-        template_name='atados_core/more_cities_soon.html'), name='more-cities-soon'),
-
-    url(_(r'^terms$'), TemplateView.as_view(
-        template_name='atados_core/terms.html'), name='terms'),
-
-    url(_(r'^privacy$'), TemplateView.as_view(
-        template_name='atados_core/privacy.html'), name='privacy'),
-
-    url(_(r'^security$'), TemplateView.as_view(
-        template_name='atados_core/security.html'), name='security'),
-
-    url(_(r'^about$'), TemplateView.as_view(
-        template_name='atados_core/about.html'), name='about'),
-
-    url(r'^city/(?P<state>[0-9]+)$', CityView.as_view()),
-    url(r'^suburb/(?P<city>[0-9]+)$', SuburbView.as_view()),
+urlpatterns += patterns('',
+  url(r'^v1/api/', include('rest_framework.urls', namespace='rest_framework')),
+  url(r'^v1/', include(router.urls)),
 )

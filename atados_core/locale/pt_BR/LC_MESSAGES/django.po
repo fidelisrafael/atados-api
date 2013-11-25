@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-28 00:44-0300\n"
+"POT-Creation-Date: 2013-11-24 10:58-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,525 +18,257 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: forms.py:45
-msgid "Search in"
-msgstr "Buscar em"
-
-#: forms.py:86 templates/403.html:17 templates/atados_core/base.html:80
-msgid "E-mail"
-msgstr "E-mail"
-
-#: forms.py:87 templates/403.html:21 templates/atados_core/base.html:84
-msgid "Stay signed in"
-msgstr "Mantenha-me conectado "
-
-#: models.py:6
+#: models.py:13
 msgid "Monday"
 msgstr "Segunda"
 
-#: models.py:7
+#: models.py:14
 msgid "Tuesday"
 msgstr "Terça"
 
-#: models.py:8
+#: models.py:15
 msgid "Wednesday"
 msgstr "Quarta"
 
-#: models.py:9
+#: models.py:16
 msgid "Thursday"
 msgstr "Quinta"
 
-#: models.py:10
+#: models.py:17
 msgid "Friday"
 msgstr "Sexta"
 
-#: models.py:11
+#: models.py:18
 msgid "Saturday"
 msgstr "Sábado"
 
-#: models.py:12
+#: models.py:19
 msgid "Sunday"
 msgstr "Domingo"
 
-#: models.py:16
+#: models.py:23
 msgid "Morning"
 msgstr "Manhã"
 
-#: models.py:17
+#: models.py:24
 msgid "Afternoon"
 msgstr "Tarde"
 
-#: models.py:18
+#: models.py:25
 msgid "Evening"
 msgstr "Noite"
 
-#: models.py:23
+#: models.py:29
 msgid "weekday"
 msgstr "dia da semana"
 
-#: models.py:24
+#: models.py:30
 msgid "period"
 msgstr "período"
 
-#: models.py:27
+#: models.py:33
 #, python-format
 msgid "%(weekday)s at %(period)s"
 msgstr "%(weekday)s -  %(period)s"
 
-#: models.py:30 models.py:36 models.py:42 models.py:51 models.py:61
+#: models.py:36 models.py:42 models.py:48 models.py:58 models.py:69
 msgid "name"
 msgstr "nome"
 
-#: models.py:48
+#: models.py:49
+#, fuzzy
+msgid "code"
+msgstr "CEP"
+
+#: models.py:55
 msgid "state"
 msgstr "estado"
 
-#: models.py:58
+#: models.py:60
+msgid "City where Atados is present."
+msgstr ""
+
+#: models.py:66
 msgid "city"
 msgstr "cidade"
 
-#: models.py:68
+#: models.py:76
 msgid "suburb"
 msgstr "zona"
 
-#: models.py:71
+#: models.py:79
 msgid "Zip code"
 msgstr "CEP"
 
-#: models.py:73
-msgid "Address line"
-msgstr "Logradouro"
+#: models.py:81
+msgid "Street"
+msgstr ""
 
-#: models.py:75
+#: models.py:83
 msgid "Address number"
 msgstr "Número"
 
-#: models.py:77
+#: models.py:85
+msgid "Apt, PO Box, block"
+msgstr ""
+
+#: models.py:87
 msgid "Neighborhood"
 msgstr "Bairro"
 
-#: models.py:79
-msgid "State"
-msgstr "Estado"
-
-#: models.py:81
-msgid "City"
-msgstr "Cidade"
-
-#: models.py:83
+#: models.py:89
 msgid "Suburb"
 msgstr "Zona"
 
-#: urls.py:14
-msgid "^sign-up$"
-msgstr "^cadatro$"
+#: models.py:108
+msgid "Name"
+msgstr "Nome"
 
-#: urls.py:17
-msgid "^sign-in$"
-msgstr "^entrar"
+#: models.py:109 models.py:209
+msgid "Details"
+msgstr "Detalhes"
 
-#: urls.py:21 urls.py:25
-msgid "/sign-in"
-msgstr "/entrar"
+#: models.py:111 models.py:210
+msgid "Short description"
+msgstr "Curta descrição"
 
-#: urls.py:24
-msgid "^sign-out$"
-msgstr "^sair"
+#: models.py:119 models.py:217 models.py:304
+msgid "Published"
+msgstr "Publicado"
 
-#: urls.py:27
-msgid "^password-change$"
-msgstr "^alteracao-de-senha$"
+#: models.py:120
+#, fuzzy
+msgid "Published date"
+msgstr "Publicado"
 
-#: urls.py:31
-msgid "^password-change-done$"
-msgstr "^alteracao-de-senha-concluida$"
+#: models.py:121 models.py:220
+msgid "Deleted"
+msgstr "Deletado"
 
-#: urls.py:34
-msgid "^search$"
-msgstr "^buscar"
+#: models.py:122 models.py:221
+msgid "Deleted date"
+msgstr "Data deletado"
 
-#: urls.py:36
-msgid "^more-cities-soon$"
-msgstr "^mais-cidades-em-breve$"
-
-#: urls.py:39
-msgid "^terms$"
-msgstr "^termos"
-
-#: urls.py:42
-msgid "^privacy$"
-msgstr "^privacidade"
-
-#: urls.py:45
-msgid "^security$"
-msgstr "^seguranca"
-
-#: urls.py:48
-msgid "^about$"
-msgstr "^sobre"
-
-#: templates/403.html:4 templates/403.html.py:9
-msgid "Sorry, but this is a private page"
-msgstr "Desculpe, mas essa página é privada"
-
-#: templates/403.html:13
-msgid ""
-"Sorry, but the page you are looking for is private. If you have an account "
-"with permissions to see it, please sign in:"
-msgstr ""
-"Desculpe, mas a página que você está tentando acessar é privada. Se você tem "
-"uma conta com permissão para vê-la, por favor identifique-se:"
-
-#: templates/403.html:18 templates/atados_core/base.html:81
-msgid "Password"
-msgstr "Senha"
-
-#: templates/403.html:19 templates/atados_core/base.html:73
-#: templates/atados_core/base.html.py:82 templates/atados_core/sign_in.html:4
-#: templates/atados_core/sign_in.html:7 templates/atados_core/sign_in.html:16
-msgid "Sign in"
-msgstr "Entrar"
-
-#: templates/404.html:4 templates/404.html.py:9
-msgid "Page not found"
-msgstr "Página não encontrada"
-
-#: templates/404.html:14
-#, python-format
-msgid ""
-"Sorry, but the page you are looking for has not been found. Try checking the "
-"address for errors or start again from <a href=\"%(home_url)s\">home</a>."
-msgstr ""
-"Desculpe, mas a página que você está tentando acessar não foi encontrada. "
-"Verifique se o endereço foi digitado corretamente ou comece sua navegação "
-"novamente a partir do <a href=\"%(home_url)s\">início</a>."
-
-#: templates/404.html:19 templates/500.html:18
-msgid "Feel free to find projects, nonprofits and volunteers:"
-msgstr "Fique a vontade para encontrar atos, ONGs e voluntários:"
-
-#: templates/404.html:20 templates/404.html.py:21 templates/500.html:19
-#: templates/500.html.py:20 templates/atados_core/base.html:50
-#: templates/search/search.html:13 templates/search/search.html.py:17
-msgid "Search"
-msgstr "Buscar"
-
-#: templates/500.html:4 templates/500.html.py:9
-msgid "Sorry, but something's wrong"
-msgstr "Desculpe, mas algo deu errado"
-
-#: templates/500.html:13
-msgid ""
-"It look as though we've broken something on our system. Our team will get to "
-"it as soon as they can. So again, we are sorry :("
-msgstr ""
-"Parece que nós quebramos algo no nosso sistema. Nosso time irá verificar "
-"isso o mais rápido possível. Então mais uma vez pedimos desculpas :("
-
-#: templates/atados_core/about.html:4 templates/atados_core/about.html.py:7
-#: templates/atados_core/about_base.html:10
-#: templates/atados_core/about_base.html:18
-#: templates/atados_core/base.html:162
-msgid "About us"
-msgstr "Sobre nós"
-
-#: templates/atados_core/about_base.html:21
-#: templates/atados_core/base.html:188 templates/atados_core/terms.html:4
-#: templates/atados_core/terms.html.py:7
-msgid "Terms of service"
-msgstr "Termos de uso"
-
-#: templates/atados_core/about_base.html:24
-#: templates/atados_core/base.html:189 templates/atados_core/privacy.html:4
-#: templates/atados_core/privacy.html:7
-msgid "Privacy"
-msgstr "Privacidade"
-
-#: templates/atados_core/about_base.html:27
-#: templates/atados_core/base.html:190 templates/atados_core/security.html:4
-#: templates/atados_core/security.html:7
-msgid "Security"
-msgstr "Segurança"
-
-#: templates/atados_core/base.html:56
-msgid "Explore your city"
-msgstr "Explore sua cidade"
-
-#: templates/atados_core/base.html:61
-#: templates/atados_core/more_cities_soon.html:4
-#: templates/atados_core/more_cities_soon.html:7
-#: templates/atados_core/more_cities_soon.html:12
-msgid "More cities soon"
-msgstr "Mais cidades em breve."
-
-#: templates/atados_core/base.html:69 templates/atados_core/home.html:319
-#: templates/atados_core/sign_in.html:23 templates/atados_core/sign_up.html:4
-#: templates/atados_core/sign_up.html:7 templates/atados_core/sign_up.html:23
-#: templates/atados_core/sign_up.html:32
-msgid "Sign up"
-msgstr "Cadastre-se"
-
-#: templates/atados_core/base.html:75 templates/atados_core/sign_in.html:13
-msgid "Connect using Facebook"
-msgstr "Conecte-se usando Facebook"
-
-#: templates/atados_core/base.html:77 templates/atados_core/sign_in.html:14
-msgid "or"
-msgstr "ou"
-
-#: templates/atados_core/base.html:102
-msgid "My profile"
-msgstr "Meu perfil"
-
-#: templates/atados_core/base.html:104
-msgid "Edit my information"
-msgstr "Editar minhas informações"
-
-#: templates/atados_core/base.html:105
-msgid "Change password"
-msgstr "Mudar senha"
-
-#: templates/atados_core/base.html:107
-msgid "Sign out"
-msgstr "Sair"
-
-#: templates/atados_core/base.html:125
-msgid "Home"
-msgstr "Início"
-
-#: templates/atados_core/base.html:138
-msgid "Well done!"
-msgstr "Boa!"
-
-#: templates/atados_core/base.html:163
-msgid "Colabore"
-msgstr "Colabore"
-
-#: templates/atados_core/base.html:164
-msgid "Contact"
-msgstr "Contato"
-
-#: templates/atados_core/base.html:165
-msgid "News"
-msgstr "Novidades"
-
-#: templates/atados_core/base.html:169
-msgid "Services"
-msgstr "Serviços"
-
-#: templates/atados_core/base.html:171
-msgid "For nonprofits"
-msgstr "Para ONGs"
-
-#: templates/atados_core/base.html:172
-msgid "For schools"
-msgstr "Para universidades"
-
-#: templates/atados_core/base.html:173
-msgid "For business"
-msgstr "Para empresas"
-
-#: templates/atados_core/base.html:177
-msgid "Social"
-msgstr "Social"
-
-#: templates/atados_core/base.html:179
-msgid "Blog"
-msgstr "Blog"
-
-#: templates/atados_core/base.html:180 templates/atados_core/home.html:334
-msgid "Facebook"
-msgstr "Facebook"
-
-#: templates/atados_core/base.html:192
-#, python-format
-msgid "&copy; 2013 %(site_name)s"
-msgstr "&copy; 2013 %(site_name)s"
-
-#: templates/atados_core/home.html:153
-msgid "Explore"
-msgstr "Explore"
-
-#: templates/atados_core/home.html:186
-msgid "Recommended"
-msgstr "Atos voluntários em destaque"
-
-#: templates/atados_core/home.html:201 templates/search/search.html:31
-msgid "Projects"
+#: models.py:207
+#, fuzzy
+msgid "Project name"
 msgstr "Atos"
 
-#: templates/atados_core/home.html:204 templates/search/search.html:34
-msgid "Nonprofits"
-msgstr "ONGs"
+#: models.py:213
+msgid "Responsible name"
+msgstr "Responsável"
 
-#: templates/atados_core/home.html:210
-msgid "Find projects by their..."
-msgstr "Encontre atos de acordo com sua..."
+#: models.py:215 models.py:351
+msgid "Phone"
+msgstr "Telefone"
 
-#: templates/atados_core/home.html:214 templates/atados_core/home.html:260
-msgid "cause"
-msgstr "causa"
+#: models.py:216
+msgid "E-mail"
+msgstr "E-mail"
 
-#: templates/atados_core/home.html:219 templates/atados_core/home.html:230
-#: templates/atados_core/home.html:248 templates/atados_core/home.html:265
-#: templates/atados_core/home.html:286
-msgid "Filter"
-msgstr "Filtrar"
+#: models.py:218
+msgid "Closed"
+msgstr "Fechado"
 
-#: templates/atados_core/home.html:225
-msgid "skill"
-msgstr "habilidade"
+#: models.py:219
+#, fuzzy
+msgid "Closed date"
+msgstr "Data deletado"
 
-#: templates/atados_core/home.html:236 templates/atados_core/home.html:271
-msgid "location"
-msgstr "localização"
+#: models.py:255
+msgid "Collection made by the nonprofit"
+msgstr "Coleção feita pela ONG"
 
-#: templates/atados_core/home.html:256
-msgid "Find nonprofits by their..."
-msgstr "Encontre ONGs de acordo com sua..."
+#: models.py:259
+msgid "Material name"
+msgstr "Nomde do material"
 
-#: templates/atados_core/home.html:308
-msgid "No search results found"
-msgstr "Nenhum resultado encontrado"
+#: models.py:261
+msgid "Quantity"
+msgstr "Quantidade"
 
-#: templates/atados_core/home.html:309
-msgid "Next page"
-msgstr "Próximo"
+#: models.py:268
+#, fuzzy
+msgid "Role name"
+msgstr "nome"
 
-#: templates/atados_core/home.html:313
-msgid "Load more"
-msgstr "Carregar mais"
+#: models.py:270
+msgid "Prerequisites"
+msgstr "Prerequisitos"
 
-#: templates/atados_core/home.html:323
-msgid "/blog"
-msgstr "/blog"
+#: models.py:272
+msgid "Vacancies"
+msgstr "Vagas"
 
-#: templates/atados_core/home.html:328
-msgid "Read more"
-msgstr "Leia mais"
-
-#: templates/atados_core/password_change.html:4
-#: templates/atados_core/password_change.html:7
-msgid "Password change"
-msgstr "Alteração de senha"
-
-#: templates/atados_core/password_change.html:14
-msgid "Save"
-msgstr "Salvar"
-
-#: templates/atados_core/password_change_done.html:7
-#: templates/atados_core/password_change_done.html:13
-msgid "Password change successfully"
-msgstr "Senha alterada com sucesso"
-
-#: templates/atados_core/password_change_done.html:17
-msgid "Your password has been successfully change!"
-msgstr "Sua senha foi alterada com sucesso!"
-
-#: templates/atados_core/sign_in.html:22
-msgid "Not registered yet?"
-msgstr "Ainda não é regitrado?"
-
-#: templates/atados_core/sign_up.html:14
-msgid "Sign up! But before, tell us more abou you."
-msgstr "Cadastre-se! Mas antes, nos conte um pouco sobre você."
-
-#: templates/atados_core/sign_up.html:20
-msgid "I am a volunteer"
-msgstr "Eu sou um voluntário"
-
-#: templates/atados_core/sign_up.html:29
-msgid "I am a nonprofit"
-msgstr "Eu sou uma ONG"
-
-#: templates/search/search.html:37
-msgid "Volunteers"
-msgstr "Voluntários"
-
-#: templates/search/search.html:45
-msgid "Causes"
-msgstr "Causas"
-
-#: templates/search/search.html:61
-msgid "Skills"
-msgstr "Habilidades"
-
-#: templates/search/search.html:84
-#, python-format
-msgid "We've found %(count)s projects"
-msgstr "Nós encontramos %(count)s atos"
-
-#: templates/search/search.html:86
-msgid "We've found 1 project"
-msgstr "Nós encontramos 1 ato"
-
-#: templates/search/search.html:91
-#, python-format
-msgid "We've found %(count)s nonprofits"
-msgstr "Nós encontramos %(count)s ONGs"
-
-#: templates/search/search.html:93
-msgid "We've found 1 nonprofit"
-msgstr "Nós encontramos 1 ONG"
-
-#: templates/search/search.html:98
-#, python-format
-msgid "We've found %(count)s volunteers"
-msgstr "Nós encontramos %(count)s voluntários"
-
-#: templates/search/search.html:100
-msgid "We've found 1 volunteer"
-msgstr "Nós encontramos 1 voluntário"
-
-#: templates/search/search.html:105
-#, python-format
-msgid "We've found %(count)s results"
-msgstr "Nós encontramos %(count)s resutados"
-
-#: templates/search/search.html:107
-msgid "We've found 1 result"
-msgstr "Nós encontramos 1 resultado"
-
-#: templates/search/search.html:134
-msgid "Previous"
-msgstr "Anterior"
-
-#: templates/search/search.html:137
-msgid "Next"
-msgstr "Próximo"
-
-#: templates/search/search.html:145
-#, python-format
-msgid "We couldn't find any projects matching '%(query)s'."
-msgstr "Nós não conseguimos encontrar nenhum ato ao buscar por '%(query)s'"
-
-#: templates/search/search.html:148
-#, python-format
-msgid "We couldn't find any nonprofits matching '%(query)s'."
-msgstr "Nós não conseguimos encontrar nenhuma ONG ao buscar por '%(query)s'"
-
-#: templates/search/search.html:151
-#, python-format
-msgid "We couldn't find any volunteers matching '%(query)s'."
+#: models.py:274 models.py:296
+msgid "Start date"
 msgstr ""
-"Nós não conseguimos encontrar nenhum voluntário ao buscar por '%(query)s'"
 
-#: templates/search/search.html:154
-#, python-format
-msgid "We couldn't find any results matching '%(query)s'."
+#: models.py:275 models.py:297
+#, fuzzy
+msgid "End date"
+msgstr "Data deletado"
+
+#: models.py:285
+msgid "Weekly hours"
+msgstr "Horas semanais"
+
+#: models.py:288
+msgid "This work can be done remotely."
+msgstr "Isso pode ser feito remotamente"
+
+#: models.py:305
+#, fuzzy
+msgid "Canceled date"
+msgstr "Data deletado"
+
+#: models.py:309
+msgid "Sort"
+msgstr "Ordenar"
+
+#: models.py:338
+msgid "email address"
 msgstr ""
-"Nós não conseguimos encontrar nenhum resultado ao buscar por '%(query)s'"
 
-#: templatetags/atados_tags.py:117
-#, python-format
-msgid "Applied to <a href=\"%(url)s\">%(name)s</a>."
-msgstr "Applicou-se à <a href=\"%(url)s\">%(name)s</a>."
+#: models.py:339
+#, fuzzy
+msgid "first name"
+msgstr "Atos"
 
-#~ msgid "availability"
-#~ msgstr "disponibilidade"
+#: models.py:340
+#, fuzzy
+msgid "last name"
+msgstr "nome"
 
-#~ msgid "Nonprofit sign up"
-#~ msgstr "Registro de ONGs"
+#: models.py:341
+msgid "Slug"
+msgstr ""
 
-#~ msgid "@movimentoatados"
-#~ msgstr "@movimentoatados"
+#: models.py:343
+msgid "Staff"
+msgstr ""
+
+#: models.py:344
+msgid "Active"
+msgstr ""
+
+#: models.py:345
+msgid "Email verified"
+msgstr ""
+
+#: models.py:356
+msgid "user"
+msgstr ""
+
+#: models.py:357
+msgid "users"
+msgstr ""
+
+#~ msgid "State"
+#~ msgstr "Estado"
+
+#~ msgid "City"
+#~ msgstr "Cidade"
+
+#~ msgid "Address line"
+#~ msgstr "Logradouro"

@@ -1,219 +1,303 @@
-import os
-from django import http
-from django.contrib.auth.models import User
-from django.core.cache import get_cache
-from django.db.models import Q
-from django.http import Http404, HttpResponseServerError
-from django.template import RequestContext, TemplateDoesNotExist, loader
-from django.utils import simplejson as json
-from django.views.decorators.cache import cache_control, never_cache, cache_page
-from django.views.decorators.csrf import requires_csrf_token
-from django.views.generic import View, TemplateView
-from django.views.generic.base import ContextMixin
-from atados_core.models import City, Suburb, Cause, Skill
-from atados_core.forms import SearchForm, AddressForm
-from atados_volunteer.views import VolunteerDetailsView, VolunteerHomeView
-from atados_volunteer.forms import RegistrationForm
-from atados_nonprofit.models import Nonprofit
-from atados_project.models import Project, Recommendation
-from haystack.views import FacetedSearchView
-from haystack.query import SearchQuerySet
-import feedparser
+from django.core.mail import send_mail
+from django.http import Http404
+from django.template.defaultfilters import slugify
 
+from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.decorators import api_view, action
+from rest_framework.response import Response
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role, User
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
+from atados_core.permissions import IsOwnerOrReadOnly
 
-@requires_csrf_token
-def server_error(request, template_name='500.html'):
+import facepy as facebook
+from provider.oauth2.views import AccessToken, Client
+
+@api_view(['GET'])
+def current_user(request, format=None):
+  if request.user.is_authenticated():
     try:
-        template = loader.get_template(template_name)
-    except TemplateDoesNotExist:
-        return HttpResponseServerError('<h1>Server Error (500)</h1>')
-    return HttpResponseServerError(template.render(RequestContext(request, {'request_path': request.path})))
+      v = VolunteerSerializer(request.user.volunteer)
+      return Response(v.data)
+    except:
+      try:
+        return Response(NonprofitSerializer(request.user.nonprofit).data)
+      except Exception as inst:
+        print inst
+        return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
-def slug(request, *args, **kwargs):
+  return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def check_slug(request, format=None):
+  try:
+    user = User.objects.get(slug=request.QUERY_PARAMS['slug'])
+    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+  except User.DoesNotExist:
+    return Response({"OK."}, status.HTTP_200_OK)
+
+@api_view(['GET'])
+def check_project_slug(request, format=None):
+  try:
+    project = Project.objects.get(slug=request.QUERY_PARAMS['slug'])
+    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+  except Project.DoesNotExist:
+    return Response({"OK."}, status.HTTP_200_OK)
+
+@api_view(['GET'])
+def check_email(request, format=None):
+  try:
+    user = User.objects.get(email=request.QUERY_PARAMS['email'])
+    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+  except User.DoesNotExist:
+    return Response({"OK."}, status.HTTP_200_OK)
+
+@api_view(['POST'])
+def facebook_auth(request, format=None):
+  accessToken = request.DATA['accessToken']
+  userID = request.DATA['userID']
+  expiresIn = request.DATA['expiresIn']
+
+  try:
+    graph = facebook.GraphAPI(accessToken)
+    me = graph.get("me")
+  except facebook.FacepyError, e:
+    return Response({"Could not talk to Facebook to log you in."}, status.HTTP_400_BAD_REQUEST)
+
+  volunteer = Volunteer.objects.filter(facebook_uid=userID)
+
+  if volunteer:
+    volunteer = volunteer[0]
+    user = volunteer.user
+  else:
     try:
-        User.objects.get(username=kwargs['slug'])
-        kwargs.update({
-            'username': kwargs.pop('slug')
-        })
-        return VolunteerDetailsView.as_view()(request, *args, **kwargs)
-    except User.DoesNotExist:
-        try:
-            Nonprofit.objects.get(slug=kwargs['slug'])
-            kwargs.update({
-                'nonprofit': kwargs.pop('slug')
-            })
-            from atados_nonprofit.views import NonprofitDetailsView
-            return NonprofitDetailsView.as_view()(request, *args, **kwargs)
-        except Nonprofit.DoesNotExist:
-            raise Http404
+      user = User.objects.get(email=me['email'])
+      volunteer = Volunteer.objects.get(user=user)
+    except:
+      try:
+        slug = me['username']
+      except:
+        slug = slugify(me['first_name'] + me['last_name'])
 
-class JSONResponseMixin(object):
+      user = User.objects.create_user(slug=slug, email=me['email'])
+      volunteer = Volunteer(user=user)
 
-    def render_to_response(self, context):
-        return self.get_json_response(self.convert_context_to_json(context))
+    if not user.first_name:
+      user.first_name = me['first_name']
+      user.save()
+    if not user.last_name:
+      user.last_name = me['last_name']
+      user.save()
+    
+    # TODO(mpomarole): get photo later
+    volunteer.facebook_uid = userID
+    volunteer.facebook_access_token = accessToken
+    volunteer.facebook_access_token_expires = expiresIn
+    volunteer.save()
 
-    def get_json_response(self, content, **httpresponse_kwargs):
-        return http.HttpResponse(content, content_type='application/json', **httpresponse_kwargs)
+  if not volunteer: 
+    return Response({"Could not get user through facebook login."}, status.HTTP_404_NOT_FOUND)
+    
+  client = Client.objects.get(id=1)
+  token = AccessToken.objects.create(user=user, client=client)
+  data = {
+    'access_token': token.token,
+    'user': VolunteerSerializer(volunteer).data
+  }
+  return Response(data, status.HTTP_200_OK)
 
-    def convert_context_to_json(self, context):
-        return json.dumps(context)
+@api_view(['POST'])
+def logout(request, format=None):
+  if not request.user.is_authenticated():
+    return Response({"User not authenticated."}, status.HTTP_404_NOT_FOUND)
+  else:
+    token = AccessToken.objects.get(token=request.auth)
+    token.delete()
+    return Response({"User logged out."}, status.HTTP_200_OK)
 
-class CityView(JSONResponseMixin, View):
+@api_view(['POST'])
+def create_volunteer(request, format=None):
+   slug = request.DATA['slug']
+   email = request.DATA['email']
+   password = request.DATA['password']
+   try:
+     user = User.objects.get(email=email)
+   except User.DoesNotExist:
+     user = User.objects.create_user(email, password, slug=slug)
 
-    @cache_control(max_age=3600)
-    def dispatch(self, *args, **kwargs):
-        return super(CityView, self).dispatch(*args, **kwargs)
+   if Volunteer.objects.filter(user=user):
+     return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
+   volunteer = Volunteer(user=user)
+   volunteer.save()
+   return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
+   # TODO send activation email
 
-    def get(self, request, *args, **kwargs):
-        context = [{
-            'id': city.pk,
-            'name': city.name,
-        } for city in City.objects.filter(state=kwargs['state'])]
-        context.insert(0, {'id': '', 'name': ''})
-        return self.render_to_response(context)
+@api_view(['POST'])
+def create_nonprofit(request, format=None):
+   obj = request.DATA
+   slug = obj['user']['slug']
+   email = obj['user']['email']
 
-class SuburbView(JSONResponseMixin, View):
+   try:
+     user = User.objects.get(email=email)
+   except User.DoesNotExist:
+     password = obj['user']['password']
+     user = User.objects.create_user(email, password, slug=obj['user']['slug'])
+     user.first_name = obj['user']['first_name']
+     user.last_name = obj['user']['last_name']
+     user.save()
 
-    @cache_control(max_age=3600)
-    def dispatch(self, *args, **kwargs):
-        return super(SuburbView, self).dispatch(*args, **kwargs)
+   if Nonprofit.objects.filter(user=user):
+     return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
 
-    def get(self, request, *args, **kwargs):
-        context = [{
-            'id': suburb.pk,
-            'name': suburb.name,
-        } for suburb in Suburb.objects.filter(city=kwargs['city'])]
-        context.insert(0, {'id': '', 'name': ''})
-        return self.render_to_response(context)
+   obja = obj['address']
+   address = Address()
+   address.zipcode = obja['zipcode']
+   address.addressline = obja['addressline']
+   address.addressline2 = obja.get('addressline2')
+   address.addressnumber = obja['addressnumber']
+   address.neighborhood = obja['neighborhood']
+   address.suburb = Suburb.objects.get(id=obja['suburbs']['id'])
+   address.save()
 
-class CauseMixin(object):
-    cause_list = None
+   FACEBOOK_KEY = 'facebook_page'
+   GOOGLE_KEY = 'google_page'
+   TWITTER_KEY = 'twitter_handle'
 
-    def __init__(self, *args, **kwargs):
-        super(CauseMixin, self).__init__(*args, **kwargs)
+   nonprofit = Nonprofit(user=user)
+   nonprofit.address = address
+   nonprofit.name = obj['name']
+   nonprofit.details = obj['details']
+   nonprofit.description = obj['description']
+   nonprofit.slug = obj['slug']
+   nonprofit.phone = obj['phone']
 
-    def get_context_data(self, **kwargs):
-        context = super(CauseMixin, self).get_context_data(**kwargs)
-        context.update({'cause_list': self.cause_list})
-        return context
+   if FACEBOOK_KEY in obj:
+     nonprofit.facebook_page = obj[FACEBOOK_KEY]
+   if GOOGLE_KEY in obj:
+     nonprofit.google_page = obj[GOOGLE_KEY]
+   if TWITTER_KEY in obj:
+     nonprofit.twitter_handle = obj[TWITTER_KEY]
 
-class SearchView(FacetedSearchView, View):
+   nonprofit.save()
 
-    @never_cache
-    def dispatch(self, *args, **kwargs):
-        return super(SearchView, self).dispatch(*args, **kwargs)
+   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
+   # TODO send activation email
+   # TODO send  email to administradors to accept this Nonprofit and remove it from moderation
 
-    def get(self, *args, **kwargs):
-        return super(SearchView, self).__call__(*args, **kwargs)
+@api_view(['POST'])
+def password_reset(request, format=None):
+  email = request.DATA['email']
+  user = User.objects.get(email=email)
+  password = User.objects.make_random_password()
+  user.set_password(password)
+  user.save()
+  message = "Sua nova senha: "
+  message += password
+  message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
+  send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
+  return Response({"Password was sent."}, status.HTTP_200_OK)
 
-    def __init__(self, *args, **kwargs):
-        kwargs['form_class'] = SearchForm
-        kwargs['searchqueryset'] = SearchQuerySet().facet('causes').facet('skills').facet('state').facet('city').facet('suburb').facet('availabilities').filter(published=True)
-        super(FacetedSearchView, self).__init__(*args, **kwargs)
+@api_view(['PUT'])
+def change_password(request, format=None):
+  email = request.DATA['email']
+  user = User.objects.get(email=email)
+  password = request.DATA['password']
+  if email and password and user:
+    user.set_password(password)
+    user.save()
+    return Response({"Password set successfuly"}, status.HTTP_200_OK)
+  else:
+    return Response({"There was a problem setting your password"}, status.HTTP_403_FORBIDDEN)
 
-    def get_cause_list(self, context):
-        cause_list = []
-        for cause in Cause.objects.all():
-            if 'fields' in context['facets']:
-                total = dict(context['facets']['fields']['causes']).get(unicode(cause.id), 0)
-            else:
-                total = 0
-            cause_list.append({
-                'id': cause.id,
-                'label': cause.name,
-                'total': total,
-            })
-        return cause_list
+@api_view(['POST'])
+def upload_volunteer_image(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    volunteer.image = request.FILES.get('file')
+    volunteer.save()
+    return Response({"file": volunteer.get_image_url()}, status.HTTP_200_OK)
+  return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
 
-    def get_skill_list(self, context):
-        skill_list = []
-        for skill in Skill.objects.all():
-            if 'fields' in context['facets']:
-                total = dict(context['facets']['fields']['skills']).get(unicode(skill.id), 0)
-            else:
-                total = 0
-            skill_list.append({
-                'id': skill.id,
-                'label': skill.name,
-                'total': total,
-            })
-        return skill_list
+class UserViewSet(viewsets.ModelViewSet):
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
+  permission_classes = [IsAdminUser]
+  lookup_field = 'slug'
 
-    def extra_context(self):
-        context = super(SearchView, self).extra_context()
-        context.update({
-            'cause_list': self.get_cause_list(context),
-            'skill_list': self.get_skill_list(context),
-        })
-        return context
+class NonprofitViewSet(viewsets.ModelViewSet):
+  queryset = Nonprofit.objects.all()
+  serializer_class = NonprofitSerializer
+  permission_classes = [IsOwnerOrReadOnly]
+  lookup_field = 'slug'
 
-class HomeView(SearchView, View):
-    template='atados_core/home.html'
+  def get_object(self):
+    try:
+      nonprofit = self.get_queryset().get(user__slug=self.kwargs['slug'])
+      nonprofit.slug = nonprofit.user.slug
+      self.check_object_permissions(self.request, nonprofit)
+      return nonprofit
+    except:
+      raise Http404
 
-    def build_form(self, form_kwargs=None):
-        data = {u'types': [u'project']}
-        kwargs = {
-            'load_all': self.load_all,
-        }
-        if form_kwargs:
-            kwargs.update(form_kwargs)
+class VolunteerViewSet(viewsets.ModelViewSet):
+  queryset = Volunteer.objects.all()
+  serializer_class = VolunteerSerializer
+  permission_classes = [IsOwnerOrReadOnly]
+  lookup_field = 'slug'
 
-        if self.searchqueryset is not None:
-            kwargs['searchqueryset'] = self.searchqueryset
+  def get_object(self):
+    try:
+      volunteer = self.get_queryset().get(user__slug=self.kwargs['slug'])
+      volunteer.slug = volunteer.user.slug
+      self.check_object_permissions(self.request, volunteer)
+      return volunteer
+    except:
+      raise Http404
 
-        return self.form_class(data, **kwargs)
+class ProjectViewSet(viewsets.ModelViewSet):
+  queryset = Project.objects.all()
+  serializer_class = ProjectSerializer
+  permissions_classes = [IsOwnerOrReadOnly]
+  lookup_field = 'slug'
 
-    def get_recommendations(self):
-        recommendations = []
-        
-        for recommendation in Recommendation.objects.order_by('-sort'):
-            recommendations.append(recommendation.project)
+class RoleViewSet(viewsets.ModelViewSet):
+  queryset = Role.objects.all()
+  serializer_class = RoleSerializer
+  permissions_classes = [IsOwnerOrReadOnly]
 
-        rand = 3 - len(recommendations) 
-        if rand > 0:
-            results = SearchQuerySet().models(Project).filter(has_image=True).filter(published=True).order_by('-id')[:rand]
-            for result in results:
-                recommendations.append(result.object)
+class CauseViewSet(viewsets.ModelViewSet):
+  queryset = Cause.objects.all()
+  serializer_class = CauseSerializer
+  permission_classes = [AllowAny]
+  lookup_field = 'id'
 
-        return recommendations
+class SkillViewSet(viewsets.ModelViewSet):
+  queryset = Skill.objects.all()
+  serializer_class = SkillSerializer
+  permission_classes = [AllowAny]
+  lookup_field = 'id'
+ 
+class AddressViewSet(viewsets.ModelViewSet):
+  queryset = Address.objects.all()
+  serializer_class = AddressSerializer
+  permission_classes = (IsOwnerOrReadOnly, IsAdminUser)
 
+class StateViewSet(viewsets.ModelViewSet):
+  queryset = State.objects.all()
+  serializer_class = StateSerializer
+  permission_classes = [AllowAny]
 
-    def extra_context(self):
-        context = super(HomeView, self).extra_context()
+class CityViewSet(viewsets.ModelViewSet):
+  queryset = City.objects.filter(active=True)
+  serializer_class = CitySerializer
+  permission_classes = [AllowAny]
 
-        project_address_form = AddressForm(no_state=True)
-        project_address_form.fields['city'].queryset = City.objects.filter(Q(address__work__project__published=True) | Q(address__donation__project__published=True)).distinct().order_by('name')
-        nonprofit_address_form = AddressForm(no_state=True)
-        nonprofit_address_form.fields['city'].queryset = City.objects.filter(address__nonprofit__published=True).distinct().order_by('name')
+class SuburbViewSet(viewsets.ModelViewSet):
+  queryset = Suburb.objects.all()
+  serializer_class = SuburbSerializer
+  permission_classes = [AllowAny]
 
-        context.update({
-            'recommendations': self.get_recommendations(),
-            'project_address_form': project_address_form,
-            'nonprofit_address_form': nonprofit_address_form,
-            'blog_feed': self.get_blog_feed()
-        })
-
-        return context
-
-    def get_blog_feed(self):
-        cache = get_cache('default')
-        blog_feed = cache.get('blog_feed')
-
-        if not blog_feed:
-            blog_feed = feedparser.parse('http://www.atados.com.br/blog/feed/').entries[0:3]
-            if blog_feed:
-                cache.set('blog_feed', blog_feed, 300)
-
-        return blog_feed
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            try:
-                Nonprofit.objects.get(user=request.user)
-                from atados_nonprofit.views import NonprofitHomeView
-                return NonprofitHomeView.as_view()(request, *args, **kwargs)
-            except Nonprofit.DoesNotExist:
-                pass
-                #return VolunteerHomeView.as_view()(request, *args, **kwargs)
-
-        return self.__call__(request, *args, **kwargs)
+class AvailabilityViewSet(viewsets.ModelViewSet):
+  queryset = Availability.objects.all()
+  serializer_class = AvailabilitySerializer
