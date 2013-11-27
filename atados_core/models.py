@@ -86,6 +86,9 @@ class Address(models.Model):
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
+    city = models.ForeignKey(City, verbose_name=_('City'), blank=False,
+                             null=True, default=None)
+
     suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
                                null=True, default=None)
 

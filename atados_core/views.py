@@ -1,17 +1,21 @@
+import facepy as facebook
+
 from django.core.mail import send_mail
 from django.http import Http404
 from django.template.defaultfilters import slugify
 
+from haystack.query import SearchQuerySet
+from provider.oauth2.views import AccessToken, Client
+
 from rest_framework import viewsets, status
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
+
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role, User
 from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
 from atados_core.permissions import IsOwnerOrReadOnly
-
-import facepy as facebook
-from provider.oauth2.views import AccessToken, Client
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -239,6 +243,39 @@ class NonprofitViewSet(viewsets.ModelViewSet):
       return nonprofit
     except:
       raise Http404
+
+class ProjectList(generics.ListAPIView):
+  serializer_class = ProjectSerializer
+  permission_classes = [AllowAny]
+
+  def get_queryset(self):
+    params = self.request.GET
+    query = params.get('query', None)
+    queryset = SearchQuerySet().filter(content=query).models(Project) if query else SearchQuerySet().all().models(Project)
+    results = [ r.pk for r in queryset ]
+    return Project.objects.filter(pk__in=results)
+
+class NonprofitList(generics.ListAPIView):
+  serializer_class = NonprofitSerializer
+  permission_classes = [AllowAny]
+
+  def get_queryset(self):
+    params = self.request.GET
+    query = params.get('query', None)
+    queryset = SearchQuerySet().filter(content=query).models(Nonprofit) if query else SearchQuerySet().all().models(Nonprofit)
+    results = [ r.pk for r in queryset ]
+    return Nonprofit.objects.filter(pk__in=results)
+
+class VolunteerList(generics.ListAPIView):
+  serializer_class = VolunteerSerializer
+  permission_classes = [AllowAny]
+
+  def get_queryset(self):
+    params = self.request.GET
+    query = params.get('query', None)
+    queryset = SearchQuerySet().filter(content=query).models(Volunteer) if query else SearchQuerySet().all().models(Nonprofit)
+    results = [ r.pk for r in queryset ]
+    return Nonprofit.objects.filter(pk__in=results)
 
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()

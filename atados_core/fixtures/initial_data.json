@@ -388,7 +388,8 @@
   "model": "atados_core.city", 
   "fields": {
     "state": 1, 
-    "name": "S\u00e3o Paulo"
+    "name": "S\u00e3o Paulo",
+    "active": 1
   }
 },
 {
@@ -396,7 +397,8 @@
   "model": "atados_core.city", 
   "fields": {
     "state": 2, 
-    "name": "Curitiba"
+    "name": "Curitiba",
+    "active": 1
   }
 },
 {
@@ -404,7 +406,8 @@
   "model": "atados_core.city", 
   "fields": {
     "state": 9, 
-    "name": "Bras\u00edlia"
+    "name": "Bras\u00edlia",
+    "active": 1
   }
 },
 {

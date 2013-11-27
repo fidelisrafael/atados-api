@@ -2,7 +2,9 @@ from django.conf import settings
 from django.conf.urls import patterns, url, include
 
 from atados_core import views
+from atados_core.models import Project
 from rest_framework.routers import DefaultRouter
+from rest_framework.generics import ListAPIView
 from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
@@ -35,6 +37,10 @@ urlpatterns = patterns('atados_core.views',
   url(r'^v1/check_email/', 'check_email'),
 
   url(r'^v1/upload_volunteer_image/', 'upload_volunteer_image'),
+
+  url(r'^v1/projects', views.ProjectList.as_view()),
+  url(r'^v1/nonprofit', views.NonprofitList.as_view()),
+  url(r'^v1/volunteers', views.VolunteerList.as_view())
 )
 
 urlpatterns += patterns('',

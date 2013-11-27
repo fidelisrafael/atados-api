@@ -21,12 +21,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql' if 'RDS_HOSTNAME' in os.environ else 'django.db.backends.sqlite3',
-        'NAME': os.environ.get('RDS_DB_NAME', 'atados.sqlite'),
-        'USER': os.environ.get('RDS_USERNAME', ''),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('RDS_DB_NAME', 'atados'),
+        'USER': os.environ.get('RDS_USERNAME', 'atados'),
         'PASSWORD': os.environ.get('RDS_PASSWORD', ''),
-        'HOST': os.environ.get('RDS_HOSTNAME', ''),
-        'PORT': os.environ.get('RDS_PORT', ''),
+        'HOST': os.environ.get('RDS_HOSTNAME', 'localhost'),
+        'PORT': os.environ.get('RDS_PORT', '3306'),
     }
 }
 
@@ -235,7 +235,7 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': 'http://%s/' % (os.environ.get('ATADOS_SEARCH_ENDPOINT', '127.0.0.1:9200')),
-        'INDEX_NAME': 'haystack',
+        'INDEX_NAME': 'haystack'
     },
 }
 
