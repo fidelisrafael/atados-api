@@ -272,10 +272,10 @@ REST_FRAMEWORK = {
       'rest_framework.parsers.MultiPartParser',
     ),
 
-    'PAGINATE_BY': 20,
+    'PAGINATE_BY': 8,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',  
-    'MAX_PAGINATE_BY': 100,
+    'MAX_PAGINATE_BY': 15,
 
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
