@@ -22,10 +22,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql' if 'ATADOS_DB_NAME' else 'django.db.backends.sqlite3',
-        'NAME': os.environ.get('ATADOS_DB_NAME', 'atados'),
-        'USER': os.environ.get('ATADOS_DB_USERNAME', 'atados'),
+        'NAME': os.environ.get('ATADOS_DB_NAME', ''),
+        'USER': os.environ.get('ATADOS_DB_USERNAME', ''),
         'PASSWORD': os.environ.get('ATADOS_DB_PASSWORD', ''),
-        'HOST': os.environ.get('ATADOS_DB_HOSTNAME', 'localhost'),
+        'HOST': os.environ.get('ATADOS_DB_HOSTNAME', ''),
         'PORT': os.environ.get('ATADOS_DB_PORT', '3306'),
     }
 }
