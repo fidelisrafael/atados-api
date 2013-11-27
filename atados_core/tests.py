@@ -103,7 +103,7 @@ class AddressTest(TestCase):
     state = State(name="Rio de Janeiro", code="RJ")
     city = City(name="Rio de Janeiro", state=state)
     suburb = Suburb(name="Zona Norte", city=city)
-    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, state=state, city=city, suburb=suburb)
+    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, city=city, suburb=suburb)
 
   def test_address_creation(self):
     """
@@ -130,7 +130,6 @@ class VolunteerTests(APITestCase):
     self.assertTrue(isinstance(v, Volunteer))
     self.assertEqual(v.__unicode__(), self.slug)
     self.assertEqual(v.get_type(), "VOLUNTEER");
-    self.assertEqual(v.get_image_url(), "http://atadosapp.s3.amazonaws.com/volunteer/default.png")
     self.assertEqual(v.image_name("teste.jpg"), "volunteer/" + self.slug + "/" + self.slug + ".jpg")
 
 
