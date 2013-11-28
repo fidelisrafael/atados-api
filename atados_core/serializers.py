@@ -19,13 +19,13 @@ class CauseSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Cause
     lookup_field = 'id'
-    fields = ('url', 'name')
+    fields = ('id', 'name')
 
 class SkillSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Skill
     lookup_field = 'id'
-    fields = ('url', 'name')
+    fields = ('id', 'name')
 
 class StateSerializer(serializers.ModelSerializer):
   class Meta:

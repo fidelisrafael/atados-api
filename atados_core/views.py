@@ -5,6 +5,8 @@ from django.http import Http404
 from django.template.defaultfilters import slugify
 
 from haystack.query import SearchQuerySet
+from haystack.inputs import Clean
+
 from provider.oauth2.views import AccessToken, Client
 
 from rest_framework import viewsets, status
@@ -251,7 +253,13 @@ class ProjectList(generics.ListAPIView):
   def get_queryset(self):
     params = self.request.GET
     query = params.get('query', None)
-    queryset = SearchQuerySet().filter(content=query).models(Project) if query else SearchQuerySet().all().models(Project)
+    cause = params.get('cause', None)
+    skill = params.get('skill', None)
+    city = params.get('city', None)
+    queryset = SearchQuerySet().filter(causes=cause).models(Project) if cause else SearchQuerySet().all().models(Project)
+    queryset = queryset.filter(skills_type=skill).models(Project) if skill else queryset
+    queryset = queryset.filter(city_type=city).models(Project) if city else queryset
+    queryset = queryset.filter(content=Clean(query)).models(Project) if query else queryset
     results = [ r.pk for r in queryset ]
     return Project.objects.filter(pk__in=results)
 
