@@ -224,6 +224,7 @@ class Project(models.Model):
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
+    address = models.OneToOneField(Address, blank=True, null=True)
 
     def get_description(self):
         return self.description if self.description else Truncator(
@@ -281,7 +282,6 @@ class Role(models.Model):
 # Ato Recorrente
 class Work(models.Model):
     project = models.OneToOneField(Project)
-    address = models.OneToOneField(Address)
     availabilities = models.ManyToManyField(Availability)
     roles = models.ManyToManyField(Role, blank=True, null=True)
     skills = models.ManyToManyField(Skill)
@@ -293,7 +293,6 @@ class Work(models.Model):
 # Ato Pontual
 class Job(models.Model):
   project = models.OneToOneField(Project)
-  address = models.OneToOneField(Address)
   skills = models.ManyToManyField(Skill)
   roles = models.ManyToManyField(Role, blank=True, null=True)
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);

@@ -62,23 +62,18 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
       return [skill.id for skill in obj.job.skills.all()]
     return []
 
-  def get_address(self, obj):
-    if hasattr(obj, 'work') and obj.work.address:
-      return obj.work.address
-    if hasattr(obj, 'donation') and obj.donation.delivery:
-      return obj.donation.delivery
-    return Address()
-
   def prepare_state(self, obj):
-    state = self.get_address(obj).city.state if self.get_address(obj).city else None
-    return state.id if state else None
+    if obj.address:
+      state = obj.address.city.state if obj.address.city else None
+      return state.id if state else None
+    return None
 
   def prepare_city(self, obj):
-    city = self.get_address(obj).city
+    city = obj.address.city if obj.address else None
     return city.id if city else None
 
   def prepare_suburb(self, obj):
-    suburb = self.get_address(obj).suburb
+    suburb = obj.address.suburb if obj.address else None
     return suburb.id if suburb else None
 
   def prepare_availabilities(self, obj):

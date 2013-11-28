@@ -258,7 +258,7 @@ class ProjectList(generics.ListAPIView):
     city = params.get('city', None)
     queryset = SearchQuerySet().filter(causes=cause).models(Project) if cause else SearchQuerySet().all().models(Project)
     queryset = queryset.filter(skills=skill).models(Project) if skill else queryset
-    queryset = queryset.filter(cities=city).models(Project) if city else queryset
+    queryset = queryset.filter(city=city).models(Project) if city else queryset
     queryset = queryset.filter(content=Clean(query)).models(Project) if query else queryset
     results = [ r.pk for r in queryset ]
     return Project.objects.filter(pk__in=results)

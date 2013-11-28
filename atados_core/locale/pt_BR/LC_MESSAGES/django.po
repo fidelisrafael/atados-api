@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-28 16:37-0200\n"
+"POT-Creation-Date: 2013-11-28 17:44-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,7 +136,7 @@ msgstr "Detalhes"
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:122 models.py:220 models.py:307
+#: models.py:122 models.py:220 models.py:306
 msgid "Published"
 msgstr "Publicado"
 
@@ -162,7 +162,7 @@ msgstr "Atos"
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:218 models.py:354
+#: models.py:218 models.py:353
 msgid "Phone"
 msgstr "Telefone"
 
@@ -179,36 +179,36 @@ msgstr "Fechado"
 msgid "Closed date"
 msgstr "Data deletado"
 
-#: models.py:258
+#: models.py:259
 msgid "Collection made by the nonprofit"
 msgstr "Coleção feita pela ONG"
 
-#: models.py:262
+#: models.py:263
 msgid "Material name"
 msgstr "Nomde do material"
 
-#: models.py:264
+#: models.py:265
 msgid "Quantity"
 msgstr "Quantidade"
 
-#: models.py:271
+#: models.py:272
 #, fuzzy
 msgid "Role name"
 msgstr "nome"
 
-#: models.py:273
+#: models.py:274
 msgid "Prerequisites"
 msgstr "Prerequisitos"
 
-#: models.py:275
+#: models.py:276
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:277 models.py:299
+#: models.py:278 models.py:298
 msgid "Start date"
 msgstr ""
 
-#: models.py:278 models.py:300
+#: models.py:279 models.py:299
 #, fuzzy
 msgid "End date"
 msgstr "Data deletado"
@@ -221,50 +221,50 @@ msgstr "Horas semanais"
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:308
+#: models.py:307
 #, fuzzy
 msgid "Canceled date"
 msgstr "Data deletado"
 
-#: models.py:312
+#: models.py:311
 msgid "Sort"
 msgstr "Ordenar"
 
-#: models.py:341
+#: models.py:340
 msgid "email address"
 msgstr ""
 
-#: models.py:342
+#: models.py:341
 #, fuzzy
 msgid "first name"
 msgstr "Atos"
 
-#: models.py:343
+#: models.py:342
 #, fuzzy
 msgid "last name"
 msgstr "nome"
 
-#: models.py:344
+#: models.py:343
 msgid "Slug"
 msgstr ""
 
-#: models.py:346
+#: models.py:345
 msgid "Staff"
 msgstr ""
 
-#: models.py:347
+#: models.py:346
 msgid "Active"
 msgstr ""
 
-#: models.py:348
+#: models.py:347
 msgid "Email verified"
 msgstr ""
 
-#: models.py:359
+#: models.py:358
 msgid "user"
 msgstr ""
 
-#: models.py:360
+#: models.py:359
 msgid "users"
 msgstr ""
 
