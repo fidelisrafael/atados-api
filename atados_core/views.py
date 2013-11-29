@@ -270,9 +270,14 @@ class NonprofitList(generics.ListAPIView):
   def get_queryset(self):
     params = self.request.GET
     query = params.get('query', None)
-    queryset = SearchQuerySet().filter(content=query).models(Nonprofit) if query else SearchQuerySet().all().models(Nonprofit)
+    cause = params.get('cause', None)
+    city = params.get('city', None)
+    queryset = SearchQuerySet().filter(causes=cause).models(Nonprofit) if cause else SearchQuerySet().all().models(Nonprofit)
+    queryset = queryset.filter(city=city).models(Nonprofit) if city else queryset
+    queryset = queryset.filter(content=Clean(query)).models(Nonprofit) if query else queryset
     results = [ r.pk for r in queryset ]
     return Nonprofit.objects.filter(pk__in=results)
+
 
 class VolunteerList(generics.ListAPIView):
   serializer_class = VolunteerSerializer
