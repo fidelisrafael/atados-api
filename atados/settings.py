@@ -233,14 +233,14 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine' if 'ATADOS_SEARCH_ENDPOINT' in os.environ else 'haystack.backends.simple_backend.SimpleEngine',
         'URL': 'http://%s/' % (os.environ.get('ATADOS_SEARCH_ENDPOINT', '127.0.0.1:9200')),
         'INDEX_NAME': 'haystack'
     },
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 8
 
 SOUTH_AUTO_FREEZE_APP = True
 
