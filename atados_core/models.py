@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.signals import post_save
+from django.db.models import Count
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
@@ -229,6 +230,9 @@ class Project(models.Model):
     def get_description(self):
         return self.description if self.description else Truncator(
                 self.details).chars(75)
+    
+    def get_volunteers(self):
+      return len(Apply.objects.filter(project=self))
 
     def delete(self, *args, **kwargs):
         self.deleted = True

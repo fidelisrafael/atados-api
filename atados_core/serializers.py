@@ -125,6 +125,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   donation = DonationSerializer(required=False)
   address = AddressSerializer()
   image_url = serializers.CharField(source='get_image_url', required=False)
+  volunteers = serializers.IntegerField(source='get_volunteers', required=True)
 
   class Meta:
     model = Project
@@ -132,7 +133,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     depth = 1
     fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'donation', 'image_url')
+              'job', 'work', 'donation', 'image_url', 'volunteers')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()
