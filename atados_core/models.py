@@ -256,21 +256,6 @@ class Project(models.Model):
     def get_project_type(self):
         return self.project_type
 
-class Donation(models.Model):
-  project = models.OneToOneField(Project)
-  delivery = models.OneToOneField(Address)
-  collection_by_nonprofit = models.BooleanField(
-          _('Collection made by the nonprofit'))
-
-class Material(models.Model):
-  donation = models.ForeignKey(Donation)
-  name = models.CharField(_('Material name'), max_length=50,
-                          blank=True, null=True, default=None)
-  quantity = models.PositiveSmallIntegerField(_('Quantity'),
-                                              blank=True,
-                                              null=True,
-                                              default=None)
-
 # Cargo para um Ato pontual ou recorrente
 class Role(models.Model):
     name = models.CharField(_('Role name'), max_length=50,

@@ -1,5 +1,5 @@
 from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cause,
-  Skill, State, City, Suburb, Address, Donation, Work, Material, Role,
+  Skill, State, City, Suburb, Address, Work, Role,
   Apply, Recommendation, Job, User)
 from rest_framework import serializers
 
@@ -52,26 +52,14 @@ class AddressSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Address
-    depth = 1
-    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'suburb')
+    depth = 2
+    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'suburb', 'city')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Work
     depth = 1
     fields = ('availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
-
-class MaterialSerializer(serializers.HyperlinkedModelSerializer):
-  class Meta:
-    model = Material
-    fields = ('donation', 'name', 'quantity')
-
-class DonationSerializer(serializers.ModelSerializer):
-  materials = MaterialSerializer(required=True)
-  class Meta:
-    model = Donation
-    depth = 1
-    fields = ('delivery', 'collection_by_nonprofit', 'materials')
 
 class RoleSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -122,7 +110,6 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   nonprofit = NonprofitSerializer()
   work = WorkSerializer(required=False)
   job = JobSerializer(required=False)
-  donation = DonationSerializer(required=False)
   address = AddressSerializer()
   image_url = serializers.CharField(source='get_image_url', required=False)
   volunteers = serializers.IntegerField(source='get_volunteers', required=True)
@@ -133,7 +120,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     depth = 1
     fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'donation', 'image_url', 'volunteers')
+              'job', 'work', 'image_url', 'volunteers')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()
