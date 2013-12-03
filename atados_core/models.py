@@ -145,7 +145,7 @@ class Nonprofit(models.Model):
                        null=True, default=None)
 
     def get_image_url(self):
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images/' + self.image.url if self.image else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.image.url if self.image else None
 
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
@@ -248,7 +248,7 @@ class Project(models.Model):
 
     def get_image_url(self):
       # TODO (mpomarole)
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images/' + self.image.url if self.image else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.image.url if self.image else None
 
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)
