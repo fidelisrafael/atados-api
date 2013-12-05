@@ -10,6 +10,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
   'atados.com.br',
+  'atadoslocal.com.br',
 )
 
 ADMINS = (
