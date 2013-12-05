@@ -157,6 +157,7 @@ def create_nonprofit(request, format=None):
      return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
 
    obja = obj['address']
+   print obja
    address = Address()
    address.zipcode = obja['zipcode']
    address.addressline = obja['addressline']
@@ -339,7 +340,7 @@ class StateViewSet(viewsets.ModelViewSet):
   permission_classes = [AllowAny]
 
 class CityViewSet(viewsets.ModelViewSet):
-  queryset = City.objects.filter(active=True)
+  queryset = City.objects.all()
   serializer_class = CitySerializer
   permission_classes = [AllowAny]
 

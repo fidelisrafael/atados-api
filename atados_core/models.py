@@ -120,6 +120,17 @@ class Nonprofit(models.Model):
 
     address = models.OneToOneField(Address, blank=True, null=True)
 
+    def image_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit/%s.%s' % (self.slug, extension)
+
+    def cover_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit-cover/%s.%s' % (time(), self.slug, extension)
+
+    image = models.ImageField(upload_to=image_name, blank=True, null=True, default=None)
+    cover = models.ImageField(upload_to=cover_name, blank=True, null=True, default=None)
+
     published = models.BooleanField(_("Published"), default=False)
     published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
@@ -137,25 +148,11 @@ class Nonprofit(models.Model):
       return self.description if self.description else Truncator(
               self.details).chars(100)
 
-    def image_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit/%s.%s' % (self.slug, extension)
-
-    image = models.ImageField(upload_to=image_name, blank=True,
-                       null=True, default=None)
-
     def get_image_url(self):
       return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.image.url if self.image else None
-
-    def cover_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit-cover/%s.%s' % (time(), self.slug, extension)
-
-    cover = models.ImageField(upload_to=cover_name, blank=True,
-                       null=True, default=None)
-
+    
     def get_cover_url(self):
-      return self.cover.url if self.cover else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.cover.url if self.cover else None
 
     def get_volunteers(self):
         return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
