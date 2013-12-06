@@ -83,7 +83,7 @@ class Address(models.Model):
                                   blank=True, null=True, default=None)
     addressnumber = models.CharField(_('Address number'), max_length=10,
                                   blank=True, null=True, default=None)
-    addressline2 = models.CharField(_('Apt, PO Box, block'), max_length=200,
+    addressline2 = models.CharField(_('Apt, PO Box, block'), max_length=100,
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
@@ -93,14 +93,14 @@ class Address(models.Model):
     suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
                                null=True, default=None)
 
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(blank=True, null=True, default=None)
+    longitude = models.FloatField(blank=True, null=True, default=None)
 
     def __unicode__(self):
       return '%s, %s, %s - %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood, self.suburb)
 
 class NonprofitManager(models.Manager):
-    use_for_related_fields = True
+    #use_for_related_fields = True
 
     def active(self):
         return self.get_query_set().filter(deleted=False)
@@ -302,7 +302,6 @@ class Recommendation(models.Model):
     city = models.ForeignKey(City, blank=True, null=True, default=None)
 
 class UserManager(BaseUserManager):
-  # TODO(set slug)
   def create_user(self, email, password=None, **extra_fields):
     now = timezone.now()
     if not email:
@@ -326,8 +325,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
   email = models.EmailField(_('email address'), max_length=254, unique=True)
-  first_name = models.CharField(_('first name'), max_length=30, blank=True)
-  last_name = models.CharField(_('last name'), max_length=30, blank=True)
+  first_name = models.CharField(_('first name'), max_length=50, blank=True)
+  last_name = models.CharField(_('last name'), max_length=50, blank=True)
   slug = models.SlugField(_('Slug'), max_length=50, unique=True)
 
   is_staff = models.BooleanField(_('Staff'), default=False)
@@ -340,7 +339,10 @@ class User(AbstractBaseUser):
   address = models.OneToOneField(Address, blank=True, null=True)
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
+  legacy_uid = models.PositiveIntegerField(blank=False, null=False)
+
   objects = UserManager()
+  USERNAME_FIELD = 'email'
 
   class Meta:
     verbose_name = _('user')
@@ -355,5 +357,3 @@ class User(AbstractBaseUser):
 
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
-
-  USERNAME_FIELD = 'email'

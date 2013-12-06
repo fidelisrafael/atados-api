@@ -748,6 +748,14 @@
   }
 },
 {
+  "pk": 0, 
+  "model": "atados_core.suburb", 
+  "fields": {
+    "city": 0,
+    "name": "Nenhum"
+  }
+},
+{
   "pk": 1, 
   "model": "atados_core.suburb", 
   "fields": {

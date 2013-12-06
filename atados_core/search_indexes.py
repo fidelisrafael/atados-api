@@ -20,14 +20,14 @@ class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   def prepare_skills(self, obj):
     return []
 
-  def prepare_state(self, obj):
-    return obj.address.suburb.city.state.id if obj.address and obj.address.suburb.city.state else None
-
-  def prepare_city(self, obj):
-    return obj.address.suburb.city.id if obj.address and obj.address.suburb.city else None
-
-  def prepare_suburb(self, obj):
-    return obj.address.suburb.id if obj.address and obj.address.suburb else None
+#  def prepare_state(self, obj):
+#    return obj.address.suburb.city.state.id if obj.address and obj.address.suburb.city.state else None
+#
+#  def prepare_city(self, obj):
+#    return obj.address.suburb.city.id if obj.address and obj.address.suburb.city else None
+#
+#  def prepare_suburb(self, obj):
+#    return obj.address.suburb.id if obj.address and obj.address.suburb else None
 
   def prepare_availabilities(self, obj):
     return []
