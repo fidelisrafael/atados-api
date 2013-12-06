@@ -103,7 +103,7 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
     lookup_field = 'slug'
     depth = 1
     fields = ('url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
-              'facebook_page', 'google_page', 'twitter_handle', 'role')
+              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role')
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   causes = CauseSerializer()

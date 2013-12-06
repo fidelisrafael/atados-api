@@ -93,6 +93,9 @@ class Address(models.Model):
     suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
                                null=True, default=None)
 
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+
     def __unicode__(self):
       return '%s, %s, %s - %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood, self.suburb)
 
@@ -114,11 +117,10 @@ class Nonprofit(models.Model):
                                null=True, default=None)
     description = models.TextField(_('Short description'), max_length=100,
                                    blank=True, null=True)
+    website = models.URLField(blank=True, null=True, default=None)
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
     twitter_handle = models.CharField(max_length=51, blank=True, null=True, default=None)
-
-    address = models.OneToOneField(Address, blank=True, null=True)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)

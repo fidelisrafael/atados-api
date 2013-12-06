@@ -22,7 +22,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql' if 'ATADOS_DB_NAME' in os.environ else 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2' if 'ATADOS_DB_NAME' in os.environ else 'django.db.backends.sqlite3',
         'NAME': os.environ.get('ATADOS_DB_NAME', 'atados.sqlite'),
         'USER': os.environ.get('ATADOS_DB_USERNAME', ''),
         'PASSWORD': os.environ.get('ATADOS_DB_PASSWORD', ''),
