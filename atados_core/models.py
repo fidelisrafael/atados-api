@@ -209,6 +209,7 @@ class Role(models.Model):
                             blank=True, null=True, default=None)
     prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
                                     blank=True, null=True, default=None)
+    details = models.TextField(_('Details'), max_length=1024, blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
     start_date = models.DateTimeField(_("Start date"), blank=True, null=True)

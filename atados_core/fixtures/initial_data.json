@@ -1,5 +1,173 @@
 [
 {
+ "pk": 1, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 0,
+    "period": 0
+  }
+},
+{
+ "pk": 2,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 0,
+    "period": 1
+  }
+},
+{
+ "pk": 3,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 0,
+    "period": 2
+  }
+},
+{
+ "pk": 4, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 1,
+    "period": 0
+  }
+},
+{
+ "pk": 5, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 1,
+    "period": 1
+  }
+},
+{
+ "pk": 6, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 1,
+    "period": 2
+  }
+},
+{
+ "pk": 7, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 2,
+    "period": 0
+  }
+},
+{
+ "pk": 8, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 2,
+    "period": 1
+  }
+},
+{
+ "pk": 9, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 2,
+    "period": 2
+  }
+},
+{
+ "pk": 10, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 3,
+    "period": 0
+  }
+},
+{
+ "pk": 11, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 3,
+    "period": 1
+  }
+},
+{
+ "pk": 12,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 3,
+    "period": 2
+  }
+},
+{
+ "pk": 13, 
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 4,
+    "period": 0
+  }
+},
+{
+ "pk": 14,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 4,
+    "period": 1
+  }
+},
+{
+ "pk": 15,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 4,
+    "period": 2
+  }
+},
+{
+ "pk": 16,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 5,
+    "period": 0
+  }
+},
+{
+ "pk": 17,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 5,
+    "period": 1
+  }
+},
+{
+ "pk": 18,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 5,
+    "period": 2
+  }
+},
+{
+ "pk": 19,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 6,
+    "period": 0
+  }
+},
+{
+ "pk": 20,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 6,
+    "period": 1
+  }
+},
+{
+ "pk": 21,
+  "model": "atados_core.availability", 
+  "fields": {
+    "weekday": 6,
+    "period": 2
+  }
+},
+{
   "pk": 1, 
   "model": "atados_core.cause", 
   "fields": {
