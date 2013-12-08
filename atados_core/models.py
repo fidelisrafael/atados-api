@@ -10,6 +10,8 @@ from datetime import datetime
 from atados import settings
 from time import time
 
+from pygeocoder import Geocoder
+
 WEEKDAYS = (
   (1, _('Monday')),
   (2, _('Tuesday')),
@@ -98,6 +100,19 @@ class Address(models.Model):
 
     def __unicode__(self):
       return '%s, %s, %s - %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood, self.suburb)
+
+def get_latitude_longitude(sender, instance, **kwargs):
+  if instance.city and not instance.city.id == 0:
+    if (not instance.latitude or not instance.longitude):
+      try: 
+        results = Geocoder.geocode(instance)
+        instance.latitude = results[0].coordinates[0]
+        instance.longitude = results[0].coordinates[1]
+        instance.save()
+      except Exception as e:
+        pass
+
+post_save.connect(get_latitude_longitude, sender=Address, dispatch_uid="get_latitude_longitude")
 
 class NonprofitManager(models.Manager):
     #use_for_related_fields = True
