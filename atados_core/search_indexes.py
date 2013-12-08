@@ -56,11 +56,7 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
     return [cause.id for cause in obj.causes.all()]
 
   def prepare_skills(self, obj):
-    if hasattr(obj, 'work'):
-      return [skill.id for skill in obj.work.skills.all()]
-    elif hasattr(obj, 'job'):
-      return [skill.id for skill in obj.job.skills.all()]
-    return []
+    return [skill.id for skill in obj.skills.all()]
 
   def prepare_state(self, obj):
     if obj.address:
