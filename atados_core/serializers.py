@@ -59,7 +59,7 @@ class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
     model = Work
     depth = 1
-    fields = ('availabilities', 'skills', 'weekly_hours', 'can_be_done_remotely')
+    fields = ('availabilities', 'weekly_hours', 'can_be_done_remotely')
 
 class RoleSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -72,13 +72,10 @@ class RoleSerializer(serializers.HyperlinkedModelSerializer):
     fields = ('url', 'name', 'prerequisites', 'vacancies')
 
 class JobSerializer(serializers.HyperlinkedModelSerializer):
-  roles = serializers.PrimaryKeyRelatedField(many=True, read_only=False)
-  skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
-
   class Meta:
     model = Job
     depth = 1
-    fields = ('skills','roles', 'start_date', 'end_date')
+    fields = ('start_date', 'end_date')
 
 class ApplySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -120,7 +117,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     depth = 1
     fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'image_url', 'volunteers')
+              'job', 'work', 'image_url', 'volunteers', 'skills', 'roles')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()

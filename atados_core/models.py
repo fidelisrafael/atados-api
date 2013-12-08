@@ -124,11 +124,11 @@ class Nonprofit(models.Model):
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit/%s.%s' % (self.slug, extension)
+        return 'nonprofit/%s.%s' % (self.user.slug, extension)
 
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit-cover/%s.%s' % (time(), self.slug, extension)
+        return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
 
     image = models.ImageField(upload_to=image_name, blank=True, null=True, default=None)
     cover = models.ImageField(upload_to=cover_name, blank=True, null=True, default=None)
@@ -151,10 +151,10 @@ class Nonprofit(models.Model):
               self.details).chars(100)
 
     def get_image_url(self):
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.image.url if self.image else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.image.url if self.image else None
     
     def get_cover_url(self):
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.cover.url if self.cover else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.cover.url if self.cover else None
 
     def get_volunteers(self):
         return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
@@ -188,7 +188,8 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_image_url(self):
-    return self.image.url if self.image else settings.STATIC_ROOT + '/volunteer/default.png'
+    return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.image.url if self.image else None
+
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
@@ -202,11 +203,20 @@ class ProjectManager(models.Manager):
     def published(self):
         return self.active().filter(published=True)
 
+# Cargo para um Ato pontual ou recorrente
+class Role(models.Model):
+    name = models.CharField(_('Role name'), max_length=50,
+                            blank=True, null=True, default=None)
+    prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
+                                    blank=True, null=True, default=None)
+    vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
+                                    blank=True, null=True, default=None)
+    start_date = models.DateTimeField(_("Start date"), blank=True, null=True)
+    end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
 class Project(models.Model):
     objects = ProjectManager()
     nonprofit = models.ForeignKey(Nonprofit)
-    causes = models.ManyToManyField(Cause)
     name = models.CharField(_('Project name'), max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
     details = models.TextField(_('Details'), max_length=1024)
@@ -218,6 +228,7 @@ class Project(models.Model):
     phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
     email = models.EmailField(_('E-mail'), blank=True, null=True)
     published = models.BooleanField(_("Published"), default=False)
+    published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
     closed = models.BooleanField(_("Closed"), default=False)
     closed_date = models.DateTimeField(_("Closed date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
@@ -225,6 +236,12 @@ class Project(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
     address = models.OneToOneField(Address, blank=True, null=True)
+
+    roles = models.ManyToManyField(Role, blank=True, null=True)
+    skills = models.ManyToManyField(Skill)
+    causes = models.ManyToManyField(Cause)
+
+    legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
     def get_description(self):
         return self.description if self.description else Truncator(
@@ -255,24 +272,11 @@ class Project(models.Model):
     def get_project_type(self):
         return self.project_type
 
-# Cargo para um Ato pontual ou recorrente
-class Role(models.Model):
-    name = models.CharField(_('Role name'), max_length=50,
-                            blank=True, null=True, default=None)
-    prerequisites = models.TextField(_('Prerequisites'), max_length=1024,
-                                    blank=True, null=True, default=None)
-    vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
-                                    blank=True, null=True, default=None)
-    start_date = models.DateTimeField(_("Start date"), blank=True, null=True)
-    end_date = models.DateTimeField(_("End date"), blank=True, null=True)
-
 
 # Ato Recorrente
 class Work(models.Model):
     project = models.OneToOneField(Project)
     availabilities = models.ManyToManyField(Availability)
-    roles = models.ManyToManyField(Role, blank=True, null=True)
-    skills = models.ManyToManyField(Skill)
     weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
                                         blank=True, null=True)
     can_be_done_remotely = models.BooleanField(
@@ -281,8 +285,6 @@ class Work(models.Model):
 # Ato Pontual
 class Job(models.Model):
   project = models.OneToOneField(Project)
-  skills = models.ManyToManyField(Skill)
-  roles = models.ManyToManyField(Role, blank=True, null=True)
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
@@ -302,6 +304,7 @@ class Recommendation(models.Model):
     city = models.ForeignKey(City, blank=True, null=True, default=None)
 
 class UserManager(BaseUserManager):
+
   def create_user(self, email, password=None, **extra_fields):
     now = timezone.now()
     if not email:
@@ -339,7 +342,7 @@ class User(AbstractBaseUser):
   address = models.OneToOneField(Address, blank=True, null=True)
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
-  legacy_uid = models.PositiveIntegerField(blank=False, null=False)
+  legacy_uid = models.PositiveIntegerField(blank=True, null=True)
 
   objects = UserManager()
   USERNAME_FIELD = 'email'

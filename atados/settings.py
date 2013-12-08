@@ -218,8 +218,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-if not DEBUG: 
-  DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
