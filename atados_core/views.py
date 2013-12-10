@@ -226,6 +226,15 @@ def upload_volunteer_image(request, format=None):
     return Response({"file": volunteer.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
 
+@api_view(['GET'])
+def numbers(request, format=None):
+  numbers = {}
+  numbers['projects'] = Project.objects.count()
+  numbers['volunteers'] = Volunteer.objects.count()
+  numbers['nonprofits'] = Nonprofit.objects.count()
+  return Response(numbers, status.HTTP_200_OK)
+
+
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer

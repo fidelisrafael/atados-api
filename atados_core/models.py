@@ -273,14 +273,14 @@ class Project(models.Model):
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
-        return 'project/%s/%s.%s' % (self.nonprofit.slug, self.slug, extension)
+        return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
 
     image = models.ImageField(upload_to=image_name, blank=True,
                        null=True, default=None)
 
     def get_image_url(self):
-      # TODO (mpomarole)
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/images' + self.image.url if self.image else None
+      print self.image.url if self.image else None
+      return 'https://s3-sa-east-1.amazonaws.com/atadosapp' + self.image.url if self.image else None
 
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)

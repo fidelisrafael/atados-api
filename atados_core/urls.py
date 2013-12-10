@@ -38,6 +38,8 @@ urlpatterns = patterns('atados_core.views',
 
   url(r'^v1/upload_volunteer_image/', 'upload_volunteer_image'),
 
+  url(r'^v1/numbers/', 'numbers'),
+
   url(r'^v1/projects', views.ProjectList.as_view()),
   url(r'^v1/nonprofit', views.NonprofitList.as_view()),
   url(r'^v1/volunteers', views.VolunteerList.as_view())
