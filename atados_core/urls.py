@@ -9,9 +9,6 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
-router.register(r'volunteers', views.VolunteerViewSet)
-router.register(r'nonprofits', views.NonprofitViewSet)
-router.register(r'projects', views.ProjectViewSet)
 router.register(r'roles', views.RoleViewSet)
 router.register(r'causes', views.CauseViewSet)
 router.register(r'skills', views.SkillViewSet)
@@ -40,7 +37,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'^v1/numbers/', 'numbers'),
 
   url(r'^v1/projects/', views.ProjectList.as_view()),
-  url(r'^v1/nonprofit/', views.NonprofitList.as_view()),
+  url(r'^v1/nonprofits/', views.NonprofitList.as_view()),
   url(r'^v1/volunteers/', views.VolunteerList.as_view())
 )
 

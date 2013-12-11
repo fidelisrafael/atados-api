@@ -33,7 +33,6 @@ class StateSerializer(serializers.ModelSerializer):
     fields = ('id', 'name', 'code')
 
 class CitySerializer(serializers.ModelSerializer):
-  state = StateSerializer()
 
   class Meta:
     model = City
@@ -42,7 +41,6 @@ class CitySerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
   class Meta:
     model = Address
-    depth = 2
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
@@ -79,7 +77,6 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
 
 class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   user = UserSerializer()
-  causes = CauseSerializer()
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
