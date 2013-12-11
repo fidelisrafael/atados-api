@@ -1,5 +1,5 @@
 from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cause,
-  Skill, State, City, Suburb, Address, Work, Role,
+  Skill, State, City, Address, Work, Role,
   Apply, Recommendation, Job, User)
 from rest_framework import serializers
 
