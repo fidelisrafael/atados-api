@@ -914,53 +914,5 @@
     "state": 1, 
     "name": "Tabo\u00e3o da Serra"
   }
-},
-{
-  "pk": 0, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 0,
-    "name": "Nenhum"
-  }
-},
-{
-  "pk": 1, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 1, 
-    "name": "Zona Leste"
-  }
-},
-{
-  "pk": 2, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 1, 
-    "name": "Zona Oeste"
-  }
-},
-{
-  "pk": 3, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 1, 
-    "name": "Zona Sul"
-  }
-},
-{
-  "pk": 4, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 1, 
-    "name": "Zona Norte"
-  }
-},
-{
-  "pk": 5, 
-  "model": "atados_core.suburb", 
-  "fields": {
-    "city": 1, 
-    "name": "Centro"
-  }
 }
 ]

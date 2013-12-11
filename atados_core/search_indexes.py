@@ -9,7 +9,6 @@ class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   skills = indexes.MultiValueField(faceted=True)
   state = indexes.CharField(faceted=True)
   city = indexes.CharField(faceted=True)
-  suburb = indexes.CharField(faceted=True)
   availabilities = indexes.MultiValueField(faceted=True)
   has_image = indexes.BooleanField()
   published = indexes.BooleanField(model_attr='published')
@@ -19,15 +18,6 @@ class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
 
   def prepare_skills(self, obj):
     return []
-
-#  def prepare_state(self, obj):
-#    return obj.address.suburb.city.state.id if obj.address and obj.address.suburb.city.state else None
-#
-#  def prepare_city(self, obj):
-#    return obj.address.suburb.city.id if obj.address and obj.address.suburb.city else None
-#
-#  def prepare_suburb(self, obj):
-#    return obj.address.suburb.id if obj.address and obj.address.suburb else None
 
   def prepare_availabilities(self, obj):
     return []
@@ -47,7 +37,6 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   skills = indexes.MultiValueField(faceted=True)
   state = indexes.CharField(faceted=True)
   city = indexes.CharField(faceted=True)
-  suburb = indexes.CharField(faceted=True)
   availabilities = indexes.MultiValueField(faceted=True)
   has_image = indexes.BooleanField()
   published = indexes.BooleanField()
@@ -67,10 +56,6 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   def prepare_city(self, obj):
     city = obj.address.city if obj.address else None
     return city.id if city else None
-
-  def prepare_suburb(self, obj):
-    suburb = obj.address.suburb if obj.address else None
-    return suburb.id if suburb else None
 
   def prepare_availabilities(self, obj):
     if hasattr(obj, 'work'):
@@ -95,7 +80,6 @@ class VolunteerIndex(indexes.SearchIndex, indexes.Indexable):
   skills = indexes.MultiValueField(faceted=True)
   state = indexes.CharField(faceted=True)
   city = indexes.CharField(faceted=True)
-  suburb = indexes.CharField(faceted=True)
   availabilities = indexes.MultiValueField(faceted=True)
   has_image = indexes.BooleanField()
   published = indexes.BooleanField()

@@ -39,21 +39,11 @@ class CitySerializer(serializers.ModelSerializer):
     model = City
     fields = ('id', 'name', 'state', 'active')
 
-class SuburbSerializer(serializers.ModelSerializer):
-  city = CitySerializer()
-
-  class Meta:
-    model = Suburb
-    depth = 1
-    fields = ('id', 'name', 'city')
-
 class AddressSerializer(serializers.ModelSerializer):
-  suburb = SuburbSerializer()
-
   class Meta:
     model = Address
     depth = 2
-    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'suburb', 'city')
+    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-10 10:14-0200\n"
+"POT-Creation-Date: 2013-12-10 21:53-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,7 +136,7 @@ msgstr "Detalhes"
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:151 models.py:246 models.py:312
+#: models.py:151 models.py:246 models.py:311
 msgid "Published"
 msgstr "Publicado"
 
@@ -166,11 +166,11 @@ msgstr "Prerequisitos"
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:230 models.py:304
+#: models.py:230 models.py:303
 msgid "Start date"
 msgstr ""
 
-#: models.py:231 models.py:305
+#: models.py:231 models.py:304
 #, fuzzy
 msgid "End date"
 msgstr "Data deletado"
@@ -184,7 +184,7 @@ msgstr "Atos"
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:244 models.py:359
+#: models.py:244 models.py:358
 msgid "Phone"
 msgstr "Telefone"
 
@@ -201,58 +201,58 @@ msgstr "Fechado"
 msgid "Closed date"
 msgstr "Data deletado"
 
-#: models.py:296
+#: models.py:295
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:299
+#: models.py:298
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:313
+#: models.py:312
 #, fuzzy
 msgid "Canceled date"
 msgstr "Data deletado"
 
-#: models.py:317
+#: models.py:316
 msgid "Sort"
 msgstr "Ordenar"
 
-#: models.py:346
+#: models.py:345
 msgid "email address"
 msgstr ""
 
-#: models.py:347
+#: models.py:346
 #, fuzzy
 msgid "first name"
 msgstr "Atos"
 
-#: models.py:348
+#: models.py:347
 #, fuzzy
 msgid "last name"
 msgstr "nome"
 
-#: models.py:349
+#: models.py:348
 msgid "Slug"
 msgstr ""
 
-#: models.py:351
+#: models.py:350
 msgid "Staff"
 msgstr ""
 
-#: models.py:352
+#: models.py:351
 msgid "Active"
 msgstr ""
 
-#: models.py:353
+#: models.py:352
 msgid "Email verified"
 msgstr ""
 
-#: models.py:367
+#: models.py:366
 msgid "user"
 msgstr ""
 
-#: models.py:368
+#: models.py:367
 msgid "users"
 msgstr ""
 

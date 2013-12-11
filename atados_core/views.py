@@ -15,8 +15,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, I
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Suburb, Address, Role, User
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, SuburbSerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
 from atados_core.permissions import IsOwnerOrReadOnly
 
 @api_view(['GET'])
@@ -164,7 +164,6 @@ def create_nonprofit(request, format=None):
    address.addressline2 = obja.get('addressline2')
    address.addressnumber = obja['addressnumber']
    address.neighborhood = obja['neighborhood']
-   address.suburb = Suburb.objects.get(id=obja['suburbs']['id'])
    address.save()
 
    FACEBOOK_KEY = 'facebook_page'
@@ -249,6 +248,7 @@ class NonprofitViewSet(viewsets.ModelViewSet):
 
   def get_object(self):
     try:
+      print self.kwargs['slug']
       nonprofit = self.get_queryset().get(user__slug=self.kwargs['slug'])
       nonprofit.slug = nonprofit.user.slug
       self.check_object_permissions(self.request, nonprofit)
@@ -351,11 +351,6 @@ class StateViewSet(viewsets.ModelViewSet):
 class CityViewSet(viewsets.ModelViewSet):
   queryset = City.objects.all()
   serializer_class = CitySerializer
-  permission_classes = [AllowAny]
-
-class SuburbViewSet(viewsets.ModelViewSet):
-  queryset = Suburb.objects.all()
-  serializer_class = SuburbSerializer
   permission_classes = [AllowAny]
 
 class AvailabilityViewSet(viewsets.ModelViewSet):

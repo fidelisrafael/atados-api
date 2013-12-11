@@ -18,12 +18,11 @@ router.register(r'skills', views.SkillViewSet)
 router.register(r'addresses', views.AddressViewSet)
 router.register(r'states', views.StateViewSet)
 router.register(r'cities', views.CityViewSet)
-router.register(r'suburbs', views.SuburbViewSet)
 router.register(r'availabilities', views.AvailabilityViewSet)
 
 urlpatterns = patterns('atados_core.views',
   url(r'^v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
-  url(r'v1/facebook', 'facebook_auth'),
+  url(r'v1/facebook/', 'facebook_auth'),
   url(r'^v1/current_user/', 'current_user'),
   url(r'^v1/password_reset/', 'password_reset'),
   url(r'^v1/change_password/', 'change_password'),
@@ -40,9 +39,9 @@ urlpatterns = patterns('atados_core.views',
 
   url(r'^v1/numbers/', 'numbers'),
 
-  url(r'^v1/projects', views.ProjectList.as_view()),
-  url(r'^v1/nonprofit', views.NonprofitList.as_view()),
-  url(r'^v1/volunteers', views.VolunteerList.as_view())
+  url(r'^v1/projects/', views.ProjectList.as_view()),
+  url(r'^v1/nonprofit/', views.NonprofitList.as_view()),
+  url(r'^v1/volunteers/', views.VolunteerList.as_view())
 )
 
 urlpatterns += patterns('',

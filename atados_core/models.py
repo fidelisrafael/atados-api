@@ -68,15 +68,6 @@ class City(models.Model):
     class Meta:
         verbose_name = _('city')
 
-class Suburb(models.Model):
-    name = models.CharField(_('name'), max_length=30)
-    city = models.ForeignKey(City)
-
-    def __unicode__(self):
-        return '%s - %s' % (self.name, self.city)
-
-    class Meta:
-        verbose_name = _('suburb')
 
 class Address(models.Model):
     zipcode = models.CharField(_('Zip code'), max_length=10,
@@ -92,14 +83,11 @@ class Address(models.Model):
     city = models.ForeignKey(City, verbose_name=_('City'), blank=False,
                              null=True, default=None)
 
-    suburb = models.ForeignKey(Suburb, verbose_name=_('Suburb'), blank=True,
-                               null=True, default=None)
-
     latitude = models.FloatField(blank=True, null=True, default=None)
     longitude = models.FloatField(blank=True, null=True, default=None)
 
     def __unicode__(self):
-      return '%s, %s, %s - %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood, self.suburb)
+      return '%s, %s, %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood)
 
 def get_latitude_longitude(sender, instance, **kwargs):
   if instance.city and not instance.city.id == 0:
@@ -166,10 +154,10 @@ class Nonprofit(models.Model):
               self.details).chars(100)
 
     def get_image_url(self):
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.image.url if self.image else None
+      return self.image.url if self.image else None
     
     def get_cover_url(self):
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.cover.url if self.cover else None
+      return self.cover.url if self.cover else None
 
     def get_volunteers(self):
         return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
@@ -203,7 +191,7 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_image_url(self):
-    return 'https://s3-sa-east-1.amazonaws.com/atadosapp/' + self.image.url if self.image else None
+    return self.image.url if self.image else None
 
 
   def __unicode__(self):
@@ -235,8 +223,8 @@ class Project(models.Model):
     nonprofit = models.ForeignKey(Nonprofit)
     name = models.CharField(_('Project name'), max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
-    details = models.TextField(_('Details'), max_length=1024)
-    description = models.TextField(_('Short description'), max_length=100,
+    details = models.TextField(_('Details'), max_length=3000)
+    description = models.TextField(_('Short description'), max_length=100, 
                                    blank=True, null=True)
     facebook_event = models.URLField(blank=True, null=True, default=None)
     responsible = models.CharField(_('Responsible name'), max_length=50,
@@ -279,8 +267,7 @@ class Project(models.Model):
                        null=True, default=None)
 
     def get_image_url(self):
-      print self.image.url if self.image else None
-      return 'https://s3-sa-east-1.amazonaws.com/atadosapp' + self.image.url if self.image else None
+      return self.image.url if self.image else None
 
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)
