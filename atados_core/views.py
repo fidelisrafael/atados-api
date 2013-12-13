@@ -29,7 +29,6 @@ def current_user(request, format=None):
       try:
         return Response(NonprofitSerializer(request.user.nonprofit).data)
       except Exception as inst:
-        print inst
         return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
@@ -157,7 +156,6 @@ def create_nonprofit(request, format=None):
      return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
 
    obja = obj['address']
-   print obja
    address = Address()
    address.zipcode = obja['zipcode']
    address.addressline = obja['addressline']
@@ -242,7 +240,7 @@ def is_volunteer_to_nonprofit(request, format=None):
       if volunteer.nonprofit_set.filter(id=nonprofit).exists():
         return Response({"YES"}, status.HTTP_200_OK)
       return Response({"NO"}, status.HTTP_200_OK)
-  return Response({"NO"}, status.HTTP_200_OK)
+  return Response({"NO"}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def set_volunteer_to_nonprofit(request, format=None):
@@ -252,7 +250,7 @@ def set_volunteer_to_nonprofit(request, format=None):
     if nonprofit:
       if volunteer.nonprofit_set.filter(id=nonprofit).exists():
         nonprofit = Nonprofit.objects.get(id=nonprofit)
-        nonprofit.volunteers.delete(volunteer)
+        nonprofit.volunteers.remove(volunteer)
         return Response({"Removed"}, status.HTTP_200_OK)
       else:
         nonprofit = Nonprofit.objects.get(id=nonprofit)
@@ -274,7 +272,6 @@ class NonprofitViewSet(viewsets.ModelViewSet):
 
   def get_object(self):
     try:
-      print self.kwargs['slug']
       nonprofit = self.get_queryset().get(user__slug=self.kwargs['slug'])
       nonprofit.slug = nonprofit.user.slug
       self.check_object_permissions(self.request, nonprofit)
