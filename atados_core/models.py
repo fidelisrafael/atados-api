@@ -194,8 +194,9 @@ class Nonprofit(models.Model):
       return self.cover.url if self.cover else None
 
     def get_volunteers(self):
-        #TODO add the list of people that favorited
-        return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
+      volunteers_from_projects = Volunteer.objects.filter(apply__project__nonprofit__id=self.id).count()
+      volunteers_favorited = self.volunteers.count()
+      return volunteers_from_projects + volunteers_favorited
 
     def __unicode__(self):
         return self.name
@@ -298,9 +299,9 @@ class Job(models.Model):
 class Apply(models.Model):
   volunteer = models.ForeignKey(Volunteer)
   project = models.ForeignKey(Project)
-  role = models.ForeignKey(Role)
+  # role = models.ForeignKey(Role)
   date = models.DateTimeField(auto_now_add=True, blank=True)
-  canceled = models.BooleanField(_("Published"), default=False)
+  canceled = models.BooleanField(_("Canceled"), default=False)
   canceled_date = models.DateTimeField(_("Canceled date"), blank=True, null=True)
 
 class Recommendation(models.Model):
@@ -343,8 +344,8 @@ class User(AbstractBaseUser):
   is_active = models.BooleanField(_('Active'), default=True)
   is_email_verified = models.BooleanField(_('Email verified'), default=False)
 
-  joined_date = models.DateTimeField(auto_now_add=True)
-  modified_date = models.DateTimeField(auto_now=True)
+  joined_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+  modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
   address = models.OneToOneField(Address, blank=True, null=True)
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)

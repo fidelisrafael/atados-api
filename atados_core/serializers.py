@@ -86,13 +86,14 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url')
+  volunteers = serializers.IntegerField(source='get_volunteers', required=True)
 
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
     depth = 1
     fields = ('id', 'url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
-              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role')
+              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers')
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
   causes = CauseSerializer()
@@ -107,7 +108,8 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     model = Project
     lookup_field = 'slug'
     depth = 1
-    fields = ('nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
+
+    fields = ('id', 'nonprofit', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
               'job', 'work', 'image_url', 'volunteers', 'skills', 'roles')
 

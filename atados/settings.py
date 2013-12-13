@@ -292,3 +292,8 @@ CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
 SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
 
 FACEBOOK_APP_ID = "307143646092582" #TODO: do I need this?
+
+# Drupal legacy sucks :/
+PASSWORD_HASHERS = (
+  'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+)

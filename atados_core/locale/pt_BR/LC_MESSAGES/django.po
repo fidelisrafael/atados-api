@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-12 17:42-0200\n"
+"POT-Creation-Date: 2013-12-13 18:11-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,7 +128,7 @@ msgstr "Detalhes"
 msgid "Short description"
 msgstr "Curta descrição"
 
-#: models.py:173 models.py:238 models.py:303
+#: models.py:173 models.py:238
 msgid "Published"
 msgstr "Publicado"
 
@@ -200,6 +200,11 @@ msgstr "Horas semanais"
 #: models.py:290
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
+
+#: models.py:303
+#, fuzzy
+msgid "Canceled"
+msgstr "Data deletado"
 
 #: models.py:304
 #, fuzzy
