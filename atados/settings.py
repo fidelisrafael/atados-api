@@ -150,6 +150,8 @@ INSTALLED_APPS = (
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
 
+    'atados_core',
+
     'haystack',
     'rest_framework',
     'facepy',
@@ -158,8 +160,6 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'django_nose',
-
-    'atados_core',
 )
 
 # A sample logging configuration. The only tangible logging
