@@ -233,6 +233,32 @@ def numbers(request, format=None):
   numbers['nonprofits'] = Nonprofit.objects.count()
   return Response(numbers, status.HTTP_200_OK)
 
+@api_view(['GET'])
+def is_volunteer_to_nonprofit(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    nonprofit = request.QUERY_PARAMS['nonprofit']
+    if nonprofit:
+      if volunteer.nonprofit_set.filter(id=nonprofit).exists():
+        return Response({"YES"}, status.HTTP_200_OK)
+      return Response({"NO"}, status.HTTP_200_OK)
+  return Response({"NO"}, status.HTTP_200_OK)
+
+@api_view(['POST'])
+def set_volunteer_to_nonprofit(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    nonprofit = request.DATA['nonprofit']
+    if nonprofit:
+      if volunteer.nonprofit_set.filter(id=nonprofit).exists():
+        nonprofit = Nonprofit.objects.get(id=nonprofit)
+        nonprofit.volunteers.delete(volunteer)
+        return Response({"Removed"}, status.HTTP_200_OK)
+      else:
+        nonprofit = Nonprofit.objects.get(id=nonprofit)
+        nonprofit.volunteers.add(volunteer)
+        return Response({"Added"}, status.HTTP_200_OK)
+  return Response({"Could not find nonprofit or volunteer"}, status.HTTP_400_BAD_REQUEST)
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()

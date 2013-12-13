@@ -102,6 +102,39 @@ def get_latitude_longitude(sender, instance, **kwargs):
 
 post_save.connect(get_latitude_longitude, sender=Address, dispatch_uid="get_latitude_longitude")
 
+class Volunteer(models.Model):
+  user = models.OneToOneField(settings.AUTH_USER_MODEL)
+  causes = models.ManyToManyField(Cause, blank=True, null=True)
+  skills = models.ManyToManyField(Skill, blank=True, null=True)
+
+  facebook_uid = models.CharField(blank=True, max_length=255)
+  facebook_access_token = models.CharField(blank=True, max_length=255)
+  facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
+
+  def image_name(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'volunteer/%s/%s.%s' % (self.user.slug,
+                                   self.user.slug,
+                                   extension)
+
+  image = models.ImageField(upload_to=image_name, blank=True,
+                     null=True, default=None)
+
+  @classmethod
+  def create(cls, user):
+    return cls(user=user)
+
+  def get_type(self):
+    return "VOLUNTEER"
+
+  def get_image_url(self):
+    return self.image.url if self.image else None
+
+
+  def __unicode__(self):
+    return self.user.first_name or self.user.slug
+
+
 class NonprofitManager(models.Manager):
     #use_for_related_fields = True
 
@@ -115,6 +148,7 @@ class Nonprofit(models.Model):
     objects = NonprofitManager()
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
+    volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=50)
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
@@ -160,42 +194,12 @@ class Nonprofit(models.Model):
       return self.cover.url if self.cover else None
 
     def get_volunteers(self):
+        #TODO add the list of people that favorited
         return Volunteer.objects.filter(apply__project__nonprofit__id=self.id)
 
     def __unicode__(self):
         return self.name
 
-class Volunteer(models.Model):
-  user = models.OneToOneField(settings.AUTH_USER_MODEL)
-  causes = models.ManyToManyField(Cause, blank=True, null=True)
-  skills = models.ManyToManyField(Skill, blank=True, null=True)
-
-  facebook_uid = models.CharField(blank=True, max_length=255)
-  facebook_access_token = models.CharField(blank=True, max_length=255)
-  facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
-
-  def image_name(self, filename):
-    left_path, extension = filename.rsplit('.', 1)
-    return 'volunteer/%s/%s.%s' % (self.user.slug,
-                                   self.user.slug,
-                                   extension)
-
-  image = models.ImageField(upload_to=image_name, blank=True,
-                     null=True, default=None)
-
-  @classmethod
-  def create(cls, user):
-    return cls(user=user)
-
-  def get_type(self):
-    return "VOLUNTEER"
-
-  def get_image_url(self):
-    return self.image.url if self.image else None
-
-
-  def __unicode__(self):
-    return self.user.first_name or self.user.slug
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True

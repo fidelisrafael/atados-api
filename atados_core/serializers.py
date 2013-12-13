@@ -3,7 +3,28 @@ from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cau
   Apply, Recommendation, Job, User)
 from rest_framework import serializers
 
+class StateSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = State
+    fields = ('id', 'name', 'code')
+
+class CitySerializer(serializers.ModelSerializer):
+  state = StateSerializer()
+
+  class Meta:
+    model = City
+    fields = ('id', 'name', 'state', 'active')
+
+class AddressSerializer(serializers.ModelSerializer):
+  city = CitySerializer()
+
+  class Meta:
+    model = Address
+    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city', 'latitude', 'longitude')
+
 class UserSerializer(serializers.ModelSerializer):
+  address = AddressSerializer()
+
   class Meta:
     model = User
     lookup_field = 'slug'
@@ -26,22 +47,6 @@ class SkillSerializer(serializers.HyperlinkedModelSerializer):
     model = Skill
     lookup_field = 'id'
     fields = ('id', 'name')
-
-class StateSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = State
-    fields = ('id', 'name', 'code')
-
-class CitySerializer(serializers.ModelSerializer):
-
-  class Meta:
-    model = City
-    fields = ('id', 'name', 'state', 'active')
-
-class AddressSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Address
-    fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city')
 
 class WorkSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -86,7 +91,7 @@ class NonprofitSerializer(serializers.HyperlinkedModelSerializer):
     model = Nonprofit
     lookup_field = 'slug'
     depth = 1
-    fields = ('url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
+    fields = ('id', 'url', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'website', 'facebook_page', 'google_page', 'twitter_handle', 'role')
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
