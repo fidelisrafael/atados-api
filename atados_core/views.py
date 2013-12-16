@@ -23,8 +23,7 @@ from atados_core.permissions import IsOwnerOrReadOnly
 def current_user(request, format=None):
   if request.user.is_authenticated():
     try:
-      v = VolunteerSerializer(request.user.volunteer)
-      return Response(v.data)
+      return Response(VolunteerSerializer(request.user.volunteer).data)
     except:
       try:
         return Response(NonprofitSerializer(request.user.nonprofit).data)

@@ -201,6 +201,8 @@ class Nonprofit(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_projects(self):
+      return Project.objects.filter(nonprofit=self)
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True

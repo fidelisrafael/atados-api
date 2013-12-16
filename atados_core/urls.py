@@ -15,6 +15,9 @@ router.register(r'skills', views.SkillViewSet)
 router.register(r'addresses', views.AddressViewSet)
 router.register(r'states', views.StateViewSet)
 router.register(r'cities', views.CityViewSet)
+router.register(r'nonprofit', views.NonprofitViewSet)
+router.register(r'project', views.ProjectViewSet)
+router.register(r'volunteer', views.VolunteerViewSet)
 router.register(r'availabilities', views.AvailabilityViewSet)
 
 urlpatterns = patterns('atados_core.views',
