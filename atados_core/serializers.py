@@ -71,9 +71,13 @@ class JobSerializer(serializers.HyperlinkedModelSerializer):
     fields = ('start_date', 'end_date')
 
 class ApplySerializer(serializers.HyperlinkedModelSerializer):
+  volunteer = serializers.Field(source="volunteer.user.slug")
+  project = serializers.Field(source="project.slug")
+
   class Meta:
     model = Apply
-    fields = ('volunteer', 'project', 'date')
+    depth = 1
+    fields = ('volunteer', 'project', 'date', 'project', 'status', 'canceled')
 
 class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -111,6 +115,17 @@ class NonprofitSerializer(serializers.ModelSerializer):
     depth = 1
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects')
+
+class VolunteerProjectSerializer(serializers.ModelSerializer):
+  name = serializers.CharField(source="get_full_name")
+  email = serializers.CharField(source="get_email")
+  phone = serializers.CharField(source="get_phone")
+  apply = ApplySerializer(source="get_apply")
+
+  class Meta:
+    model = Volunteer
+    lookup_field = 'slug'
+    fields = ('name', 'email', 'phone', 'apply')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer()

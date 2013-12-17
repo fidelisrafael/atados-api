@@ -6,8 +6,6 @@ from atados_core.models import Address, Nonprofit, Project, Volunteer
 class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document=True, use_template=True)
   causes = indexes.MultiValueField(faceted=True)
-  skills = indexes.MultiValueField(faceted=True)
-  state = indexes.CharField(faceted=True)
   city = indexes.CharField(faceted=True)
   availabilities = indexes.MultiValueField(faceted=True)
   has_image = indexes.BooleanField()
@@ -15,9 +13,6 @@ class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
 
   def prepare_causes(self, obj):
     return [cause.id for cause in obj.causes.all()]
-
-  def prepare_skills(self, obj):
-    return []
 
   def prepare_availabilities(self, obj):
     return []

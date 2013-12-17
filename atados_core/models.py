@@ -127,9 +127,22 @@ class Volunteer(models.Model):
   def get_type(self):
     return "VOLUNTEER"
 
+  def get_full_name(self):
+    name = self.user.first_name if self.user.first_name else ""
+    name += self.user.last_name if self.user.last_name else ""
+    return name
+
+  def get_email(self):
+    return self.user.email if self.user.email else None
+
+  def get_phone(self):
+    return self.user.phone if self.user.phone else None
+
+  def get_apply(self):
+    return Apply.objects.filter(volunteer=self)
+
   def get_image_url(self):
     return self.image.url if self.image else None
-
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
@@ -289,8 +302,7 @@ class Work(models.Model):
     availabilities = models.ManyToManyField(Availability)
     weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
                                         blank=True, null=True)
-    can_be_done_remotely = models.BooleanField(
-            _('This work can be done remotely.'))
+    can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'))
 
 # Ato Pontual
 class Job(models.Model):
@@ -298,20 +310,26 @@ class Job(models.Model):
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
+class ApplyStatus(models.Model):
+  name = models.CharField(_('name'), max_length=30)
+
+  def __unicode__(self):
+      return self.name
+
 class Apply(models.Model):
   volunteer = models.ForeignKey(Volunteer)
   project = models.ForeignKey(Project)
-  # role = models.ForeignKey(Role)
+  status = models.ForeignKey(ApplyStatus)
   date = models.DateTimeField(auto_now_add=True, blank=True)
   canceled = models.BooleanField(_("Canceled"), default=False)
   canceled_date = models.DateTimeField(_("Canceled date"), blank=True, null=True)
 
 class Recommendation(models.Model):
-    project = models.ForeignKey(Project)
-    sort = models.PositiveSmallIntegerField(_('Sort'),
-            blank=True, null=True, default=None)
-    state = models.ForeignKey(State, blank=True, null=True, default=None)
-    city = models.ForeignKey(City, blank=True, null=True, default=None)
+  project = models.ForeignKey(Project)
+  sort = models.PositiveSmallIntegerField(_('Sort'),
+          blank=True, null=True, default=None)
+  state = models.ForeignKey(State, blank=True, null=True, default=None)
+  city = models.ForeignKey(City, blank=True, null=True, default=None)
 
 class UserManager(BaseUserManager):
 

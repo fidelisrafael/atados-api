@@ -15,9 +15,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, I
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer
-from atados_core.permissions import IsOwnerOrReadOnly
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User, Apply, ApplyStatus
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer, VolunteerProjectSerializer
+from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -257,6 +257,23 @@ def set_volunteer_to_nonprofit(request, format=None):
         return Response({"Added"}, status.HTTP_200_OK)
   return Response({"Could not find nonprofit or volunteer"}, status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+def change_volunteer_status(request, format=None):
+  if request.user.is_authenticated():
+    try:
+      project = request.DATA['project']
+      volunteer = request.DATA['volunteer']
+      s =  request.DATA['volunteerStatus']
+      project = Project.objects.get(slug=project)
+      volunteer = User.objects.get(email=volunteer).volunteer
+      a = Apply.objects.get(volunteer=volunteer, project=project)
+      a.status = ApplyStatus.objects.get(name=s)
+      a.save()
+      return Response({"OK"}, status.HTTP_200_OK)
+    except Exception as inst:
+      return Response({"Some error with the paramters you passed."}, status.HTTP_400_BAD_REQUEST)
+  return Response({"Some error with the paramters you passed."}, status.HTTP_400_BAD_REQUEST)
+
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
   serializer_class = UserSerializer
@@ -317,6 +334,15 @@ class NonprofitList(generics.ListAPIView):
     results = [ r.pk for r in queryset ]
     return Nonprofit.objects.filter(pk__in=results)
 
+class VolunteerProjectList(generics.ListAPIView):
+  serializer_class = VolunteerProjectSerializer
+  permission_classes = (IsNonprofit, )
+
+  def get_queryset(self):
+    project_slug = self.kwargs.get('project_slug', None)
+    applies = Apply.objects.filter(project__slug=project_slug)
+    volunteers = [ apply.volunteer for apply in applies ]
+    return volunteers
 
 class VolunteerList(generics.ListAPIView):
   serializer_class = VolunteerSerializer
