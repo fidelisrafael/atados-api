@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'django_nose',
+    'import_export',
 )
 
 # A sample logging configuration. The only tangible logging

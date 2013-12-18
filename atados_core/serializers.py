@@ -89,7 +89,7 @@ class ProjectSerializer(serializers.ModelSerializer):
   slug = serializers.CharField(source="slug", required=False)
   details = serializers.CharField(source="details", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
-  volunteers = serializers.IntegerField(source='get_volunteers', required=False)
+  volunteers = serializers.IntegerField(source='get_volunteers_count', required=False)
   name = serializers.CharField(source='name', required=False)
   roles = RoleSerializer(required=False)
 

@@ -6,6 +6,7 @@ from django.db.models import Count
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
+from import_export import resources, fields
 from datetime import datetime
 from atados import settings
 from time import time
@@ -271,8 +272,12 @@ class Project(models.Model):
         return self.description if self.description else Truncator(
                 self.details).chars(75)
     
-    def get_volunteers(self):
+    def get_volunteers_count(self):
       return len(Apply.objects.filter(project=self))
+
+    def get_volunteers(self):
+      apply = Apply.objects.filter(project=self)
+      return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
 
     def delete(self, *args, **kwargs):
         self.deleted = True
@@ -355,7 +360,7 @@ class UserManager(BaseUserManager):
     return user
 
 class User(AbstractBaseUser):
-  email = models.EmailField(_('email address'), max_length=254, unique=True)
+  email = models.EmailField('Email', max_length=254, unique=True)
   first_name = models.CharField(_('first name'), max_length=50, blank=True)
   last_name = models.CharField(_('last name'), max_length=50, blank=True)
   slug = models.SlugField(_('Slug'), max_length=50, unique=True)
@@ -388,3 +393,20 @@ class User(AbstractBaseUser):
 
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
+
+class VolunteerResource(resources.ModelResource):
+  nome = fields.Field()
+  email = fields.Field()
+  telefone = fields.Field()
+
+  class Meta:
+    model = Volunteer
+    fields = ()
+
+  def dehydrate_nome(self, volunteer):
+    return '%s %s' % (volunteer.user.first_name, volunteer.user.last_name)
+  def dehydrate_email(self, volunteer):
+    return volunteer.user.email
+  def dehydrate_telefone(self, volunteer):
+    return volunteer.user.phone
+

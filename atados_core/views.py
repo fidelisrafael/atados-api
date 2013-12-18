@@ -1,10 +1,10 @@
+import datetime
 import facepy as facebook
 
 from django.core.mail import send_mail
 from django.http import Http404
 from django.template.defaultfilters import slugify
-
-import datetime
+from django.http import HttpResponse
 
 from haystack.query import SearchQuerySet
 from haystack.inputs import Clean
@@ -17,7 +17,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, I
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User, Apply, ApplyStatus
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User, Apply, ApplyStatus, VolunteerResource
 from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
@@ -295,6 +295,17 @@ def clone_project(request, project_slug, format=None):
       return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def export_project_csv(request, project_slug, format=None):
+  if request.user.is_authenticated():
+    try:
+      project = Project.objects.get(slug=project_slug)
+      data = VolunteerResource().export(project.get_volunteers()).csv
+      return Response({'volunteers': data}, status.HTTP_200_OK)
+    except Exception as inst:
+      print inst
+      return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
+  return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()
