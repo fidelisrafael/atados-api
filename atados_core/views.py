@@ -278,11 +278,19 @@ def change_volunteer_status(request, format=None):
 
 @api_view(['POST'])
 def clone_project(request, project_slug, format=None):
+  def new_slug(slug):
+    append = '-2'
+    i = 2
+    while (Project.objects.filter(slug=slug + append).exists()):
+        i += 1
+        append = '-' + str(i)
+    return slug + append
+    
   if request.user.is_authenticated():
     try:
       project = Project.objects.get(slug=project_slug)
       project.pk = None
-      project.slug = project.slug + datetime.date.today().strftime("-%d-%m-%y")
+      project.slug = new_slug(project.slug)
       address = project.address
       address.pk = None
       address.save()
