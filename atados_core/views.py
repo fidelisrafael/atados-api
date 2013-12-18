@@ -4,6 +4,8 @@ from django.core.mail import send_mail
 from django.http import Http404
 from django.template.defaultfilters import slugify
 
+import datetime
+
 from haystack.query import SearchQuerySet
 from haystack.inputs import Clean
 
@@ -271,8 +273,28 @@ def change_volunteer_status(request, format=None):
       a.save()
       return Response({"OK"}, status.HTTP_200_OK)
     except Exception as inst:
-      return Response({"Some error with the paramters you passed."}, status.HTTP_400_BAD_REQUEST)
-  return Response({"Some error with the paramters you passed."}, status.HTTP_400_BAD_REQUEST)
+      return Response({"Some error with the parameters you passed."}, status.HTTP_400_BAD_REQUEST)
+  return Response({"Some error with the parameters you passed."}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def clone_project(request, project_slug, format=None):
+  if request.user.is_authenticated():
+    try:
+      project = Project.objects.get(slug=project_slug)
+      project.pk = None
+      project.slug = project.slug + datetime.date.today().strftime("-%d-%m-%y")
+      address = project.address
+      address.pk = None
+      address.save()
+      project.address = address
+      project.published = False
+      project.save()
+      return Response(ProjectSerializer(project).data, status.HTTP_200_OK)
+    except Exception as inst:
+      print inst
+      return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
+  return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
+
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()

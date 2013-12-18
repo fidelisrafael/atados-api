@@ -43,7 +43,8 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/projects/', views.ProjectList.as_view()),
   url(r'v1/nonprofits/', views.NonprofitList.as_view()),
   url(r'^v1/volunteers/$', views.VolunteerList.as_view()),
-  url(r'v1/project/(?P<project_slug>[\w-]+)/volunteers/', views.VolunteerProjectList.as_view())
+  url(r'v1/project/(?P<project_slug>[\w-]+)/volunteers/', views.VolunteerProjectList.as_view()),
+  url(r'v1/project/(?P<project_slug>[\w-]+)/clone/', 'clone_project'),
 )
 
 urlpatterns += patterns('',
