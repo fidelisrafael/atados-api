@@ -373,7 +373,7 @@ class VolunteerViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.all()
   serializer_class = ProjectSerializer
-  permissions_classes = [IsOwnerOrReadOnly]
+  permissions_classes = [IsNonprofit]
   lookup_field = 'slug'
 
 class RoleViewSet(viewsets.ModelViewSet):

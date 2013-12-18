@@ -18,9 +18,9 @@ class IsNonprofit(permissions.BasePermission):
   Custom permission for accessign volunteer data from the Nonprofit panel
   """
   def has_object_permission(self, request, view, obj):
-    if request.user.is_authenticated() and request.method in permissions.SAFE_METHODS:
+    if request.user.is_authenticated():
       return True if request.user.nonprofit or request.user.is_staff() else False
 
   def has_permission(self, request, view, obj=None):
-    if request.user.is_authenticated() and request.method in permissions.SAFE_METHODS:
+    if request.user.is_authenticated():
       return True if request.user.nonprofit or request.user.is_staff() else False

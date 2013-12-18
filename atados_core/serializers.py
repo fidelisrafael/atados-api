@@ -2,6 +2,7 @@ from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cau
   Skill, State, City, Address, Work, Role,
   Apply, Recommendation, Job, User)
 from rest_framework import serializers
+from django.db.models.loading import get_model
 
 class StateSerializer(serializers.ModelSerializer):
   class Meta:
@@ -54,15 +55,10 @@ class WorkSerializer(serializers.HyperlinkedModelSerializer):
     depth = 1
     fields = ('availabilities', 'weekly_hours', 'can_be_done_remotely')
 
-class RoleSerializer(serializers.HyperlinkedModelSerializer):
-
-  def __init__(self, *args, **kwargs):
-    many = kwargs.pop('many', True)
-    super(RoleSerializer, self).__init__(*args, **kwargs)
-
+class RoleSerializer(serializers.ModelSerializer):
   class Meta:
     model = Role
-    fields = ('url', 'name', 'prerequisites', 'vacancies')
+    fields = ('id', 'name', 'prerequisites', 'vacancies')
 
 class JobSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -85,12 +81,17 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
     fields = ('project', 'sort', 'state', 'city')
 
 class ProjectSerializer(serializers.ModelSerializer):
-  causes = CauseSerializer()
+  causes = CauseSerializer(required=False)
+  skills = SkillSerializer(required=False)
   work = WorkSerializer(required=False)
   job = JobSerializer(required=False)
-  address = AddressSerializer()
+  address = AddressSerializer(required=False)
+  slug = serializers.CharField(source="slug", required=False)
+  details = serializers.CharField(source="details", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
-  volunteers = serializers.IntegerField(source='get_volunteers', required=True)
+  volunteers = serializers.IntegerField(source='get_volunteers', required=False)
+  name = serializers.CharField(source='name', required=False)
+  roles = RoleSerializer(required=False)
 
   class Meta:
     model = Project
@@ -98,16 +99,18 @@ class ProjectSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'image_url', 'volunteers', 'skills', 'roles', 'nonprofit')
+              'work', 'image_url', 'volunteers', 'skills', 'roles', 'nonprofit')
 
 class NonprofitSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
+  user = UserSerializer(required=False)
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url')
-  volunteers = serializers.IntegerField(source='get_volunteers', required=True)
+  volunteers = serializers.IntegerField(source='get_volunteers', required=False)
   projects = ProjectSerializer(source='get_projects')
+  cause = CauseSerializer(required=False)
+  name = serializers.CharField(source="name", required=False)
 
   class Meta:
     model = Nonprofit
