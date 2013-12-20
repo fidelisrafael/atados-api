@@ -106,10 +106,10 @@ class NonprofitSerializer(serializers.ModelSerializer):
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
-  cover_url = serializers.CharField(source='get_cover_url')
+  cover_url = serializers.CharField(source='get_cover_url', required=False)
   volunteers = serializers.IntegerField(source='get_volunteers', required=False)
-  projects = ProjectSerializer(source='get_projects')
-  cause = CauseSerializer(required=False)
+  projects = ProjectSerializer(source='get_projects', required=False)
+  causes = CauseSerializer(required=False)
   name = serializers.CharField(source="name", required=False)
 
   class Meta:

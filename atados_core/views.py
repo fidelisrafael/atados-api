@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 from django.http import HttpResponse
 
 from haystack.query import SearchQuerySet
-from haystack.inputs import Clean
+from haystack.inputs import Clean, AutoQuery
 
 from provider.oauth2.views import AccessToken, Client
 
@@ -355,10 +355,9 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(causes=cause).models(Project) if cause else queryset
     queryset = queryset.filter(skills=skill).models(Project) if skill else queryset
     queryset = queryset.filter(city=city).models(Project) if city else queryset
-    queryset = queryset.filter(content=Clean(query)).models(Project) if query else queryset
+    queryset = queryset.models(Project).filter(content=AutoQuery(query.lower())).boost(query, 1.2) if query else queryset
 
-    results = [ r.pk for r in queryset ]
-    return Project.objects.filter(pk__in=results)
+    return Project.objects.filter(pk__in=[ r.pk for r in queryset ])
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSerializer

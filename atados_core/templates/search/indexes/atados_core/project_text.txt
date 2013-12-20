@@ -1,4 +1,5 @@
 {{ object.name }}
+{{ object.nonprofit.name }}
 {{ object.description }}
 {{ object.details }}
-{{ object.nonprofit.name }}
+

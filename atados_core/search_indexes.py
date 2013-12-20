@@ -32,9 +32,11 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   skills = indexes.MultiValueField(faceted=True)
   state = indexes.CharField(faceted=True)
   city = indexes.CharField(faceted=True)
-  availabilities = indexes.MultiValueField(faceted=True)
-  has_image = indexes.BooleanField()
-  published = indexes.BooleanField()
+
+  def prepare_name(self, obj):
+    return obj.name
+  def prepare_nonprofit(self, obj):
+    return obj.nonprofit.name
 
   def prepare_causes(self, obj):
     return [cause.id for cause in obj.causes.all()]
@@ -51,17 +53,6 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   def prepare_city(self, obj):
     city = obj.address.city if obj.address else None
     return city.id if city else None
-
-  def prepare_availabilities(self, obj):
-    if hasattr(obj, 'work'):
-      return [availability.id for availability in obj.work.availabilities.all()]
-    return []
-
-  def prepare_has_image(self, obj):
-    return True if obj.image else False
-
-  def prepare_published(self, obj):
-    return True if obj.published and obj.nonprofit.published else False
 
   def get_model(self):
     return Project

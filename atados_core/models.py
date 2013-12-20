@@ -188,6 +188,9 @@ class Nonprofit(models.Model):
     published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
     deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now_add=True)
+
 
     def delete(self, *args, **kwargs):
       self.deleted = True
@@ -217,6 +220,12 @@ class Nonprofit(models.Model):
 
     def get_projects(self):
       return Project.objects.filter(nonprofit=self)
+
+def update_modified_date(sender, instance, **kwargs):
+  instance.modified_date = datetime.now()
+  instance.save()
+
+post_save.connect(update_modified_date, sender=Nonprofit, dispatch_uid="update_modified_date")
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True
