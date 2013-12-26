@@ -224,6 +224,24 @@ def upload_volunteer_image(request, format=None):
     return Response({"file": volunteer.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
 
+@api_view(['POST'])
+def upload_nonprofit_profile_image(request, format=None):
+  if request.user.is_authenticated() and request.user.nonprofit:
+    nonprofit = request.user.nonprofit
+    nonprofit.image = request.FILES.get('file')
+    nonprofit.save()
+    return Response({"file": nonprofit.get_image_url()}, status.HTTP_200_OK)
+  return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def upload_nonprofit_cover_image(request, format=None):
+  if request.user.is_authenticated() and request.user.nonprofit:
+    nonprofit = request.user.nonprofit
+    nonprofit.cover = request.FILES.get('file')
+    nonprofit.save()
+    return Response({"file": nonprofit.get_cover_url()}, status.HTTP_200_OK)
+  return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
+
 @api_view(['GET'])
 def numbers(request, format=None):
   numbers = {}

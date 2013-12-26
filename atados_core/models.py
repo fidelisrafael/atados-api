@@ -171,7 +171,7 @@ class Nonprofit(models.Model):
     website = models.URLField(blank=True, null=True, default=None)
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
-    twitter_handle = models.CharField(max_length=51, blank=True, null=True, default=None)
+    twitter_handle = models.URLField(blank=True, null=True, default=None)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
@@ -221,11 +221,9 @@ class Nonprofit(models.Model):
     def get_projects(self):
       return Project.objects.filter(nonprofit=self)
 
-def update_modified_date(sender, instance, **kwargs):
-  instance.modified_date = datetime.now()
-  instance.save()
-
-post_save.connect(update_modified_date, sender=Nonprofit, dispatch_uid="update_modified_date")
+    def save(self, *args, **kwargs):
+      self.modified_date = datetime.now()
+      return super(Nonprofit, self).save(*args, **kwargs)
 
 class ProjectManager(models.Manager):
     use_for_related_fields = True
