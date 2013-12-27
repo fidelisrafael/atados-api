@@ -276,7 +276,6 @@ REST_FRAMEWORK = {
     'PAGINATE_BY': 8,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',  
-    'MAX_PAGINATE_BY': 15,
 
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
