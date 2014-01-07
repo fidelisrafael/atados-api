@@ -462,9 +462,15 @@ class StateViewSet(viewsets.ModelViewSet):
   permission_classes = [AllowAny]
 
 class CityViewSet(viewsets.ModelViewSet):
-  queryset = City.objects.all()
+  model = City
   serializer_class = CitySerializer
   permission_classes = [AllowAny]
+
+  def get_queryset(self):
+    try:
+      return City.objects.filter(state_id=self.request.QUERY_PARAMS['state']).order_by('name')
+    except:
+      return City.objects.all().order_by('-active')
 
 class AvailabilityViewSet(viewsets.ModelViewSet):
   queryset = Availability.objects.all()
