@@ -10,6 +10,7 @@ from import_export import resources, fields
 from datetime import datetime
 from atados import settings
 from time import time
+from itertools import chain
 
 from pygeocoder import Geocoder
 
@@ -90,6 +91,13 @@ class Address(models.Model):
     def __unicode__(self):
       return '%s, %s, %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood)
 
+    def get_city_state(self):
+      if self.city:
+        return "%s, %s" % (self.city.name, self.city.state.code)
+      else:
+        return ""
+
+
 def get_latitude_longitude(sender, instance, **kwargs):
   if instance.city and not instance.city.id == 0:
     if (not instance.latitude or not instance.longitude):
@@ -145,9 +153,14 @@ class Volunteer(models.Model):
   def get_image_url(self):
     return self.image.url if self.image else None
 
+  def get_projects(self):
+    return Project.objects.filter(id__in=Apply.objects.filter(volunteer_id=self.id, canceled=False).values_list('project', flat=True))
+
+  def get_nonprofits(self):
+    return list(chain(Nonprofit.objects.filter(volunteers__in=[self]) , Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))))
+
   def __unicode__(self):
     return self.user.first_name or self.user.slug
-
 
 class NonprofitManager(models.Manager):
     #use_for_related_fields = True
@@ -200,6 +213,7 @@ class Nonprofit(models.Model):
     def get_type(self):
       return "NONPROFIT";
 
+    
     def get_description(self):
       return self.description if self.description else Truncator(
               self.details).chars(100)

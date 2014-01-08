@@ -402,17 +402,6 @@ class VolunteerProjectList(generics.ListAPIView):
     volunteers = [ apply.volunteer for apply in applies ]
     return volunteers
 
-class VolunteerList(generics.ListAPIView):
-  serializer_class = VolunteerSerializer
-  permission_classes = [AllowAny]
-
-  def get_queryset(self):
-    params = self.request.GET
-    query = params.get('query', None)
-    queryset = SearchQuerySet().filter(content=query).models(Volunteer) if query else SearchQuerySet().all().models(Nonprofit)
-    results = [ r.pk for r in queryset ]
-    return Nonprofit.objects.filter(pk__in=results)
-
 class VolunteerViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
   serializer_class = VolunteerSerializer
