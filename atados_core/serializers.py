@@ -10,14 +10,13 @@ class StateSerializer(serializers.ModelSerializer):
     fields = ('id', 'name', 'code')
 
 class CitySerializer(serializers.ModelSerializer):
-  state = StateSerializer()
+  state = StateSerializer(read_only=True)
 
   class Meta:
     model = City
     fields = ('id', 'name', 'state', 'active')
 
 class AddressSerializer(serializers.ModelSerializer):
-  city = CitySerializer()
 
   class Meta:
     model = Address
@@ -131,14 +130,15 @@ class VolunteerProjectSerializer(serializers.ModelSerializer):
     fields = ('name', 'email', 'phone', 'apply')
 
 class VolunteerSerializer(serializers.ModelSerializer):
-  user = UserSerializer()
-  causes = serializers.HyperlinkedRelatedField(many=True, view_name='cause-detail', lookup_field='id')
-  skills  = serializers.HyperlinkedRelatedField(many=True, view_name='skill-detail', lookup_field='id')
+  user = UserSerializer(required=False)
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
+  causes = serializers.PrimaryKeyRelatedField(many=True)
+  skills = serializers.PrimaryKeyRelatedField(many=True)
 
   class Meta:
     model = Volunteer
     lookup_field = 'slug'
+    depth = 1
     fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role')

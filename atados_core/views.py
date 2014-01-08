@@ -456,12 +456,15 @@ class AddressViewSet(viewsets.ModelViewSet):
   serializer_class = AddressSerializer
   permission_classes = (IsOwnerOrReadOnly, IsAdminUser)
 
-class StateViewSet(viewsets.ModelViewSet):
-  queryset = State.objects.all()
+class StateViewSet(viewsets.ReadOnlyModelViewSet):
+  model = State
   serializer_class = StateSerializer
   permission_classes = [AllowAny]
+  
+  def get_queryset(self):
+    return State.objects.all().order_by('id')
 
-class CityViewSet(viewsets.ModelViewSet):
+class CityViewSet(viewsets.ReadOnlyModelViewSet):
   model = City
   serializer_class = CitySerializer
   permission_classes = [AllowAny]
