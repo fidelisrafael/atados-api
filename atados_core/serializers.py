@@ -110,6 +110,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
   volunteers = serializers.IntegerField(source='get_volunteers', required=False)
   projects = ProjectSerializer(source='get_projects', required=False)
   name = serializers.CharField(source="name", required=False)
+  causes = serializers.PrimaryKeyRelatedField(many=True)
 
   class Meta:
     model = Nonprofit
