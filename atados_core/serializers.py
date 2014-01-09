@@ -58,7 +58,7 @@ class WorkSerializer(serializers.HyperlinkedModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
   class Meta:
     model = Role
-    fields = ('id', 'name', 'prerequisites', 'vacancies')
+    fields = ('id', 'name', 'prerequisites', 'vacancies', 'details')
 
 class JobSerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
