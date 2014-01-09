@@ -93,6 +93,8 @@ class Address(models.Model):
 
     def get_city_state(self):
       if self.city:
+        if self.city.id == 0: # Trabalho a Distancia
+          return self.city.name
         return "%s, %s" % (self.city.name, self.city.state.code)
       else:
         return ""
