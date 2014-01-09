@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-09 14:55-0200\n"
+"POT-Creation-Date: 2014-01-09 15:42-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,7 +71,7 @@ msgstr "período"
 msgid "%(weekday)s at %(period)s"
 msgstr "%(weekday)s -  %(period)s"
 
-#: models.py:41 models.py:47 models.py:53 models.py:63 models.py:342
+#: models.py:41 models.py:47 models.py:53 models.py:63 models.py:339
 msgid "name"
 msgstr "nome"
 
@@ -158,11 +158,11 @@ msgstr "Prerequisitos"
 msgid "Vacancies"
 msgstr "Vagas"
 
-#: models.py:262 models.py:338
+#: models.py:262 models.py:335
 msgid "Start date"
 msgstr ""
 
-#: models.py:263 models.py:339
+#: models.py:263 models.py:336
 #, fuzzy
 msgid "End date"
 msgstr "Data deletado"
@@ -176,7 +176,7 @@ msgstr "Atos"
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:276 models.py:399
+#: models.py:276 models.py:396
 msgid "Phone"
 msgstr "Telefone"
 
@@ -193,59 +193,59 @@ msgstr "Fechado"
 msgid "Closed date"
 msgstr "Data deletado"
 
-#: models.py:331
+#: models.py:328
 msgid "Weekly hours"
 msgstr "Horas semanais"
 
-#: models.py:333
+#: models.py:330
 msgid "This work can be done remotely."
 msgstr "Isso pode ser feito remotamente"
 
-#: models.py:352
+#: models.py:349
 #, fuzzy
 msgid "Canceled"
 msgstr "Data deletado"
 
-#: models.py:353
+#: models.py:350
 #, fuzzy
 msgid "Canceled date"
 msgstr "Data deletado"
 
-#: models.py:357
+#: models.py:354
 msgid "Sort"
 msgstr "Ordenar"
 
-#: models.py:387
+#: models.py:384
 #, fuzzy
 msgid "first name"
 msgstr "Atos"
 
-#: models.py:388
+#: models.py:385
 #, fuzzy
 msgid "last name"
 msgstr "nome"
 
-#: models.py:389
+#: models.py:386
 msgid "Slug"
 msgstr ""
 
-#: models.py:391
+#: models.py:388
 msgid "Staff"
 msgstr ""
 
-#: models.py:392
+#: models.py:389
 msgid "Active"
 msgstr ""
 
-#: models.py:393
+#: models.py:390
 msgid "Email verified"
 msgstr ""
 
-#: models.py:407
+#: models.py:404
 msgid "user"
 msgstr ""
 
-#: models.py:408
+#: models.py:405
 msgid "users"
 msgstr ""
 

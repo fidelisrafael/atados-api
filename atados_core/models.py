@@ -153,7 +153,7 @@ class Volunteer(models.Model):
     return Apply.objects.filter(volunteer=self)
 
   def get_image_url(self):
-    return self.image.url if self.image else None
+    return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/volunteer/default_profile.jpg'
 
   def get_projects(self):
     return Project.objects.filter(id__in=Apply.objects.filter(volunteer_id=self.id, canceled=False).values_list('project', flat=True))
@@ -295,9 +295,6 @@ class Project(models.Model):
         return self.description if self.description else Truncator(
                 self.details).chars(75)
     
-    def get_volunteers_count(self):
-      return len(Apply.objects.filter(project=self))
-
     def get_volunteers(self):
       apply = Apply.objects.filter(project=self)
       return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])

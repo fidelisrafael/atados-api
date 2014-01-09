@@ -21,6 +21,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = Address
+
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city', 'latitude', 'longitude', 'city_state')
 
 class UserSerializer(serializers.ModelSerializer):
@@ -80,6 +81,26 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
     model = Recommendation
     fields = ('project', 'sort', 'state', 'city')
 
+class VolunteerProjectSerializer(serializers.ModelSerializer):
+  name = serializers.CharField(source="get_full_name")
+  email = serializers.CharField(source="get_email")
+  phone = serializers.CharField(source="get_phone")
+  apply = ApplySerializer(source="get_apply")
+
+  class Meta:
+    model = Volunteer
+    lookup_field = 'slug'
+    fields = ('name', 'email', 'phone', 'apply')
+
+class VolunteerSlimSerializer(serializers.ModelSerializer):
+  slug = serializers.CharField(source="user.slug")
+  image_url = serializers.CharField(source="get_image_url")
+
+  class Meta:
+    model = Volunteer
+    lookup_field = 'slug'
+    fields = ('slug', 'image_url')
+
 class ProjectSerializer(serializers.ModelSerializer):
   causes = CauseSerializer(required=False)
   skills = SkillSerializer(required=False)
@@ -89,17 +110,17 @@ class ProjectSerializer(serializers.ModelSerializer):
   slug = serializers.CharField(source="slug", required=False)
   details = serializers.CharField(source="details", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
-  volunteers = serializers.IntegerField(source='get_volunteers_count', required=False)
   name = serializers.CharField(source='name', required=False)
   roles = RoleSerializer(required=False)
+  volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
 
   class Meta:
     model = Project
     lookup_field = 'slug'
     depth = 2
-    fields = ('id', 'causes', 'name', 'slug', 'details', 'description', 'facebook_event',
+    fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'work', 'image_url', 'volunteers', 'skills', 'roles', 'nonprofit')
+              'job', 'work', 'image_url', 'skills', 'roles', 'nonprofit')
 
 class NonprofitSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
@@ -118,17 +139,6 @@ class NonprofitSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects')
-
-class VolunteerProjectSerializer(serializers.ModelSerializer):
-  name = serializers.CharField(source="get_full_name")
-  email = serializers.CharField(source="get_email")
-  phone = serializers.CharField(source="get_phone")
-  apply = ApplySerializer(source="get_apply")
-
-  class Meta:
-    model = Volunteer
-    lookup_field = 'slug'
-    fields = ('name', 'email', 'phone', 'apply')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
