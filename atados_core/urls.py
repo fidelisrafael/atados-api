@@ -16,6 +16,7 @@ router.register(r'availabilities', views.AvailabilityViewSet)
 router.register(r'nonprofit', views.NonprofitViewSet)
 router.register(r'project', views.ProjectViewSet)
 router.register(r'volunteers', views.VolunteerViewSet)
+router.register(r'apply', views.ApplyViewSet)
 
 urlpatterns = patterns('atados_core.views',
   url(r'v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
@@ -39,6 +40,8 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/set_volunteer_to_nonprofit/', 'set_volunteer_to_nonprofit'),
   url(r'v1/is_volunteer_to_nonprofit/', 'is_volunteer_to_nonprofit'),
   url(r'v1/change_volunteer_status/', 'change_volunteer_status'),
+  url(r'v1/apply_volunteer_to_project/', 'apply_volunteer_to_project'),
+  url(r'v1/has_volunteer_applied/', 'has_volunteer_applied'),
 
   url(r'v1/numbers/', 'numbers'),
 

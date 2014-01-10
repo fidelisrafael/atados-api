@@ -17,8 +17,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, I
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, Role, User, Apply, ApplyStatus, VolunteerResource
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, RoleSerializer, VolunteerProjectSerializer
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, ApplySerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
@@ -278,6 +278,50 @@ def set_volunteer_to_nonprofit(request, format=None):
   return Response({"Could not find nonprofit or volunteer"}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+def apply_volunteer_to_project(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    project = Project.objects.get(id=request.DATA['project'])
+    if project:
+      try:
+        # If apply exists, then cancel it 
+        apply = Apply.objects.get(project=project, volunteer=volunteer)
+        if not apply.canceled:
+          apply.canceled = True
+          apply.status = ApplyStatus.objects.get(id=3) # Desistente
+          apply.save()
+          return Response({"Canceled"}, status.HTTP_200_OK)
+        else:
+          apply.canceled = False
+          apply.status = ApplyStatus.objects.get(id=2) # Candidato 
+          apply.save()
+          return Response({"Applied"}, status.HTTP_200_OK)
+      except:
+        apply = Apply()
+        apply.project = project
+        apply.volunteer = volunteer
+        apply.status = ApplyStatus.objects.get(id=2) # Candidato 
+        apply.save()
+        return Response({"Applied"}, status.HTTP_200_OK)
+
+  return Response({"Could not find project or volunteer"}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def has_volunteer_applied(request, format=None):
+  if request.user.is_authenticated():
+    volunteer = Volunteer.objects.get(user=request.user)
+    project = request.QUERY_PARAMS['project']
+    if project and volunteer:
+      try:
+        apply = Apply.objects.get(project=project, volunteer=volunteer)
+        if apply.canceled:
+          return Response({"NO"}, status.HTTP_200_OK)
+        return Response({"YES"}, status.HTTP_200_OK)
+      except:
+        return Response({"NO"}, status.HTTP_200_OK)
+  return Response({"NO"}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
 def change_volunteer_status(request, format=None):
   if request.user.is_authenticated():
     try:
@@ -423,9 +467,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
   permissions_classes = [IsNonprofit]
   lookup_field = 'slug'
 
-class RoleViewSet(viewsets.ModelViewSet):
-  queryset = Role.objects.all()
-  serializer_class = RoleSerializer
+class ApplyViewSet(viewsets.ModelViewSet):
+  queryset = Apply.objects.all()
+  serializer_class = ApplySerializer
   permissions_classes = [IsOwnerOrReadOnly]
 
 class CauseViewSet(viewsets.ModelViewSet):

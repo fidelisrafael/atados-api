@@ -221,10 +221,10 @@ class Nonprofit(models.Model):
               self.details).chars(100)
 
     def get_image_url(self):
-      return self.image.url if self.image else None
+      return self.image.url if self.image else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit.png"
     
     def get_cover_url(self):
-      return self.cover.url if self.cover else None
+      return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit_cover.jpg"
 
     def get_volunteers(self):
       volunteers_from_projects = Volunteer.objects.filter(apply__project__nonprofit__id=self.id).count()
@@ -296,7 +296,7 @@ class Project(models.Model):
                 self.details).chars(75)
     
     def get_volunteers(self):
-      apply = Apply.objects.filter(project=self)
+      apply = Apply.objects.filter(project=self, canceled=False)
       return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
 
     def delete(self, *args, **kwargs):
@@ -312,7 +312,7 @@ class Project(models.Model):
                        null=True, default=None)
 
     def get_image_url(self):
-      return self.image.url if self.image else None
+      return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/project/default_project.jpg'
 
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)
@@ -345,9 +345,16 @@ class Apply(models.Model):
   volunteer = models.ForeignKey(Volunteer)
   project = models.ForeignKey(Project)
   status = models.ForeignKey(ApplyStatus)
-  date = models.DateTimeField(auto_now_add=True, blank=True)
+  date = models.DateTimeField(auto_now_add=True, blank=True) # created date
   canceled = models.BooleanField(_("Canceled"), default=False)
   canceled_date = models.DateTimeField(_("Canceled date"), blank=True, null=True)
+
+  def save(self, *args, **kwargs):
+    if self.canceled:
+      self.canceled_date = datetime.now()
+    else:
+      self.canceled_date = None
+    return super(Apply, self).save(*args, **kwargs)
 
 class Recommendation(models.Model):
   project = models.ForeignKey(Project)
