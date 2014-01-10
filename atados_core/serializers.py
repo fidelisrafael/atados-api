@@ -128,7 +128,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url', required=False)
-  volunteers = serializers.IntegerField(source='get_volunteers', required=False)
+  volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
   projects = ProjectSerializer(source='get_projects', required=False)
   name = serializers.CharField(source="name", required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)

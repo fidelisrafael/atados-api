@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.files.base import ContentFile
 from django.db import models
 from django.db.models.signals import post_save
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
@@ -227,9 +227,9 @@ class Nonprofit(models.Model):
       return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit_cover.jpg"
 
     def get_volunteers(self):
-      volunteers_from_projects = Volunteer.objects.filter(apply__project__nonprofit__id=self.id).count()
-      volunteers_favorited = self.volunteers.count()
-      return volunteers_from_projects + volunteers_favorited
+      return Volunteer.objects.filter(
+        Q(id__in=self.volunteers.all().values_list('id', flat=True)) |
+        Q(apply__project__nonprofit__id=self.id)).distinct()
 
     def __unicode__(self):
         return self.name
