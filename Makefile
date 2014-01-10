@@ -23,7 +23,10 @@ rebuild_index:
 	@python ./manage.py rebuild_index
 
 dump:
-	@python ./manage.py dumpdata atados_core > atados_core/fixtures/dump_cities_state.json
+	@python ./manage.py dumpdata atados_core > atados_core/fixtures/data.json
+
+dumpoauth2:
+	@python ./manage.py dumpdata oauth2 > atados_core/fixtures/oauth.json
 
 makemessages:
 	@cd atados_core; \
