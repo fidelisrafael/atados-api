@@ -43,6 +43,29 @@ def check_slug(request, format=None):
     return Response({"OK."}, status.HTTP_200_OK)
 
 @api_view(['GET'])
+def slug_role(request, format=None):
+  try:
+    user = User.objects.get(slug=request.QUERY_PARAMS['slug'])
+    try:
+      return Response({'type': Nonprofit.objects.get(user=user).get_type()}, status.HTTP_200_OK)
+    except:
+      return Response({'type': Volunteer.objects.get(user=user).get_type()}, status.HTTP_200_OK)
+  except User.DoesNotExist:
+    return Response({"Not found."}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def legacy_to_slug(request, type, format=None):
+  try:
+    uid = request.QUERY_PARAMS['uid']
+    if type == 'nonprofit':
+      slug = User.objects.get(legacy_uid=uid).slug
+    if type == 'project':
+      slug = Project.objects.get(legacy_nid=uid).slug
+    return Response({'slug': slug}, status.HTTP_200_OK)
+  except:
+    return Response({"Not found."}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
 def check_project_slug(request, format=None):
   try:
     project = Project.objects.get(slug=request.QUERY_PARAMS['slug'])
@@ -53,7 +76,8 @@ def check_project_slug(request, format=None):
 @api_view(['GET'])
 def check_email(request, format=None):
   try:
-    user = User.objects.get(email=request.QUERY_PARAMS['email'])
+    print request.QUERY_PARAMS['email'].split('?')[0]
+    user = User.objects.get(email=request.QUERY_PARAMS['email'].split('?')[0])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except User.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)

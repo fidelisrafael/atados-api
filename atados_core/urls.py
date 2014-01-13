@@ -33,6 +33,9 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/check_project_slug/', 'check_project_slug'),
   url(r'v1/check_email/', 'check_email'),
 
+  url(r'v1/legacy_to_slug/(?P<type>[\w-]+)/', 'legacy_to_slug'),
+  url(r'v1/slug_role/', 'slug_role'),
+
   url(r'v1/upload_volunteer_image/', 'upload_volunteer_image'),
   url(r'v1/upload_nonprofit_profile_image/', 'upload_nonprofit_profile_image'),
   url(r'v1/upload_nonprofit_cover_image/', 'upload_nonprofit_cover_image'),
