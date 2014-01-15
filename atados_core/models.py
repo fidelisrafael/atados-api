@@ -123,6 +123,7 @@ class Volunteer(models.Model):
 
   created_date = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
+
   def image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
     return 'volunteer/%s/%s.%s' % (self.user.slug,
@@ -163,11 +164,11 @@ class Volunteer(models.Model):
     return list(chain(Nonprofit.objects.filter(volunteers__in=[self]) , Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))))
 
   def save(self, *args, **kwargs):
-      local_tz = pytz.timezone("America/Sao_Paulo")
-      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
-      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
-      self.modified_date = local_dt
-      return super(Volunteer, self).save(*args, **kwargs)
+    local_tz = pytz.timezone("America/Sao_Paulo")
+    utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
+    local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+    self.modified_date = local_dt
+    return super(Project, self).save(*args, **kwargs)
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
