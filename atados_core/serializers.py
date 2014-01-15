@@ -2,7 +2,6 @@ from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cau
   Skill, State, City, Address, Work, Role,
   Apply, Recommendation, Job, User)
 from rest_framework import serializers
-from django.db.models.loading import get_model
 
 class StateSerializer(serializers.ModelSerializer):
   class Meta:

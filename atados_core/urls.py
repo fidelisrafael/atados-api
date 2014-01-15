@@ -1,11 +1,6 @@
-from django.conf import settings
 from django.conf.urls import patterns, url, include
-
 from atados_core import views
-from atados_core.models import Project
 from rest_framework.routers import DefaultRouter
-from rest_framework.generics import ListAPIView
-from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
 router.register(r'causes', views.CauseViewSet)

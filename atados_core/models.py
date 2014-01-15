@@ -1,15 +1,14 @@
+import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.core.files.base import ContentFile
 from django.db import models
+from django.db.models import Q 
 from django.db.models.signals import post_save
-from django.db.models import Count, Q
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from import_export import resources, fields
 from datetime import datetime
 from atados import settings
-from time import time
 from itertools import chain
 
 from pygeocoder import Geocoder
@@ -122,6 +121,8 @@ class Volunteer(models.Model):
   facebook_access_token = models.CharField(blank=True, max_length=255)
   facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
 
+  created_date = models.DateTimeField(auto_now_add=True)
+  modified_date = models.DateTimeField(auto_now=True)
   def image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
     return 'volunteer/%s/%s.%s' % (self.user.slug,
@@ -160,6 +161,13 @@ class Volunteer(models.Model):
 
   def get_nonprofits(self):
     return list(chain(Nonprofit.objects.filter(volunteers__in=[self]) , Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))))
+
+  def save(self, *args, **kwargs):
+      local_tz = pytz.timezone("America/Sao_Paulo")
+      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
+      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+      self.modified_date = local_dt
+      return super(Volunteer, self).save(*args, **kwargs)
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
@@ -206,7 +214,6 @@ class Nonprofit(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now_add=True)
 
-
     def delete(self, *args, **kwargs):
       self.deleted = True
       self.deleted_date = datetime.now()
@@ -238,7 +245,10 @@ class Nonprofit(models.Model):
       return Project.objects.filter(nonprofit=self)
 
     def save(self, *args, **kwargs):
-      self.modified_date = datetime.now()
+      local_tz = pytz.timezone("America/Sao_Paulo")
+      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
+      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+      self.modified_date = local_dt
       return super(Nonprofit, self).save(*args, **kwargs)
 
 class ProjectManager(models.Manager):
@@ -303,6 +313,13 @@ class Project(models.Model):
         self.deleted = True
         self.deleted_date = datetime.now()
         self.save()
+
+    def save(self, *args, **kwargs):
+      local_tz = pytz.timezone("America/Sao_Paulo")
+      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
+      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
+      self.modified_date = local_dt
+      return super(Project, self).save(*args, **kwargs)
 
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
@@ -415,7 +432,7 @@ class User(AbstractBaseUser):
     full_name = '%s %s' % (self.first_name, self.last_name)
     return full_name.strip()
 
-  def get_short_name():
+  def get_short_name(self):
     return self.first_name
 
   def email_user(self, subject, message, from_email=None):

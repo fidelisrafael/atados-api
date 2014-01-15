@@ -1,10 +1,8 @@
-import datetime
 import facepy as facebook
 
 from django.core.mail import send_mail
 from django.http import Http404
 from django.template.defaultfilters import slugify
-from django.http import HttpResponse
 
 from haystack.query import SearchQuerySet
 from haystack.inputs import Clean, AutoQuery
@@ -13,12 +11,12 @@ from provider.oauth2.views import AccessToken, Client
 
 from rest_framework import viewsets, status
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
-from rest_framework.decorators import api_view, action
+from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, WorkSerializer, ApplySerializer, VolunteerProjectSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
@@ -29,7 +27,7 @@ def current_user(request, format=None):
     except:
       try:
         return Response(NonprofitSerializer(request.user.nonprofit).data)
-      except Exception as inst:
+      except:
         return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
@@ -37,7 +35,7 @@ def current_user(request, format=None):
 @api_view(['GET'])
 def check_slug(request, format=None):
   try:
-    user = User.objects.get(slug=request.QUERY_PARAMS['slug'])
+    User.objects.get(slug=request.QUERY_PARAMS['slug'])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except User.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
@@ -68,7 +66,7 @@ def legacy_to_slug(request, type, format=None):
 @api_view(['GET'])
 def check_project_slug(request, format=None):
   try:
-    project = Project.objects.get(slug=request.QUERY_PARAMS['slug'])
+    Project.objects.get(slug=request.QUERY_PARAMS['slug'])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except Project.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
@@ -76,8 +74,7 @@ def check_project_slug(request, format=None):
 @api_view(['GET'])
 def check_email(request, format=None):
   try:
-    print request.QUERY_PARAMS['email'].split('?')[0]
-    user = User.objects.get(email=request.QUERY_PARAMS['email'].split('?')[0])
+    User.objects.get(email=request.QUERY_PARAMS['email'].split('?')[0])
     return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
   except User.DoesNotExist:
     return Response({"OK."}, status.HTTP_200_OK)
@@ -165,7 +162,7 @@ def create_volunteer(request, format=None):
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
    obj = request.DATA
-   slug = obj['user']['slug']
+   # slug = obj['user']['slug']
    email = obj['user']['email']
 
    try:

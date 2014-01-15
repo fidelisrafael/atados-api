@@ -1,7 +1,5 @@
-import datetime
-from django.db.models import signals
 from haystack import indexes
-from atados_core.models import Address, Nonprofit, Project, Volunteer
+from atados_core.models import Nonprofit, Project, Volunteer
 
 class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document=True, use_template=True)

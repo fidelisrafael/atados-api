@@ -1,13 +1,10 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
 
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIRequestFactory
-from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
-from atados_core.models import Availability, Cause, Skill, State, City, Address, Nonprofit, User, Volunteer
+from atados_core.models import Availability, Cause, Skill, State, City, Address, User, Volunteer
 from atados_core import views
 
 # Models

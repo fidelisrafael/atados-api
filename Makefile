@@ -10,7 +10,7 @@ install:
 	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
-run: makemessages compilemessages
+run:
 	@python ./manage.py runserver
 
 pep8:
