@@ -109,6 +109,13 @@ class ProjectSerializer(serializers.ModelSerializer):
   slug = serializers.CharField(source="slug", required=False)
   details = serializers.CharField(source="details", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
+  #nonprofit_name = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  #nonprofit_slug = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  nonprofit_image = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  #nonprofit_facebook_page = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  #nonprofit_twitter_handle = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  #nonprofit_google_plus = serializers.CharField(source="nonprofit.get_image_url", required=False)
+  nonprofit_city_state = serializers.CharField(source="nonprofit.user.address.get_city_state", required=False)
   name = serializers.CharField(source='name', required=False)
   roles = RoleSerializer(required=False)
   volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
@@ -119,7 +126,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
-              'job', 'work', 'image_url', 'skills', 'roles', 'nonprofit')
+              'job', 'work', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
 
 class NonprofitSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
