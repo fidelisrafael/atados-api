@@ -168,7 +168,7 @@ class Volunteer(models.Model):
     utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
     local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
     self.modified_date = local_dt
-    return super(Project, self).save(*args, **kwargs)
+    return super(Volunteer, self).save(*args, **kwargs)
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
