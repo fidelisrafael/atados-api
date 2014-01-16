@@ -1,4 +1,4 @@
-import pytz, sys
+import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.db.models import Q 
@@ -8,7 +8,6 @@ from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from import_export import resources, fields
 from datetime import datetime
-from django.utils.timezone import utc
 from atados import settings
 from itertools import chain
 
@@ -265,8 +264,6 @@ class Role(models.Model):
     details = models.TextField(_('Details'), max_length=1024, blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
-    start_date = models.DateTimeField(_("Start date"), blank=True, null=True)
-    end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
 class Project(models.Model):
     objects = ProjectManager()
