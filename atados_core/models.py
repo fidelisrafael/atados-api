@@ -1,4 +1,4 @@
-import pytz
+import pytz, sys
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.db.models import Q 
@@ -8,6 +8,7 @@ from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 from import_export import resources, fields
 from datetime import datetime
+from django.utils.timezone import utc
 from atados import settings
 from itertools import chain
 
@@ -84,8 +85,8 @@ class Address(models.Model):
     city = models.ForeignKey(City, verbose_name=_('City'), blank=False,
                              null=True, default=None)
 
-    latitude = models.FloatField(blank=True, null=True, default=None)
-    longitude = models.FloatField(blank=True, null=True, default=None)
+    latitude = models.FloatField(blank=False, null=False, default=0.0)
+    longitude = models.FloatField(blank=False, null=False, default=0.0)
 
     def __unicode__(self):
       return '%s, %s, %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood)
@@ -164,10 +165,7 @@ class Volunteer(models.Model):
     return list(chain(Nonprofit.objects.filter(volunteers__in=[self]) , Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))))
 
   def save(self, *args, **kwargs):
-    local_tz = pytz.timezone("America/Sao_Paulo")
-    utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
-    local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
-    self.modified_date = local_dt
+    self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     return super(Volunteer, self).save(*args, **kwargs)
 
   def __unicode__(self):
@@ -246,10 +244,7 @@ class Nonprofit(models.Model):
       return Project.objects.filter(nonprofit=self)
 
     def save(self, *args, **kwargs):
-      local_tz = pytz.timezone("America/Sao_Paulo")
-      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
-      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
-      self.modified_date = local_dt
+      self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Nonprofit, self).save(*args, **kwargs)
 
 class ProjectManager(models.Manager):
@@ -302,10 +297,13 @@ class Project(models.Model):
 
     legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
-    def get_description(self):
-        return self.description if self.description else Truncator(
-                self.details).chars(75)
-    
+    def image_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
+
+    image = models.ImageField(upload_to=image_name, blank=True,
+                       null=True, default=None)
+
     def get_volunteers(self):
       apply = Apply.objects.filter(project=self, canceled=False)
       return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
@@ -316,18 +314,13 @@ class Project(models.Model):
         self.save()
 
     def save(self, *args, **kwargs):
-      local_tz = pytz.timezone("America/Sao_Paulo")
-      utc_dt = datetime.utcfromtimestamp(datetime.now()).replace(tzinfo=pytz.utc)
-      local_dt = local_tz.normalize(utc_dt.astimezone(local_tz))
-      self.modified_date = local_dt
+      self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+
+      # If there is no description, take 100 chars from the details
+      if not self.description and len(self.details) > 100:
+        self.description = self.details[0:100]
+
       return super(Project, self).save(*args, **kwargs)
-
-    def image_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
-
-    image = models.ImageField(upload_to=image_name, blank=True,
-                       null=True, default=None)
 
     def get_image_url(self):
       return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/project/default_project.jpg'
@@ -335,10 +328,7 @@ class Project(models.Model):
     def __unicode__(self):
         return  '%s - %s' % (self.name, self.nonprofit.name)
 
-    def get_project_type(self):
-        return self.project_type
-
-
+    
 # Ato Recorrente
 class Work(models.Model):
     project = models.OneToOneField(Project)
@@ -438,6 +428,10 @@ class User(AbstractBaseUser):
 
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
+
+  def save(self, *args, **kwargs):
+    self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+    return super(User, self).save(*args, **kwargs)
 
 class VolunteerResource(resources.ModelResource):
   nome = fields.Field()
