@@ -272,7 +272,7 @@ class Project(models.Model):
     objects = ProjectManager()
     nonprofit = models.ForeignKey(Nonprofit)
     name = models.CharField(_('Project name'), max_length=50)
-    slug = models.SlugField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
     details = models.TextField(_('Details'), max_length=3000)
     description = models.TextField(_('Short description'), max_length=100, 
                                    blank=True, null=True)
@@ -398,7 +398,7 @@ class User(AbstractBaseUser):
   email = models.EmailField('Email', max_length=254, unique=True)
   first_name = models.CharField(_('first name'), max_length=50, blank=True)
   last_name = models.CharField(_('last name'), max_length=50, blank=True)
-  slug = models.SlugField(_('Slug'), max_length=50, unique=True)
+  slug = models.SlugField(_('Slug'), max_length=100, unique=True)
 
   is_staff = models.BooleanField(_('Staff'), default=False)
   is_active = models.BooleanField(_('Active'), default=True)
