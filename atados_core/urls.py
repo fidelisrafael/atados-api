@@ -41,6 +41,8 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/apply_volunteer_to_project/', 'apply_volunteer_to_project'),
   url(r'v1/has_volunteer_applied/', 'has_volunteer_applied'),
 
+  url(r'v1/send_volunteer_email_to_nonprofit/', 'send_volunteer_email_to_nonprofit'),
+
   url(r'v1/numbers/', 'numbers'),
 
   url(r'v1/projects/', views.ProjectList.as_view()),

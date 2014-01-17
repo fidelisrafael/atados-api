@@ -81,7 +81,7 @@ class Address(models.Model):
                                   blank=True, null=True, default=None)
     neighborhood = models.CharField(_('Neighborhood'), max_length=50,
                                     blank=True, null=True, default=None)
-    city = models.ForeignKey(City, verbose_name=_('City'), blank=False,
+    city = models.ForeignKey(City, verbose_name=_('City'), blank=True,
                              null=True, default=None)
 
     latitude = models.FloatField(blank=False, null=False, default=0.0)

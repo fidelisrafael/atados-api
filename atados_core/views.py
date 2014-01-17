@@ -224,6 +224,17 @@ def password_reset(request, format=None):
   send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
   return Response({"Password was sent."}, status.HTTP_200_OK)
 
+@api_view(['POST'])
+def send_volunteer_email_to_nonprofit(request, format=None):
+  message = request.DATA['message'].encode('utf-8').strip()
+  nonprofitEmail = request.DATA['nonprofit']
+  volunteerEmail = request.DATA['volunteer']
+  if not volunteerEmail or not nonprofitEmail or not message:
+    return Response({"Not enough information."}, status.HTTP_400_BAD_REQUEST)
+  print 'Sending %s from %s to %s' % (message, volunteerEmail, nonprofitEmail)
+  send_mail('Atados Voluntario Atado', message, volunteerEmail, [nonprofitEmail])
+  return Response({"Email was sent."}, status.HTTP_200_OK)
+
 @api_view(['PUT'])
 def change_password(request, format=None):
   email = request.DATA['email']
