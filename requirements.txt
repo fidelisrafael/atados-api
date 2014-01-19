@@ -1,4 +1,4 @@
-boto==2.22.0
+boto==2.23
 coverage==3.7
 coveralls==0.4
 Django==1.6
@@ -18,7 +18,7 @@ pep8==1.4.6
 PIL==1.1.7
 psycopg2==2.5.1
 pyelasticsearch==0.6.1
-pygeocoder==1.2.1.1
+pygeocoder==1.2.2
 python-dateutil==2.2
 python-memcached==1.53
 pytz==2013.9
