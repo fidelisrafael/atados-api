@@ -78,35 +78,35 @@ class CityTest(TestCase):
     self.assertTrue(isinstance(c, City))
     self.assertEqual(c.__unicode__(), "Rio de Janeiro, RJ")
 
-class AddressTest(TestCase):
-
-  def create_address(self, zipcode="05432-001", addressline="Rua Hello World", addressnumber="123", addressline2="apt 1101",
-                     neighborhood="Copacabana"):
-    state = State(name="Rio de Janeiro", code="RJ")
-    city = City(name="Rio de Janeiro", state=state)
-    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, city=city)
-
-  def test_address_creation(self):
-    """
-    Tests Address.
-    """
-    a = self.create_address()
-    self.assertTrue(isinstance(a, Address))
-    self.assertEqual(a.__unicode__(),
-                     "Rua Hello World, 123, apt 1101 - Copacabana - Zona Norte - Rio de Janeiro, RJ")
-
-  def test_address_lat_long(self):
-    """
-    Tests Address if no latitude and longitude
-    """
-    a = Address()
-    a.city = City(id=0, name="trabalho a distancia", state=State(name="blah", code="BL"))
-    self.assertEqual(a.latitude, None)
-    self.assertEqual(a.longitude, None)
-    a = self.create_address()
-    self.assertTrue(a.latitude != None)
-    self.assertTrue(a.longitude != None)
-
+#class AddressTest(TestCase):
+#
+#  def create_address(self, zipcode="05432-001", addressline="Rua Hello World", addressnumber="123", addressline2="apt 1101",
+#                     neighborhood="Copacabana"):
+#    state = State(name="Rio de Janeiro", code="RJ")
+#    city = City(name="Rio de Janeiro", state=state)
+#    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, city=city)
+#
+#  def test_address_creation(self):
+#    """
+#    Tests Address.
+#    """
+#    a = self.create_address()
+#    self.assertTrue(isinstance(a, Address))
+#    self.assertEqual(a.__unicode__(),
+#                     "Rua Hello World, 123, apt 1101 - Copacabana - Zona Norte - Rio de Janeiro, RJ")
+#
+#  def test_address_lat_long(self):
+#    """
+#    Tests Address if no latitude and longitude
+#    """
+#    a = Address()
+#    a.city = City(id=0, name="trabalho a distancia", state=State(name="blah", code="BL"))
+#    self.assertEqual(a.latitude, None)
+#    self.assertEqual(a.longitude, None)
+#    a = self.create_address()
+#    self.assertTrue(a.latitude != None)
+#    self.assertTrue(a.longitude != None)
+#
 # Views
 class VolunteerTests(APITestCase):
 
