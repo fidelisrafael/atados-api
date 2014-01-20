@@ -430,6 +430,14 @@ class User(AbstractBaseUser):
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     return super(User, self).save(*args, **kwargs)
 
+  def has_module_perms(self, app_label):
+    # Handle whether the user has permissions to view the app `app_label`?"
+    return True
+
+  def has_perm(self, perm, obj=None):
+    # Handle whether the user has a specific permission?"
+    return True
+
 class VolunteerResource(resources.ModelResource):
   nome = fields.Field()
   email = fields.Field()
