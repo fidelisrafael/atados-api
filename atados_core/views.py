@@ -1,4 +1,5 @@
 import facepy as facebook
+from django.utils import timezone
 
 from django.core.mail import send_mail
 from django.http import Http404
@@ -22,6 +23,8 @@ from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 @api_view(['GET'])
 def current_user(request, format=None):
   if request.user.is_authenticated():
+    request.user.last_login=timezone.now()
+    request.user.save()
     try:
       return Response(VolunteerSerializer(request.user.volunteer).data)
     except:
@@ -88,7 +91,7 @@ def facebook_auth(request, format=None):
   try:
     graph = facebook.GraphAPI(accessToken)
     me = graph.get("me")
-  except facebook.FacepyError, e:
+  except facebook.FacepyError:
     return Response({"Could not talk to Facebook to log you in."}, status.HTTP_400_BAD_REQUEST)
 
   volunteer = Volunteer.objects.filter(facebook_uid=userID)
@@ -96,6 +99,8 @@ def facebook_auth(request, format=None):
   if volunteer:
     volunteer = volunteer[0]
     user = volunteer.user
+    user.last_login=timezone.now()
+    user.save()
   else:
     try:
       user = User.objects.get(email=me['email'])
@@ -109,6 +114,7 @@ def facebook_auth(request, format=None):
       user = User.objects.create_user(slug=slug, email=me['email'])
       volunteer = Volunteer(user=user)
 
+    user.last_login=timezone.now()
     if not user.first_name:
       user.first_name = me['first_name']
       user.save()
@@ -140,7 +146,7 @@ def logout(request, format=None):
   else:
     token = AccessToken.objects.get(token=request.auth)
     token.delete()
-    return Response({"User logged out."}, status.HTTP_200_OK)
+    return Response(UserSerializer(request.user).data, status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_volunteer(request, format=None):
