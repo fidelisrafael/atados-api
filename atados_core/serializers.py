@@ -84,12 +84,12 @@ class VolunteerProjectSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source="get_full_name")
   email = serializers.CharField(source="get_email")
   phone = serializers.CharField(source="get_phone")
-  apply = ApplySerializer(source="get_apply")
+  slug = serializers.CharField(source="user.slug")
 
   class Meta:
     model = Volunteer
     lookup_field = 'slug'
-    fields = ('name', 'email', 'phone', 'apply')
+    fields = ('name', 'email', 'phone', 'slug')
 
 class VolunteerSlimSerializer(serializers.ModelSerializer):
   slug = serializers.CharField(source="user.slug")

@@ -366,7 +366,7 @@ def change_volunteer_status(request, format=None):
       a.status = ApplyStatus.objects.get(name=s)
       a.save()
       return Response({"OK"}, status.HTTP_200_OK)
-    except Exception as inst:
+    except Exception:
       return Response({"Some error with the parameters you passed."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error with the parameters you passed."}, status.HTTP_400_BAD_REQUEST)
 
@@ -475,7 +475,8 @@ class VolunteerProjectList(generics.ListAPIView):
   def get_queryset(self):
     project_slug = self.kwargs.get('project_slug', None)
     applies = Apply.objects.filter(project__slug=project_slug)
-    volunteers = [ apply.volunteer for apply in applies ]
+    ids = applies.values_list('volunteer', flat=True)
+    volunteers = Volunteer.objects.filter(id__in=ids)
     return volunteers
 
 class VolunteerViewSet(viewsets.ModelViewSet):
@@ -503,6 +504,16 @@ class ApplyViewSet(viewsets.ModelViewSet):
   queryset = Apply.objects.all()
   serializer_class = ApplySerializer
   permissions_classes = [IsOwnerOrReadOnly]
+
+class ApplyList(generics.ListAPIView):
+  serializer_class = ApplySerializer
+  permission_classes = (IsNonprofit, )
+
+  def get_queryset(self):
+    project_slug = self.request.QUERY_PARAMS['project_slug']
+    volunteer_slug = self.request.QUERY_PARAMS['volunteer_slug']
+    applies = Apply.objects.filter(project__slug=project_slug, volunteer__user__slug=volunteer_slug).distinct()
+    return applies
 
 class CauseViewSet(viewsets.ModelViewSet):
   queryset = Cause.objects.all()
