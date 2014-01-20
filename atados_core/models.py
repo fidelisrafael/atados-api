@@ -36,17 +36,27 @@ class Availability(models.Model):
   def __unicode__(self):
     return _('%(weekday)s at %(period)s') % {'weekday': self.get_weekday_display(), 'period': self.get_period_display()}
 
+  class Meta:
+    verbose_name = _('availability')
+
 class Cause(models.Model):
     name = models.CharField(_('name'), max_length=30)
 
     def __unicode__(self):
-        return self.name
+      return self.name
+
+    class Meta:
+      verbose_name = _('cause')
+      verbose_name_plural = _('causes')
 
 class Skill(models.Model):
     name = models.CharField(_('name'), max_length=30)
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+      verbose_name = _('skill')
 
 class State(models.Model):
     name = models.CharField(_('name'), max_length=30)
@@ -68,6 +78,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name = _('city')
+        verbose_name_plural = _('cities')
 
 
 class Address(models.Model):
@@ -98,6 +109,8 @@ class Address(models.Model):
       else:
         return ""
 
+    class Meta:
+      verbose_name = _('address')
 
 def get_latitude_longitude(sender, instance, **kwargs):
   if instance.city and not instance.city.id == 0:
@@ -169,6 +182,10 @@ class Volunteer(models.Model):
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
+
+    class Meta:
+      verbose_name = _('volunteer')
+      verbose_name_plural = _('volunteers')
 
 class NonprofitManager(models.Manager):
     #use_for_related_fields = True
@@ -246,6 +263,9 @@ class Nonprofit(models.Model):
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Nonprofit, self).save(*args, **kwargs)
 
+    class Meta:
+      verbose_name = _('nonprofit')
+
 class ProjectManager(models.Manager):
     use_for_related_fields = True
 
@@ -264,75 +284,85 @@ class Role(models.Model):
     details = models.TextField(_('Details'), max_length=1024, blank=True, null=True, default=None)
     vacancies = models.PositiveSmallIntegerField(_('Vacancies'),
                                     blank=True, null=True, default=None)
+    class Meta:
+      verbose_name = _('role')
+
 
 class Project(models.Model):
-    objects = ProjectManager()
-    nonprofit = models.ForeignKey(Nonprofit)
-    name = models.CharField(_('Project name'), max_length=50)
-    slug = models.SlugField(max_length=100, unique=True)
-    details = models.TextField(_('Details'), max_length=3000)
-    description = models.TextField(_('Short description'), max_length=100, 
-                                   blank=True, null=True)
-    facebook_event = models.URLField(blank=True, null=True, default=None)
-    responsible = models.CharField(_('Responsible name'), max_length=50,
-                                   blank=True, null=True)
-    phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
-    email = models.EmailField(_('E-mail'), blank=True, null=True)
-    published = models.BooleanField(_("Published"), default=False)
-    published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
-    closed = models.BooleanField(_("Closed"), default=False)
-    closed_date = models.DateTimeField(_("Closed date"), blank=True, null=True)
-    deleted = models.BooleanField(_("Deleted"), default=False)
-    deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
-    created_date = models.DateTimeField(auto_now_add=True)
-    modified_date = models.DateTimeField(auto_now=True)
-    address = models.OneToOneField(Address, blank=True, null=True)
+  objects = ProjectManager()
+  nonprofit = models.ForeignKey(Nonprofit)
+  name = models.CharField(_('Project name'), max_length=50)
+  slug = models.SlugField(max_length=100, unique=True)
+  details = models.TextField(_('Details'), max_length=3000)
+  description = models.TextField(_('Short description'), max_length=100, 
+                                 blank=True, null=True)
+  facebook_event = models.URLField(blank=True, null=True, default=None)
+  responsible = models.CharField(_('Responsible name'), max_length=50,
+                                 blank=True, null=True)
+  phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True)
+  email = models.EmailField(_('E-mail'), blank=True, null=True)
+  published = models.BooleanField(_("Published"), default=False)
+  published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
+  closed = models.BooleanField(_("Closed"), default=False)
+  closed_date = models.DateTimeField(_("Closed date"), blank=True, null=True)
+  deleted = models.BooleanField(_("Deleted"), default=False)
+  deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
+  created_date = models.DateTimeField(auto_now_add=True)
+  modified_date = models.DateTimeField(auto_now=True)
+  address = models.OneToOneField(Address, blank=True, null=True)
 
-    roles = models.ManyToManyField(Role, blank=True, null=True)
-    skills = models.ManyToManyField(Skill)
-    causes = models.ManyToManyField(Cause)
+  roles = models.ManyToManyField(Role, blank=True, null=True)
+  skills = models.ManyToManyField(Skill)
+  causes = models.ManyToManyField(Cause)
 
-    legacy_nid = models.PositiveIntegerField(blank=True, null=True)
+  legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
-    def image_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
+  def image_name(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
 
-    image = models.ImageField(upload_to=image_name, blank=True,
-                       null=True, default=None)
+  image = models.ImageField(upload_to=image_name, blank=True,
+                     null=True, default=None)
 
-    def get_volunteers(self):
-      apply = Apply.objects.filter(project=self, canceled=False)
-      return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
+  def get_volunteers(self):
+    apply = Apply.objects.filter(project=self, canceled=False)
+    return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
 
-    def delete(self, *args, **kwargs):
-        self.deleted = True
-        self.deleted_date = datetime.now()
-        self.save()
+  def delete(self, *args, **kwargs):
+      self.deleted = True
+      self.deleted_date = datetime.now()
+      self.save()
 
-    def save(self, *args, **kwargs):
-      self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+  def save(self, *args, **kwargs):
+    self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
 
-      # If there is no description, take 100 chars from the details
-      if not self.description and len(self.details) > 100:
-        self.description = self.details[0:100]
+    # If there is no description, take 100 chars from the details
+    if not self.description and len(self.details) > 100:
+      self.description = self.details[0:100]
 
-      return super(Project, self).save(*args, **kwargs)
+    return super(Project, self).save(*args, **kwargs)
 
-    def get_image_url(self):
-      return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/project/default_project.jpg'
+  def get_image_url(self):
+    return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/project/default_project.jpg'
 
-    def __unicode__(self):
-        return  '%s - %s' % (self.name, self.nonprofit.name)
+  def __unicode__(self):
+      return  '%s - %s' % (self.name, self.nonprofit.name)
 
-    
+  class Meta:
+    verbose_name = _('project')
+    verbose_name_plural = _('projects')
+   
 # Ato Recorrente
 class Work(models.Model):
-    project = models.OneToOneField(Project)
-    availabilities = models.ManyToManyField(Availability)
-    weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
-                                        blank=True, null=True)
-    can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'))
+  project = models.OneToOneField(Project)
+  availabilities = models.ManyToManyField(Availability)
+  weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
+                                      blank=True, null=True)
+  can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'))
+
+  class Meta:
+    verbose_name = _('work')
+    verbose_name_plural = _('works')
 
 # Ato Pontual
 class Job(models.Model):
@@ -340,11 +370,18 @@ class Job(models.Model):
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
+  class Meta:
+    verbose_name = _('Job')
+    verbose_name_plural = _('Jobs')
+
 class ApplyStatus(models.Model):
   name = models.CharField(_('name'), max_length=30)
 
   def __unicode__(self):
       return self.name
+
+  class Meta:
+    verbose_name = _('apply status')
 
 class Apply(models.Model):
   volunteer = models.ForeignKey(Volunteer)
@@ -361,12 +398,19 @@ class Apply(models.Model):
       self.canceled_date = None
     return super(Apply, self).save(*args, **kwargs)
 
+  class Meta:
+    verbose_name = _('apply')
+    verbose_name_plural = _('applies')
+
 class Recommendation(models.Model):
   project = models.ForeignKey(Project)
   sort = models.PositiveSmallIntegerField(_('Sort'),
           blank=True, null=True, default=None)
   state = models.ForeignKey(State, blank=True, null=True, default=None)
   city = models.ForeignKey(City, blank=True, null=True, default=None)
+
+  class Meta:
+    verbose_name = _('recommendation')
 
 class UserManager(BaseUserManager):
 
