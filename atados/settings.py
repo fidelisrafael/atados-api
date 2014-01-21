@@ -253,9 +253,6 @@ CACHES = {
     },
 }
 
-if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
-    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
