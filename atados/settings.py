@@ -291,3 +291,6 @@ SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
+
+if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
+  SESSION_ENGINE = "django.contrib.sessions.backends.cache"

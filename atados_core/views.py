@@ -1,4 +1,5 @@
 import facepy as facebook
+import json
 from django.utils import timezone
 
 from django.core.mail import send_mail
@@ -167,55 +168,58 @@ def create_volunteer(request, format=None):
 
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
-   obj = request.DATA
-   # slug = obj['user']['slug']
-   email = obj['user']['email']
+  obj = json.loads(request.DATA['nonprofit'])
+  print obj
+  email = obj['user']['email']
 
-   try:
-     user = User.objects.get(email=email)
-   except User.DoesNotExist:
-     password = obj['user']['password']
-     user = User.objects.create_user(email, password, slug=obj['user']['slug'])
-     user.first_name = obj['user']['first_name']
-     user.last_name = obj['user']['last_name']
-     user.save()
+  try:
+   user = User.objects.get(email=email)
+  except User.DoesNotExist:
+   password = obj['user']['password']
+   user = User.objects.create_user(email, password, slug=obj['user']['slug'])
+   user.first_name = obj['user']['first_name']
+   user.last_name = obj['user']['last_name']
+   user.save()
 
-   if Nonprofit.objects.filter(user=user):
-     return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
+  if Nonprofit.objects.filter(user=user):
+   return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
 
-   obja = obj['address']
-   address = Address()
-   address.zipcode = obja['zipcode']
-   address.addressline = obja['addressline']
-   address.addressline2 = obja.get('addressline2')
-   address.addressnumber = obja['addressnumber']
-   address.neighborhood = obja['neighborhood']
-   address.save()
+  obja = obj['address']
+  address = Address()
+  address.zipcode = obja['zipcode'][0:9]
+  address.addressline = obja['addressline']
+  address.addressline2 = obja.get('addressline2')
+  address.addressnumber = obja['addressnumber'][0:9]
+  address.neighborhood = obja['neighborhood']
+  address.save()
 
-   FACEBOOK_KEY = 'facebook_page'
-   GOOGLE_KEY = 'google_page'
-   TWITTER_KEY = 'twitter_handle'
+  FACEBOOK_KEY = 'facebook_page'
+  GOOGLE_KEY = 'google_page'
+  TWITTER_KEY = 'twitter_handle'
 
-   nonprofit = Nonprofit(user=user)
-   nonprofit.address = address
-   nonprofit.name = obj['name']
-   nonprofit.details = obj['details']
-   nonprofit.description = obj['description']
-   nonprofit.slug = obj['slug']
-   nonprofit.phone = obj['phone']
+  nonprofit = Nonprofit(user=user)
+  nonprofit.address = address
+  nonprofit.name = obj['name']
+  nonprofit.details = obj['details']
+  nonprofit.description = obj['description']
+  nonprofit.slug = obj['slug']
+  nonprofit.phone = obj['phone']
 
-   if FACEBOOK_KEY in obj:
-     nonprofit.facebook_page = obj[FACEBOOK_KEY]
-   if GOOGLE_KEY in obj:
-     nonprofit.google_page = obj[GOOGLE_KEY]
-   if TWITTER_KEY in obj:
-     nonprofit.twitter_handle = obj[TWITTER_KEY]
+  if FACEBOOK_KEY in obj:
+   nonprofit.facebook_page = obj[FACEBOOK_KEY]
+  if GOOGLE_KEY in obj:
+   nonprofit.google_page = obj[GOOGLE_KEY]
+  if TWITTER_KEY in obj:
+   nonprofit.twitter_handle = obj[TWITTER_KEY]
 
-   nonprofit.save()
+  nonprofit.image = request.FILES.get('image')
+  nonprofit.cover = request.FILES.get('cover')
+  nonprofit.save()
 
-   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
-   # TODO send activation email
-   # TODO send  email to administradors to accept this Nonprofit and remove it from moderation
+
+  return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
+  # TODO send activation email
+  # TODO send  email to administradors to accept this Nonprofit and remove it from moderation
 
 @api_view(['POST'])
 def password_reset(request, format=None):
