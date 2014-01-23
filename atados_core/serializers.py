@@ -144,7 +144,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
     lookup_field = 'slug'
     depth = 2
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
-              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects')
+              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects', 'published')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
