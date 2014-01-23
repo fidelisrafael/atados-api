@@ -169,7 +169,6 @@ def create_volunteer(request, format=None):
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
   obj = json.loads(request.DATA['nonprofit'])
-  print obj
   email = obj['user']['email']
 
   try:
@@ -204,6 +203,11 @@ def create_nonprofit(request, format=None):
   nonprofit.description = obj['description']
   nonprofit.slug = obj['slug']
   nonprofit.phone = obj['phone']
+  nonprofit.save()
+
+  causes = obj['causes']
+  for c in causes:
+    nonprofit.causes.add(Cause.objects.get(name=c['name']))
 
   if FACEBOOK_KEY in obj:
    nonprofit.facebook_page = obj[FACEBOOK_KEY]
