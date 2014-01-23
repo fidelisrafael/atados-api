@@ -512,7 +512,7 @@ class VolunteerViewSet(viewsets.ModelViewSet):
       raise Http404
 
 class ProjectViewSet(viewsets.ModelViewSet):
-  queryset = Project.objects.all()
+  queryset = Project.objects.filter(deleted=False)
   serializer_class = ProjectSerializer
   permissions_classes = [IsNonprofit]
   lookup_field = 'slug'
