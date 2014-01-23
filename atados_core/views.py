@@ -171,18 +171,6 @@ def create_nonprofit(request, format=None):
   obj = json.loads(request.DATA['nonprofit'])
   email = obj['user']['email']
 
-  try:
-   user = User.objects.get(email=email)
-  except User.DoesNotExist:
-   password = obj['user']['password']
-   user = User.objects.create_user(email, password, slug=obj['user']['slug'])
-   user.first_name = obj['user']['first_name']
-   user.last_name = obj['user']['last_name']
-   user.save()
-
-  if Nonprofit.objects.filter(user=user):
-   return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
-
   obja = obj['address']
   address = Address()
   address.zipcode = obja['zipcode'][0:9]
@@ -190,20 +178,34 @@ def create_nonprofit(request, format=None):
   address.addressline2 = obja.get('addressline2')
   address.addressnumber = obja['addressnumber'][0:9]
   address.neighborhood = obja['neighborhood']
+  address.city = City.objects.get(name=obja['city']['name'])
   address.save()
 
+  try:
+   user = User.objects.get(email=email)
+  except User.DoesNotExist:
+   password = obj['user']['password']
+   user = User.objects.create_user(email, password, slug=obj['user']['slug'])
+   user.first_name = obj['user']['first_name']
+   user.last_name = obj['user']['last_name']
+   user.hidden_address = obj['hidden_address']
+   user.address = address
+   user.save()
+
+  if Nonprofit.objects.filter(user=user):
+   return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
+
+  
   FACEBOOK_KEY = 'facebook_page'
   GOOGLE_KEY = 'google_page'
   TWITTER_KEY = 'twitter_handle'
 
   nonprofit = Nonprofit(user=user)
-  nonprofit.address = address
   nonprofit.name = obj['name']
   nonprofit.details = obj['details']
   nonprofit.description = obj['description']
   nonprofit.slug = obj['slug']
   nonprofit.phone = obj['phone']
-  nonprofit.hidden_address = obj['hidden_address']
   nonprofit.save()
 
   causes = obj['causes']
