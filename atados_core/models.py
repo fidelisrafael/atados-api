@@ -104,6 +104,7 @@ class Address(models.Model):
     def get_city_state(self):
       if self.city:
         if self.city.id == 0: # Trabalho a Distancia
+          print self.city.name
           return self.city.name
         return "%s, %s" % (self.city.name, self.city.state.code)
       else:
@@ -210,7 +211,7 @@ class Nonprofit(models.Model):
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
     twitter_handle = models.URLField(blank=True, null=True, default=None)
-
+    
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit/%s.%s' % (self.user.slug, extension)
@@ -237,7 +238,6 @@ class Nonprofit(models.Model):
     def get_type(self):
       return "NONPROFIT";
 
-    
     def get_description(self):
       return self.description if self.description else Truncator(
               self.details).chars(100)
@@ -449,6 +449,13 @@ class User(AbstractBaseUser):
   modified_date = models.DateTimeField(auto_now=True, null=True, blank=True)
 
   address = models.OneToOneField(Address, blank=True, null=True)
+  hidden_address = models.BooleanField(_("Endereco escondido."), default=False)
+
+  def get_address(self):
+    if self.hidden_address:
+      return Address.objects.get(id=0) # Trabalho a Distancia Address
+    return self.address
+
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
   legacy_uid = models.PositiveIntegerField(blank=True, null=True)

@@ -203,6 +203,7 @@ def create_nonprofit(request, format=None):
   nonprofit.description = obj['description']
   nonprofit.slug = obj['slug']
   nonprofit.phone = obj['phone']
+  nonprofit.hidden_address = obj['hidden_address']
   nonprofit.save()
 
   causes = obj['causes']
