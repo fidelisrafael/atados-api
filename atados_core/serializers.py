@@ -24,7 +24,7 @@ class AddressSerializer(serializers.ModelSerializer):
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city', 'latitude', 'longitude', 'city_state')
 
 class UserSerializer(serializers.ModelSerializer):
-  address = AddressSerializer(source="get_address", required=False)
+  address = AddressSerializer()
 
   class Meta:
     model = User
