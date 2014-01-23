@@ -433,7 +433,7 @@ class UserViewSet(viewsets.ModelViewSet):
   lookup_field = 'slug'
 
 class NonprofitViewSet(viewsets.ModelViewSet):
-  queryset = Nonprofit.objects.all()
+  queryset = Nonprofit.objects.filter(deleted=False)
   serializer_class = NonprofitSerializer
   permission_classes = [IsOwnerOrReadOnly]
   lookup_field = 'slug'
