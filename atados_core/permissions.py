@@ -11,7 +11,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
       return True
   
     # Write permissions are only allowed to the owner of the snippet
-    return obj.user == request.user
+    return request.user.is_staff or obj.user == request.user
 
 class IsNonprofit(permissions.BasePermission):
   """
@@ -19,8 +19,8 @@ class IsNonprofit(permissions.BasePermission):
   """
   def has_object_permission(self, request, view, obj):
     if request.user.is_authenticated():
-      return True if request.user.nonprofit or request.user.is_staff() else False
+      return True if request.user.is_staff or request.user.nonprofit else False
 
   def has_permission(self, request, view, obj=None):
     if request.user.is_authenticated():
-      return True if request.user.nonprofit or request.user.is_staff() else False
+      return True if request.user.is_staff or request.user.nonprofit else False

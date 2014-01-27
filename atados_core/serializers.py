@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     lookup_field = 'slug'
     depth = 1
-    fields = ('email', 'slug', 'first_name', 'last_name', 'phone', 'address')
+    fields = ('email', 'slug', 'first_name', 'last_name', 'phone', 'address', 'is_staff')
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:

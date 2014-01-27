@@ -1,28 +1,6 @@
 from django.contrib import admin
 from atados_core import models
 
-class ProjectAdmin(admin.ModelAdmin):
-    list_filter = ('published',)
-    exclude = ('deleted', 'deleted_date',)
-
-    def queryset(self, request):
-        qs = self.model._default_manager.active()
-        ordering = self.ordering or () 
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
-class NonprofitAdmin(admin.ModelAdmin):
-    list_filter = ('published',)
-    exclude = ('deleted', 'deleted_date',)
-
-    def queryset(self, request):
-        qs = self.model._default_manager.active()
-        ordering = self.ordering or () 
-        if ordering:
-            qs = qs.order_by(*ordering)
-        return qs
-
 admin.site.register(models.Nonprofit)
 admin.site.register(models.Apply)
 admin.site.register(models.Availability)
