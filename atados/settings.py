@@ -224,6 +224,7 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
     AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_KEY']
     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
     AWS_S3_SECURE_URLS = True
+    AWS_S3_URL_PROTOCOL = 'https'
     AWS_HEADERS = {
         'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
     }
