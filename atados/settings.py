@@ -14,8 +14,7 @@ ALLOWED_HOSTS = (
 )
 
 ADMINS = (
-    ('Rogério Yokomizo', 'me@ro.ger.io'),
-    ('Marjori Pomarole', 'marjoripomarole@gmail.com'),
+    ('Marjori Pomarole', 'marjoripomarole@gmail.com')
 )
 
 MANAGERS = ADMINS
@@ -103,14 +102,12 @@ if DEBUG:
   TEMPLATE_LOADERS = (
       'django.template.loaders.filesystem.Loader',
       'django.template.loaders.app_directories.Loader',
-      # 'django.template.loaders.eggs.Loader',
     )
 else:
   TEMPLATE_LOADERS = (
       ('django.template.loaders.cached.Loader', (
         'django.template.loaders.filesystem.Loader',
         'django.template.loaders.app_directories.Loader',
-        # 'django.template.loaders.eggs.Loader',
       )),
   )
 
@@ -213,7 +210,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'marjori@atados.com.br')
+EMAIL_HOST_USER = os.environ.get('ATADOS_EMAIL_USER', 'contato@atados.com.br')
 EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -226,7 +223,7 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
     AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
     AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_KEY']
     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-    AWS_S3_SECURE_URLS = False
+    AWS_S3_SECURE_URLS = True
     AWS_HEADERS = {
         'Expires': 'Thu, 1 Dec 2015 00:00:01 GMT',
     }
@@ -253,10 +250,10 @@ CACHES = {
     },
 }
 
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
+if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
+  SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -284,13 +281,10 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
-SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br" if DEBUG else ".atados.com.br"
+CSRF_COOKIE_DOMAIN = ".atados.com.br"
+SESSION_COOKIE_DOMAIN = ".atados.com.br"
 
 # Drupal legacy sucks :/
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
-
-if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
-  SESSION_ENGINE = "django.contrib.sessions.backends.cache"
