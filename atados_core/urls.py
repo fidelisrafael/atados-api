@@ -7,11 +7,10 @@ router.register(r'causes', views.CauseViewSet)
 router.register(r'skills', views.SkillViewSet)
 router.register(r'states', views.StateViewSet)
 router.register(r'cities', views.CityViewSet)
-router.register(r'availabilities', views.AvailabilityViewSet)
 router.register(r'nonprofit', views.NonprofitViewSet)
 router.register(r'project', views.ProjectViewSet)
 router.register(r'volunteers', views.VolunteerViewSet)
-router.register(r'apply', views.ApplyViewSet)
+router.register(r'volunteers_public', views.VolunteerPublicViewSet)
 
 urlpatterns = patterns('atados_core.views',
   url(r'v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),

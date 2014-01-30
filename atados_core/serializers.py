@@ -184,6 +184,19 @@ class VolunteerSerializer(serializers.ModelSerializer):
   image_url = serializers.CharField(source='get_image_url', required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)
   skills = serializers.PrimaryKeyRelatedField(many=True)
+
+  class Meta:
+    model = Volunteer
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role')
+
+class VolunteerPublicSerializer(serializers.ModelSerializer):
+  slug = serializers.Field(source='user.slug')
+  role = serializers.Field(source='get_type')
+  image_url = serializers.CharField(source='get_image_url', required=False)
+  causes = serializers.PrimaryKeyRelatedField(many=True)
+  skills = serializers.PrimaryKeyRelatedField(many=True)
   projects = ProjectSerializer(source="get_projects", required=False, read_only=True)
   nonprofits = NonprofitSerializer(source="get_nonprofits", required=False, read_only=True)
 
@@ -191,4 +204,4 @@ class VolunteerSerializer(serializers.ModelSerializer):
     model = Volunteer
     lookup_field = 'slug'
     depth = 1
-    fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role', 'projects', 'nonprofits')
+    fields = ('slug', 'image_url', 'causes', 'skills', 'role', 'projects', 'nonprofits')

@@ -18,7 +18,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource
-from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
@@ -496,18 +496,30 @@ class VolunteerProjectList(generics.ListAPIView):
     volunteers = Volunteer.objects.filter(id__in=ids)
     return volunteers
 
-class VolunteerViewSet(viewsets.ModelViewSet):
+class VolunteerPublicViewSet(viewsets.ModelViewSet):
   queryset = Volunteer.objects.all()
-  serializer_class = VolunteerSerializer
-  permission_classes = [IsOwnerOrReadOnly]
+  serializer_class = VolunteerPublicSerializer
   lookup_field = 'slug'
 
   def get_object(self):
     try:
       volunteer = self.get_queryset().get(user__slug=self.kwargs['slug'])
       volunteer.slug = volunteer.user.slug
-      self.check_object_permissions(self.request, volunteer)
       return volunteer
+    except:
+      raise Http404
+
+class VolunteerViewSet(viewsets.ModelViewSet):
+  queryset = Volunteer.objects.all()
+  serializer_class = VolunteerSerializer
+  lookup_field = 'slug'
+
+  def get_object(self):
+    try:
+      volunteer = self.get_queryset().get(user__slug=self.kwargs['slug'])
+      volunteer.slug = volunteer.user.slug
+      if self.request.user == volunteer.user:
+        return volunteer
     except:
       raise Http404
 
@@ -524,7 +536,7 @@ class ApplyViewSet(viewsets.ModelViewSet):
 
 class ApplyList(generics.ListAPIView):
   serializer_class = ApplySerializer
-  permission_classes = (IsNonprofit, )
+  permission_classes = [IsNonprofit]
 
   def get_queryset(self):
     project_slug = self.request.QUERY_PARAMS['project_slug']
