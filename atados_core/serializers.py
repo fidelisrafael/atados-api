@@ -174,9 +174,8 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
-    depth = 2
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes',
-              'details', 'description', 'website', 'role')
+              'description', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
