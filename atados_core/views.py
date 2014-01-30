@@ -18,7 +18,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource
-from atados_core.serializers import UserSerializer, NonprofitSerializer, VolunteerSerializer, ProjectSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
@@ -448,7 +448,7 @@ class NonprofitViewSet(viewsets.ModelViewSet):
       raise Http404
 
 class ProjectList(generics.ListAPIView):
-  serializer_class = ProjectSerializer
+  serializer_class = ProjectSearchSerializer
   permission_classes = [AllowAny]
 
   def get_queryset(self):
@@ -471,7 +471,7 @@ class ProjectList(generics.ListAPIView):
     return Project.objects.filter(pk__in=[ r.pk for r in queryset ])
 
 class NonprofitList(generics.ListAPIView):
-  serializer_class = NonprofitSerializer
+  serializer_class = NonprofitSearchSerializer
   permission_classes = [AllowAny]
 
   def get_queryset(self):
