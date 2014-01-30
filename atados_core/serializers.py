@@ -168,8 +168,6 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url', required=False)
-  volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
-  projects = ProjectSerializer(source='get_projects', required=False)
   name = serializers.CharField(source="name", required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)
 
@@ -177,8 +175,8 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
     model = Nonprofit
     lookup_field = 'slug'
     depth = 2
-    fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
-              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects', 'published')
+    fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes',
+              'details', 'description', 'website', 'role')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
