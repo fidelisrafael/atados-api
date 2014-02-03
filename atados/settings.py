@@ -149,6 +149,7 @@ INSTALLED_APPS = (
 
     'atados_core',
 
+    'debug_toolbar',
     'haystack',
     'rest_framework',
     'facepy',
