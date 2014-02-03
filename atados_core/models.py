@@ -430,8 +430,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
   email = models.EmailField('Email', max_length=254, unique=True)
-  first_name = models.CharField(_('first name'), max_length=50, blank=True)
-  last_name = models.CharField(_('last name'), max_length=50, blank=True)
+  name = models.CharField(_('Name'), max_length=200, blank=True)
   slug = models.SlugField(_('Slug'), max_length=100, unique=True)
 
   is_staff = models.BooleanField(_('Staff'), default=False)
@@ -460,13 +459,6 @@ class User(AbstractBaseUser):
     verbose_name = _('user')
     verbose_name_plural = _('users')
 
-  def get_full_name(self):
-    full_name = '%s %s' % (self.first_name, self.last_name)
-    return full_name.strip()
-
-  def get_short_name(self):
-    return self.first_name
-
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
 
@@ -492,7 +484,7 @@ class VolunteerResource(resources.ModelResource):
     fields = ()
 
   def dehydrate_nome(self, volunteer):
-    return '%s %s' % (volunteer.user.first_name, volunteer.user.last_name)
+    return volunteer.user.name
   def dehydrate_email(self, volunteer):
     return volunteer.user.email
   def dehydrate_telefone(self, volunteer):

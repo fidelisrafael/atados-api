@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     lookup_field = 'slug'
     depth = 1
-    fields = ('email', 'slug', 'first_name', 'last_name', 'phone', 'address', 'is_staff')
+    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff')
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -81,7 +81,7 @@ class RecommendationSerializer(serializers.HyperlinkedModelSerializer):
     fields = ('project', 'sort', 'state', 'city')
 
 class VolunteerProjectSerializer(serializers.ModelSerializer):
-  name = serializers.CharField(source="get_full_name")
+  name = serializers.CharField(source="user.name")
   email = serializers.CharField(source="get_email")
   phone = serializers.CharField(source="get_phone")
   slug = serializers.CharField(source="user.slug")

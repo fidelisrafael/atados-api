@@ -116,12 +116,8 @@ def facebook_auth(request, format=None):
       volunteer = Volunteer(user=user)
 
     user.last_login=timezone.now()
-    if not user.first_name:
-      user.first_name = me['first_name']
-      user.save()
-    if not user.last_name:
-      user.last_name = me['last_name']
-      user.save()
+    user.name = me['first_name'] + me['last_name']
+    user.save()
     
     # TODO(mpomarole): get photo later
     volunteer.facebook_uid = userID
@@ -186,8 +182,7 @@ def create_nonprofit(request, format=None):
   except User.DoesNotExist:
    password = obj['user']['password']
    user = User.objects.create_user(email, password, slug=obj['user']['slug'])
-   user.first_name = obj['user']['first_name']
-   user.last_name = obj['user']['last_name']
+   user.name = obj['user']['name']
    user.hidden_address = obj['hidden_address']
    user.address = address
    user.save()
