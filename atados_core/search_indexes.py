@@ -39,7 +39,7 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
     return Project
 
   def index_queryset(self, using=None):
-    return self.get_model().objects.filter(closed=False, published=True, deleted=False)
+    return Project.objects.filter(closed=False, published=True, deleted=False)
 
 class VolunteerIndex(indexes.SearchIndex, indexes.Indexable):
   text = indexes.CharField(document=True, use_template=True)

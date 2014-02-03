@@ -468,7 +468,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(city=city).models(Project) if city else queryset
     queryset = queryset.models(Project).filter(content=AutoQuery(query.lower())).boost(query, 1.2) if query else queryset
 
-    return Project.objects.filter(pk__in=[ r.pk for r in queryset ])
+    return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False)
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer

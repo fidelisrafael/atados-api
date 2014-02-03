@@ -135,6 +135,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
   skills = SkillSerializer(required=False)
   work = WorkSerializer(required=False)
   job = JobSerializer(required=False)
+  volunteers = serializers.CharField(source='get_volunteers_number', required=False)
 
   class Meta:
     model = Project
@@ -142,7 +143,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'causes', 'name', 'slug', 'description', 'job', 'work',
               'image_url', 'skills', 'nonprofit_image', 'city_state',
-              'nonprofit_slug', 'nonprofit_name', 'address')
+              'nonprofit_slug', 'nonprofit_name', 'address', 'volunteers')
 
 class NonprofitSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
@@ -170,12 +171,13 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   cover_url = serializers.CharField(source='get_cover_url', required=False)
   name = serializers.CharField(source="name", required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)
+  volunteers = serializers.CharField(source='get_volunteers_number', required=False)
 
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes',
-              'description', 'role')
+              'description', 'role', 'volunteers')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)

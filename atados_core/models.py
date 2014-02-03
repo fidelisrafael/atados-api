@@ -189,17 +189,8 @@ class Volunteer(models.Model):
   def __unicode__(self):
     return self.user.first_name or self.user.slug
 
-class NonprofitManager(models.Manager):
-    #use_for_related_fields = True
-
-    def active(self):
-        return self.get_query_set().filter(deleted=False)
-
-    def published(self):
-        return self.active().filter(published=True)
 
 class Nonprofit(models.Model):
-    objects = NonprofitManager()
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
@@ -254,6 +245,11 @@ class Nonprofit(models.Model):
         Q(id__in=self.volunteers.all().values_list('id', flat=True)) |
         Q(apply__project__nonprofit__id=self.id)).distinct()
 
+    def get_volunteers_number(self):
+      return Volunteer.objects.filter(
+        Q(id__in=self.volunteers.all().values_list('id', flat=True)) |
+        Q(apply__project__nonprofit__id=self.id)).distinct().count
+
     def __unicode__(self):
         return self.name
 
@@ -266,15 +262,6 @@ class Nonprofit(models.Model):
 
     class Meta:
       verbose_name = _('nonprofit')
-
-class ProjectManager(models.Manager):
-    use_for_related_fields = True
-
-    def active(self):
-        return self.get_query_set().filter(deleted=False)
-
-    def published(self):
-        return self.active().filter(published=True)
 
 # Cargo para um Ato pontual ou recorrente
 class Role(models.Model):
@@ -293,7 +280,6 @@ class Role(models.Model):
       return  '(%s vagas) %s' % (self.vacancies, self.name)
 
 class Project(models.Model):
-  objects = ProjectManager()
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
   slug = models.SlugField(max_length=100, unique=True)
@@ -331,6 +317,9 @@ class Project(models.Model):
   def get_volunteers(self):
     apply = Apply.objects.filter(project=self, canceled=False)
     return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
+
+  def get_volunteers_number(self):
+    return Apply.objects.filter(project=self, canceled=False).count
 
   def delete(self, *args, **kwargs):
       self.deleted = True
