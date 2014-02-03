@@ -143,6 +143,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'grappelli.dashboard',
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
 
@@ -153,6 +154,7 @@ INSTALLED_APPS = (
     'facepy',
     'corsheaders',
     'south',
+    'pyExcelerator',
     'provider',
     'provider.oauth2',
     'django_nose',
@@ -198,13 +200,13 @@ HTTPS_SUPPORT = True
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.request",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
+    "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
-    "django.core.context_processors.request",
     "django.core.context_processors.tz",
-    "django.contrib.messages.context_processors.messages",
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
@@ -289,3 +291,6 @@ SESSION_COOKIE_DOMAIN = ".atados.com.br"
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
+
+GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.CustomIndexDashboard'
+EXPORT_RECORDS_LIMIT = 20000

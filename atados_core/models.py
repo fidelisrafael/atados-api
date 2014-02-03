@@ -127,6 +127,11 @@ def get_latitude_longitude(sender, instance, **kwargs):
 post_save.connect(get_latitude_longitude, sender=Address, dispatch_uid="get_latitude_longitude")
 
 class Volunteer(models.Model):
+
+  class Meta:
+    verbose_name = _('volunteer')
+    verbose_name_plural = _('volunteers')
+
   user = models.OneToOneField(settings.AUTH_USER_MODEL)
   causes = models.ManyToManyField(Cause, blank=True, null=True)
   skills = models.ManyToManyField(Skill, blank=True, null=True)
@@ -183,10 +188,6 @@ class Volunteer(models.Model):
 
   def __unicode__(self):
     return self.user.first_name or self.user.slug
-
-    class Meta:
-      verbose_name = _('volunteer')
-      verbose_name_plural = _('volunteers')
 
 class NonprofitManager(models.Manager):
     #use_for_related_fields = True
@@ -286,7 +287,10 @@ class Role(models.Model):
                                     blank=True, null=True, default=None)
     class Meta:
       verbose_name = _('role')
+      verbose_name_plural = _('roles')
 
+    def __unicode__(self):
+      return  '(%s vagas) %s' % (self.vacancies, self.name)
 
 class Project(models.Model):
   objects = ProjectManager()
