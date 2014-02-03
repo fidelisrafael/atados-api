@@ -245,7 +245,7 @@ class Nonprofit(models.Model):
         Q(id__in=self.volunteers.all().values_list('id', flat=True)) |
         Q(apply__project__nonprofit__id=self.id)).distinct()
 
-    def get_volunteers_number(self):
+    def get_volunteers_numbers(self):
       return Volunteer.objects.filter(
         Q(id__in=self.volunteers.all().values_list('id', flat=True)) |
         Q(apply__project__nonprofit__id=self.id)).distinct().count
@@ -318,7 +318,7 @@ class Project(models.Model):
     apply = Apply.objects.filter(project=self, canceled=False)
     return Volunteer.objects.filter(pk__in=[a.volunteer.pk for a in apply])
 
-  def get_volunteers_number(self):
+  def get_volunteers_numbers(self):
     return Apply.objects.filter(project=self, canceled=False).count
 
   def delete(self, *args, **kwargs):

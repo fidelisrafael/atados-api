@@ -114,13 +114,14 @@ class ProjectSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)
   roles = RoleSerializer(required=False)
   volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
+  volunteers_numbers = serializers.CharField(source='get_volunteers_numbers', required=False)
 
   class Meta:
     model = Project
     lookup_field = 'slug'
     depth = 2
     fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
-              'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted',
+              'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted', 'volunteers_numbers',
               'job', 'work', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
 
 class ProjectSearchSerializer(serializers.ModelSerializer):
@@ -135,7 +136,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
   skills = SkillSerializer(required=False)
   work = WorkSerializer(required=False)
   job = JobSerializer(required=False)
-  volunteers = serializers.CharField(source='get_volunteers_number', required=False)
+  volunteers_numbers = serializers.CharField(source='get_volunteers_numbers', required=False)
 
   class Meta:
     model = Project
@@ -143,7 +144,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'causes', 'name', 'slug', 'description', 'job', 'work',
               'image_url', 'skills', 'nonprofit_image', 'city_state',
-              'nonprofit_slug', 'nonprofit_name', 'address', 'volunteers')
+              'nonprofit_slug', 'nonprofit_name', 'address', 'volunteers_numbers')
 
 class NonprofitSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
@@ -171,13 +172,13 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   cover_url = serializers.CharField(source='get_cover_url', required=False)
   name = serializers.CharField(source="name", required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)
-  volunteers = serializers.CharField(source='get_volunteers_number', required=False)
+  volunteers_numbers = serializers.CharField(source='get_volunteers_numbers', required=False)
 
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes',
-              'description', 'role', 'volunteers')
+              'description', 'role', 'volunteers_numbers')
 
 class VolunteerSerializer(serializers.ModelSerializer):
   user = UserSerializer(required=False)
