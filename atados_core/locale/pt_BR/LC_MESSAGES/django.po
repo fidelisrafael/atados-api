@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-03 16:12-0200\n"
+"POT-Creation-Date: 2014-02-03 18:36-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -176,7 +176,7 @@ msgstr "voluntário"
 msgid "volunteers"
 msgstr "voluntários"
 
-#: models.py:197
+#: models.py:197 models.py:433
 msgid "Name"
 msgstr "Nome"
 
@@ -237,7 +237,7 @@ msgstr "Atos"
 msgid "Responsible name"
 msgstr "Responsável"
 
-#: models.py:292 models.py:452
+#: models.py:292 models.py:451
 msgid "Phone"
 msgstr "Telefone"
 
@@ -321,38 +321,36 @@ msgstr "Ordenar"
 msgid "recommendation"
 msgstr "recomendações"
 
-#: models.py:433
-msgid "first name"
-msgstr "nome"
-
 #: models.py:434
-msgid "last name"
-msgstr "sobrenome"
-
-#: models.py:435
 msgid "Slug"
 msgstr "Nome do usuário"
 
-#: models.py:437
+#: models.py:436
 msgid "Staff"
 msgstr "Funcionários"
 
-#: models.py:438
+#: models.py:437
 msgid "Active"
 msgstr "Ativo"
 
-#: models.py:439
+#: models.py:438
 msgid "Email verified"
 msgstr "Email verificado"
 
-#: models.py:445
+#: models.py:444
 msgid "Endereco escondido."
 msgstr ""
 
-#: models.py:460
+#: models.py:459
 msgid "user"
 msgstr "usuário"
 
-#: models.py:461
+#: models.py:460
 msgid "users"
 msgstr "usuários"
+
+#~ msgid "first name"
+#~ msgstr "nome"
+
+#~ msgid "last name"
+#~ msgstr "sobrenome"

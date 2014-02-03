@@ -289,9 +289,9 @@ def upload_nonprofit_cover_image(request, format=None):
 @api_view(['GET'])
 def numbers(request, format=None):
   numbers = {}
-  numbers['projects'] = Project.objects.count()
+  numbers['projects'] = Project.objects.filter(closed=False, published=True).count()
   numbers['volunteers'] = Volunteer.objects.count()
-  numbers['nonprofits'] = Nonprofit.objects.count()
+  numbers['nonprofits'] = Nonprofit.objects.filter(published=True).count()
   return Response(numbers, status.HTTP_200_OK)
 
 @api_view(['GET'])

@@ -33,7 +33,7 @@ class ProjectAdmin(admin.ModelAdmin):
   }
 
 class UserAdmin(admin.ModelAdmin):
-  list_display = ('slug', 'email', 'first_name', 'last_name', 'last_login')
+  list_display = ('slug', 'email', 'name', 'last_login')
   list_filter = ('last_login', 'joined_date')
   search_fields = ('email', 'slug')
 
