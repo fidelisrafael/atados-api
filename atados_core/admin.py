@@ -20,7 +20,7 @@ class NonprofitAdmin(admin.ModelAdmin):
   make_published.short_description = _("Mark selected stories as published")
 
 class AddressAdmin(admin.ModelAdmin):
-  list_display = ('id', 'addressline', 'city')
+  list_display = ('id', 'city', 'latitude', 'longitude', 'addressline')
   search_fields = ['id']
 
 class ProjectAdmin(admin.ModelAdmin):

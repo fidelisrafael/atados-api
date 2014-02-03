@@ -255,9 +255,6 @@ CACHES = {
 
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 
-if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ:
-  SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
       'rest_framework.authentication.SessionAuthentication',
@@ -292,5 +289,5 @@ PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
 )
 
-GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.CustomIndexDashboard'
+GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.AtadosDashboard'
 EXPORT_RECORDS_LIMIT = 20000
