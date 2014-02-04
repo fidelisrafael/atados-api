@@ -452,13 +452,17 @@ class ProjectList(generics.ListAPIView):
       nonprofit = Nonprofit.objects.get(user__slug=nonprofit)
       queryset = Project.objects.filter(nonprofit=nonprofit)
     else:
-      queryset = SearchQuerySet().all().models(Project)
-    queryset = queryset.filter(causes=cause).models(Project) if cause else queryset
-    queryset = queryset.filter(skills=skill).models(Project) if skill else queryset
-    queryset = queryset.filter(city=city).models(Project) if city else queryset
-    queryset = queryset.models(Project).filter(content=AutoQuery(query.lower())).boost(query, 1.2) if query else queryset
+        queryset = SearchQuerySet()
+    queryset = queryset.filter(causes=cause) if cause else queryset
+    queryset = queryset.filter(skills=skill) if skill else queryset
+    queryset = queryset.filter(city=city) if city else queryset
+    queryset = queryset.filter(content=AutoQuery(query.lower())) if query else queryset
 
-    return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False)
+    highlighted = True if params.get('highlighted') == 'true' else False
+    if highlighted:
+      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False).order_by('-highlighted')
+    else:
+      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False).order_by('?')
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
@@ -469,11 +473,17 @@ class NonprofitList(generics.ListAPIView):
     query = params.get('query', None)
     cause = params.get('cause', None)
     city = params.get('city', None)
-    queryset = SearchQuerySet().filter(causes=cause).models(Nonprofit) if cause else SearchQuerySet().all().models(Nonprofit)
-    queryset = queryset.filter(city=city).models(Nonprofit) if city else queryset
-    queryset = queryset.filter(content=Clean(query)).models(Nonprofit) if query else queryset
+    queryset = SearchQuerySet()
+    queryset = SearchQuerySet().filter(causes=cause) if cause else queryset
+    queryset = queryset.filter(city=city) if city else queryset
+    queryset = queryset.filter(content=Clean(query)) if query else queryset
     results = [ r.pk for r in queryset ]
-    return Nonprofit.objects.filter(pk__in=results)
+    highlighted = True if params.get('highlighted') == 'true' else False
+    if highlighted:
+      return Nonprofit.objects.filter(pk__in=results).order_by('-highlighted')
+    else:
+      return Nonprofit.objects.filter(pk__in=results).order_by('?')
+
 
 class VolunteerProjectList(generics.ListAPIView):
   serializer_class = VolunteerProjectSerializer
