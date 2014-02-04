@@ -215,6 +215,7 @@ class Nonprofit(models.Model):
     image = models.ImageField(upload_to=image_name, blank=True, null=True, default=None)
     cover = models.ImageField(upload_to=cover_name, blank=True, null=True, default=None)
 
+    highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
     published = models.BooleanField(_("Published"), default=False)
     published_date = models.DateTimeField(_("Published date"), blank=True, null=True)
     deleted = models.BooleanField(_("Deleted"), default=False)
@@ -300,6 +301,8 @@ class Project(models.Model):
   created_date = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
   address = models.OneToOneField(Address, blank=True, null=True)
+
+  highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
 
   roles = models.ManyToManyField(Role, blank=True, null=True)
   skills = models.ManyToManyField(Skill)

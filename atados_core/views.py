@@ -160,7 +160,6 @@ def create_volunteer(request, format=None):
    volunteer = Volunteer(user=user)
    volunteer.save()
    return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
-   # TODO send activation email
 
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
@@ -217,10 +216,7 @@ def create_nonprofit(request, format=None):
   nonprofit.cover = request.FILES.get('cover')
   nonprofit.save()
 
-
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
-  # TODO send activation email
-  # TODO send  email to administradors to accept this Nonprofit and remove it from moderation
 
 @api_view(['POST'])
 def password_reset(request, format=None):
