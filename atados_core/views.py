@@ -174,7 +174,7 @@ def create_nonprofit(request, format=None):
   address.addressline2 = obja.get('addressline2')
   address.addressnumber = obja['addressnumber'][0:9]
   address.neighborhood = obja['neighborhood']
-  address.city = City.objects.get(name=obja['city']['name'])
+  address.city = City.objects.get(id=obja['city']['id'])
   address.save()
 
   try:
@@ -199,7 +199,6 @@ def create_nonprofit(request, format=None):
   nonprofit.name = obj['name']
   nonprofit.details = obj['details']
   nonprofit.description = obj['description']
-  nonprofit.slug = obj['slug']
   nonprofit.phone = obj['phone']
   nonprofit.save()
 
