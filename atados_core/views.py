@@ -1,10 +1,12 @@
 import facepy as facebook
 import json
+import pytz                  
 import urllib2                                       
 from django.core.files import File                   
 from django.core.files.temp import NamedTemporaryFile
 from django.utils.encoding import iri_to_uri         
 from django.utils import timezone
+from datetime import datetime
 
 from django.core.mail import send_mail
 from django.http import Http404
@@ -21,7 +23,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
@@ -237,6 +239,77 @@ def create_nonprofit(request, format=None):
   nonprofit.save()
 
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
+
+# TODO Make sure only logged in nonprofit can create a project
+@api_view(['POST'])
+def create_project(request, format=None):
+  obj = request.DATA['project'];
+  project = Project()
+  try:
+    project.name = obj['name']
+    project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit']['id'])
+    project.slug = obj['slug']
+    project.details = obj['details']
+    project.description = obj['description']
+    project.facebook_event = obj['facebook_event']
+    project.responsible = obj['responsible']
+    project.phone = obj['phone']
+    project.email = obj['email']
+    project.save()
+    obja = obj['address']
+    address = Address()
+    address.addressline = obja['addressline']
+    address.addressline2 = obja['addressline2']
+    address.addressnumber = obja['addressnumber']
+    address.neighborhood = obja['neighborhood']
+    address.zipcode = obja['zipcode']
+    address.city = City.objects.get(id=obja['city']['id'])
+    project.address = address
+    project.image = request.FILES.get('image')
+
+    roles = obj['roles']
+    for r in roles:
+      role = Role()
+      role.name = r['name']
+      role.prerequisites = r['prerequisites']
+      role.details = r['details']
+      role.vacancies = r['vacancies']
+      role.save()
+      project.roles.add(role)
+
+    skills = obj['skills']
+    for s in skills:
+      project.skills.add(Skill.objects.get(name=s['name']))
+
+    causes = obj['causes']
+    for c in causes:
+      project.causes.add(Cause.objects.get(name=c['name']))
+
+    if obj.get('work', None):
+      work =  Work()
+      work.project = project
+      work.weekly_hours = obj['work']['weekly_hours']
+      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+      availabilities = obj['work']['availabilities']
+      for a in availabilities:
+        availability = Availability()
+        availability.weekday = a['weekday']
+        availability.period = a['period']
+        availability.save()
+        work.availabilities.add(availability)
+      work.save()
+    elif obj.get('job', None):
+      job = Job()
+      job.project = project
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.save()
+
+    project.save()
+  except:
+    return Response({'detail': 'Something.'}, status.HTTP_400_BAD_REQUEST) 
+
+  return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
 
 @api_view(['POST'])
 def password_reset(request, format=None):
