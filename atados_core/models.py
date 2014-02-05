@@ -197,7 +197,7 @@ class Nonprofit(models.Model):
     name = models.CharField(_('Name'), max_length=50)
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
-    description = models.TextField(_('Short description'), max_length=100,
+    description = models.TextField(_('Short description'), max_length=160,
                                    blank=True, null=True)
     website = models.URLField(blank=True, null=True, default=None)
     facebook_page = models.URLField(blank=True, null=True, default=None)
@@ -285,7 +285,7 @@ class Project(models.Model):
   name = models.CharField(_('Project name'), max_length=50)
   slug = models.SlugField(max_length=100, unique=True)
   details = models.TextField(_('Details'), max_length=3000)
-  description = models.TextField(_('Short description'), max_length=100, 
+  description = models.TextField(_('Short description'), max_length=160,
                                  blank=True, null=True)
   facebook_event = models.URLField(blank=True, null=True, default=None)
   responsible = models.CharField(_('Responsible name'), max_length=50,

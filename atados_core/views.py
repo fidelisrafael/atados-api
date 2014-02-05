@@ -460,9 +460,9 @@ class ProjectList(generics.ListAPIView):
 
     highlighted = True if params.get('highlighted') == 'true' else False
     if highlighted:
-      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False).order_by('-highlighted')
+      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False, published=True).order_by('-highlighted')
     else:
-      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False).order_by('?')
+      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False, published=True).order_by('?')
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
