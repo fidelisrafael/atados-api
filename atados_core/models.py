@@ -104,7 +104,6 @@ class Address(models.Model):
     def get_city_state(self):
       if self.city:
         if self.city.id == 0: # Trabalho a Distancia
-          print self.city.name
           return self.city.name
         return "%s, %s" % (self.city.name, self.city.state.code)
       else:
@@ -160,9 +159,7 @@ class Volunteer(models.Model):
     return "VOLUNTEER"
 
   def get_full_name(self):
-    name = self.user.first_name if self.user.first_name else ""
-    name += self.user.last_name if self.user.last_name else ""
-    return name
+    return self.user.name
 
   def get_email(self):
     return self.user.email if self.user.email else None
@@ -187,7 +184,7 @@ class Volunteer(models.Model):
     return super(Volunteer, self).save(*args, **kwargs)
 
   def __unicode__(self):
-    return self.user.first_name or self.user.slug
+    return self.user.name
 
 
 class Nonprofit(models.Model):

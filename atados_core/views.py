@@ -1,5 +1,9 @@
 import facepy as facebook
 import json
+import urllib2                                       
+from django.core.files import File                   
+from django.core.files.temp import NamedTemporaryFile
+from django.utils.encoding import iri_to_uri         
 from django.utils import timezone
 
 from django.core.mail import send_mail
@@ -88,6 +92,7 @@ def facebook_auth(request, format=None):
   accessToken = request.DATA['accessToken']
   userID = request.DATA['userID']
   expiresIn = request.DATA['expiresIn']
+  getPhoto = request.DATA.get('getPhoto', None)
 
   try:
     graph = facebook.GraphAPI(accessToken)
@@ -99,6 +104,15 @@ def facebook_auth(request, format=None):
 
   if volunteer:
     volunteer = volunteer[0]
+    if getPhoto:
+      faceImage = graph.get("me/picture?redirect=0&height=200&type=normal&width=200")
+      imgurl = iri_to_uri(faceImage['data']['url'])
+      image = NamedTemporaryFile(delete=True)
+      image.write(urllib2.urlopen(imgurl).read())
+      image.flush()
+      imgname = 'volunteer/%s/%s.jpg' % (volunteer.user.slug, volunteer.user.slug)
+      volunteer.image.save(imgname, File(image))
+      volunteer.save()
     user = volunteer.user
     user.last_login=timezone.now()
     user.save()
@@ -110,16 +124,22 @@ def facebook_auth(request, format=None):
       try:
         slug = me['username']
       except:
-        slug = slugify(me['first_name'] + me['last_name'])
+        slug = slugify(me['name'])
 
       user = User.objects.create_user(slug=slug, email=me['email'])
       volunteer = Volunteer(user=user)
 
     user.last_login=timezone.now()
-    user.name = me['first_name'] + me['last_name']
+    user.name = me['name']
     user.save()
     
-    # TODO(mpomarole): get photo later
+    faceImage = graph.get("me/picture?redirect=0&height=200&type=normal&width=200")
+    imgurl = iri_to_uri(faceImage['data']['url'])
+    image = NamedTemporaryFile(delete=True)
+    image.write(urllib2.urlopen(imgurl).read())
+    image.flush()
+    imgname = 'volunteer/%s/%s.jpg' % (volunteer.user.slug, volunteer.user.slug)
+    volunteer.image.save(imgname, File(image))
     volunteer.facebook_uid = userID
     volunteer.facebook_access_token = accessToken
     volunteer.facebook_access_token_expires = expiresIn
