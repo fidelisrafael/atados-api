@@ -281,7 +281,7 @@ class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
   slug = models.SlugField(max_length=100, unique=True)
-  details = models.TextField(_('Details'), max_length=3000)
+  details = models.TextField(_('Details'), max_length=1024)
   description = models.TextField(_('Short description'), max_length=160,
                                  blank=True, null=True)
   facebook_event = models.URLField(blank=True, null=True, default=None)

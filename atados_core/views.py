@@ -240,14 +240,31 @@ def create_nonprofit(request, format=None):
 
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
 
-# TODO Make sure only logged in nonprofit can create a project
+@api_view(['GET'])
+def create_project_slug(request, format=None):
+  name = request.QUERY_PARAMS.get('name', None);
+  if name:
+    slug = slugify(name)[0:46]                            
+    append = ''                                           
+    i = 0                                                 
+    while len(Project.objects.filter(slug=slug + append)):
+      i += 1                                            
+      append = '-' + str(i)                             
+      return Response(slug + append, status.HTTP_200_OK) 
+    return Response(slug, status.HTTP_200_OK) 
+
+  return Response({'error': ':('}, status.HTTP_400_BAD_REQUEST)
+
 @api_view(['POST'])
 def create_project(request, format=None):
+  if not request.user.is_authenticated() or not request.user.nonprofit:
+    return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
+
   obj = request.DATA['project'];
   project = Project()
   try:
     project.name = obj['name']
-    project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit']['id'])
+    project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit'])
     project.slug = obj['slug']
     project.details = obj['details']
     project.description = obj['description']
@@ -301,12 +318,13 @@ def create_project(request, format=None):
     elif obj.get('job', None):
       job = Job()
       job.project = project
-      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
-      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       job.save()
 
     project.save()
-  except:
+  except Exception as inst:
+    print inst
     return Response({'detail': 'Something.'}, status.HTTP_400_BAD_REQUEST) 
 
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
