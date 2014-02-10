@@ -139,6 +139,8 @@ class Volunteer(models.Model):
   facebook_access_token = models.CharField(blank=True, max_length=255)
   facebook_access_token_expires = models.PositiveIntegerField(blank=True, null=True)
 
+  birthDate = models.DateField(null=True)
+
   created_date = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
 
