@@ -271,7 +271,7 @@ class Nonprofit(models.Model):
       return Project.objects.filter(nonprofit=self)
 
     def get_address(self):
-      return self.address
+      return self.user.address
 
     def save(self, *args, **kwargs):
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
