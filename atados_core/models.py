@@ -98,6 +98,13 @@ class Address(models.Model):
     latitude = models.FloatField(blank=False, null=False, default=0.0)
     longitude = models.FloatField(blank=False, null=False, default=0.0)
 
+    modified_date = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+      self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      return super(Address, self).save(*args, **kwargs)
+
+
     def __unicode__(self):
       return '%s, %s, %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood)
 

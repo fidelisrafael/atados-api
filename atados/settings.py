@@ -284,9 +284,9 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_DOMAIN = ".atados.com.br"
 SESSION_COOKIE_DOMAIN = ".atados.com.br"
 
-# Drupal legacy sucks :/
 PASSWORD_HASHERS = (
-  'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+  'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(
+  'django.contrib.auth.hashers.PBKDF2PasswordHasher'
 )
 
 GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.AtadosDashboard'
