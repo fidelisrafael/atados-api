@@ -99,10 +99,17 @@ def export_as_xls(modeladmin, request, queryset):
                     val = lookup_field(field, obj, modeladmin)
                 except :
                     val = ['None']
-            if isinstance(val[-1], bool):
-              ws0.write(row, col, strip_tags(str(val[-1])))
+
+            if not val[-1] == None:
+              if isinstance(val[-1], bool):
+                ws0.write(row, col, strip_tags(str(val[-1])))
+              elif not isinstance(val[-1], str) and not isinstance(val[-1], unicode):
+                ws0.write(row, col, strip_tags(val[-1].__unicode__()))
+              elif val[-1]:
+                ws0.write(row, col, strip_tags(val[-1]))
             else:
-              ws0.write(row, col, (strip_tags(val[-1])))
+              ws0.write(row, col, strip_tags(''))
+
 
             col = col + 1
         
