@@ -101,12 +101,32 @@ class Address(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
+     if self.city and not self.city.id == 0:
+      try: 
+        results = Geocoder.geocode(self)
+        self.latitude = results[0].coordinates[0]
+        self.longitude = results[0].coordinates[1]
+      except Exception as e:
+        print e
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Address, self).save(*args, **kwargs)
 
-
     def __unicode__(self):
-      return '%s, %s, %s - %s' % (self.addressline, self.addressnumber, self.addressline2, self.neighborhood)
+      address = '';
+      if self.addressline:
+        address = self.addressline
+      if self.addressnumber:
+        address = '%s, %s' % (address, self.addressnumber)
+      if self.addressline2:
+        address = '%s, %s' % (address, self.addressline2)
+      if self.neighborhood:
+        address = '%s, %s' % (address, self.neighborhood)
+      if self.city:
+        if address == '':
+          address = '%s, %s' % (self.city.name, self.city.state.code)
+        else:
+          address = '%s - %s, %s' % (address, self.city.name, self.city.state.code)
+      return address
 
     def get_city_state(self):
       if self.city:
@@ -118,19 +138,6 @@ class Address(models.Model):
 
     class Meta:
       verbose_name = _('address')
-
-def get_latitude_longitude(sender, instance, **kwargs):
-  if instance.city and not instance.city.id == 0:
-    if (not instance.latitude or not instance.longitude):
-      try: 
-        results = Geocoder.geocode(instance)
-        instance.latitude = results[0].coordinates[0]
-        instance.longitude = results[0].coordinates[1]
-        instance.save()
-      except Exception as e:
-        pass
-
-post_save.connect(get_latitude_longitude, sender=Address, dispatch_uid="get_latitude_longitude")
 
 class Volunteer(models.Model):
 
