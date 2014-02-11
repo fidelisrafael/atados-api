@@ -192,7 +192,7 @@ class VolunteerSerializer(serializers.ModelSerializer):
     model = Volunteer
     lookup_field = 'slug'
     depth = 1
-    fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role', 'facebook_uid')
+    fields = ('user', 'slug', 'image_url', 'causes', 'skills', 'role', 'facebook_uid', 'birthDate')
 
 class VolunteerPublicSerializer(serializers.ModelSerializer):
   slug = serializers.Field(source='user.slug')
