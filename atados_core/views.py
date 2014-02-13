@@ -260,8 +260,6 @@ def create_project(request, format=None):
   if not request.user.is_authenticated() or not request.user.nonprofit:
     return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
 
-  print request.DATA
-  print request.FILES
   obj = json.loads(request.DATA['project'])
   project = Project()
   try:
@@ -286,9 +284,6 @@ def create_project(request, format=None):
     address.save()
     project.address = address
     project.image = request.FILES.get('image')
-    print request.FILES
-    print request.DATA
-    print project.image
 
     roles = obj['roles']
     for r in roles:
@@ -313,6 +308,7 @@ def create_project(request, format=None):
       work.project = project
       work.weekly_hours = obj['work']['weekly_hours']
       work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+      work.save()
       availabilities = obj['work']['availabilities']
       for a in availabilities:
         availability = Availability()
