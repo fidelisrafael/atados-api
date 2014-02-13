@@ -260,7 +260,9 @@ def create_project(request, format=None):
   if not request.user.is_authenticated() or not request.user.nonprofit:
     return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
 
-  obj = request.DATA['project'];
+  print request.DATA
+  print request.FILES
+  obj = json.loads(request.DATA['project'])
   project = Project()
   try:
     project.name = obj['name']
@@ -284,6 +286,9 @@ def create_project(request, format=None):
     address.save()
     project.address = address
     project.image = request.FILES.get('image')
+    print request.FILES
+    print request.DATA
+    print project.image
 
     roles = obj['roles']
     for r in roles:
@@ -319,14 +324,15 @@ def create_project(request, format=None):
     elif obj.get('job', None):
       job = Job()
       job.project = project
-      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
-      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
       job.save()
 
     project.save()
+
   except Exception as inst:
     print inst
-    return Response({'detail': 'Something.'}, status.HTTP_400_BAD_REQUEST) 
+    return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
 
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
 
