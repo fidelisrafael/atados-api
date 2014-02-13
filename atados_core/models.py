@@ -1,8 +1,8 @@
 import pytz
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.mail import send_mail
 from django.db import models
 from django.db.models import Q 
-from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
@@ -249,10 +249,10 @@ class Nonprofit(models.Model):
               self.details).chars(100)
 
     def get_image_url(self):
-      return self.image.url if self.image else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit.png"
+      return self.image.url if self.image else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit/default_nonprofit.png"
     
     def get_cover_url(self):
-      return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit_cover.jpg"
+      return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit.png"
 
     def get_volunteers(self):
       return Volunteer.objects.filter(

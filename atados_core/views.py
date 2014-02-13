@@ -251,7 +251,7 @@ def create_project_slug(request, format=None):
       i += 1                                            
       append = '-' + str(i)                             
       return Response(slug + append, status.HTTP_200_OK) 
-    return Response(slug, status.HTTP_200_OK) 
+    return Response({'slug': slug}, status.HTTP_200_OK) 
 
   return Response({'error': ':('}, status.HTTP_400_BAD_REQUEST)
 
@@ -281,6 +281,7 @@ def create_project(request, format=None):
     address.neighborhood = obja['neighborhood']
     address.zipcode = obja['zipcode']
     address.city = City.objects.get(id=obja['city']['id'])
+    address.save()
     project.address = address
     project.image = request.FILES.get('image')
 
