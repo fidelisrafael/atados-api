@@ -380,16 +380,37 @@ def save_project(request, format=None):
     address.save()
 
     # TODO: clean this up
-    #roles = obj['roles']
-    #for r in roles:
-#      role = Role()
-#      role.name = r['name']
-#      role.prerequisites = r['prerequisites']
-#      role.details = r['details']
-#      role.vacancies = r['vacancies']
-#      role.save()
-#      project.roles.add(role)
-#
+    roles = obj['roles']
+
+    # Remove the roles that were deleted
+    print project.roles
+    for pr in project.roles.all():
+      found = False
+
+      for r in roles:
+        if r.get('id', None) == pr.id:
+          found = True
+
+      if not found:
+        project.roles.remove(pr)
+
+    for r in roles:
+      found = False
+      for pr in project.roles.all():
+        if r.get('id', None) == pr.id:
+          found = True
+      if found:
+        role = Role.objects.get(id=r['id'])
+      else:
+        role = Role()
+      role.name = r['name']
+      role.prerequisites = r['prerequisites']
+      role.details = r['details']
+      role.vacancies = r['vacancies']
+      role.save()
+      project.roles.add(role)
+
+
 #    skills = obj['skills']
 #    for s in skills:
 #      project.skills.add(Skill.objects.get(name=s['name']))

@@ -321,6 +321,7 @@ class Project(models.Model):
   highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
 
   roles = models.ManyToManyField(Role, blank=True, null=True)
+
   skills = models.ManyToManyField(Skill)
   causes = models.ManyToManyField(Cause)
 
