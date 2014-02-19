@@ -2,6 +2,8 @@ import facepy as facebook
 import json
 import sys
 import urllib2                                       
+import boto
+
 from django.core.files import File                   
 from django.core.files.temp import NamedTemporaryFile
 from django.utils.encoding import iri_to_uri         
@@ -16,9 +18,6 @@ from haystack.query import SearchQuerySet
 from haystack.inputs import Clean, AutoQuery
 
 from provider.oauth2.views import AccessToken, Client
-
-from boto.s3.key import Key
-import boto
 
 from rest_framework import viewsets, status
 from rest_framework import generics
@@ -383,7 +382,6 @@ def save_project(request, format=None):
     roles = obj['roles']
 
     # Remove the roles that were deleted
-    print project.roles
     for pr in project.roles.all():
       found = False
 
@@ -410,35 +408,68 @@ def save_project(request, format=None):
       role.save()
       project.roles.add(role)
 
+    # Removing all skills then adding new ones
+    skills = obj['skills']
+    for s in project.skills.all():
+      project.skills.remove(s)
 
-#    skills = obj['skills']
-#    for s in skills:
-#      project.skills.add(Skill.objects.get(name=s['name']))
-#
-#    causes = obj['causes']
-#    for c in causes:
-#      project.causes.add(Cause.objects.get(name=c['name']))
-#
-#    if obj.get('work', None):
-#      work =  Work()
-#      work.project = project
-#      work.weekly_hours = obj['work']['weekly_hours']
-#      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
-#      work.save()
-#      availabilities = obj['work']['availabilities']
-#      for a in availabilities:
-#        availability = Availability()
-#        availability.weekday = a['weekday']
-#        availability.period = a['period']
-#        availability.save()
-#        work.availabilities.add(availability)
-#      work.save()
-#    elif obj.get('job', None):
-#      job = Job()
-#      job.project = project
-#      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
-#      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
-#      job.save()
+    for s in skills:
+      project.skills.add(Skill.objects.get(id=s))
+
+    # Removing all causes then adding new ones
+    causes = obj['causes']
+    for c in project.causes.all():
+      project.causes.remove(c)
+
+    for c in causes:
+      project.causes.add(Cause.objects.get(id=c))
+
+    if obj.get('work', None):
+      try:
+        work = project.work
+      except:
+        work = Work()
+        work.project = project
+      work.weekly_hours = obj['work']['weekly_hours']
+      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+      work.save()
+
+      if obj['work'].get('availabilities', None):
+        for a in project.work.availabilities.all():
+          project.work.availabilities.remove(a)
+
+        availabilities = obj['work']['availabilities']
+
+        for a in availabilities:
+          availability = Availability()
+          availability.weekday = a['weekday']
+          availability.period = a['period']
+          availability.save()
+          work.availabilities.add(availability)
+      else:
+        project.work.availabilities = []
+
+      work.save()
+      try:
+        project.job.delete()
+        project.job = None
+      except:
+        pass
+
+    elif obj.get('job', None):
+      try:
+        job = project.job
+      except:
+        job = Job()
+        job.project = project
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
+      job.save()
+      try:
+        project.work.delete()
+        project.work = None
+      except:
+        pass
 
     project.save()
 

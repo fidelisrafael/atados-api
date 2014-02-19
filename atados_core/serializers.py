@@ -121,7 +121,7 @@ class ProjectSerializer(serializers.ModelSerializer):
   causes = serializers.PrimaryKeyRelatedField(many=True)
   skills = serializers.PrimaryKeyRelatedField(many=True)
   job = JobSerializer(required=False)
-  work = JobSerializer(required=False)
+  work = WorkSerializer(required=False)
   address = AddressSerializer(required=False)
   slug = serializers.CharField(source="slug", required=False)
   details = serializers.CharField(source="details", required=False)
@@ -140,7 +140,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     depth = 2
     fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted', 'volunteers_numbers',
-              'job', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
+              'work', 'job', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
 
 class ProjectSearchSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)
