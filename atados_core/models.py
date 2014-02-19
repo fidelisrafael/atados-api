@@ -366,7 +366,7 @@ class Project(models.Model):
    
 # Ato Recorrente
 class Work(models.Model):
-  project = models.OneToOneField(Project)
+  project = models.OneToOneField(Project, blank=True, null=True)
   availabilities = models.ManyToManyField(Availability)
   weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
                                       blank=True, null=True)
@@ -378,7 +378,7 @@ class Work(models.Model):
 
 # Ato Pontual
 class Job(models.Model):
-  project = models.OneToOneField(Project)
+  project = models.OneToOneField(Project, blank=True, null=True)
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 

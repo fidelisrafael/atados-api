@@ -9,6 +9,8 @@ router.register(r'states', views.StateViewSet)
 router.register(r'cities', views.CityViewSet)
 router.register(r'nonprofit', views.NonprofitViewSet)
 router.register(r'project', views.ProjectViewSet)
+router.register(r'jobs', views.JobViewSet)
+router.register(r'works', views.WorkViewSet)
 router.register(r'volunteers', views.VolunteerViewSet)
 router.register(r'volunteers_public', views.VolunteerPublicViewSet)
 
@@ -25,6 +27,8 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/create/project/', 'create_project'),
   url(r'v1/create_project_slug/', 'create_project_slug'),
 
+  url(r'v1/save/project', 'save_project'),
+
   url(r'v1/check_slug/', 'check_slug'),
   url(r'v1/check_project_slug/', 'check_project_slug'),
   url(r'v1/check_email/', 'check_email'),
@@ -33,6 +37,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/slug_role/', 'slug_role'),
 
   url(r'v1/upload_volunteer_image/', 'upload_volunteer_image'),
+  url(r'v1/upload_project_image/', 'upload_project_image'),
   url(r'v1/upload_nonprofit_profile_image/', 'upload_nonprofit_profile_image'),
   url(r'v1/upload_nonprofit_cover_image/', 'upload_nonprofit_cover_image'),
 

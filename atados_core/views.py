@@ -1,6 +1,6 @@
 import facepy as facebook
 import json
-import pytz                  
+import sys
 import urllib2                                       
 from django.core.files import File                   
 from django.core.files.temp import NamedTemporaryFile
@@ -17,6 +17,9 @@ from haystack.inputs import Clean, AutoQuery
 
 from provider.oauth2.views import AccessToken, Client
 
+from boto.s3.key import Key
+import boto
+
 from rest_framework import viewsets, status
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -24,7 +27,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
-from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
 @api_view(['GET'])
@@ -37,7 +40,8 @@ def current_user(request, format=None):
     except:
       try:
         return Response(NonprofitSerializer(request.user.nonprofit).data)
-      except:
+      except Exception as e:
+        print e
         return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
@@ -326,11 +330,104 @@ def create_project(request, format=None):
 
     project.save()
 
-  except Exception as inst:
-    print inst
+  except Exception as e:
+    print e
     return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
 
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
+
+@api_view(['PUT'])
+def save_project(request, format=None):
+  if not request.user.is_authenticated() or not request.user.nonprofit:
+    return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
+
+  obj = request.DATA['project']
+  project = Project.objects.get(id=obj['id'])
+
+  try:
+
+    # Renaming the image file if the slug has changed
+    if obj.get('slug') != project.slug:
+      c = boto.connect_s3()
+      bucket = c.get_bucket('atadosapp')
+      k = bucket.get_key(project.image.name)
+      if k:
+        name = "project/%s/%s.jpg" % (project.nonprofit.user.slug, obj['slug'])
+        if name != project.image.name:
+          k.copy('atadosapp', name)
+          k.delete()
+          project.image.name = name;
+      else:
+        return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
+
+    project.name = obj['name']
+    project.slug = obj['slug']
+    project.details = obj['details']
+    project.description = obj['description']
+    project.facebook_event = obj.get('facebook_event', None)
+    project.responsible = obj['responsible']
+    project.phone = obj['phone']
+    project.email = obj['email']
+
+    obja = obj['address']
+    address = project.address
+    address.addressline = obja['addressline']
+    address.addressline2 = obja.get('addressline2', '')
+    address.addressnumber = obja['addressnumber']
+    address.neighborhood = obja['neighborhood']
+    address.zipcode = obja['zipcode']
+    address.city = City.objects.get(id=obja['city'])
+    address.save()
+
+    # TODO: clean this up
+    #roles = obj['roles']
+    #for r in roles:
+#      role = Role()
+#      role.name = r['name']
+#      role.prerequisites = r['prerequisites']
+#      role.details = r['details']
+#      role.vacancies = r['vacancies']
+#      role.save()
+#      project.roles.add(role)
+#
+#    skills = obj['skills']
+#    for s in skills:
+#      project.skills.add(Skill.objects.get(name=s['name']))
+#
+#    causes = obj['causes']
+#    for c in causes:
+#      project.causes.add(Cause.objects.get(name=c['name']))
+#
+#    if obj.get('work', None):
+#      work =  Work()
+#      work.project = project
+#      work.weekly_hours = obj['work']['weekly_hours']
+#      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+#      work.save()
+#      availabilities = obj['work']['availabilities']
+#      for a in availabilities:
+#        availability = Availability()
+#        availability.weekday = a['weekday']
+#        availability.period = a['period']
+#        availability.save()
+#        work.availabilities.add(availability)
+#      work.save()
+#    elif obj.get('job', None):
+#      job = Job()
+#      job.project = project
+#      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
+#      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
+#      job.save()
+
+    project.save()
+
+  except Exception as e:
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    print(e, exc_tb.tb_lineno)
+    return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
+
+  return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED) 
+
 
 @api_view(['POST'])
 def password_reset(request, format=None):
@@ -376,6 +473,16 @@ def upload_volunteer_image(request, format=None):
     volunteer.save()
     return Response({"file": volunteer.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def upload_project_image(request, format=None):
+  if request.user.is_authenticated():
+    project = Project.objects.get(id=request.QUERY_PARAMS.get('id'))
+    project.image = request.FILES.get('file')
+    project.save()
+    return Response({"file": project.get_image_url()}, status.HTTP_200_OK)
+  return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
+
 
 @api_view(['POST'])
 def upload_nonprofit_profile_image(request, format=None):
@@ -513,8 +620,8 @@ def clone_project(request, project_slug, format=None):
       project.published = False
       project.save()
       return Response(ProjectSerializer(project).data, status.HTTP_200_OK)
-    except Exception as inst:
-      print inst
+    except Exception as e:
+      print e
       return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
 
@@ -525,8 +632,8 @@ def export_project_csv(request, project_slug, format=None):
       project = Project.objects.get(slug=project_slug)
       data = VolunteerResource().export(project.get_volunteers()).csv
       return Response({'volunteers': data}, status.HTTP_200_OK)
-    except Exception as inst:
-      print inst
+    except Exception as e:
+      print e
       return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
 
@@ -642,6 +749,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
   serializer_class = ProjectSerializer
   permissions_classes = [IsNonprofit]
   lookup_field = 'slug'
+
+class JobViewSet(viewsets.ModelViewSet):
+  queryset = Job.objects.all()
+  serializer_class = JobSerializer
+
+class WorkViewSet(viewsets.ModelViewSet):
+  queryset = Work.objects.all()
+  serializer_class = WorkSerializer
 
 class ApplyViewSet(viewsets.ModelViewSet):
   queryset = Apply.objects.all()
