@@ -203,6 +203,7 @@ class VolunteerSerializer(serializers.ModelSerializer):
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
+  birthDate = serializers.DateField(source="birthDate", required=False)
   causes = serializers.PrimaryKeyRelatedField(many=True)
   skills = serializers.PrimaryKeyRelatedField(many=True)
 
