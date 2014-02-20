@@ -16,8 +16,8 @@ psql -U marjoripomarole -d atados -c "drop schema public cascade; create schema 
 make install
 
 #4 migrate time
-#cd ~/projects/atados/atados-migration
-#make migrate
+cd ~/projects/atados/atados-migration
+make migrate
 
 # Wait and go eat something ....
 
