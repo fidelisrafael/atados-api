@@ -24,7 +24,7 @@ class AddressSerializer(serializers.ModelSerializer):
     fields = ('id', 'zipcode', 'addressline', 'addressnumber', 'neighborhood', 'city', 'latitude', 'longitude', 'city_state')
 
 class UserSerializer(serializers.ModelSerializer):
-  address = AddressSerializer()
+  address = AddressSerializer(source="get_address")
 
   class Meta:
     model = User
@@ -112,7 +112,7 @@ class NonprofitProjectSerializer(serializers.ModelSerializer):
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
-    depth = 2
+    depth = 1
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
               'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'published')
 
@@ -137,7 +137,7 @@ class ProjectSerializer(serializers.ModelSerializer):
   class Meta:
     model = Project
     lookup_field = 'slug'
-    depth = 2
+    depth = 1
     fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted', 'volunteers_numbers',
               'work', 'job', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
