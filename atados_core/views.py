@@ -46,14 +46,6 @@ def current_user(request, format=None):
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def check_slug(request, format=None):
-  try:
-    User.objects.get(slug=request.QUERY_PARAMS['slug'])
-    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
-  except User.DoesNotExist:
-    return Response({"OK."}, status.HTTP_200_OK)
-
-@api_view(['GET'])
 def slug_role(request, format=None):
   try:
     user = User.objects.get(slug=request.QUERY_PARAMS['slug'])
@@ -77,20 +69,20 @@ def legacy_to_slug(request, type, format=None):
     return Response({"Not found."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def check_project_slug(request, format=None):
+def check_slug(request, format=None):
   try:
-    Project.objects.get(slug=request.QUERY_PARAMS['slug'])
-    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
-  except Project.DoesNotExist:
-    return Response({"OK."}, status.HTTP_200_OK)
+    User.objects.get(slug=request.QUERY_PARAMS['slug'])
+    return Response({"alreadyUsed": True}, status.HTTP_200_OK)
+  except User.DoesNotExist:
+    return Response({"alreadyUsed": False}, status.HTTP_200_OK)
 
 @api_view(['GET'])
 def check_email(request, format=None):
   try:
     User.objects.get(email=request.QUERY_PARAMS['email'].split('?')[0])
-    return Response("Already exists.", status.HTTP_400_BAD_REQUEST)
+    return Response({"alreadyUsed": True}, status.HTTP_200_OK)
   except User.DoesNotExist:
-    return Response({"OK."}, status.HTTP_200_OK)
+    return Response({"alreadyUsed": False}, status.HTTP_200_OK)
 
 @api_view(['POST'])
 def facebook_auth(request, format=None):
@@ -378,7 +370,6 @@ def save_project(request, format=None):
     address.city = City.objects.get(id=obja['city'])
     address.save()
 
-    # TODO: clean this up
     roles = obj['roles']
 
     # Remove the roles that were deleted
@@ -592,6 +583,9 @@ def set_volunteer_to_nonprofit(request, format=None):
 @api_view(['POST'])
 def apply_volunteer_to_project(request, format=None):
   if request.user.is_authenticated():
+    if not request.user.is_email_verified:
+      return Response({"403": "Volunteer has not actived its account by email."}, status.HTTP_403_FORBIDDEN)
+
     volunteer = Volunteer.objects.get(user=request.user)
     project = Project.objects.get(id=request.DATA['project'])
     if project:
