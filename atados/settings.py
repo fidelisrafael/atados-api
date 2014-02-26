@@ -282,8 +282,8 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_DOMAIN = ".atados.com.br"
-SESSION_COOKIE_DOMAIN = ".atados.com.br"
+CSRF_COOKIE_DOMAIN = ".atados.com.br" if not DEBUG else ".atadoslocal.com.br"
+SESSION_COOKIE_DOMAIN = ".atados.com.br" if not DEBUG else ".atadoslocal.com.br"
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(

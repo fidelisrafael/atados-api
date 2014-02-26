@@ -1,8 +1,16 @@
+# -*- coding: utf-8 -*- 
+
 import pytz
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+
 from django.db import models
 from django.db.models import Q 
+
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
@@ -202,7 +210,7 @@ class Volunteer(models.Model):
   def __unicode__(self):
     return self.user.name
 
-
+  
 class Nonprofit(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
@@ -274,6 +282,20 @@ class Nonprofit(models.Model):
       return self.user.address
 
     def save(self, *args, **kwargs):
+      if self.pk is not None:
+        orig = Nonprofit.objects.get(pk=self.pk)
+        if not orig.published and self.published:
+          # Sending welcome email on nonprofit signup
+          plaintext = get_template('email/nonprofitApproved.txt')
+          htmly     = get_template('email/nonprofitApproved.html')
+          d = Context()
+          subject, from_email, to = 'Cadastro no Atados realizado com sucesso!', 'contato@atados.com.br', self.user.email
+          text_content = plaintext.render(d)
+          html_content = htmly.render(d)
+          msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+          msg.attach_alternative(html_content, "text/html")
+          msg.send()
+
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Nonprofit, self).save(*args, **kwargs)
 
@@ -347,6 +369,20 @@ class Project(models.Model):
       self.save()
 
   def save(self, *args, **kwargs):
+    if self.pk is not None:
+        orig = Project.objects.get(pk=self.pk)
+        if not orig.published and self.published:
+          # Sending welcome email on nonprofit signup
+          plaintext = get_template('email/projectApproved.txt')
+          htmly     = get_template('email/projectApproved.html')
+          d = Context()
+          subject, from_email, to = u"Seu ato já está no ar.", 'contato@atados.com.br', self.email
+          text_content = plaintext.render(d)
+          html_content = htmly.render(d)
+          msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+          msg.attach_alternative(html_content, "text/html")
+          msg.send()
+
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
 
     # If there is no description, take 100 chars from the details

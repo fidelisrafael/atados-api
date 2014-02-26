@@ -1,5 +1,5 @@
 from django.contrib import admin
-from atados_core.models import Nonprofit, Project, Volunteer, User, Address
+from atados_core.models import Nonprofit, Project, User, Address
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.util import lookup_field
@@ -40,7 +40,6 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(Nonprofit, NonprofitAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Address, AddressAdmin)
-admin.site.register(Volunteer)
 admin.site.register(User, UserAdmin)
 
 

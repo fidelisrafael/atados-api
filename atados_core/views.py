@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- 
+
 import facepy as facebook
 import json
 import sys
@@ -11,6 +13,9 @@ from django.utils import timezone
 from datetime import datetime
 
 from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
 from django.http import Http404
 from django.template.defaultfilters import slugify
 
@@ -118,13 +123,27 @@ def facebook_auth(request, format=None):
       user = User.objects.get(email=me['email'])
       volunteer = Volunteer.objects.get(user=user)
     except:
+      name = ""
       try:
         slug = me['username']
       except:
-        slug = slugify(me['name'])
+        name = me['name']
+        slug = slugify(name)
 
-      user = User.objects.create_user(slug=slug, email=me['email'])
+      email = me['email']
+      user = User.objects.create_user(slug=slug, email=email)
       volunteer = Volunteer(user=user)
+
+      # Sending welcome email on facebook signup
+      plaintext = get_template('email/volunteerFacebookSignup.txt')
+      htmly     = get_template('email/volunteerFacebookSignup.html')
+      d = Context({ 'name': name })
+      subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', email
+      text_content = plaintext.render(d)
+      html_content = htmly.render(d)
+      msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+      msg.attach_alternative(html_content, "text/html")
+      msg.send()
 
     user.last_login=timezone.now()
     user.name = me['name']
@@ -164,19 +183,34 @@ def logout(request, format=None):
 
 @api_view(['POST'])
 def create_volunteer(request, format=None):
-   slug = request.DATA['slug']
-   email = request.DATA['email']
-   password = request.DATA['password']
-   try:
-     user = User.objects.get(email=email)
-   except User.DoesNotExist:
-     user = User.objects.create_user(email, password, slug=slug)
+  print "Creating volunteers"
+  slug = request.DATA['slug']
+  email = request.DATA['email']
+  password = request.DATA['password']
+  try:
+   user = User.objects.get(email=email)
+   print "User already created"
+  except User.DoesNotExist:
+    print "User being created "
+    user = User.objects.create_user(email, password, slug=slug)
+    print "Sending email without facebook"
+    # Sending welcome email on email signup
+    plaintext = get_template('email/volunteerSignup.txt')
+    htmly     = get_template('email/volunteerSignup.html')
+    print plaintext
+    d = Context({ 'name': user.name })
+    subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', user.email
+    text_content = plaintext.render(d)
+    html_content = htmly.render(d)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
-   if Volunteer.objects.filter(user=user):
-     return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
-   volunteer = Volunteer(user=user)
-   volunteer.save()
-   return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
+  if Volunteer.objects.filter(user=user):
+   return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
+  volunteer = Volunteer(user=user)
+  volunteer.save()
+  return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
 
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
@@ -232,6 +266,17 @@ def create_nonprofit(request, format=None):
   nonprofit.image = request.FILES.get('image')
   nonprofit.cover = request.FILES.get('cover')
   nonprofit.save()
+
+  # Sending welcome email on nonprofit signup
+  plaintext = get_template('email/nonprofitSignup.txt')
+  htmly     = get_template('email/nonprofitSignup.html')
+  d = Context()
+  subject, from_email, to = 'Cadastro no Atados enviado com sucesso!', 'contato@atados.com.br', nonprofit.user.email
+  text_content = plaintext.render(d)
+  html_content = htmly.render(d)
+  msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+  msg.attach_alternative(html_content, "text/html")
+  msg.send()
 
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
 
@@ -474,27 +519,18 @@ def save_project(request, format=None):
 
 @api_view(['POST'])
 def password_reset(request, format=None):
-  email = request.DATA['email']
-  user = User.objects.get(email=email)
-  password = User.objects.make_random_password()
-  user.set_password(password)
-  user.save()
-  message = "Sua nova senha: "
-  message += password
-  message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
-  send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
-  return Response({"Password was sent."}, status.HTTP_200_OK)
-
-@api_view(['POST'])
-def send_volunteer_email_to_nonprofit(request, format=None):
-  message = request.DATA['message'].encode('utf-8').strip()
-  nonprofitEmail = request.DATA['nonprofit']
-  volunteerEmail = request.DATA['volunteer']
-  if not volunteerEmail or not nonprofitEmail or not message:
-    return Response({"Not enough information."}, status.HTTP_400_BAD_REQUEST)
-  print 'Sending %s from %s to %s' % (message, volunteerEmail, nonprofitEmail)
-  send_mail('Atados Voluntario Atado', message, volunteerEmail, [nonprofitEmail])
-  return Response({"Email was sent."}, status.HTTP_200_OK)
+  if request.user.is_authenticated:
+    email = request.DATA['email']
+    user = User.objects.get(email=email)
+    password = User.objects.make_random_password()
+    user.set_password(password)
+    user.save()
+    message = "Sua nova senha: "
+    message += password
+    message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
+    send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
+    return Response({"Password was sent."}, status.HTTP_200_OK)
+  return Response({"No one is logged in."}, status.HTTP_404_NOT_FOUND)
 
 @api_view(['PUT'])
 def change_password(request, format=None):
@@ -588,6 +624,8 @@ def apply_volunteer_to_project(request, format=None):
 
     volunteer = Volunteer.objects.get(user=request.user)
     project = Project.objects.get(id=request.DATA['project'])
+    message = request.DATA['message']
+
     if project:
       try:
         # If apply exists, then cancel it 
@@ -597,17 +635,42 @@ def apply_volunteer_to_project(request, format=None):
           apply.status = ApplyStatus.objects.get(id=3) # Desistente
           apply.save()
           return Response({"Canceled"}, status.HTTP_200_OK)
+
         else:
           apply.canceled = False
           apply.status = ApplyStatus.objects.get(id=2) # Candidato 
           apply.save()
           return Response({"Applied"}, status.HTTP_200_OK)
+
       except:
         apply = Apply()
         apply.project = project
         apply.volunteer = volunteer
         apply.status = ApplyStatus.objects.get(id=2) # Candidato 
         apply.save()
+
+        # Sending email to volunteer after user applied to project
+        plaintext = get_template('email/volunteerAppliesToProject.txt')
+        htmly     = get_template('email/volunteerAppliesToProject.html')
+        d = Context({ 'project_name': project.name })
+        subject, from_email, to = u'Confirmação do ato. Parabéns.', 'contato@atados.com.br', volunteer.user.email
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        # Sending email to nonprofit after user applied to project
+        plaintext = get_template('email/nonprofitGetsNotifiedAboutApply.txt')
+        htmly     = get_template('email/nonprofitGetsNotifiedAboutApply.html')
+        d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message })
+        subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'contato@atados.com.br', volunteer.user.email
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
         return Response({"Applied"}, status.HTTP_200_OK)
 
   return Response({"Could not find project or volunteer"}, status.HTTP_400_BAD_REQUEST)
