@@ -186,21 +186,16 @@ def logout(request, format=None):
 
 @api_view(['POST'])
 def create_volunteer(request, format=None):
-  print "Creating volunteers"
   slug = request.DATA['slug']
   email = request.DATA['email']
   password = request.DATA['password']
   try:
    user = User.objects.get(email=email)
-   print "User already created"
   except User.DoesNotExist:
-    print "User being created "
     user = User.objects.create_user(email, password, slug=slug)
-    print "Sending email without facebook"
     # Sending welcome email on email signup
     plaintext = get_template('email/volunteerSignup.txt')
     htmly     = get_template('email/volunteerSignup.html')
-    print plaintext
     d = Context({ 'name': user.name })
     subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', user.email
     text_content = plaintext.render(d)
@@ -647,7 +642,6 @@ def apply_volunteer_to_project(request, format=None):
 
           # Schedule email to be sent 30 days after this Apply
           eta = datetime.now() + timedelta(days=30)
-          print eta
           send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
             eta=eta,
             kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
@@ -655,7 +649,6 @@ def apply_volunteer_to_project(request, format=None):
           #if pontual, schedule email to be sent 3 days before
           if project.job:
             eta = project.job.start_date - timedelta(days=3)
-            print eta
             send_email_to_volunteer_3_days_before_pontual.apply_async(
               eta=eta,
               kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
@@ -695,7 +688,6 @@ def apply_volunteer_to_project(request, format=None):
          
         # Schedule email to be sent 30 days after this Apply
         eta = datetime.now() + timedelta(days=30)
-        print eta
         send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
           eta=eta,
           kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
@@ -703,7 +695,6 @@ def apply_volunteer_to_project(request, format=None):
         #if pontual, schedule email to be sent 3 days before
         if project.job:
           eta = project.job.start_date - timedelta(days=3)
-          print eta
           send_email_to_volunteer_3_days_before_pontual.apply_async(
             eta=eta,
             kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
@@ -821,13 +812,14 @@ class ProjectList(generics.ListAPIView):
       nonprofit = Nonprofit.objects.get(user__slug=nonprofit)
       queryset = Project.objects.filter(nonprofit=nonprofit)
     else:
-        queryset = SearchQuerySet()
+        queryset = SearchQuerySet().models(Project)
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(city=city) if city else queryset
-    queryset = queryset.filter(content=AutoQuery(query.lower())) if query else queryset
+    queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
 
     highlighted = True if params.get('highlighted') == 'true' else False
+
     if highlighted:
       return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False, published=True).order_by('-highlighted')
     else:
@@ -842,10 +834,10 @@ class NonprofitList(generics.ListAPIView):
     query = params.get('query', None)
     cause = params.get('cause', None)
     city = params.get('city', None)
-    queryset = SearchQuerySet()
-    queryset = SearchQuerySet().filter(causes=cause) if cause else queryset
+    queryset = SearchQuerySet().models(Nonprofit)
+    queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(city=city) if city else queryset
-    queryset = queryset.filter(content=Clean(query)) if query else queryset
+    queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
     highlighted = True if params.get('highlighted') == 'true' else False
     if highlighted:

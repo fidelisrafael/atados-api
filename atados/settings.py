@@ -242,7 +242,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 8
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 20
 
 SOUTH_AUTO_FREEZE_APP = True
 
@@ -268,7 +268,7 @@ REST_FRAMEWORK = {
       'rest_framework.parsers.MultiPartParser',
     ),
 
-    'PAGINATE_BY': 8,
+    'PAGINATE_BY': 20,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',  
 
