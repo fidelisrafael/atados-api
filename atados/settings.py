@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     'provider.oauth2',
     'django_nose',
     'import_export',
+    'djcelery'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -292,3 +293,15 @@ PASSWORD_HASHERS = (
 
 GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.AtadosDashboard'
 EXPORT_RECORDS_LIMIT = 20000
+
+
+
+import djcelery
+djcelery.setup_loader()
+
+BROKER_URL = 'amqp://guest@localhost:5672//'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'

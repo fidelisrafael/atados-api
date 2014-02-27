@@ -11,6 +11,7 @@ from django.core.files.temp import NamedTemporaryFile
 from django.utils.encoding import iri_to_uri         
 from django.utils import timezone
 from datetime import datetime
+from datetime import timedelta
 
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
@@ -33,6 +34,8 @@ from rest_framework.response import Response
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
+
+from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -634,12 +637,30 @@ def apply_volunteer_to_project(request, format=None):
           apply.canceled = True
           apply.status = ApplyStatus.objects.get(id=3) # Desistente
           apply.save()
+          # TODO remove 4 week email from message queue if passed 30 days
           return Response({"Canceled"}, status.HTTP_200_OK)
 
         else:
           apply.canceled = False
           apply.status = ApplyStatus.objects.get(id=2) # Candidato 
           apply.save()
+
+          # Schedule email to be sent 30 days after this Apply
+          eta = datetime.now() + timedelta(days=30)
+          print eta
+          send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
+            eta=eta,
+            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+
+          #if pontual, schedule email to be sent 3 days before
+          if project.job:
+            eta = project.job.start_date - timedelta(days=3)
+            print eta
+            send_email_to_volunteer_3_days_before_pontual.apply_async(
+              eta=eta,
+              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+
+
           return Response({"Applied"}, status.HTTP_200_OK)
 
       except:
@@ -670,6 +691,24 @@ def apply_volunteer_to_project(request, format=None):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+         
+        # Schedule email to be sent 30 days after this Apply
+        eta = datetime.now() + timedelta(days=30)
+        print eta
+        send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
+          eta=eta,
+          kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+
+        #if pontual, schedule email to be sent 3 days before
+        if project.job:
+          eta = project.job.start_date - timedelta(days=3)
+          print eta
+          send_email_to_volunteer_3_days_before_pontual.apply_async(
+            eta=eta,
+            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+
+
 
         return Response({"Applied"}, status.HTTP_200_OK)
 
