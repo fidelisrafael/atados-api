@@ -5,7 +5,6 @@ class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   causes = indexes.MultiValueField(faceted=True)
   text = indexes.CharField(document=True, use_template=True)
   city = indexes.CharField(faceted=True)
-  content_auto = indexes.EdgeNgramField(model_attr='name')
   highlighted = indexes.BooleanField(model_attr='highlighted')
 
   def prepare_city(self, obj):
@@ -26,7 +25,6 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   causes = indexes.MultiValueField(faceted=True)
   skills = indexes.MultiValueField(faceted=True)
   city = indexes.CharField(faceted=True)
-  content_auto = indexes.EdgeNgramField(model_attr='name')
   highlighted = indexes.BooleanField(model_attr='highlighted')
 
   def prepare_causes(self, obj):

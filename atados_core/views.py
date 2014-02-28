@@ -840,6 +840,7 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
     highlighted = True if params.get('highlighted') == 'true' else False
+    # print SearchQuerySet().spelling_suggestion('Movimrnto Boa')
     if highlighted:
       return Nonprofit.objects.filter(pk__in=results).order_by('-highlighted')
     else:
