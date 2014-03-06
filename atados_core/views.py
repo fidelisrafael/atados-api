@@ -21,7 +21,6 @@ from django.http import Http404
 from django.template.defaultfilters import slugify
 
 from haystack.query import SearchQuerySet
-from haystack.inputs import Clean, AutoQuery
 
 from provider.oauth2.views import AccessToken, Client
 
@@ -588,6 +587,11 @@ def numbers(request, format=None):
   return Response(numbers, status.HTTP_200_OK)
 
 @api_view(['GET'])
+def active_cities(request, format=None):
+  return Response(CitySerializer(City.objects.filter(active=True)).data, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
 def is_volunteer_to_nonprofit(request, format=None):
   if request.user.is_authenticated():
     volunteer = Volunteer.objects.get(user=request.user)
@@ -808,6 +812,7 @@ class ProjectList(generics.ListAPIView):
     skill = params.get('skill', None)
     city = params.get('city', None)
     nonprofit = params.get('nonprofit', None)
+
     if nonprofit:
       nonprofit = Nonprofit.objects.get(user__slug=nonprofit)
       queryset = Project.objects.filter(nonprofit=nonprofit)
@@ -818,12 +823,13 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
 
-    highlighted = True if params.get('highlighted') == 'true' else False
+    highlighted = params.get('highlighted') == 'true'
 
+    pks = [ r.pk for r in queryset]
     if highlighted:
-      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False, published=True).order_by('-highlighted')
+      return Project.objects.filter(pk__in=pks).order_by('-highlighted')
     else:
-      return Project.objects.filter(pk__in=[ r.pk for r in queryset ], closed=False, published=True).order_by('?')
+      return Project.objects.filter(pk__in=pks).order_by('?')
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
@@ -841,6 +847,7 @@ class NonprofitList(generics.ListAPIView):
     results = [ r.pk for r in queryset ]
     highlighted = True if params.get('highlighted') == 'true' else False
     # print SearchQuerySet().spelling_suggestion('Movimrnto Boa')
+
     if highlighted:
       return Nonprofit.objects.filter(pk__in=results).order_by('-highlighted')
     else:

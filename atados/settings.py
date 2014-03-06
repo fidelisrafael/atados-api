@@ -120,6 +120,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
@@ -149,6 +150,7 @@ INSTALLED_APPS = (
 
     'atados_core',
 
+    'debug_toolbar',
     'haystack',
     'rest_framework',
     'facepy',
@@ -159,7 +161,7 @@ INSTALLED_APPS = (
     'provider.oauth2',
     'django_nose',
     'import_export',
-    'djcelery'
+    'djcelery',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -47,6 +47,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/has_volunteer_applied/', 'has_volunteer_applied'),
 
   url(r'v1/numbers/', 'numbers'),
+  url(r'v1/active_cities/', 'active_cities'),
 
   url(r'v1/projects/', views.ProjectList.as_view()), # Powers search and explore view
   url(r'v1/nonprofits/', views.NonprofitList.as_view()), # Powers search and explore view

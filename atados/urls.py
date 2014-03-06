@@ -8,5 +8,12 @@ admin.autodiscover()
 urlpatterns = patterns('backend.views',
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('atados_core.urls'))
+
+    url(r'^', include('atados_core.urls')),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+  import debug_toolbar
+  urlpatterns += patterns('',
+    url(r'^__debug__/', include(debug_toolbar.urls)),
+  )
