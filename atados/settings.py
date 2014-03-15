@@ -9,12 +9,13 @@ DEBUG = os.environ.get('ATADOS_DEBUG', False)
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-  'atados.com.br',
+  '.atados.com.br',
+  '.atados.com.br.',
   'atadoslocal.com.br',
 )
 
 ADMINS = (
-    ('Marjori Pomarole', 'marjoripomarole@gmail.com')
+    ('Marjori Pomarole', 'marjori@atados.com.br')
 )
 
 MANAGERS = ADMINS

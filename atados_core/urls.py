@@ -15,6 +15,9 @@ router.register(r'volunteers', views.VolunteerViewSet)
 router.register(r'volunteers_public', views.VolunteerPublicViewSet)
 
 urlpatterns = patterns('atados_core.views',
+  url(r'^v1/api/', include('rest_framework.urls', namespace='rest_framework')),
+  url(r'^v1/', include(router.urls)),
+
   url(r'v1/oauth2/', include('provider.oauth2.urls', namespace='oauth2')),
   url(r'v1/facebook/', 'facebook_auth'),
   url(r'v1/current_user/', 'current_user'),
@@ -55,9 +58,4 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/project/(?P<project_slug>[\w-]+)/volunteers/', views.VolunteerProjectList.as_view()),
   url(r'v1/project/(?P<project_slug>[\w-]+)/clone/', 'clone_project'),
   url(r'v1/project/(?P<project_slug>[\w-]+)/export/', 'export_project_csv'),
-)
-
-urlpatterns += patterns('',
-  url(r'^v1/api/', include('rest_framework.urls', namespace='rest_framework')),
-  url(r'^v1/', include(router.urls)),
 )
