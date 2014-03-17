@@ -48,7 +48,7 @@ class Availability(models.Model):
     verbose_name = _('availability')
 
 class Cause(models.Model):
-    name = models.CharField(_('name'), max_length=30)
+    name = models.CharField(_('name'), max_length=100)
 
     def __unicode__(self):
       return self.name
@@ -58,7 +58,7 @@ class Cause(models.Model):
       verbose_name_plural = _('causes')
 
 class Skill(models.Model):
-    name = models.CharField(_('name'), max_length=30)
+    name = models.CharField(_('name'), max_length=100)
 
     def __unicode__(self):
         return self.name
