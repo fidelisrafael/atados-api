@@ -231,6 +231,7 @@ def create_nonprofit(request, format=None):
    user = User.objects.create_user(email, password, slug=obj['user']['slug'])
    user.name = obj['user']['name']
    user.hidden_address = obj['hidden_address']
+   user.phone = obj['phone']
    user.address = address
    user.save()
 
@@ -246,7 +247,6 @@ def create_nonprofit(request, format=None):
   nonprofit.name = obj['name']
   nonprofit.details = obj['details']
   nonprofit.description = obj['description']
-  nonprofit.phone = obj['phone']
   nonprofit.save()
 
   causes = obj['causes']
