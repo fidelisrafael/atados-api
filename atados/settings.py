@@ -9,7 +9,6 @@ DEBUG=False
 TEMPLATE_DEBUG=False
 
 ALLOWED_HOSTS = (
-  '.atados.com.br',
   '.atados.com.br.',
 )
 
@@ -285,8 +284,6 @@ PASSWORD_HASHERS = (
 
 GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.AtadosDashboard'
 EXPORT_RECORDS_LIMIT = 20000
-
-
 
 import djcelery
 djcelery.setup_loader()
