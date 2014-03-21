@@ -9,6 +9,7 @@ DEBUG=False
 TEMPLATE_DEBUG=False
 
 ALLOWED_HOSTS = (
+  '.atados.com.br',
   '.atados.com.br.',
 )
 
