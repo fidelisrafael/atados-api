@@ -5,13 +5,12 @@ import sys
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG = os.environ.get('ATADOS_DEBUG', False)
-TEMPLATE_DEBUG = DEBUG
+DEBUG=False
+TEMPLATE_DEBUG=False
 
 ALLOWED_HOSTS = (
   '.atados.com.br',
   '.atados.com.br.',
-  'atadoslocal.com.br',
 )
 
 ADMINS = (
@@ -271,7 +270,6 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
     'atados.com.br',
-    'atadoslocal.com.br'
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
