@@ -99,18 +99,12 @@ STATICFILES_FINDERS = (
 SECRET_KEY = '#7j@g*f*nufizr04s!f8_3+h&amp;1x!l04!q@0u@28ppkl)5kuy2^'
 
 # List of callables that know how to import templates from various sources.
-if DEBUG:
-  TEMPLATE_LOADERS = (
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
       'django.template.loaders.filesystem.Loader',
       'django.template.loaders.app_directories.Loader',
-    )
-else:
-  TEMPLATE_LOADERS = (
-      ('django.template.loaders.cached.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-      )),
-  )
+    )),
+)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.cache.UpdateCacheMiddleware',
@@ -211,7 +205,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/atados-messages'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -283,8 +277,8 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_DOMAIN = ".atados.com.br" if not DEBUG else ".atadoslocal.com.br"
-SESSION_COOKIE_DOMAIN = ".atados.com.br" if not DEBUG else ".atadoslocal.com.br"
+CSRF_COOKIE_DOMAIN = ".atados.com.br"
+SESSION_COOKIE_DOMAIN = ".atados.com.br"
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(
