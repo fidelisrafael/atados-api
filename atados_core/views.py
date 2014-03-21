@@ -922,13 +922,13 @@ class ApplyList(generics.ListAPIView):
     return applies
 
 class CauseViewSet(viewsets.ModelViewSet):
-  queryset = Cause.objects.all()
+  queryset = Cause.objects.all().order_by('id')
   serializer_class = CauseSerializer
   permission_classes = [AllowAny]
   lookup_field = 'id'
 
 class SkillViewSet(viewsets.ModelViewSet):
-  queryset = Skill.objects.all()
+  queryset = Skill.objects.all().order_by('id')
   serializer_class = SkillSerializer
   permission_classes = [AllowAny]
   lookup_field = 'id'
