@@ -41,6 +41,12 @@ class EditableUserSerializer(serializers.ModelSerializer):
     depth = 1
     fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff')
 
+class VolunteerUserSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = User
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff')
 
 class AvailabilitySerializer(serializers.HyperlinkedModelSerializer):
   class Meta:
@@ -210,7 +216,7 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
               'description', 'role', 'volunteers_numbers')
 
 class VolunteerSerializer(serializers.ModelSerializer):
-  user = UserSerializer(required=False)
+  user = VolunteerUserSerializer(required=False)
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
