@@ -524,8 +524,8 @@ def password_reset(request, format=None):
     user.save()
     message = "Sua nova senha: "
     message += password
-    message += ". Por favor entre na sua conta e mude para algo de sua preferencia. Qualquer duvida contate contato@atados.com.br."
-    send_mail('Sua nova senha', message, 'contato@atados.com.br', [email])
+    message += ". Por favor entre na sua conta e mude para algo de sua preferência. Qualquer dúvida mande um email para contato@atados.com.br. Abraços."
+    send_mail('Nova senha do Atados', message, 'contato@atados.com.br', [email])
     return Response({"Password was sent."}, status.HTTP_200_OK)
   return Response({"No one is logged in."}, status.HTTP_404_NOT_FOUND)
 
