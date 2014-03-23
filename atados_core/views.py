@@ -587,9 +587,32 @@ def numbers(request, format=None):
   return Response(numbers, status.HTTP_200_OK)
 
 @api_view(['GET'])
-def active_cities(request, format=None):
-  return Response(CitySerializer(City.objects.filter(active=True)).data, status.HTTP_200_OK)
+def startup(request, format=None):
+  data = {}
 
+  try:
+    # Getting website number 
+    data['numbers'] = {}
+    data['numbers']['projects'] = Project.objects.filter(closed=False, published=True).count()
+    data['numbers']['volunteers'] = Volunteer.objects.count()
+    data['numbers']['nonprofits'] = Nonprofit.objects.filter(published=True).count()
+
+    # Getting active cities
+    data['cities'] = CitySerializer(City.objects.filter(active=True), many=True).data
+
+    # Getting states
+    data['states'] = StateSerializer(State.objects.all(), many=True).data
+
+    # Getting causes
+    data['causes'] = CauseSerializer(Cause.objects.all(), many=True).data
+
+    # Getting skills
+    data['skills'] = SkillSerializer(Skill.objects.all(), many=True).data
+
+    return Response(data, status.HTTP_200_OK)
+  except Exception as e:
+    print e
+    return Response({"Something went wrong on the models lookup."}, status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['GET'])
 def is_volunteer_to_nonprofit(request, format=None):
