@@ -5,12 +5,11 @@ import sys
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG=False
-TEMPLATE_DEBUG=False
+DEBUG=True
+TEMPLATE_DEBUG=True
 
 ALLOWED_HOSTS = (
-  '.atados.com.br',
-  '.atados.com.br.',
+  '.atadoslocal.com.br',
 )
 
 ADMINS = (
@@ -269,14 +268,14 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'atados.com.br',
+    'atadoslocal.com.br',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-CSRF_COOKIE_DOMAIN = ".atados.com.br"
-SESSION_COOKIE_DOMAIN = ".atados.com.br"
+CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
+SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(
