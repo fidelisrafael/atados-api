@@ -13,7 +13,6 @@ from django.utils import timezone
 from datetime import datetime
 from datetime import timedelta
 
-from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
@@ -521,18 +520,25 @@ def save_project(request, format=None):
 
 @api_view(['POST'])
 def password_reset(request, format=None):
-  if request.user.is_authenticated:
+  try:
     email = request.DATA['email']
     user = User.objects.get(email=email)
     password = User.objects.make_random_password()
     user.set_password(password)
-    user.save()
-    message = "Sua nova senha: "
-    message += password
-    message += ". Por favor entre na sua conta e mude para algo de sua preferência. Qualquer dúvida mande um email para contato@atados.com.br. Abraços."
-    send_mail('Nova senha do Atados', message, 'contato@atados.com.br', [email])
+
+    # Sending password reset email
+    plaintext = 'Sua nova senha: '
+    plaintext += password
+    plaintext += u'. Por favor entre na sua conta e mude para algo de sua preferência. Qualquer dúvida retorne o email. Abraços.'
+    html = plaintext
+    subject, from_email, to = 'Nova senha do Atados', 'contato@atados.com.br', email
+    msg = EmailMultiAlternatives(subject, plaintext, from_email, [to])
+    msg.attach_alternative(html, "text/html")
+    msg.send()
     return Response({"Password was sent."}, status.HTTP_200_OK)
-  return Response({"No one is logged in."}, status.HTTP_404_NOT_FOUND)
+  except Exception as e:
+    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({e}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
 def change_password(request, format=None):
