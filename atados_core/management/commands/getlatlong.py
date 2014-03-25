@@ -18,6 +18,7 @@ class Command(BaseCommand):
             a.latitude = results[0].coordinates[0]
             a.longitude = results[0].coordinates[1]
             print "%s %s" %(a.latitude, a.longitude)
+            a.save()
           except Exception as e:                       
             print e                                    
 
