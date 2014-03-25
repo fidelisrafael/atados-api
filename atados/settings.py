@@ -113,7 +113,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'atados_core.middleware.ProfileMiddleware',
+    # 'atados_core.middleware.ProfileMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
@@ -142,7 +142,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'atados_core',
-    'django_toolbar',
+    'debug_toolbar',
 
     'haystack',
     'rest_framework',
