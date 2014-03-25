@@ -105,15 +105,18 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'atados_core.middleware.ProfileMiddleware',
+  'django.middleware.cache.UpdateCacheMiddleware',
+  'django.middleware.cache.FetchFromCacheMiddleware',
+  'django.middleware.common.CommonMiddleware',
+  'django.middleware.csrf.CsrfViewMiddleware',
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'django.contrib.messages.middleware.MessageMiddleware',
+  'django.middleware.gzip.GZipMiddleware',
+  'django.middleware.cache.FetchFromCacheMiddleware',
+  'django.middleware.http.ConditionalGetMiddleware',
+  'corsheaders.middleware.CorsMiddleware',
+  #'atados_core.middleware.ProfileMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
@@ -142,7 +145,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
 
     'atados_core',
-    'django_toolbar',
+    'debug_toolbar',
 
     'haystack',
     'rest_framework',
@@ -230,7 +233,7 @@ if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine' if 'ATADOS_SEARCH_ENDPOINT' in os.environ else 'haystack.backends.simple_backend.SimpleEngine',
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': 'http://%s/' % (os.environ.get('ATADOS_SEARCH_ENDPOINT', '127.0.0.1:9200')),
         'INDEX_NAME': 'haystack'
     },
@@ -244,11 +247,12 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache' if 'ATADOS_MEMCACHED_ENDPOINT' in os.environ else 'django.core.cache.backends.dummy.DummyCache',
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
     },
 }
-
+                                         
+CACHE_MIDDLEWARE_SECONDS = 1200
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 
 REST_FRAMEWORK = {
