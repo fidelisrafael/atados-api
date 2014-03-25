@@ -125,14 +125,19 @@ def facebook_auth(request, format=None):
       user = User.objects.get(email=me['email'])
       volunteer = Volunteer.objects.get(user=user)
     except:
+      email = me.get('email', None)
       name = ""
       try:
-        slug = me['username']
+        slug = me.get('username', None)
       except:
-        name = me['name']
-        slug = slugify(name)
+        name = me.get('name', None)
+        if name:
+          slug = slugify(name)
+        elif email:
+          slug = slugify(email)
+        else:
+          return Response({"Could not creata slug for account."}, status.HTTP_400_BAD_REQUEST)
 
-      email = me['email']
       user = User.objects.create_user(slug=slug, email=email)
       volunteer = Volunteer(user=user)
 
@@ -148,7 +153,7 @@ def facebook_auth(request, format=None):
       msg.send()
 
     user.last_login=timezone.now()
-    user.name = me['name']
+    user.name = me.get('name', None)
     user.save()
     
     faceImage = graph.get("me/picture?redirect=0&height=200&type=normal&width=200")
