@@ -525,6 +525,7 @@ def password_reset(request, format=None):
     user = User.objects.get(email=email)
     password = User.objects.make_random_password()
     user.set_password(password)
+    user.save()
 
     # Sending password reset email
     plaintext = 'Sua nova senha: '
