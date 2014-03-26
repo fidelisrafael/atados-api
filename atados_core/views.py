@@ -100,10 +100,11 @@ def facebook_auth(request, format=None):
   try:
     graph = facebook.GraphAPI(accessToken)
     me = graph.get("me")
-  except facebook.FacepyError:
-    return Response({"Could not talk to Facebook to log you in."}, status.HTTP_400_BAD_REQUEST)
+  except facebook.FacepyError as e:
+    return Response({"We don't have permissions to log in the user."}, status.HTTP_403_FORBIDDEN)
 
   volunteer = Volunteer.objects.filter(facebook_uid=userID)
+  print volunteer
 
   if volunteer:
     volunteer = volunteer[0]
@@ -125,31 +126,31 @@ def facebook_auth(request, format=None):
       volunteer = Volunteer.objects.get(user=user)
     except:
       email = me.get('email', None)
-      name = ""
-      try:
-        slug = me.get('username', None)
-      except:
-        name = me.get('name', None)
-        if name:
-          slug = slugify(name)
-        elif email:
-          slug = slugify(email)
-        else:
-          return Response({"Could not creata slug for account."}, status.HTTP_400_BAD_REQUEST)
+      print me
+      name = me.get('name', None)
+      if name:
+        slug = slugify(name)
+      elif email:
+        slug = slugify(email)
+      else:
+        return Response({"Could not creata slug for account."}, status.HTTP_400_BAD_REQUEST)
 
-      user = User.objects.create_user(slug=slug, email=email)
+      user = User.objects.create_user(slug=slug, email=email, password="facebook")
       volunteer = Volunteer(user=user)
 
-      # Sending welcome email on facebook signup
-      plaintext = get_template('email/volunteerFacebookSignup.txt')
-      htmly     = get_template('email/volunteerFacebookSignup.html')
-      d = Context({ 'name': name })
-      subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', email
-      text_content = plaintext.render(d)
-      html_content = htmly.render(d)
-      msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-      msg.attach_alternative(html_content, "text/html")
-      msg.send()
+      try:
+        # Sending welcome email on facebook signup
+        plaintext = get_template('email/volunteerFacebookSignup.txt')
+        htmly     = get_template('email/volunteerFacebookSignup.html')
+        d = Context({ 'name': name })
+        subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', email
+        text_content = plaintext.render(d)
+        html_content = htmly.render(d)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+      except:
+        pass
 
     user.last_login=timezone.now()
     user.name = me.get('name', None)
