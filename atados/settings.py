@@ -5,12 +5,27 @@ import sys
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
-DEBUG=False
+if os.environ.get('ATADOS_ENV') == 'debug':
+  DEBUG=True
+  TEMPLATE_DEBUG=DEBUG
+else:
+  DEBUG=False
+  TEMPLATE_DEBUG=DEBUG
 
-ALLOWED_HOSTS = (
-  #'.atadoslocal.com.br',
-  '.atados.com.br',
-)
+# Settings for when developing on local computer
+if os.environ.get('DJANGO_ENV') == 'development':
+  DEVELOPMENT=True
+else:
+  DEVELOPMENT=False
+
+if DEVELOPMENT:
+  ALLOWED_HOSTS = (
+    '.atadoslocal.com.br',
+  )
+else: 
+  ALLOWED_HOSTS = (
+    '.atados.com.br',
+  )
 
 ADMINS = (
     ('Marjori Pomarole', 'marjori@atados.com.br')
@@ -94,7 +109,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '#7j@g*f*nufizr04s!f8_3+h&amp;1x!l04!q@0u@28ppkl)5kuy2^'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -273,18 +288,22 @@ REST_FRAMEWORK = {
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 
-CORS_ORIGIN_WHITELIST = (
-    #'atadoslocal.com.br',
-    'atados.com.br',
-)
-
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
-#CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
-CSRF_COOKIE_DOMAIN = ".atados.com.br"
-#SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
-SESSION_COOKIE_DOMAIN = ".atados.com.br"
+if DEVELOPMENT:
+  CORS_ORIGIN_WHITELIST = (
+    'atadoslocal.com.br',
+  )
+  
+  CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
+  SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
+else:
+  SESSION_COOKIE_DOMAIN = ".atados.com.br"
+  CSRF_COOKIE_DOMAIN = ".atados.com.br"
+  CORS_ORIGIN_WHITELIST = (
+    'atados.com.br',
+  )
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(

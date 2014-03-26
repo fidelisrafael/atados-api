@@ -1,4 +1,7 @@
-export ATADOS_DEBUG=True
+export ATADOS_ENV=debug
+export DJANGO_ENV=development
+export DJANGO_SECRET_KEY=
+
 
 export AWS_STORAGE_BUCKET_NAME=                                        
 export AWS_ACCESS_KEY_ID=                                   
