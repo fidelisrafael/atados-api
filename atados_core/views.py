@@ -863,9 +863,9 @@ class ProjectList(generics.ListAPIView):
 
     pks = [ r.pk for r in queryset]
     if highlighted:
-      return Project.objects.filter(pk__in=pks).order_by('-highlighted')
+      return Project.objects.filter(pk__in=pks, deleted=False).order_by('-highlighted')
     else:
-      return Project.objects.filter(pk__in=pks).order_by('?')
+      return Project.objects.filter(pk__in=pks, deleted=False).order_by('?')
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
