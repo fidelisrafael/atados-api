@@ -135,9 +135,8 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
-  'django.middleware.gzip.GZipMiddleware',
-  'django.middleware.cache.FetchFromCacheMiddleware',
-  'django.middleware.http.ConditionalGetMiddleware',
+  #'django.middleware.gzip.GZipMiddleware',
+  #'django.middleware.http.ConditionalGetMiddleware',
   'corsheaders.middleware.CorsMiddleware',
   #'atados_core.middleware.ProfileMiddleware',
 )
@@ -231,7 +230,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEVELOPMENT else 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/atados-messages'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

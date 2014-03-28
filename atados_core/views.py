@@ -104,7 +104,6 @@ def facebook_auth(request, format=None):
     return Response({"We don't have permissions to log in the user."}, status.HTTP_403_FORBIDDEN)
 
   volunteer = Volunteer.objects.filter(facebook_uid=userID)
-  print volunteer
 
   if volunteer:
     volunteer = volunteer[0]
@@ -126,7 +125,6 @@ def facebook_auth(request, format=None):
       volunteer = Volunteer.objects.get(user=user)
     except:
       email = me.get('email', None)
-      print me
       name = me.get('name', None)
       if name:
         slug = slugify(name)
@@ -688,11 +686,11 @@ def apply_volunteer_to_project(request, format=None):
 
           #if pontual, schedule email to be sent 3 days before
           if project.job:
-            eta = project.job.start_date - timedelta(days=3)
-            send_email_to_volunteer_3_days_before_pontual.apply_async(
-              eta=eta,
-              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
-
+            if project.job.start_date:
+              eta = project.job.start_date - timedelta(days=3)
+              send_email_to_volunteer_3_days_before_pontual.apply_async(
+                eta=eta,
+                kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
 
           return Response({"Applied"}, status.HTTP_200_OK)
 
@@ -734,10 +732,11 @@ def apply_volunteer_to_project(request, format=None):
 
         #if pontual, schedule email to be sent 3 days before
         if project.job:
-          eta = project.job.start_date - timedelta(days=3)
-          send_email_to_volunteer_3_days_before_pontual.apply_async(
-            eta=eta,
-            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+          if project.job.start_date:
+            eta = project.job.start_date - timedelta(days=3)
+            send_email_to_volunteer_3_days_before_pontual.apply_async(
+              eta=eta,
+              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
 
 
 
@@ -882,7 +881,6 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
     highlighted = True if params.get('highlighted') == 'true' else False
-    # print SearchQuerySet().spelling_suggestion('Movimrnto Boa')
 
     if highlighted:
       return Nonprofit.objects.filter(pk__in=results).order_by('-highlighted')
