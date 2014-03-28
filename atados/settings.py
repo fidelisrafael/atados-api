@@ -135,8 +135,8 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
-  #'django.middleware.gzip.GZipMiddleware',
-  #'django.middleware.http.ConditionalGetMiddleware',
+  'django.middleware.gzip.GZipMiddleware',
+  'django.middleware.http.ConditionalGetMiddleware',
   'corsheaders.middleware.CorsMiddleware',
   #'atados_core.middleware.ProfileMiddleware',
 )
