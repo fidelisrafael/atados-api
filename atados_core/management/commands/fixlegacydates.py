@@ -4,7 +4,7 @@ import pytz
 from datetime import datetime
 from django.core.management.base import NoArgsCommand
 from django.db import connections
-from atados_core.models import Project, User, Apply
+from atados_core.models import Project, User, Apply, Nonprofit
 
 class Command(NoArgsCommand):
   help = "Get dates updated from legacy database."
@@ -29,33 +29,45 @@ class Command(NoArgsCommand):
 #
     cursor.execute(
       '''
-        SELECT DISTINCT                                                                
-           flag_content.uid AS 'uid',      
-           flag_content.content_id AS 'nid',
-           flag_content.timestamp AS 'date'                                             
-         FROM                                                                           
-           flag_content                                                                 
-         LEFT JOIN users ON flag_content.uid = users.uid                                
-         WHERE flag_content.fid = 4
+        SELECT DISTINCT                                                      
+           node.nid,                                                         
+           node.uid,                                                         
+           node.created AS 'created'                                    
+         FROM                                                                
+           node                                                              
+         WHERE node.type IN ('profile_ong')  
+         GROUP BY node.nid                                                   
+         ORDER BY node.uid                                                   
       ;''')
+#    cursor.execute(
+#      '''
+#        SELECT DISTINCT                                                                
+#           flag_content.uid AS 'uid',      
+#           flag_content.content_id AS 'nid',
+#           flag_content.timestamp AS 'date'                                             
+#         FROM                                                                           
+#           flag_content                                                                 
+#         LEFT JOIN users ON flag_content.uid = users.uid                                
+#         WHERE flag_content.fid = 4
+#      ;''')
                                                                                       
     desc = cursor.description
-    print "Now processing....%d nonprofits" % cursor.rowcount
+    print "Now processing....%d" % cursor.rowcount
     print
     i = 0
     for row in cursor.fetchall():
       i = i + 1
       row = dict(zip([col[0] for col in desc], row))
       try:
-        project = Project.objects.get(legacy_nid=row['nid'])
-        user = User.objects.get(legacy_uid=row['uid'])
-        volunteer = user.volunteer
-        date = datetime.utcfromtimestamp(row['date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
-        a = Apply.objects.get(volunteer=volunteer, project=project)
-        if a.date != date:
-          a.date = date
-          print a.date
-          a.save()
+#        project = Project.objects.get(legacy_nid=row['nid'])
+#        user = User.objects.get(legacy_uid=row['uid'])
+#        volunteer = user.volunteer
+#        date = datetime.utcfromtimestamp(row['date']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+#        a = Apply.objects.get(volunteer=volunteer, project=project)
+#        if a.date != date:
+#          a.date = date
+#          print a.date
+#          a.save()
         #print "%s %s" % (project.name, user.name)
 #        project = Project.objects.get(legacy_nid=row['nid'])
 #
@@ -72,6 +84,13 @@ class Command(NoArgsCommand):
 #          print project.modified_date
 #          project.save()
 #          print project.modified_date
+        nonprofit = User.objects.get(legacy_uid=row['uid']).nonprofit
+
+        created_date = datetime.utcfromtimestamp(row['created']).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+        if nonprofit.created_date != created_date:
+          nonprofit.created_date = created_date
+          print nonprofit.created_date
+          nonprofit.save()
 
       except Exception as e: 
         print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
