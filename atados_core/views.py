@@ -661,6 +661,18 @@ def apply_volunteer_to_project(request, format=None):
     volunteer = Volunteer.objects.get(user=request.user)
     project = Project.objects.get(id=request.DATA['project'])
     message = request.DATA['message']
+    phone = request.DATA['phone']
+    name = request.DATA['name']
+
+    if name:
+      if volunteer.user.name != name:
+        volunteer.user.name = name
+        volunteer.user.save()
+
+    if phone:
+      if volunteer.user.phone != phone:
+        volunteer.user.phone = phone
+        volunteer.user.save()
 
     if project:
       try:
@@ -685,12 +697,13 @@ def apply_volunteer_to_project(request, format=None):
             kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
 
           #if pontual, schedule email to be sent 3 days before
-          if project.job:
-            if project.job.start_date:
-              eta = project.job.start_date - timedelta(days=3)
-              send_email_to_volunteer_3_days_before_pontual.apply_async(
-                eta=eta,
-                kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+          try:
+            eta = project.job.start_date - timedelta(days=3)
+            send_email_to_volunteer_3_days_before_pontual.apply_async(
+              eta=eta,
+              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+          except:
+            pass
 
           return Response({"Applied"}, status.HTTP_200_OK)
 
@@ -731,12 +744,13 @@ def apply_volunteer_to_project(request, format=None):
           kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
 
         #if pontual, schedule email to be sent 3 days before
-        if project.job:
-          if project.job.start_date:
-            eta = project.job.start_date - timedelta(days=3)
-            send_email_to_volunteer_3_days_before_pontual.apply_async(
-              eta=eta,
-              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+        try:
+          eta = project.job.start_date - timedelta(days=3)
+          send_email_to_volunteer_3_days_before_pontual.apply_async(
+            eta=eta,
+            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+        except:
+          pass
 
 
 
