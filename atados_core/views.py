@@ -609,16 +609,16 @@ def startup(request, format=None):
     data['numbers']['nonprofits'] = Nonprofit.objects.filter(published=True).count()
 
     # Getting active cities
-    data['cities'] = CitySerializer(City.objects.filter(active=True), many=True).data
+    data['cities'] = CitySerializer(City.objects.filter(active=True).order_by('id'), many=True).data
 
     # Getting states
-    data['states'] = StateSerializer(State.objects.all(), many=True).data
+    data['states'] = StateSerializer(State.objects.all().order_by('id'), many=True).data
 
     # Getting causes
-    data['causes'] = CauseSerializer(Cause.objects.all(), many=True).data
+    data['causes'] = CauseSerializer(Cause.objects.all().order_by('id'), many=True).data
 
     # Getting skills
-    data['skills'] = SkillSerializer(Skill.objects.all(), many=True).data
+    data['skills'] = SkillSerializer(Skill.objects.all().order_by('id'), many=True).data
 
     return Response(data, status.HTTP_200_OK)
   except Exception as e:
