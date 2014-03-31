@@ -856,6 +856,11 @@ class ProjectList(generics.ListAPIView):
 
   def get_queryset(self):
     params = self.request.GET
+
+    highlighted = params.get('highlighted') == 'true'
+    if highlighted:
+      return Project.objects.filter(highlighted=highlighted)
+
     query = params.get('query', None)
     cause = params.get('cause', None)
     skill = params.get('skill', None)
@@ -871,14 +876,9 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
+    results = [ r.pk for r in queryset]
 
-    highlighted = params.get('highlighted') == 'true'
-
-    pks = [ r.pk for r in queryset]
-    if highlighted:
-      return Project.objects.filter(pk__in=pks, deleted=False, closed=False, published=True).order_by('-highlighted')
-    else:
-      return Project.objects.filter(pk__in=pks, deleted=False, closed=False, published=True).order_by('?')
+    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('?')
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
@@ -886,20 +886,22 @@ class NonprofitList(generics.ListAPIView):
 
   def get_queryset(self):
     params = self.request.GET
+    highlighted = params.get('highlighted') == 'true'
+
+    if highlighted:
+      return Nonprofit.objects.filter(highlighted=highlighted)
+
     query = params.get('query', None)
     cause = params.get('cause', None)
     city = params.get('city', None)
+
     queryset = SearchQuerySet().models(Nonprofit)
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
-    highlighted = True if params.get('highlighted') == 'true' else False
 
-    if highlighted:
-      return Nonprofit.objects.filter(pk__in=results).order_by('-highlighted')
-    else:
-      return Nonprofit.objects.filter(pk__in=results).order_by('?')
+    return Nonprofit.objects.filter(pk__in=results).order_by('?')
 
 
 class VolunteerProjectList(generics.ListAPIView):
