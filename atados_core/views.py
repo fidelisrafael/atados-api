@@ -280,9 +280,7 @@ def create_nonprofit(request, format=None):
 
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
 
-@api_view(['GET'])
-def create_project_slug(request, format=None):
-  name = request.QUERY_PARAMS.get('name', None);
+def create_project_slug(name):
   if name:
     slug = slugify(name)[0:46]                            
     append = ''                                           
@@ -290,10 +288,8 @@ def create_project_slug(request, format=None):
     while len(Project.objects.filter(slug=slug + append)):
       i += 1                                            
       append = '-' + str(i)                             
-      return Response(slug + append, status.HTTP_200_OK) 
-    return Response({'slug': slug}, status.HTTP_200_OK) 
-
-  return Response({'error': ':('}, status.HTTP_400_BAD_REQUEST)
+      return slug
+    return slug
 
 @api_view(['POST'])
 def create_project(request, format=None):
@@ -305,7 +301,7 @@ def create_project(request, format=None):
   try:
     project.name = obj['name']
     project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit'])
-    project.slug = obj['slug']
+    project.slug = create_project_slug(project.name)
     project.details = obj['details']
     project.description = obj['description']
     project.facebook_event = obj.get('facebook_event', None)
@@ -337,11 +333,12 @@ def create_project(request, format=None):
 
     skills = obj['skills']
     for s in skills:
-      project.skills.add(Skill.objects.get(name=s['name']))
+      print s
+      project.skills.add(Skill.objects.get(id=s))
 
     causes = obj['causes']
     for c in causes:
-      project.causes.add(Cause.objects.get(name=c['name']))
+      project.causes.add(Cause.objects.get(id=c))
 
     if obj.get('work', None):
       work =  Work()
@@ -367,7 +364,7 @@ def create_project(request, format=None):
     project.save()
 
   except Exception as e:
-    print e
+    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
 
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
@@ -381,9 +378,10 @@ def save_project(request, format=None):
   project = Project.objects.get(id=obj['id'])
 
   try:
-
+    project.name = obj['name']
+    slug = create_project_slug(obj['name'])
     # Renaming the image file if the slug has changed
-    if obj.get('slug') != project.slug:
+    if slug != project.slug:
       c = boto.connect_s3()
       bucket = c.get_bucket('atadosapp')
       k = bucket.get_key(project.image.name)
@@ -396,8 +394,7 @@ def save_project(request, format=None):
       else:
         return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
 
-    project.name = obj['name']
-    project.slug = obj['slug']
+    project.slug = slug
     project.details = obj['details']
     project.description = obj['description']
     project.facebook_event = obj.get('facebook_event', None)
