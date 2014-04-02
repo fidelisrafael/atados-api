@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- 
+
 from django.conf.urls import patterns, url, include
 from atados_core import views
 from rest_framework.routers import DefaultRouter
