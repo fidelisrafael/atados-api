@@ -29,7 +29,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 
@@ -846,6 +846,15 @@ class NonprofitViewSet(viewsets.ModelViewSet):
       return nonprofit
     except:
       raise Http404
+
+class PortoSegutoProjectList(generics.ListAPIView):
+  serializer_class = ProjectSearchSerializer
+  permission_classes = [AllowAny]
+
+  def get_queryset(self):
+    porto_seguro = Company.objects.get(id=1)
+    return Project.objects.filter(deleted=False, closed=False, published=True, companies=porto_seguro).order_by('?')
+
 
 class ProjectList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer

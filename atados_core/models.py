@@ -88,7 +88,6 @@ class City(models.Model):
         verbose_name = _('city')
         verbose_name_plural = _('cities')
 
-
 class Address(models.Model):
     zipcode = models.CharField(_('Zip code'), max_length=10,
                                blank=True, null=True, default=None)
@@ -146,6 +145,13 @@ class Address(models.Model):
 
     class Meta:
       verbose_name = _('address')
+
+class Company(models.Model):
+  name = models.CharField(_('name'), max_length=300)
+  address = models.OneToOneField(Address, blank=True, null=True)
+
+  def __unicode__(self):
+    return self.name
 
 class Volunteer(models.Model):
 
@@ -349,6 +355,8 @@ class Project(models.Model):
 
   legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
+  companies = models.ManyToManyField(Company)
+
   def image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
     return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
@@ -498,6 +506,8 @@ class User(AbstractBaseUser):
 
   address = models.OneToOneField(Address, blank=True, null=True)
   hidden_address = models.BooleanField(_("Endereco escondido."), default=False)
+
+  company = models.ForeignKey(Company, blank=True, null=True)
 
   def get_address(self):
     if self.hidden_address:

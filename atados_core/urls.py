@@ -59,4 +59,6 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/project/(?P<project_slug>[\w-]+)/volunteers/', views.VolunteerProjectList.as_view()),
   url(r'v1/project/(?P<project_slug>[\w-]+)/clone/', 'clone_project'),
   url(r'v1/project/(?P<project_slug>[\w-]+)/export/', 'export_project_csv'),
+
+  url(r'v1/porto/highlights/', views.PortoSegutoProjectList.as_view()),
 )
