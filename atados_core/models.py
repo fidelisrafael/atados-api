@@ -511,8 +511,10 @@ class User(AbstractBaseUser):
 
   def get_address(self):
     if self.hidden_address:
-      return Address.objects.filter(id__in=[1, 2, 3], city__id=self.address.city.id)[0]
-    return self.address
+      try:
+        return Address.objects.filter(id__in=[1, 2, 3], city__id=self.address.city.id)[0]
+      except:
+        return None
 
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
