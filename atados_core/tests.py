@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIRequestFactory
 from rest_framework.test import APITestCase
 
-from atados_core.models import Availability, Cause, Skill, State, City, Address, User, Volunteer
+from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit
 from atados_core import views
 
 # Models
@@ -63,6 +63,29 @@ class StateTest(TestCase):
     s = self.create_state()
     self.assertTrue(isinstance(s, State))
     self.assertEqual(s.__unicode__(), "Rio de Janeiro")
+
+class CommentTest(TestCase):
+
+  def create_comment(self, project, user, comment):
+    return Comment(project=project, user=user, comment=comment)
+
+  def test_comment_creation(self):
+    """
+    Tests Comment creation
+    """
+    u1 = User(email="test", slug="user1") 
+    u1.save()
+    n = Nonprofit(user=u1)
+    n.save()
+    p = Project(name="Project 1", nonprofit=n)
+    p.save()
+    u = User(email="email@gmail.com", slug="email")
+    u.save()
+    c = self.create_comment(p, u, "Comment nro 1")
+    c.save()
+    self.assertTrue(isinstance(c, Comment))
+    self.assertEqual(c.__unicode__(), "(Project 1) email@gmail.com: Comment nro 1")
+    self.assertTrue(c.created_date)
 
 class CityTest(TestCase):
 

@@ -8,19 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 14:29-0300\n"
+"POT-Creation-Date: 2014-04-11 00:18-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
 #: admin.py:20
 msgid "Mark selected stories as published"
-msgstr "Publicar selecionados"
+msgstr ""
 
 #: admin.py:123
 msgid "Export selected to XLS"
@@ -31,9 +29,8 @@ msgid "Dados do Atados"
 msgstr ""
 
 #: dashboard.py:35
-#, fuzzy
 msgid "Suporte"
-msgstr "Ordenar"
+msgstr ""
 
 #: dashboard.py:39
 msgid "Achou algum bug?"
@@ -49,145 +46,145 @@ msgstr ""
 
 #: models.py:25
 msgid "Monday"
-msgstr "Segunda"
+msgstr ""
 
 #: models.py:26
 msgid "Tuesday"
-msgstr "Terça"
+msgstr ""
 
 #: models.py:27
 msgid "Wednesday"
-msgstr "Quarta"
+msgstr ""
 
 #: models.py:28
 msgid "Thursday"
-msgstr "Quinta"
+msgstr ""
 
 #: models.py:29
 msgid "Friday"
-msgstr "Sexta"
+msgstr ""
 
 #: models.py:30
 msgid "Saturday"
-msgstr "Sábado"
+msgstr ""
 
 #: models.py:31
 msgid "Sunday"
-msgstr "Domingo"
+msgstr ""
 
 #: models.py:35
 msgid "Morning"
-msgstr "Manhã"
+msgstr ""
 
 #: models.py:36
 msgid "Afternoon"
-msgstr "Tarde"
+msgstr ""
 
 #: models.py:37
 msgid "Evening"
-msgstr "Noite"
+msgstr ""
 
 #: models.py:41
 msgid "weekday"
-msgstr "dia da semana"
+msgstr ""
 
 #: models.py:42
 msgid "period"
-msgstr "período"
+msgstr ""
 
 #: models.py:45
 #, python-format
 msgid "%(weekday)s at %(period)s"
-msgstr "%(weekday)s -  %(period)s"
+msgstr ""
 
 #: models.py:48
 msgid "availability"
-msgstr "disponibilidade"
+msgstr ""
 
 #: models.py:51 models.py:61 models.py:70 models.py:80 models.py:150
 #: models.py:439
 msgid "name"
-msgstr "nome"
+msgstr ""
 
 #: models.py:57
 msgid "cause"
-msgstr "causa"
+msgstr ""
 
 #: models.py:58
 msgid "causes"
-msgstr "causa"
+msgstr ""
 
 #: models.py:67
 msgid "skill"
-msgstr "habilidade"
+msgstr ""
 
 #: models.py:71
 msgid "code"
-msgstr "CEP"
+msgstr ""
 
 #: models.py:77
 msgid "state"
-msgstr "estado"
+msgstr ""
 
 #: models.py:82
 msgid "City where Atados is present."
-msgstr "Cidade onde Atados está presente."
+msgstr ""
 
 #: models.py:88
 msgid "city"
-msgstr "cidade"
+msgstr ""
 
 #: models.py:89
 msgid "cities"
-msgstr "cidades"
+msgstr ""
 
 #: models.py:92
 msgid "Zip code"
-msgstr "CEP"
+msgstr ""
 
 #: models.py:94
 msgid "Street"
-msgstr "rua"
+msgstr ""
 
 #: models.py:96
 msgid "Address number"
-msgstr "Número"
+msgstr ""
 
 #: models.py:98
 msgid "Apt, PO Box, block"
-msgstr "Apto, Caixa, Bloco"
+msgstr ""
 
 #: models.py:100
 msgid "Neighborhood"
-msgstr "Bairro"
+msgstr ""
 
 #: models.py:102
 msgid "City"
-msgstr "Cidade"
+msgstr ""
 
 #: models.py:147
 msgid "address"
-msgstr "endereço"
+msgstr ""
 
 #: models.py:159
 msgid "volunteer"
-msgstr "voluntário"
+msgstr ""
 
 #: models.py:160
 msgid "volunteers"
-msgstr "voluntários"
+msgstr ""
 
 #: models.py:224 models.py:501
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: models.py:225 models.py:319 models.py:333
 msgid "Details"
-msgstr "Detalhes"
+msgstr ""
 
 #: models.py:227 models.py:334
 msgid "Short description"
-msgstr "Curta descrição"
+msgstr ""
 
 #: models.py:245 models.py:351
 msgid "Highlighted"
@@ -195,152 +192,151 @@ msgstr ""
 
 #: models.py:246 models.py:341
 msgid "Published"
-msgstr "Publicado"
+msgstr ""
 
 #: models.py:247 models.py:342
 msgid "Published date"
-msgstr "Publicado"
+msgstr ""
 
-#: models.py:248 models.py:345
+#: models.py:248 models.py:345 models.py:557
 msgid "Deleted"
-msgstr "Deletado"
+msgstr ""
 
-#: models.py:249 models.py:346
+#: models.py:249 models.py:346 models.py:558
 msgid "Deleted date"
-msgstr "Data deletado"
+msgstr ""
 
 #: models.py:309
 msgid "nonprofit"
-msgstr "ONG"
+msgstr ""
 
 #: models.py:315
 msgid "Role name"
-msgstr "Nome do cargo"
+msgstr ""
 
 #: models.py:317
 msgid "Prerequisites"
-msgstr "Prerequisitos"
+msgstr ""
 
 #: models.py:320
 msgid "Vacancies"
-msgstr "Vagas"
+msgstr ""
 
 #: models.py:323
 msgid "role"
-msgstr "cargo"
+msgstr ""
 
 #: models.py:324
-#, fuzzy
 msgid "roles"
-msgstr "cargo"
+msgstr ""
 
 #: models.py:331
 msgid "Project name"
-msgstr "Atos"
+msgstr ""
 
 #: models.py:337
 msgid "Responsible name"
-msgstr "Responsável"
+msgstr ""
 
 #: models.py:339 models.py:523
 msgid "Phone"
-msgstr "Telefone"
+msgstr ""
 
 #: models.py:340
 msgid "E-mail"
-msgstr "E-mail"
+msgstr ""
 
 #: models.py:343
 msgid "Closed"
-msgstr "Fechado"
+msgstr ""
 
 #: models.py:344
 msgid "Closed date"
-msgstr "Data fechado."
+msgstr ""
 
 #: models.py:411
 msgid "project"
-msgstr "Ato"
+msgstr ""
 
 #: models.py:412
 msgid "projects"
-msgstr "Atos"
+msgstr ""
 
 #: models.py:420
 msgid "Weekly hours"
-msgstr "Horas semanais"
+msgstr ""
 
 #: models.py:422
 msgid "This work can be done remotely."
-msgstr "Isso pode ser feito remotamente"
+msgstr ""
 
 #: models.py:425
 msgid "work"
-msgstr "Ato Recorrente"
+msgstr ""
 
 #: models.py:426
 msgid "works"
-msgstr "Atos Recorrentes"
+msgstr ""
 
 #: models.py:431
 msgid "Start date"
-msgstr "data de início"
+msgstr ""
 
 #: models.py:432
 msgid "End date"
-msgstr "Data deletado"
+msgstr ""
 
 #: models.py:435
 msgid "Job"
-msgstr "Ato Pontual"
+msgstr ""
 
 #: models.py:436
 msgid "Jobs"
-msgstr "Atos Pontuais"
+msgstr ""
 
 #: models.py:445
 msgid "apply status"
-msgstr "status do cadastro"
+msgstr ""
 
 #: models.py:452
 msgid "Canceled"
-msgstr "Data deletado"
+msgstr ""
 
 #: models.py:453
 msgid "Canceled date"
-msgstr "Data deletado"
+msgstr ""
 
 #: models.py:463
 msgid "apply"
-msgstr "cadastro"
+msgstr ""
 
 #: models.py:464
 msgid "applies"
-msgstr "cadastros"
+msgstr ""
 
 #: models.py:468
 msgid "Sort"
-msgstr "Ordenar"
+msgstr ""
 
 #: models.py:474
 msgid "recommendation"
-msgstr "recomendações"
+msgstr ""
 
 #: models.py:502
 msgid "Slug"
-msgstr "Nome do usuário"
+msgstr ""
 
 #: models.py:504
 msgid "Staff"
-msgstr "Funcionários"
+msgstr ""
 
 #: models.py:505
 msgid "Active"
-msgstr "Ativo"
+msgstr ""
 
 #: models.py:506
 msgid "Email verified"
-msgstr "Email verificado"
+msgstr ""
 
 #: models.py:512
 msgid "Endereco escondido."
@@ -348,14 +344,8 @@ msgstr ""
 
 #: models.py:531
 msgid "user"
-msgstr "usuário"
+msgstr ""
 
 #: models.py:532
 msgid "users"
-msgstr "usuários"
-
-#~ msgid "first name"
-#~ msgstr "nome"
-
-#~ msgid "last name"
-#~ msgstr "sobrenome"
+msgstr ""

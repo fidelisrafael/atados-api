@@ -308,6 +308,8 @@ class Nonprofit(models.Model):
     class Meta:
       verbose_name = _('nonprofit')
 
+
+
 # Cargo para um Ato pontual ou recorrente
 class Role(models.Model):
     name = models.CharField(_('Role name'), max_length=50,
@@ -408,7 +410,9 @@ class Project(models.Model):
   class Meta:
     verbose_name = _('project')
     verbose_name_plural = _('projects')
-   
+
+
+  
 # Ato Recorrente
 class Work(models.Model):
   project = models.OneToOneField(Project, blank=True, null=True)
@@ -544,6 +548,22 @@ class User(AbstractBaseUser):
   def has_perm(self, perm, obj=None):
     # Handle whether the user has a specific permission?"
     return True
+
+class Comment(models.Model):
+  project = models.ForeignKey(Project, null=False)
+  user = models.ForeignKey(User) 
+  comment = models.TextField()
+  created_date = models.DateTimeField(auto_now_add=True)
+  deleted = models.BooleanField(_("Deleted"), default=False)
+  deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
+
+  def delete(self, *args, **kwargs):
+    self.deleted = True
+    self.deleted_date = datetime.now()
+    self.save()
+
+  def __unicode__(self):
+    return "(%s) %s: %s" % (self.project.name, self.user.email, self.comment)
 
 class VolunteerResource(resources.ModelResource):
   nome = fields.Field()
