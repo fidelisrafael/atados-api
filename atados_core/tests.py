@@ -134,17 +134,18 @@ class CityTest(TestCase):
 class VolunteerTests(APITestCase):
 
   email = "test@test.com"
-  slug = "testtest"
+  slug = "test"
+  name="Test"
   password = "hello world"
 
   def test_volunteer_creation(self):
     """
     Test Volunteer Model.
     """
-    u = User(email=self.email, slug=self.slug)
+    u = User(email=self.email, slug=self.slug, name=self.name)
     v = Volunteer.create(u)
     self.assertTrue(isinstance(v, Volunteer))
-    self.assertEqual(v.__unicode__(), self.slug)
+    self.assertEqual(v.__unicode__(), self.name)
     self.assertEqual(v.get_type(), "VOLUNTEER");
     self.assertEqual(v.image_name("teste.jpg"), "volunteer/" + self.slug + "/" + self.slug + ".jpg")
 
