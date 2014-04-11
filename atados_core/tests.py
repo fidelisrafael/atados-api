@@ -71,7 +71,7 @@ class CommentTest(TestCase):
 
   def test_comment_creation(self):
     """
-    Tests Comment creation
+    Tests Comment creation.
     """
     u1 = User(email="test", slug="user1") 
     u1.save()
@@ -86,6 +86,25 @@ class CommentTest(TestCase):
     self.assertTrue(isinstance(c, Comment))
     self.assertEqual(c.__unicode__(), "(Project 1) email@gmail.com: Comment nro 1")
     self.assertTrue(c.created_date)
+
+  def test_comment_deletion(self):
+    """
+    Tests Comment deletion.
+    """
+    u1 = User(email="test", slug="user1") 
+    u1.save()
+    n = Nonprofit(user=u1)
+    n.save()
+    p = Project(name="Project 1", nonprofit=n)
+    p.save()
+    u = User(email="email@gmail.com", slug="email")
+    u.save()
+    c = self.create_comment(p, u, "Comment nro 1")
+    c.save()
+    c.delete()
+    self.assertTrue(c.deleted)
+    self.assertTrue(c.deleted_date)
+
 
 class CityTest(TestCase):
 
