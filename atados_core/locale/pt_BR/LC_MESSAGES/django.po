@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 14:29-0300\n"
+"POT-Creation-Date: 2014-04-11 10:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -201,11 +201,11 @@ msgstr "Publicado"
 msgid "Published date"
 msgstr "Publicado"
 
-#: models.py:248 models.py:345
+#: models.py:248 models.py:345 models.py:557
 msgid "Deleted"
 msgstr "Deletado"
 
-#: models.py:249 models.py:346
+#: models.py:249 models.py:346 models.py:558
 msgid "Deleted date"
 msgstr "Data deletado"
 

@@ -551,7 +551,7 @@ class User(AbstractBaseUser):
 
 class Comment(models.Model):
   project = models.ForeignKey(Project, null=False)
-  user = models.ForeignKey(User) 
+  user = models.ForeignKey(User, null=False) 
   comment = models.TextField()
   created_date = models.DateTimeField(auto_now_add=True)
   deleted = models.BooleanField(_("Deleted"), default=False)
@@ -559,7 +559,7 @@ class Comment(models.Model):
 
   def delete(self, *args, **kwargs):
     self.deleted = True
-    self.deleted_date = datetime.now()
+    self.deleted_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     self.save()
 
   def __unicode__(self):
