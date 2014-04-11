@@ -15,7 +15,6 @@ facepy==0.9
 feedparser==5.1.3
 nose==1.3.1
 pep8==1.4.6
-PIL==1.1.7
 psycopg2==2.5.2
 pyelasticsearch==0.6.1
 pygeocoder==1.2.2
