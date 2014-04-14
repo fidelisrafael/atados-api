@@ -36,7 +36,7 @@ class CauseTest(TestCase):
     self.assertTrue(isinstance(c, Cause))
     self.assertEqual(c.__unicode__(), self.cause)
 
-class SKillTest(TestCase):
+class SkillTest(TestCase):
 
   skill = "Direito"
 
@@ -148,7 +148,7 @@ class CityTest(TestCase):
 #    a = self.create_address()
 #    self.assertTrue(a.latitude != None)
 #    self.assertTrue(a.longitude != None)
-#
+
 # Views
 class VolunteerTests(APITestCase):
 
