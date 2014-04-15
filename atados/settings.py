@@ -25,6 +25,7 @@ if DEVELOPMENT:
 else: 
   ALLOWED_HOSTS = (
     '.atados.com.br',
+    '.portovoluntario.com.br'
   )
 
 ADMINS = (
@@ -310,6 +311,7 @@ else:
   CSRF_COOKIE_DOMAIN = ".atados.com.br"
   CORS_ORIGIN_WHITELIST = (
     'atados.com.br',
+    'portovoluntario.com.br'
   )
 
 PASSWORD_HASHERS = (
