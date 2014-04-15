@@ -178,14 +178,14 @@
   "pk": 2, 
   "model": "atados_core.cause", 
   "fields": {
-    "name": "Combate \u00e0 Pobreza e Desenvolvimento Comunit\u00e1rio"
+    "name": "Combate \u00e0 Pobreza"
   }
 },
 {
   "pk": 3, 
   "model": "atados_core.cause", 
   "fields": {
-    "name": "Consumo Consciente e Sustentabilidade"
+    "name": "Consumo Consciente"
   }
 },
 {
