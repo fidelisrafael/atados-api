@@ -282,7 +282,7 @@ class Nonprofit(models.Model):
         return self.name
 
     def get_projects(self):
-      return Project.objects.filter(nonprofit=self, deleted=False, published=True)
+      return Project.objects.filter(nonprofit=self, deleted=False)
 
     def get_address(self):
       return self.user.address
