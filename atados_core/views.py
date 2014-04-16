@@ -404,6 +404,7 @@ def save_project(request, format=None):
 
     obja = obj['address']
     if obja:
+      print obja
       address = project.address
       address.addressline = obja.get('addressline', '')
       address.addressline2 = obja.get('addressline2', '')
