@@ -13,10 +13,10 @@ else:
   TEMPLATE_DEBUG=DEBUG
 
 # Settings for when developing on local computer
-if os.environ.get('DJANGO_ENV') == 'development':
-  DEVELOPMENT=True
-else:
+if os.environ.get('DJANGO_ENV') == 'production':
   DEVELOPMENT=False
+else:
+  DEVELOPMENT=True
 
 if DEVELOPMENT:
   ALLOWED_HOSTS = (
