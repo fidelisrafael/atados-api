@@ -404,12 +404,12 @@ def save_project(request, format=None):
 
     obja = obj['address']
     address = project.address
-    address.addressline = obja['addressline']
+    address.addressline = obja.get('addressline', '')
     address.addressline2 = obja.get('addressline2', '')
-    address.addressnumber = obja['addressnumber']
-    address.neighborhood = obja['neighborhood']
-    address.zipcode = obja['zipcode']
-    address.city = City.objects.get(id=obja['city'])
+    address.addressnumber = obja.get('addressnumber', '')
+    address.neighborhood = obja.get('neighborhood', '')
+    address.zipcode = obja.get('zipcode', '')
+    address.city = City.objects.get(id=obja.get('city', None))
     address.save()
 
     roles = obj['roles']
