@@ -7,6 +7,9 @@ from rest_framework.test import APITestCase
 from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit, Address
 from atados_core import views
 
+import pytz
+from datetime import datetime
+
 # Models
 class AvailabilityTest(TestCase):
 
@@ -64,6 +67,32 @@ class StateTest(TestCase):
     self.assertTrue(isinstance(s, State))
     self.assertEqual(s.__unicode__(), "Rio de Janeiro")
 
+def datesAreEqual(d1, d2):
+  return d1.year == d2.year and d1.month == d2.month and d1.day == d2.day \
+         and d1.hour == d2.hour and d1.minute == d2.minute
+
+class ProjectTest(TestCase):
+
+  def create_project(self, nonprofit):
+    project = Project(nonprofit=nonprofit)
+    project.save()
+    return project
+
+  def test_project_creation(self):
+    """
+    Tests Project creation.
+    """
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    p = self.create_project(n)
+    now = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+    self.assertTrue(isinstance(p, Project))
+    self.assertEqual(p.__unicode__(), " - ")
+    self.assertTrue(datesAreEqual(p.created_date, now))
+    self.assertTrue(datesAreEqual(p.modified_date, now))
+
 class CommentTest(TestCase):
 
   def create_comment(self, project, user, comment):
@@ -83,9 +112,10 @@ class CommentTest(TestCase):
     u.save()
     c = self.create_comment(p, u, "Comment nro 1")
     c.save()
+    now = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     self.assertTrue(isinstance(c, Comment))
     self.assertEqual(c.__unicode__(), "(Project 1) email@gmail.com: Comment nro 1")
-    self.assertTrue(c.created_date)
+    self.assertTrue(datesAreEqual(c.created_date, now))
 
   def test_comment_deletion(self):
     """
@@ -150,7 +180,7 @@ class AddressTest(TestCase):
     self.assertTrue(a.longitude != 0.0)
 
 # Views
-class VolunteerTests(APITestCase):
+class VolunteerViewsTest(APITestCase):
 
   email = "test@test.com"
   slug = "test"
