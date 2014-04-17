@@ -42,15 +42,7 @@ DATABASES = {
       'PASSWORD': os.environ.get('ATADOS_DB_PASSWORD', ''),
       'HOST': os.environ.get('ATADOS_DB_HOSTNAME', ''),
       'PORT': os.environ.get('ATADOS_DB_PORT', ''),
-    },
-    'legacy': {                                                   
-      'ENGINE': 'django.db.backends.mysql',                     
-      'NAME': os.environ.get('LEGACY_DB_NAME', 'atados.sqlite'),
-      'USER': os.environ.get('LEGACY_USERNAME', ''),            
-      'PASSWORD': os.environ.get('LEGACY_PASSWORD', ''),        
-      'HOST': os.environ.get('LEGACY_HOSTNAME', ''),            
-      'PORT': os.environ.get('LEGACY_PORT', ''),                
-    }                                                             
+    }
 }
 
 if 'test' in sys.argv:
