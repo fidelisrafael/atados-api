@@ -6,7 +6,7 @@ db:
 	@python ./manage.py migrate
 
 install:
-	@pip install -r requirements.txt -q --use-mirrors
+	@pip install -r requirements.txt
 	@python ./manage.py syncdb --noinput
 	@python ./manage.py migrate
 
