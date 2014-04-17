@@ -3,7 +3,9 @@ python:
   - 2.7
 
 install:
-  - make install
+  - pip install -r requirements.txt -q --use-mirrors
+  - python ./manage.py syncdb --noinput             
+  - python ./manage.py migrate                      
 
 script:
   - make test
