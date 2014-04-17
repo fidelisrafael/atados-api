@@ -1,4 +1,4 @@
-# [Atados v0.4.0](http://www.atados.com.br) [![Build Status](https://travis-ci.org/atados/atados.png?branch=master)](https://travis-ci.org/atados/atados) [![Coverage Status](https://coveralls.io/repos/atados/atados/badge.png?branch=master)](https://coveralls.io/r/atados/atados) [![Dependency Status](https://gemnasium.com/atados/atados.png)](https://gemnasium.com/atados/atados)
+# [Atados API](http://www.atados.com.br) [![Build Status](https://travis-ci.org/atados/atados.png?branch=master)](https://travis-ci.org/atados/atados) [![Coverage Status](https://coveralls.io/repos/atados/atados/badge.png?branch=master)](https://coveralls.io/r/atados/atados) [![Dependency Status](https://gemnasium.com/atados/atados.png)](https://gemnasium.com/atados/atados)
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
 encontram oportunidades de voluntariado.
