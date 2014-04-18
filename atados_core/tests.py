@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from rest_framework import status
 from rest_framework.test import APIRequestFactory
+from rest_framework.test import force_authenticate
 from rest_framework.test import APITestCase
 
 from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit, Address
@@ -71,27 +72,164 @@ def datesAreEqual(d1, d2):
   return d1.year == d2.year and d1.month == d2.month and d1.day == d2.day \
          and d1.hour == d2.hour and d1.minute == d2.minute
 
-class ProjectTest(TestCase):
+class ProjectTest(APITestCase):
+  fixtures = ['causes_skills.json']
 
-  def create_project(self, nonprofit):
-    project = Project(nonprofit=nonprofit)
+  def create_project(self, nonprofit, name):
+    project = Project(nonprofit=nonprofit, name=name)
     project.save()
     return project
 
-  def test_project_creation(self):
+  def test_project_date_creation(self):
     """
-    Tests Project creation.
+    Tests Project date creation.
     """
+    u = User()
+    u.save()
+    n = Nonprofit(user=u, name="Nonprofit 1")
+    n.save()
+    p = self.create_project(n, "Project 1")
+    now = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+    self.assertTrue(isinstance(p, Project))
+    self.assertEqual(p.__unicode__(), "Project 1 - Nonprofit 1")
+    self.assertTrue(datesAreEqual(p.created_date, now))
+    self.assertTrue(datesAreEqual(p.modified_date, now))
+
+  def test_project_date_editing(self):
+    """
+    Tests Project date editing.
+    """
+    u = User()
+    u.save()
+    n = Nonprofit(user=u, name="Nonprofit 1")
+    n.save()
+    p = self.create_project(n, "Project 1")
+    self.assertEqual(p.__unicode__(), "Project 1 - Nonprofit 1")
+    p.name = "Project 2"
+    p.save()
+    now = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+    self.assertTrue(datesAreEqual(p.modified_date, now))
+    self.assertEqual(p.__unicode__(), "Project 2 - Nonprofit 1")
+
+  def test_create_project_view_bad_request(self):
+    """
+    Project with bad data being sent.
+    """
+    factory = APIRequestFactory()
+    request = factory.post("/create/project/", {"project": ""})
     u = User()
     u.save()
     n = Nonprofit(user=u)
     n.save()
-    p = self.create_project(n)
-    now = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
-    self.assertTrue(isinstance(p, Project))
-    self.assertEqual(p.__unicode__(), " - ")
-    self.assertTrue(datesAreEqual(p.created_date, now))
-    self.assertTrue(datesAreEqual(p.modified_date, now))
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+  def test_create_project_view_not_authenticated(self):
+    """
+    Project with no authenticated user.
+    """
+    factory = APIRequestFactory()
+    request = factory.post("/create/project/", {"project": ""})
+    response = views.create_project(request)
+    self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+  def test_create_project_view_not_nonprofit_authenticated(self):
+    """
+    Project with user that is not nonprofit.
+    """
+    factory = APIRequestFactory()
+    request = factory.post("/create/project/", {"project": ""})
+    u = User()
+    u.save()
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+  def test_create_project_view_with_only_required_fields_but_no_work_or_job(self):
+    """
+    Project with only required fields but no work or job.
+    """
+    factory = APIRequestFactory()
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjor',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2]
+    }
+    request = factory.post("/create/project/", {'project': project})
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.data, {'detail': 'Needs to have project or work.'})
+    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+  def test_create_project_view_with_only_required_fields_work(self):
+    """
+    Project work with only required fields and no availabilites.
+    """
+    factory = APIRequestFactory()
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjor',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2],
+      'work': {
+        'weekly_hours': 1,
+        'can_be_done_remotely': True
+      }
+    }
+    request = factory.post("/create/project/", {'project': project})
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+  def test_create_project_view_with_only_required_fields_job(self):
+    """
+    Project job with only required fields and no availabilites.
+    """
+    factory = APIRequestFactory()
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjor',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2],
+      'job': {
+        'start_date': 20140416,
+        'end_date': 20140417
+      }
+    }
+    request = factory.post("/create/project/", {'project': project})
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+
 
 class CommentTest(TestCase):
 
@@ -179,8 +317,7 @@ class AddressTest(TestCase):
     self.assertTrue(a.latitude != 0.0)
     self.assertTrue(a.longitude != 0.0)
 
-# Views
-class VolunteerViewsTest(APITestCase):
+class VolunteerTest(APITestCase):
 
   email = "test@test.com"
   slug = "test"
@@ -206,8 +343,8 @@ class VolunteerViewsTest(APITestCase):
     factory = APIRequestFactory()
     request = factory.post("/create/volunteer/", {"slug": self.slug, "email": self.email, "password": self.password})
     response = views.create_volunteer(request)
-    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     self.assertEqual(response.data, {'detail': 'Volunteer succesfully created.'})
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     user = User.objects.get(email=self.email)
     volunteer = user.volunteer
     self.assertEqual(volunteer.user.email, user.email)

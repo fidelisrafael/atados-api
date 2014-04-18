@@ -12,6 +12,7 @@ from django.utils.encoding import iri_to_uri
 from django.utils import timezone
 from datetime import datetime
 from datetime import timedelta
+import pytz
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -46,7 +47,7 @@ def current_user(request, format=None):
       try:
         return Response(NonprofitSerializer(request.user.nonprofit).data)
       except Exception as e:
-        print e
+        print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
         return  Response({"There was an error in our servers. Please contact us if the problem persists."}, status.HTTP_404_NOT_FOUND)
 
   return Response({"No user logged in."}, status.HTTP_400_BAD_REQUEST)
@@ -101,6 +102,7 @@ def facebook_auth(request, format=None):
     graph = facebook.GraphAPI(accessToken)
     me = graph.get("me")
   except facebook.FacepyError as e:
+    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({"We don't have permissions to log in the user."}, status.HTTP_403_FORBIDDEN)
 
   volunteer = Volunteer.objects.filter(facebook_uid=userID)
@@ -293,47 +295,33 @@ def create_project_slug(name):
 
 @api_view(['POST'])
 def create_project(request, format=None):
-  if not request.user.is_authenticated() or not request.user.nonprofit:
-    return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
+  # Need a nonprofit user
+  try:
+    request.user.nonprofit
+  except Exception as e:
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
-  obj = json.loads(request.DATA['project'])
+  try:
+    obj = json.loads(request.DATA['project'])
+  except:
+    obj = request.DATA['project']
+
   project = Project()
   try:
+    # Getting required field
+    project.nonprofit = request.user.nonprofit
     project.name = obj['name']
-    project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit'])
     project.slug = create_project_slug(project.name)
     project.details = obj['details']
     project.description = obj['description']
-    project.facebook_event = obj.get('facebook_event', None)
     project.responsible = obj['responsible']
     project.phone = obj['phone']
     project.email = obj['email']
     project.save()
-    obja = obj['address']
-    address = Address()
-    address.addressline = obja['addressline']
-    address.addressline2 = obja['addressline2']
-    address.addressnumber = obja['addressnumber']
-    address.neighborhood = obja['neighborhood']
-    address.zipcode = obja['zipcode']
-    address.city = City.objects.get(id=obja['city']['id'])
-    address.save()
-    project.address = address
-    project.image = request.FILES.get('image')
-
-    roles = obj['roles']
-    for r in roles:
-      role = Role()
-      role.name = r['name']
-      role.prerequisites = r['prerequisites']
-      role.details = r['details']
-      role.vacancies = r['vacancies']
-      role.save()
-      project.roles.add(role)
 
     skills = obj['skills']
     for s in skills:
-      print s
       project.skills.add(Skill.objects.get(id=s))
 
     causes = obj['causes']
@@ -343,29 +331,72 @@ def create_project(request, format=None):
     if obj.get('work', None):
       work =  Work()
       work.project = project
-      work.weekly_hours = obj['work']['weekly_hours']
-      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+      work.weekly_hours = obj['work'].get('weekly_hours', 0)
+      work.can_be_done_remotely = obj['work'].get('can_be_done_remotely', False)
       work.save()
-      availabilities = obj['work']['availabilities']
-      for a in availabilities:
-        availability = Availability()
-        availability.weekday = a['weekday']
-        availability.period = a['period']
-        availability.save()
-        work.availabilities.add(availability)
+
+      availabilities = obj['work'].get('availabilities', None)
+      if availabilities:
+        for a in availabilities:
+          availability = Availability()
+          availability.weekday = a['weekday']
+          availability.period = a['period']
+          availability.save()
+          work.availabilities.add(availability)
       work.save()
     elif obj.get('job', None):
       job = Job()
       job.project = project
-      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
-      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       job.save()
 
+    has_work = False
+    has_job = False
+    try:
+      project.work
+      has_work = True
+    except:
+      pass
+    try:
+      project.job
+      has_job = True
+    except:
+      pass
+
+    if not has_job and not has_work:
+      return Response({'detail': 'Needs to have project or work.'}, status.HTTP_400_BAD_REQUEST) 
+
+    # Doing not required fields
+    try:
+      project.facebook_event = obj.get('facebook_event', None)
+      obja = obj['address']
+      project.address = Address()
+      project.address.addressline = obja['addressline']
+      project.address.addressline2 = obja['addressline2']
+      project.address.addressnumber = obja['addressnumber']
+      project.address.neighborhood = obja['neighborhood']
+      project.address.zipcode = obja['zipcode']
+      project.address.city = City.objects.get(id=obja['city']['id'])
+      project.address.save()
+      project.image = request.FILES.get('image')
+      roles = obj['roles']
+      for r in roles:
+        role = Role()
+        role.name = r['name']
+        role.prerequisites = r['prerequisites']
+        role.details = r['details']
+        role.vacancies = r['vacancies']
+        role.save()
+        project.roles.add(role)
+    except:
+      pass
+      
     project.save()
 
   except Exception as e:
-    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({'detail': error}, status.HTTP_400_BAD_REQUEST) 
 
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
 
@@ -511,8 +542,7 @@ def save_project(request, format=None):
     project.save()
 
   except Exception as e:
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    print(e, exc_tb.tb_lineno)
+    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
 
   return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED) 
@@ -623,7 +653,7 @@ def startup(request, format=None):
 
     return Response(data, status.HTTP_200_OK)
   except Exception as e:
-    print e
+    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({"Something went wrong on the models lookup."}, status.HTTP_400_BAD_REQUEST) 
 
 @api_view(['GET'])
@@ -814,7 +844,7 @@ def clone_project(request, project_slug, format=None):
       project.save()
       return Response(ProjectSerializer(project).data, status.HTTP_200_OK)
     except Exception as e:
-      print e
+      print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
       return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error cloning the project."}, status.HTTP_400_BAD_REQUEST)
 
@@ -826,7 +856,7 @@ def export_project_csv(request, project_slug, format=None):
       data = VolunteerResource().export(project.get_volunteers()).csv
       return Response({'volunteers': data}, status.HTTP_200_OK)
     except Exception as e:
-      print e
+      print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
       return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
 
