@@ -39,12 +39,11 @@ class ProjectAdmin(admin.ModelAdmin):
   list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'address', 'created_date')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['name', 'description', 'published', 'closed']
-  search_fields = ['name', 'slug', 'nonprofit']
+  search_fields = ['name', 'slug']
   raw_id_fields = ['address', 'roles']
   filter_horizontal = ['causes', 'skills']
   related_lookup_fields = {
-    'address': ['address'],
-    'roles': ['role']
+    'address': ['address']
   }
 
   readonly_fields = ['url', 'image_tag']
