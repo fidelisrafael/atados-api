@@ -1,5 +1,5 @@
 Celery==3.1.11
-Django==1.6.2
+Django==1.6.3
 Pillow==2.4.0
 South==0.8.4
 boto==2.27.0
