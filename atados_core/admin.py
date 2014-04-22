@@ -27,12 +27,28 @@ class NonprofitAdmin(admin.ModelAdmin):
 
 class UserInline(admin.TabularInline):
     model = User
+class ProjectInline(admin.TabularInline):
+    model = Project
+
 class AddressAdmin(admin.ModelAdmin):
-  list_display = ('id', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
+  list_display = ('object', 'id', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
   search_fields = ['id']
   inlines = [
     UserInline,
+    ProjectInline
   ]
+
+  def object(self, instance):
+    try:
+      project = instance.project
+      return "%s" % ("(Ato) ", project)
+    except:
+      try:
+        user = instance.user
+        return u"(Usuario) %s" % user
+      except:
+        company = instance.company
+        return "%s" % ("(Empresa) ", company)
 
 class ProjectAdmin(admin.ModelAdmin):
 
