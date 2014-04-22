@@ -57,11 +57,11 @@ class AddressAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
 
   fields = (('name', 'slug'), 'url',
-        'nonprofit__id', 'description', 'details', 'highlighted', 'image', 'image_tag',
+        'nonprofit', 'description', 'details', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
-        'address', 'roles', 'skills', 'causes')
-  list_display = ('id', 'name', 'slug', 'nonprofit__id', 'description', 'published', 'closed', 'deleted', 'created_date')
+        'roles', 'skills', 'causes')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['name', 'description', 'published', 'closed']
   search_fields = ['name', 'slug']
