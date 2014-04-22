@@ -334,7 +334,7 @@ class Role(models.Model):
       verbose_name_plural = _('roles')
 
     def __unicode__(self):
-      return  '(%s vagas) %s' % (self.vacancies, self.name)
+      return  '%s - %s - %s (%s vagas)' % (self.name, self.details, self.prerequisites, self.vacancies)
 
 class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)

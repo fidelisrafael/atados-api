@@ -25,9 +25,14 @@ class NonprofitAdmin(admin.ModelAdmin):
       queryset.update(published=True)
   make_published.short_description = _("Mark selected stories as published")
 
+class UserInline(admin.TabularInline):
+    model = User
 class AddressAdmin(admin.ModelAdmin):
-  list_display = ('id', 'city', 'latitude', 'longitude', 'addressline')
+  list_display = ('id', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
   search_fields = ['id']
+  inlines = [
+    UserInline,
+  ]
 
 class ProjectAdmin(admin.ModelAdmin):
 
@@ -40,8 +45,8 @@ class ProjectAdmin(admin.ModelAdmin):
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['name', 'description', 'published', 'closed']
   search_fields = ['name', 'slug']
-  raw_id_fields = ['address', 'roles']
-  filter_horizontal = ['causes', 'skills']
+  # raw_id_fields = ['address', 'roles']
+  filter_horizontal = ['causes', 'skills', 'roles']
   related_lookup_fields = {
     'address': ['address']
   }
