@@ -235,12 +235,22 @@ class Nonprofit(models.Model):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit/%s.%s' % (self.user.slug, extension)
 
+    def image_tag(self):
+        return u'<img src="%s" />' % self.image.url
+    image_tag.short_description = 'Logo 200x200'
+    image_tag.allow_tags = True
+
     def cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
 
-    image = models.ImageField(upload_to=image_name, blank=True, null=True, default=None)
-    cover = models.ImageField(upload_to=cover_name, blank=True, null=True, default=None)
+    def cover_tag(self):
+        return u'<img src="%s" />' % self.cover.url
+    cover_tag.short_description = 'Cover 1450x340'
+    cover_tag.allow_tags = True
+
+    image = models.ImageField(_("Logo 200x200"), upload_to=image_name, blank=True, null=True, default=None)
+    cover = models.ImageField(_("Cover 1450x340"),upload_to=cover_name, blank=True, null=True, default=None)
 
     highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
     published = models.BooleanField(_("Published"), default=False)
@@ -363,7 +373,13 @@ class Project(models.Model):
     left_path, extension = filename.rsplit('.', 1)
     return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
 
-  image = models.ImageField(upload_to=image_name, blank=True,
+  def image_tag(self):
+        return u'<img src="%s" />' % self.image.url
+  image_tag.short_description = 'Image 350x260'
+  image_tag.allow_tags = True
+
+
+  image = models.ImageField(_('Image 350x260'), upload_to=image_name, blank=True,
                      null=True, default=None)
 
   def get_volunteers(self):
