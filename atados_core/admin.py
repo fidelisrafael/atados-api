@@ -24,12 +24,12 @@ class AddressAdmin(admin.ModelAdmin):
   search_fields = ['id']
 
 class ProjectAdmin(admin.ModelAdmin):
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'address')
-  list_filter = ('published', 'deleted')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'address', 'created_date')
+  list_filter = ('published', 'deleted', 'closed')
   search_fields = ['name', 'slug', 'nonprofit']
-  raw_id_fields = ['address', 'roles']
+  raw_id_fields = ['address']
   related_lookup_fields = {
-    'address': ['address'],
+    'address': ['address']
   }
 
 class UserAdmin(admin.ModelAdmin):
