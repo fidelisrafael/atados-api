@@ -10,7 +10,7 @@ from atados import settings
 from django.utils.translation import ugettext_lazy as _
 
 class NonprofitAdmin(admin.ModelAdmin):
-  list_display = ('id', 'name', 'description', 'published', 'deleted', 'get_address')
+  list_display = ('id', 'name', 'description', 'published', 'deleted', 'get_address', 'created_date')
   list_filter = ('published', 'deleted')
   search_fields = ['name']
   actions = ['make_published']
