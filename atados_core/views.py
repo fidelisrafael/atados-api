@@ -402,19 +402,27 @@ def create_project(request, format=None):
 
 @api_view(['PUT'])
 def save_project(request, format=None):
-  if not request.user.is_authenticated() or not request.user.nonprofit:
-    return Response({"User not authenticated."}, status.HTTP_403_FORBIDDEN)
+  # Need a nonprofit user
+  try:
+    request.user.nonprofit
+  except Exception as e:
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
-  obj = request.DATA['project']
+  try:
+    obj = json.loads(request.DATA['project'])
+  except:
+    obj = request.DATA['project']
+
   project = Project.objects.get(id=obj['id'])
 
   try:
     project.name = obj['name']
     slug = create_project_slug(obj['name'])
     # Renaming the image file if the slug has changed
-    if slug != project.slug:
+    if slug != project.slug and project.image.name:
       c = boto.connect_s3()
-      bucket = c.get_bucket('atadosapp')
+      bucket = c.get_bucket('atadosapp') 
       k = bucket.get_key(project.image.name)
       if k:
         name = "project/%s/%s.jpg" % (project.nonprofit.user.slug, obj['slug'])
@@ -423,7 +431,7 @@ def save_project(request, format=None):
           k.delete()
           project.image.name = name;
       else:
-        return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
+        return Response({'detail': 'Could not get boto key to change project image name on S3.'}, status.HTTP_400_BAD_REQUEST)
 
     project.slug = slug
     project.details = obj['details']
@@ -433,7 +441,7 @@ def save_project(request, format=None):
     project.phone = obj['phone']
     project.email = obj['email']
 
-    obja = obj['address']
+    obja = obj.get('address', None)
     if obja:
       if project.address:
         address = project.address
@@ -447,7 +455,7 @@ def save_project(request, format=None):
       address.city = City.objects.get(id=obja.get('city', None))
       address.save()
 
-    roles = obj['roles']
+    roles = obj.get('roles', [])
 
     # Remove the roles that were deleted
     for pr in project.roles.all():
@@ -477,7 +485,7 @@ def save_project(request, format=None):
       project.roles.add(role)
 
     # Removing all skills then adding new ones
-    skills = obj['skills']
+    skills = obj.get('skills', [])
     for s in project.skills.all():
       project.skills.remove(s)
 
@@ -485,7 +493,7 @@ def save_project(request, format=None):
       project.skills.add(Skill.objects.get(id=s))
 
     # Removing all causes then adding new ones
-    causes = obj['causes']
+    causes = obj.get('causes', None)
     for c in project.causes.all():
       project.causes.remove(c)
 
@@ -530,8 +538,8 @@ def save_project(request, format=None):
       except:
         job = Job()
         job.project = project
-      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000)
-      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000)
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       job.save()
       try:
         project.work.delete()
@@ -542,8 +550,8 @@ def save_project(request, format=None):
     project.save()
 
   except Exception as e:
-    print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({'detail': 'Something went wrong..'}, status.HTTP_400_BAD_REQUEST) 
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
   return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED) 
 

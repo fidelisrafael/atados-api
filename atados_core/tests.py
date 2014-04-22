@@ -72,7 +72,7 @@ def datesAreEqual(d1, d2):
   return d1.year == d2.year and d1.month == d2.month and d1.day == d2.day \
          and d1.hour == d2.hour and d1.minute == d2.minute
 
-class ProjectTest(APITestCase):
+class ProjectCreateTest(APITestCase):
   fixtures = ['causes_skills.json']
 
   def create_project(self, nonprofit, name):
@@ -229,6 +229,40 @@ class ProjectTest(APITestCase):
     self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+class ProjectEditTest(APITestCase):
+  fixtures = ['causes_skills.json']
+
+  def test_edit_project_view_with_only_required_fields_job(self):
+    """
+    Project edit job with only required fields and no availabilites.
+    """
+    factory = APIRequestFactory()
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjori',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2],
+      'job': {
+        'start_date': 20140416,
+        'end_date': 20140417
+      },
+      'nonprofit': 1
+    }
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    p = Project(nonprofit=n, name=project['name'], slug="name", details=project['details'])
+    p.save()
+    project['id'] = p.id
+    request = factory.put("/save/project/", {'project': project})
+    force_authenticate(request, user=u)
+    response = views.save_project(request)
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class CommentTest(TestCase):
