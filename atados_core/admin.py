@@ -1,5 +1,5 @@
 from django.contrib import admin
-from atados_core.models import Nonprofit, Project, User, Address, Role
+from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.util import lookup_field
@@ -11,12 +11,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['user', 'name', 'url', 'description', 'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
-  list_display = ['id', 'name', 'description', 'published', 'deleted', 'get_address', 'created_date']
+  fields = ['id', 'name', 'url', 'description', 'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
+  list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date']
   list_filter = ('published', 'deleted')
   search_fields = ['name']
   actions = ['make_published']
-  readonly_fields = ['url', 'image_tag', 'cover_tag']
+  readonly_fields = ['id', 'url', 'image_tag', 'cover_tag']
 
   def url(self, instance):
    return format_html("<a href='https://www.atados.com.br/ong/{0}/' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
@@ -29,6 +29,10 @@ class UserInline(admin.TabularInline):
     model = User
 class ProjectInline(admin.TabularInline):
     model = Project
+class WorkInline(admin.TabularInline):
+    model = Work
+class JobInline(admin.TabularInline):
+    model = Job
 
 class AddressAdmin(admin.ModelAdmin):
   list_display = ('object', 'id', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
@@ -53,19 +57,15 @@ class AddressAdmin(admin.ModelAdmin):
 class ProjectAdmin(admin.ModelAdmin):
 
   fields = (('name', 'slug'), 'url',
-        'nonprofit', 'description', 'details', 'highlighted', 'image', 'image_tag',
+        'nonprofit__id', 'description', 'details', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'address', 'roles', 'skills', 'causes')
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'address', 'created_date')
+  list_display = ('id', 'name', 'slug', 'nonprofit__id', 'description', 'published', 'closed', 'deleted', 'created_date')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['name', 'description', 'published', 'closed']
   search_fields = ['name', 'slug']
-  # raw_id_fields = ['address', 'roles']
-  filter_horizontal = ['causes', 'skills', 'roles']
-  related_lookup_fields = {
-    'address': ['address']
-  }
+  # filter_horizontal = ['causes', 'skills', 'roles']
 
   readonly_fields = ['url', 'image_tag']
 
@@ -82,7 +82,8 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Role)
-
+admin.site.register(Work)
+admin.site.register(Job)
 
 
 def export_as_xls(modeladmin, request, queryset):

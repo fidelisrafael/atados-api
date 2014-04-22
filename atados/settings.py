@@ -96,6 +96,7 @@ MIDDLEWARE_CLASSES = (
   'django.middleware.gzip.GZipMiddleware',
   'django.middleware.http.ConditionalGetMiddleware',
   'corsheaders.middleware.CorsMiddleware',
+  'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'atados.urls'
