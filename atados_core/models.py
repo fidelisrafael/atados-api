@@ -357,7 +357,7 @@ class Project(models.Model):
 
   legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
-  companies = models.ManyToManyField(Company)
+  companies = models.ManyToManyField(Company, blank=True, null=True)
 
   def image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
