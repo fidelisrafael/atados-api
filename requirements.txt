@@ -26,5 +26,5 @@ pyelasticsearch==0.6.1
 pygeocoder==1.2.4
 python-dateutil==2.2
 python-memcached==1.53
-pytz==2014.1.1
+pytz==2014.2
 sorl-thumbnail==11.12
