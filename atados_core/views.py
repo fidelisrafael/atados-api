@@ -899,6 +899,7 @@ class PortoSegutoProjectList(generics.ListAPIView):
     return Project.objects.filter(deleted=False, closed=False, published=True, companies=porto_seguro).order_by('?')
 
 
+@cache_control(must_revalidate=True, max_age=1200)
 class ProjectList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer
   permission_classes = [AllowAny]
@@ -929,6 +930,7 @@ class ProjectList(generics.ListAPIView):
 
     return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('?')
 
+@cache_control(must_revalidate=True, max_age=1200)
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
   permission_classes = [AllowAny]
