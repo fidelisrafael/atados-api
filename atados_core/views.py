@@ -1,40 +1,40 @@
 # -*- coding: utf-8 -*- 
 
+import boto
 import facepy as facebook
 import json
+import pytz
 import sys
 import urllib2                                       
-import boto
+
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
+from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer
+from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
+
+from datetime import datetime
+from datetime import timedelta
 
 from django.core.files import File                   
 from django.core.files.temp import NamedTemporaryFile
-from django.utils.encoding import iri_to_uri         
-from django.utils import timezone
-from datetime import datetime
-from datetime import timedelta
-import pytz
-
 from django.core.mail import EmailMultiAlternatives
-from django.template.loader import get_template
-from django.template import Context
 from django.http import Http404
+from django.template import Context
 from django.template.defaultfilters import slugify
+from django.template.loader import get_template
+from django.utils import timezone
+from django.utils.encoding import iri_to_uri         
+from django.views.decorators.cache import cache_control
 
 from haystack.query import SearchQuerySet
 
 from provider.oauth2.views import AccessToken, Client
 
-from rest_framework import viewsets, status
 from rest_framework import generics
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
-
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
-from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer
-from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
-
-from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
 
 @api_view(['GET'])
 def current_user(request, format=None):
@@ -636,6 +636,7 @@ def numbers(request, format=None):
   numbers['nonprofits'] = Nonprofit.objects.filter(published=True).count()
   return Response(numbers, status.HTTP_200_OK)
 
+@cache_control(must_revalidate=True, max_age=1200)
 @api_view(['GET'])
 def startup(request, format=None):
   data = {}
