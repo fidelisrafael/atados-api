@@ -949,7 +949,7 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
 
-    return Nonprofit.objects.filter(pk__in=results).order_by('?')
+    return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?')
 
 
 class VolunteerProjectList(generics.ListAPIView):
