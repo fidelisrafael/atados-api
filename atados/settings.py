@@ -7,16 +7,19 @@ PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
 if os.environ.get('ATADOS_ENV') == 'debug':
   DEBUG=True
-  TEMPLATE_DEBUG=DEBUG
 else:
   DEBUG=False
-  TEMPLATE_DEBUG=DEBUG
+
+TEMPLATE_DEBUG=DEBUG
 
 # Settings for when developing on local computer
 if os.environ.get('DJANGO_ENV') == 'production':
   DEVELOPMENT=False
 else:
   DEVELOPMENT=True
+
+print "Development mode: %s" % DEVELOPMENT
+print "Debug mode: %s" % DEBUG
 
 if DEVELOPMENT:
   ALLOWED_HOSTS = (
@@ -42,6 +45,14 @@ DATABASES = {
       'PASSWORD': os.environ.get('ATADOS_DB_PASSWORD', ''),
       'HOST': os.environ.get('ATADOS_DB_HOSTNAME', ''),
       'PORT': os.environ.get('ATADOS_DB_PORT', ''),
+    },
+    'legacy_local': {
+      'ENGINE': 'django.db.backends.mysql',
+      'NAME': os.environ.get('LEGACY_DB_NAME', ''),
+      'USER': os.environ.get('LEGACY_USERNAME', ''),
+      'PASSWORD': os.environ.get('LEGACY_PASSWORD', ''),
+      'HOST': os.environ.get('LEGACY_HOSTNAME', 'localhost'),
+      'PORT': '3306',
     }
 }
 
@@ -136,6 +147,23 @@ INSTALLED_APPS = (
     'djcelery',
 )
 
+
+DEBUG_TOOLBAR_PANELS = [
+    # 'debug_toolbar.panels.settings.SettingsPanel',
+    # 'debug_toolbar.panels.templates.TemplatesPanel',
+    # 'debug_toolbar.panels.versions.VersionsPanel',
+    'debug_toolbar.panels.cache.CachePanel',
+    'debug_toolbar.panels.headers.HeadersPanel',
+    'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.profiling.ProfilingPanel',
+    'debug_toolbar.panels.redirects.RedirectsPanel',
+    'debug_toolbar.panels.request.RequestPanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+    'debug_toolbar.panels.timer.TimerPanel',
+]
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -188,7 +216,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage' if not DEVELOPMENT else 'django.core.files.storage.FileSystemStorage'
 
 if all (var in os.environ for var in ('AWS_STORAGE_BUCKET_NAME',
                                       'AWS_ACCESS_KEY_ID',
