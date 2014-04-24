@@ -11,7 +11,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['id', 'name', 'url', 'description', 'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
+  fields = ['id', 'name', 'url', 'description',
+        ('published', 'deleted'),
+          'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
   list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date']
   list_filter = ('published', 'deleted')
   search_fields = ['name']
