@@ -20,20 +20,29 @@ class Command(BaseCommand):
 
     nonprofit.user.slug = new_slug
 
-    top_level, image = nonprofit.image.name.rsplit('/', 1)
-    name, extension = nonprofit.image.name.rsplit('.', 1)
-    nonprofit.image.name = "%s/%s.%s" % (top_level, new_slug, extension)
+    try:
+        top_level, image = nonprofit.image.name.rsplit('/', 1)
+        name, extension = nonprofit.image.name.rsplit('.', 1)
+        nonprofit.image.name = "%s/%s.%s" % (top_level, new_slug, extension)
+    except:
+        pass
 
-    top_level, image = nonprofit.cover.name.rsplit('/', 1)
-    name, extension = nonprofit.cover.name.rsplit('.', 1)
-    nonprofit.cover.name = "%s/%s.%s" % (top_level, new_slug, extension)
+    try:
+        top_level, image = nonprofit.cover.name.rsplit('/', 1)
+        name, extension = nonprofit.cover.name.rsplit('.', 1)
+        nonprofit.cover.name = "%s/%s.%s" % (top_level, new_slug, extension)
+    except:
+        pass
 
     projects = Project.objects.filter(nonprofit=nonprofit)
     for p in projects:
-      top_level, image = p.image.name.rsplit('/', 1)
-      project_folder, slug = top_level.rsplit('/', 1)
-      p.image.name = "%s/%s/%s" % (project_folder, new_slug, image)
-      p.save()
+        try:
+            top_level, image = p.image.name.rsplit('/', 1)
+            project_folder, slug = top_level.rsplit('/', 1)
+            p.image.name = "%s/%s/%s" % (project_folder, new_slug, image)
+            p.save()
+        except:
+            pass
     nonprofit.save()
     nonprofit.user.save()
     self.stdout.write('Successfully changed from %s to %s ' % (old_slug, new_slug))
