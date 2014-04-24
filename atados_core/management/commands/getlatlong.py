@@ -5,7 +5,7 @@ from atados_core.models import Project, Address
 from pygeocoder import Geocoder
 
 class Command(BaseCommand):
-  help = 'Read address from csv and get latitude and longitude from google'
+  help = 'Fix latitude and longitude from google on project address'
 
   def handle(self, *args, **options):
     ids = Project.objects.values_list('address_id', flat=True)
