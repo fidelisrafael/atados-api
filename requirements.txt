@@ -16,6 +16,7 @@ django-nose==1.2
 django-oauth2-provider==0.2.6
 django-storages==1.1.8
 djangorestframework==2.3.13
+django-rest-swagger==0.1.14
 facepy==0.9
 feedparser==5.1.3
 nose==1.3.1
