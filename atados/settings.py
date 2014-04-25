@@ -45,16 +45,18 @@ DATABASES = {
       'PASSWORD': os.environ.get('ATADOS_DB_PASSWORD', ''),
       'HOST': os.environ.get('ATADOS_DB_HOSTNAME', ''),
       'PORT': os.environ.get('ATADOS_DB_PORT', ''),
-    },
-    'legacy_local': {
-      'ENGINE': 'django.db.backends.mysql' if 'DEBUG' else 'django.db.backends.sqlite3',
+    }
+}
+
+if DEBUG and DEVELOPMENT:
+    DATABASES['legacy_local'] = {
+      'ENGINE': 'django.db.backends.mysql',
       'NAME': os.environ.get('LEGACY_DB_NAME', ''),
       'USER': os.environ.get('LEGACY_USERNAME', ''),
       'PASSWORD': os.environ.get('LEGACY_PASSWORD', ''),
       'HOST': os.environ.get('LEGACY_HOSTNAME', 'localhost'),
       'PORT': '3306',
     }
-}
 
 if 'test' in sys.argv:
   DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
