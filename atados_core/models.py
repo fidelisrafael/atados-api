@@ -221,7 +221,7 @@ class Nonprofit(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
-    name = models.CharField(_('Name'), max_length=50)
+    name = models.CharField(_('Name'), max_length=150)
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
     description = models.TextField(_('Short description'), max_length=160,
