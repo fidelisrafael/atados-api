@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import boto
 import facepy as facebook
 import json
 import pytz
 import sys
-import urllib2                                       
+import urllib2
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
@@ -15,7 +15,7 @@ from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, se
 from datetime import datetime
 from datetime import timedelta
 
-from django.core.files import File                   
+from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.core.mail import EmailMultiAlternatives
 from django.http import Http404
@@ -23,7 +23,7 @@ from django.template import Context
 from django.template.defaultfilters import slugify
 from django.template.loader import get_template
 from django.utils import timezone
-from django.utils.encoding import iri_to_uri         
+from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import cache_control
 
 from haystack.query import SearchQuerySet
@@ -155,7 +155,7 @@ def facebook_auth(request, format=None):
     user.last_login=timezone.now()
     user.name = me.get('name', None)
     user.save()
-    
+
     faceImage = graph.get("me/picture?redirect=0&height=200&type=normal&width=200")
     imgurl = iri_to_uri(faceImage['data']['url'])
     image = NamedTemporaryFile(delete=True)
@@ -168,9 +168,9 @@ def facebook_auth(request, format=None):
     volunteer.facebook_access_token_expires = expiresIn
     volunteer.save()
 
-  if not volunteer: 
+  if not volunteer:
     return Response({"Could not get user through facebook login."}, status.HTTP_404_NOT_FOUND)
-    
+
   client = Client.objects.get(id=1)
   token = AccessToken.objects.create(user=user, client=client)
   data = {
@@ -209,10 +209,10 @@ def create_volunteer(request, format=None):
     msg.send()
 
   if Volunteer.objects.filter(user=user):
-   return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND) 
+   return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND)
   volunteer = Volunteer(user=user)
   volunteer.save()
-  return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED) 
+  return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
@@ -241,9 +241,9 @@ def create_nonprofit(request, format=None):
    user.save()
 
   if Nonprofit.objects.filter(user=user):
-   return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND) 
+   return Response({'detail': 'Nonprofit already exists.'}, status.HTTP_404_NOT_FOUND)
 
-  
+
   FACEBOOK_KEY = 'facebook_page'
   GOOGLE_KEY = 'google_page'
   TWITTER_KEY = 'twitter_handle'
@@ -280,18 +280,20 @@ def create_nonprofit(request, format=None):
   msg.attach_alternative(html_content, "text/html")
   msg.send()
 
-  return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK) 
+  return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK)
 
 def create_project_slug(name):
   if name:
-    slug = slugify(name)[0:46]                            
-    append = ''                                           
-    i = 0                                                 
-    while len(Project.objects.filter(slug=slug + append)):
-      i += 1                                            
-      append = '-' + str(i)                             
-      return slug
-    return slug
+    slug = slugify(name)[0:99]
+    append = ''
+    i = 0
+
+    query = Project.objects.filter(slug=slug + append)
+    while query.count() > 0:
+      i += 1
+      append = '-' + str(i)
+      query = Project.objects.filter(slug=slug + append)
+    return slug + append
 
 @api_view(['POST'])
 def create_project(request, format=None):
@@ -365,7 +367,7 @@ def create_project(request, format=None):
       pass
 
     if not has_job and not has_work:
-      return Response({'detail': 'Needs to have project or work.'}, status.HTTP_400_BAD_REQUEST) 
+      return Response({'detail': 'Needs to have project or work.'}, status.HTTP_400_BAD_REQUEST)
 
     # Doing not required fields
     try:
@@ -391,14 +393,14 @@ def create_project(request, format=None):
         project.roles.add(role)
     except:
       pass
-      
+
     project.save()
 
   except Exception as e:
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({'detail': error}, status.HTTP_400_BAD_REQUEST) 
+    return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
-  return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED) 
+  return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
 def save_project(request, format=None):
@@ -422,7 +424,7 @@ def save_project(request, format=None):
     # Renaming the image file if the slug has changed
     if slug != project.slug and project.image.name:
       c = boto.connect_s3()
-      bucket = c.get_bucket('atadosapp') 
+      bucket = c.get_bucket('atadosapp')
       k = bucket.get_key(project.image.name)
       if k:
         name = "project/%s/%s.jpg" % (project.nonprofit.user.slug, obj['slug'])
@@ -553,7 +555,7 @@ def save_project(request, format=None):
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
-  return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED) 
+  return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -642,7 +644,7 @@ def startup(request, format=None):
   data = {}
 
   try:
-    # Getting website number 
+    # Getting website number
     data['numbers'] = {}
     data['numbers']['projects'] = Project.objects.filter(closed=False, published=True).count()
     data['numbers']['volunteers'] = Volunteer.objects.count()
@@ -663,7 +665,7 @@ def startup(request, format=None):
     return Response(data, status.HTTP_200_OK)
   except Exception as e:
     print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({"Something went wrong on the models lookup."}, status.HTTP_400_BAD_REQUEST) 
+    return Response({"Something went wrong on the models lookup."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def is_volunteer_to_nonprofit(request, format=None):
@@ -716,7 +718,7 @@ def apply_volunteer_to_project(request, format=None):
 
     if project:
       try:
-        # If apply exists, then cancel it 
+        # If apply exists, then cancel it
         apply = Apply.objects.get(project=project, volunteer=volunteer)
         if not apply.canceled:
           apply.canceled = True
@@ -727,7 +729,7 @@ def apply_volunteer_to_project(request, format=None):
 
         else:
           apply.canceled = False
-          apply.status = ApplyStatus.objects.get(id=2) # Candidato 
+          apply.status = ApplyStatus.objects.get(id=2) # Candidato
           apply.save()
 
           # Schedule email to be sent 30 days after this Apply
@@ -751,7 +753,7 @@ def apply_volunteer_to_project(request, format=None):
         apply = Apply()
         apply.project = project
         apply.volunteer = volunteer
-        apply.status = ApplyStatus.objects.get(id=2) # Candidato 
+        apply.status = ApplyStatus.objects.get(id=2) # Candidato
         apply.save()
 
         # Sending email to volunteer after user applied to project
@@ -777,7 +779,7 @@ def apply_volunteer_to_project(request, format=None):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-         
+
         # Schedule email to be sent 30 days after this Apply
         eta = datetime.now() + timedelta(days=30)
         send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
@@ -840,7 +842,7 @@ def clone_project(request, project_slug, format=None):
         i += 1
         append = '-' + str(i)
     return slug + append
-    
+
   if request.user.is_authenticated():
     try:
       project = Project.objects.get(slug=project_slug)
@@ -1032,7 +1034,7 @@ class SkillViewSet(viewsets.ModelViewSet):
   serializer_class = SkillSerializer
   permission_classes = [AllowAny]
   lookup_field = 'id'
- 
+
 class AddressViewSet(viewsets.ModelViewSet):
   queryset = Address.objects.all()
   serializer_class = AddressSerializer
@@ -1042,7 +1044,7 @@ class StateViewSet(viewsets.ReadOnlyModelViewSet):
   model = State
   serializer_class = StateSerializer
   permission_classes = [AllowAny]
-  
+
   def get_queryset(self):
     return State.objects.all().order_by('id')
 

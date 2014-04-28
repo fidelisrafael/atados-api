@@ -229,6 +229,39 @@ class ProjectCreateTest(APITestCase):
     self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+  def test_create_two_project_same_slug(self):
+    """
+    Creating two projects with same name to see if different slugs are created..
+    """
+    factory = APIRequestFactory()
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjor',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2],
+      'job': {
+        'start_date': 20140416,
+        'end_date': 20140417
+      }
+    }
+    u = User()
+    u.save()
+    n = Nonprofit(user=u)
+    n.save()
+    request = factory.post("/create/project/", {'project': project})
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    request = factory.post("/create/project/", {'project': project})
+    force_authenticate(request, user=u)
+    response = views.create_project(request)
+    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 class ProjectEditTest(APITestCase):
   fixtures = ['causes_skills.json']
 
