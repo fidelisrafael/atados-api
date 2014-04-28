@@ -19,6 +19,11 @@ pep8:
 test:
 	@coverage run --source=. manage.py test -s -v 2
 
+coverage:
+	@coverage run --source=atados_core manage.py test
+	@coverage html
+	@open coverage_html_report/index.html
+
 rebuild_index:
 	@python ./manage.py rebuild_index
 
