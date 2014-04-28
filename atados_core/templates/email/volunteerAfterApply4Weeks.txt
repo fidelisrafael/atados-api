@@ -1,6 +1,6 @@
 Como anda essa força? ;)
 
-Vimos que você se cadastrou há quatro semana no ato {{ project_name }}.
+Vimos que você se cadastrou há quatro semanas no ato {{ project_name }}.
 
 Queremos ouvir de você como andam as coisas: se você tornou-se voluntário, se a experiência foi boa, enfim. É só clicar aqui [https://feso.typeform.com/to/MFcTah] e responder uma pesquisa. Vai ser rapidinho, prometemos.
 
