@@ -5,7 +5,7 @@ from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 from rest_framework.test import APITestCase
 
-from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit, Address
+from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit, Address, ApplyStatus
 from atados_core import views
 
 import pytz
@@ -415,3 +415,36 @@ class VolunteerTest(APITestCase):
     user = User.objects.get(email=self.email)
     volunteer = user.volunteer
     self.assertEqual(volunteer.user.email, user.email)
+
+class ApplyTest(APITestCase):
+
+  def create_project(self):
+      u = User(email="project_user@gmail.com", name="what", slug="hahah")
+      u.save()
+      n = Nonprofit(user=u, name="hahah")
+      n.save()
+      project = Project(nonprofit=n, name='name')
+      project.nonprofit = n
+      project.save()
+      return project
+
+  def test_apply_volunteer_to_project_view(self):
+    """
+    Ensure we can apply a volunteer to a project.
+    """
+    a = ApplyStatus(name="Candidato", id=2)
+    a.save()
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.is_email_verified = True
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    project = self.create_project()
+    factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Applied'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+

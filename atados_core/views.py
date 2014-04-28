@@ -701,10 +701,16 @@ def apply_volunteer_to_project(request, format=None):
       return Response({"403": "Volunteer has not actived its account by email."}, status.HTTP_403_FORBIDDEN)
 
     volunteer = Volunteer.objects.get(user=request.user)
-    project = Project.objects.get(id=request.DATA['project'])
-    message = request.DATA['message']
-    phone = request.DATA['phone']
-    name = request.DATA['name']
+
+    try:
+        project = Project.objects.get(id=request.DATA['project'])
+    except Exception as e:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      return Response({"No project id. " + error}, status.HTTP_400_BAD_REQUEST)
+
+    message = request.DATA.get('message', '')
+    phone = request.DATA.get('phone', '')
+    name = request.DATA.get('name', volunteer.user.name)
 
     if name:
       if volunteer.user.name != name:
@@ -716,69 +722,20 @@ def apply_volunteer_to_project(request, format=None):
         volunteer.user.phone = phone
         volunteer.user.save()
 
-    if project:
-      try:
-        # If apply exists, then cancel it
-        apply = Apply.objects.get(project=project, volunteer=volunteer)
-        if not apply.canceled:
-          apply.canceled = True
-          apply.status = ApplyStatus.objects.get(id=3) # Desistente
-          apply.save()
-          # TODO remove 4 week email from message queue if passed 30 days
-          return Response({"Canceled"}, status.HTTP_200_OK)
+    try:
+      # If apply exists, then cancel it
+      apply = Apply.objects.get(project=project, volunteer=volunteer)
+      if not apply.canceled:
+        apply.canceled = True
+        apply.status = ApplyStatus.objects.get(id=3) # Desistente
+        apply.save()
+        # TODO remove 4 week email from message queue if passed 30 days
+        return Response({"Canceled"}, status.HTTP_200_OK)
 
-        else:
-          apply.canceled = False
-          apply.status = ApplyStatus.objects.get(id=2) # Candidato
-          apply.save()
-
-          # Schedule email to be sent 30 days after this Apply
-          eta = datetime.now() + timedelta(days=30)
-          send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
-            eta=eta,
-            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
-
-          #if pontual, schedule email to be sent 3 days before
-          try:
-            eta = project.job.start_date - timedelta(days=3)
-            send_email_to_volunteer_3_days_before_pontual.apply_async(
-              eta=eta,
-              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
-          except:
-            pass
-
-          return Response({"Applied"}, status.HTTP_200_OK)
-
-      except:
-        apply = Apply()
-        apply.project = project
-        apply.volunteer = volunteer
+      else:
+        apply.canceled = False
         apply.status = ApplyStatus.objects.get(id=2) # Candidato
         apply.save()
-
-        # Sending email to volunteer after user applied to project
-        plaintext = get_template('email/volunteerAppliesToProject.txt')
-        htmly     = get_template('email/volunteerAppliesToProject.html')
-        d = Context({ 'project_name': project.name })
-        subject, from_email, to = u'Confirmação do ato. Parabéns.', 'contato@atados.com.br', volunteer.user.email
-        text_content = plaintext.render(d)
-        html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-
-        # Sending email to nonprofit after user applied to project
-        plaintext = get_template('email/nonprofitGetsNotifiedAboutApply.txt')
-        htmly     = get_template('email/nonprofitGetsNotifiedAboutApply.html')
-        d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message })
-        email = project.email if project.email else project.nonprofit.user.email
-        subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'contato@atados.com.br', email
-        text_content = plaintext.render(d)
-        html_content = htmly.render(d)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
-
 
         # Schedule email to be sent 30 days after this Apply
         eta = datetime.now() + timedelta(days=30)
@@ -795,9 +752,57 @@ def apply_volunteer_to_project(request, format=None):
         except:
           pass
 
-
-
         return Response({"Applied"}, status.HTTP_200_OK)
+
+    except:
+      apply = Apply()
+      apply.project = project
+      apply.volunteer = volunteer
+      apply.status = ApplyStatus.objects.get(id=2) # Candidato
+      apply.save()
+
+      # Sending email to volunteer after user applied to project
+      plaintext = get_template('email/volunteerAppliesToProject.txt')
+      htmly     = get_template('email/volunteerAppliesToProject.html')
+      d = Context({ 'project_name': project.name })
+      subject, from_email, to = u'Confirmação do ato. Parabéns.', 'contato@atados.com.br', volunteer.user.email
+      text_content = plaintext.render(d)
+      html_content = htmly.render(d)
+      msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+      msg.attach_alternative(html_content, "text/html")
+      msg.send()
+
+      # Sending email to nonprofit after user applied to project
+      plaintext = get_template('email/nonprofitGetsNotifiedAboutApply.txt')
+      htmly     = get_template('email/nonprofitGetsNotifiedAboutApply.html')
+      d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message })
+      email = project.email if project.email else project.nonprofit.user.email
+      subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'contato@atados.com.br', email
+      text_content = plaintext.render(d)
+      html_content = htmly.render(d)
+      msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+      msg.attach_alternative(html_content, "text/html")
+      msg.send()
+
+
+      # Schedule email to be sent 30 days after this Apply
+      eta = datetime.now() + timedelta(days=30)
+      send_email_to_volunteer_after_4_weeks_of_apply.apply_async(
+        eta=eta,
+        kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+
+      #if pontual, schedule email to be sent 3 days before
+      try:
+        eta = project.job.start_date - timedelta(days=3)
+        send_email_to_volunteer_3_days_before_pontual.apply_async(
+          eta=eta,
+          kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+      except:
+        pass
+
+
+
+      return Response({"Applied"}, status.HTTP_200_OK)
 
   return Response({"Could not find project or volunteer"}, status.HTTP_400_BAD_REQUEST)
 
