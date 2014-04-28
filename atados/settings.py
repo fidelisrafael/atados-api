@@ -25,7 +25,7 @@ if DEVELOPMENT:
   ALLOWED_HOSTS = (
     '.atadoslocal.com.br',
   )
-else: 
+else:
   ALLOWED_HOSTS = (
     '.atados.com.br',
     '.portovoluntario.com.br'
@@ -252,7 +252,7 @@ CACHES = {
         'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
     },
 }
-                                         
+
 CACHE_MIDDLEWARE_SECONDS = 1200
 CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 
@@ -269,7 +269,7 @@ REST_FRAMEWORK = {
 
     'PAGINATE_BY': 8,
     # Allow client to override, using `?page_size=xxx`.
-    'PAGINATE_BY_PARAM': 'page_size',  
+    'PAGINATE_BY_PARAM': 'page_size',
 
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
@@ -281,7 +281,7 @@ if DEVELOPMENT:
   CORS_ORIGIN_WHITELIST = (
     'atadoslocal.com.br',
   )
-  
+
   CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
   SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
 else:
@@ -309,3 +309,13 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Sao_Paulo'
 CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERYD_NODES="worker1"
+CELERY_BIN="/home/ubuntu/.virtualenvs/atados/bin/celery"
+CELERY_APP="atados"
+CELERYD_CHDIR="/home/ubuntu/api/"
+CELERYD_OPTS="--time-limit=300 --concurrency=8"
+CELERYD_LOG_FILE="/var/log/celery/%N.log"
+CELERYD_PID_FILE="/var/run/celery/%N.pid"
+CELERYD_USER="root"
+CELERYD_GROUP="root"
+CELERY_CREATE_DIRS=1
