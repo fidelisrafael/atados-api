@@ -5,7 +5,8 @@ from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 from rest_framework.test import APITestCase
 
-from atados_core.models import Availability, Cause, Skill, State, City, User, Volunteer, Comment, Project, Nonprofit, Address, ApplyStatus
+from atados_core.models import (Availability, Cause, Skill, State, City, User, Volunteer,
+                                Comment, Project, Nonprofit, Address, Apply, ApplyStatus, Job)
 from atados_core import views
 
 import pytz
@@ -418,14 +419,31 @@ class VolunteerTest(APITestCase):
 
 class ApplyTest(APITestCase):
 
+  def test_apply_creation(self):
+    """
+    Tests Apply.
+    """
+    u = User(name="Voluntario", slug="voluntario")
+    u.save()
+    v = Volunteer(user=u)
+    v.save()
+    p = Project(name="Project")
+    a = Apply(status=ApplyStatus(), volunteer=v, project=p)
+    self.assertTrue(isinstance(a, Apply))
+    self.assertEqual(a.__unicode__(), "[False] Voluntario - Project")
+
   def create_project(self):
       u = User(email="project_user@gmail.com", name="what", slug="hahah")
       u.save()
       n = Nonprofit(user=u, name="hahah")
       n.save()
-      project = Project(nonprofit=n, name='name')
+      from random import randint
+      random = randint(1,100)
+      project = Project(nonprofit=n, name='name' + str(random))
       project.nonprofit = n
       project.save()
+      project.job = Job(start_date=datetime.now().replace(tzinfo=pytz.timezone("America/Sao_Paulo")), end_date=datetime.now().replace(tzinfo=pytz.timezone("America/Sao_Paulo")))
+      project.job.save()
       return project
 
   def test_apply_volunteer_to_project_view(self):
@@ -441,8 +459,112 @@ class ApplyTest(APITestCase):
     volunteer.save()
     project = self.create_project()
     factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id, 'name': 'new name', 'phone': '3444-3434'})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Applied'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    u = User.objects.get(slug='test')
+    self.assertEqual('new name', u.name)
+    self.assertEqual('3444-3434', u.phone)
+
+  def test_apply_volunteer_to_project_view_not_verified(self):
+    """
+    Apply a volunteer not verified to a project.
+    """
+    a = ApplyStatus(name="Candidato", id=2)
+    a.save()
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    project = self.create_project()
+    factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {"403": "Volunteer has not actived its account by email."})
+    self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+  def test_apply_volunteer_to_project_view_without_auth(self):
+    """
+    Apply no volunteer to a project.
+    """
+    a = ApplyStatus(name="Candidato", id=2)
+    a.save()
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    project = self.create_project()
+    factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {"No user logged in."})
+    self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+  def test_apply_volunteer_to_project_view_without_project(self):
+    """
+    Apply volunteer to project without project id.
+    """
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.is_email_verified = True
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": ''})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {"No project id. ERROR - 706 - invalid literal for int() with base 10: ''"})
+    self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+  def test_apply_volunteer_to_project_view_already_apply(self):
+    """
+    Unaply when apply already exists.
+    """
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.is_email_verified = True
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    project = self.create_project()
+    factory = APIRequestFactory()
     request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
     force_authenticate(request, user=volunteer.user)
     response = views.apply_volunteer_to_project(request)
     self.assertEqual(response.data, {'Applied'})
     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Canceled'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+  def test_apply_volunteer_to_project_view_after_canceled(self):
+    """
+    Apply again after canceled.
+    """
+    u = User(email="test@gmail.com", name="test", slug="test")
+    u.is_email_verified = True
+    u.save()
+    volunteer = Volunteer(user=u)
+    volunteer.save()
+    project = self.create_project()
+    factory = APIRequestFactory()
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Applied'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Canceled'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    request = factory.post("/apply_volunteer_to_project/", {"project": project.id})
+    force_authenticate(request, user=volunteer.user)
+    response = views.apply_volunteer_to_project(request)
+    self.assertEqual(response.data, {'Applied'})
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+

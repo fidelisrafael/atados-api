@@ -727,14 +727,20 @@ def apply_volunteer_to_project(request, format=None):
       apply = Apply.objects.get(project=project, volunteer=volunteer)
       if not apply.canceled:
         apply.canceled = True
-        apply.status = ApplyStatus.objects.get(id=3) # Desistente
+        try:
+          apply.status = ApplyStatus.objects.get(id=3) # Desistente
+        except:
+          apply.status = ApplyStatus(name="Desistente", id=3) # Desistente
         apply.save()
         # TODO remove 4 week email from message queue if passed 30 days
         return Response({"Canceled"}, status.HTTP_200_OK)
 
       else:
         apply.canceled = False
-        apply.status = ApplyStatus.objects.get(id=2) # Candidato
+        try:
+          apply.status = ApplyStatus.objects.get(id=2) # Candidato
+        except:
+          apply.status = ApplyStatus(name="Candidato", id=2) # Candidato
         apply.save()
 
         # Schedule email to be sent 30 days after this Apply
@@ -754,11 +760,14 @@ def apply_volunteer_to_project(request, format=None):
 
         return Response({"Applied"}, status.HTTP_200_OK)
 
-    except:
+    except: # new apply
       apply = Apply()
       apply.project = project
       apply.volunteer = volunteer
-      apply.status = ApplyStatus.objects.get(id=2) # Candidato
+      try:
+        apply.status = ApplyStatus.objects.get(id=2) # Candidato
+      except:
+        apply.status = ApplyStatus(name="Candidato", id=2) # Candidato
       apply.save()
 
       # Sending email to volunteer after user applied to project
@@ -800,11 +809,9 @@ def apply_volunteer_to_project(request, format=None):
       except:
         pass
 
-
-
       return Response({"Applied"}, status.HTTP_200_OK)
 
-  return Response({"Could not find project or volunteer"}, status.HTTP_400_BAD_REQUEST)
+  return Response({"No user logged in."}, status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
 def has_volunteer_applied(request, format=None):

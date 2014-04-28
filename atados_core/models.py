@@ -470,10 +470,13 @@ class Apply(models.Model):
 
   def save(self, *args, **kwargs):
     if self.canceled:
-      self.canceled_date = datetime.now()
+      self.canceled_date = datetime.now().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     else:
       self.canceled_date = None
     return super(Apply, self).save(*args, **kwargs)
+
+  def __unicode__(self):
+    return "[%s] %s - %s" % (self.canceled, self.volunteer.user.name, self.project.name)
 
   class Meta:
     verbose_name = _('apply')
