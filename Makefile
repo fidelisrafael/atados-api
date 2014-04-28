@@ -23,7 +23,6 @@ coverage:
 	@coverage run --source=atados_core manage.py test
 	@coverage html
 	@open coverage_html_report/index.html
-	coveralls
 
 rebuild_index:
 	@python ./manage.py rebuild_index
