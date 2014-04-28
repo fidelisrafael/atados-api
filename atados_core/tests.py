@@ -446,5 +446,3 @@ class ApplyTest(APITestCase):
     response = views.apply_volunteer_to_project(request)
     self.assertEqual(response.data, {'Applied'})
     self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
