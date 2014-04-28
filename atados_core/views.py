@@ -403,6 +403,52 @@ def create_project(request, format=None):
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
+def open_project(request, format=None):
+  # Need a nonprofit user
+  try:
+    request.user.nonprofit
+  except Exception as e:
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+
+  try:
+    project_id = json.loads(request.DATA['project'])
+  except:
+    project_id = request.DATA['project']
+
+  try:
+    project = Project.objects.get(id=project_id)
+  except:
+    return Response({"No project with id " + project_id}, status.HTTP_400_BAD_REQUEST)
+
+  project.closed = False;
+  project.save()
+  return Response(project.closed, status.HTTP_200_OK)
+
+@api_view(['PUT'])
+def close_project(request, format=None):
+  # Need a nonprofit user
+  try:
+    request.user.nonprofit
+  except Exception as e:
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+
+  try:
+    project_id = json.loads(request.DATA['project'])
+  except:
+    project_id = request.DATA['project']
+
+  try:
+    project = Project.objects.get(id=project_id)
+  except:
+    return Response({"No project with id " + project_id}, status.HTTP_400_BAD_REQUEST)
+
+  project.closed = True;
+  project.save()
+  return Response(project.closed, status.HTTP_200_OK)
+
+@api_view(['PUT'])
 def save_project(request, format=None):
   # Need a nonprofit user
   try:

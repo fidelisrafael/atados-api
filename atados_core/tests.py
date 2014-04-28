@@ -341,6 +341,47 @@ class CommentTest(TestCase):
     self.assertTrue(c.deleted)
     self.assertTrue(c.deleted_date)
 
+class ProjectTest(APITestCase):
+  fixtures = ['causes_skills.json']
+
+  def create_project(self, nonprofit, name):
+    project = Project(nonprofit=nonprofit, name=name)
+    project.save()
+    return project
+
+  def test_open_project(self):
+    """
+    Tests opening project that is closed.
+    """
+    u = User()
+    u.save()
+    n = Nonprofit(user=u, name="Nonprofit 1")
+    n.save()
+    p = self.create_project(n, "Project 1")
+    p.closed = True;
+    factory = APIRequestFactory()
+    request = factory.put("/open/project/", {'project': p.id})
+    force_authenticate(request, user=u)
+    response = views.open_project(request)
+    self.assertEqual(response.data, False)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+  def test_close_project(self):
+    """
+    Tests closing project that is open.
+    """
+    u = User()
+    u.save()
+    n = Nonprofit(user=u, name="Nonprofit 1")
+    n.save()
+    p = self.create_project(n, "Project 1")
+    p.closed = False;
+    factory = APIRequestFactory()
+    request = factory.put("/close/project/", {'project': p.id})
+    force_authenticate(request, user=u)
+    response = views.close_project(request)
+    self.assertEqual(response.data, True)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class CityTest(TestCase):
 
@@ -516,7 +557,7 @@ class ApplyTest(APITestCase):
     request = factory.post("/apply_volunteer_to_project/", {"project": ''})
     force_authenticate(request, user=volunteer.user)
     response = views.apply_volunteer_to_project(request)
-    self.assertEqual(response.data, {"No project id. ERROR - 706 - invalid literal for int() with base 10: ''"})
+    self.assertEqual(response.data, {"No project id. ERROR - 752 - invalid literal for int() with base 10: ''"})
     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
   def test_apply_volunteer_to_project_view_already_apply(self):
