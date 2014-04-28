@@ -11,6 +11,7 @@ install:
 env:
   DJANGO_ENV=production
   ATADOS_ENV=notdebug
+  SECRET_KEY='!+j14^i_2g9urmgo(y%49@devw)#4kixb2jke)o&g=ohz&#g_6'
 
 script:
   - make test
