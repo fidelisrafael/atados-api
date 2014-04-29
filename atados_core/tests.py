@@ -557,7 +557,7 @@ class ApplyTest(APITestCase):
     request = factory.post("/apply_volunteer_to_project/", {"project": ''})
     force_authenticate(request, user=volunteer.user)
     response = views.apply_volunteer_to_project(request)
-    self.assertEqual(response.data, {"No project id. ERROR - 752 - invalid literal for int() with base 10: ''"})
+    self.assertEqual(response.data, {"No project id. ERROR - 769 - invalid literal for int() with base 10: ''"})
     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
   def test_apply_volunteer_to_project_view_already_apply(self):
