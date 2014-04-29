@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*- 
 
 import pytz
+import random
+import hashlib
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
@@ -492,6 +494,12 @@ class Recommendation(models.Model):
   class Meta:
     verbose_name = _('recommendation')
 
+def random_token(extra=None, hash_func=hashlib.sha256):
+    if extra is None:
+        extra = []
+    bits = extra + [str(random.SystemRandom().getrandbits(512))]
+    return hash_func("".join(bits).encode('utf-8')).hexdigest()
+
 class UserManager(BaseUserManager):
 
   def create_user(self, email, password=None, **extra_fields):
@@ -499,9 +507,20 @@ class UserManager(BaseUserManager):
     if not email:
         raise ValueError('The given email address must be set')
     email = UserManager.normalize_email(email)
-    user = self.model(email=email,
+    token = random_token([email])
+    user = self.model(email=email, token=token,
                       is_staff=False, is_active=True,
                       last_login=now, joined_date=now, **extra_fields)
+
+    plaintext = get_template('email/emailVerification.txt')
+    htmly     = get_template('email/emailVerification.html')
+    d = Context({ 'token': token })
+    subject, from_email, to = u'Confirme seu email do Atados.', 'contato@atados.com.br', email
+    text_content = plaintext.render(d)
+    html_content = htmly.render(d)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
     user.set_password(password)
     user.save()
@@ -532,16 +551,10 @@ class User(AbstractBaseUser):
 
   company = models.ForeignKey(Company, blank=True, null=True)
 
-  def get_address(self):
-    if self.hidden_address:
-      try:
-        return Address.objects.filter(id__in=[1, 2, 3], city__id=self.address.city.id)[0]
-      except:
-        return None
-
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 
   legacy_uid = models.PositiveIntegerField(blank=True, null=True)
+  token = models.CharField(verbose_name=_('token'), max_length=64, unique=True, null=True, default=None)
 
   objects = UserManager()
   USERNAME_FIELD = 'email'
@@ -553,12 +566,17 @@ class User(AbstractBaseUser):
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
 
-  def get_short_name(self):
-    return self.name
-
   def save(self, *args, **kwargs):
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     return super(User, self).save(*args, **kwargs)
+
+  def get_address(self):
+    if self.hidden_address:
+      try:
+        return Address.objects.filter(id__in=[1, 2, 3], city__id=self.address.city.id)[0]
+      except:
+        return None
+
 
   def has_module_perms(self, app_label):
     # Handle whether the user has permissions to view the app `app_label`?"

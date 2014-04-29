@@ -403,6 +403,23 @@ def create_project(request, format=None):
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
+def confirm_email(request, format=None):
+  try:
+    token = json.loads(request.DATA['token'])
+  except:
+    token = request.DATA['token']
+
+  try:
+    user = User.objects.get(token=token)
+    user.is_email_verified = True
+    user.save()
+  except Exception as e:
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
+
+  return Response(user.email, status.HTTP_200_OK)
+
+@api_view(['PUT'])
 def open_project(request, format=None):
   # Need a nonprofit user
   try:
