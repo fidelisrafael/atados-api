@@ -566,6 +566,9 @@ class User(AbstractBaseUser):
   def email_user(self, subject, message, from_email=None):
     send_mail(subject, message, from_email, [self.email])
 
+  def get_short_name(self):
+    return self.name
+
   def save(self, *args, **kwargs):
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
     return super(User, self).save(*args, **kwargs)
