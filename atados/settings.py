@@ -128,7 +128,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'grappelli.dashboard',
     'grappelli', # needs to come before django.contrib.admin
     'django.contrib.admin',
 
