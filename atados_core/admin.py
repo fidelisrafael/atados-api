@@ -12,8 +12,8 @@ from django.utils.html import format_html
 
 class NonprofitAdmin(admin.ModelAdmin):
   fields = ['id', 'name', 'url', 'description',
-        ('published', 'deleted'),
-          'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
+            ('published', 'deleted'),
+            'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
   list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
   list_filter = ('published', 'deleted')
   search_fields = ['name']
@@ -21,11 +21,11 @@ class NonprofitAdmin(admin.ModelAdmin):
   readonly_fields = ['id', 'url', 'image_tag', 'cover_tag']
 
   def url(self, instance):
-   return format_html("<a href='https://www.atados.com.br/ong/{0}/' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
+   return format_html("<a href='https://www.atados.com.br/ong/{0}' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
 
   def make_published(self, request, queryset):
       queryset.update(published=True)
-  make_published.short_description = _("Mark selected stories as published")
+  make_published.short_description = _("Mark selected Nonprofits as published")
 
 class UserInline(admin.TabularInline):
     model = User
@@ -65,14 +65,12 @@ class ProjectAdmin(admin.ModelAdmin):
         'roles', 'skills', 'causes')
   list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date')
   list_filter = ['published', 'deleted', 'closed']
-  list_editable = ['name', 'description', 'published', 'closed']
+  list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
-  # filter_horizontal = ['causes', 'skills', 'roles']
-
   readonly_fields = ['url', 'image_tag']
 
   def url(self, instance):
-   return format_html("<a href='https://www.atados.com.br/ato/{0}/' target='_blank'>Clique para ver ato no site</a>", instance.slug)
+   return format_html("<a href='https://www.atados.com.br/ato/{0}' target='_blank'>Clique para ver ato no site</a>", instance.slug)
 
 class UserAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'email', 'phone')
