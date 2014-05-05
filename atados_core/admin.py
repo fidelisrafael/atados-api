@@ -14,7 +14,7 @@ class NonprofitAdmin(admin.ModelAdmin):
   fields = ['id', 'name', 'url', 'description',
         ('published', 'deleted'),
           'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
-  list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date']
+  list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
   list_filter = ('published', 'deleted')
   search_fields = ['name']
   actions = ['make_published']
