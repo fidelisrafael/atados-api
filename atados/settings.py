@@ -296,7 +296,8 @@ PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.PBKDF2PasswordHasher'
 )
 
-GRAPPELLI_INDEX_DASHBOARD = 'atados_core.dashboard.AtadosDashboard'
+GRAPPELLI_ADMIN_TITLE="Admin do Atados"
+AUTOCOMPLETE_LIMIT=5
 EXPORT_RECORDS_LIMIT = 20000
 
 import djcelery
