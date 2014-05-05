@@ -267,7 +267,7 @@ REST_FRAMEWORK = {
       'rest_framework.parsers.MultiPartParser',
     ),
 
-    'PAGINATE_BY': 8,
+    'PAGINATE_BY': 12,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',
 
