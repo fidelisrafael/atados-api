@@ -75,6 +75,7 @@ class ProjectAdmin(admin.ModelAdmin):
    return format_html("<a href='https://www.atados.com.br/ato/{0}/' target='_blank'>Clique para ver ato no site</a>", instance.slug)
 
 class UserAdmin(admin.ModelAdmin):
+  fields = ('name', 'slug', 'email', 'phone')
   list_display = ('slug', 'email', 'name', 'last_login')
   list_filter = ('last_login', 'joined_date')
   search_fields = ('email', 'slug')
