@@ -5,8 +5,8 @@ Pillow==2.4.0
 South==0.8.4
 boto==2.27.0
 coverage==3.7.1
-coveralls==0.4
-django-bootstrap-toolkit==2.15.0
+coveralls==0.4.1
+django-bootstrap-toolkit==2.15
 django-celery==3.1.10
 django-cors-headers==0.12
 django-debug-toolbar==1.0.1
