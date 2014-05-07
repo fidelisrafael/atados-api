@@ -527,6 +527,7 @@ def save_project(request, format=None):
       found = False
 
       for r in roles:
+        print r
         if r.get('id', None) == pr.id:
           found = True
 

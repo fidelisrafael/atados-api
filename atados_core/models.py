@@ -400,7 +400,7 @@ class Project(models.Model):
     if self.pk is not None:
         orig = Project.objects.get(pk=self.pk)
         if not orig.published and self.published:
-          # Sending welcome email on nonprofit signup
+          # Sending welcome email on project creation
           plaintext = get_template('email/projectApproved.txt')
           htmly     = get_template('email/projectApproved.html')
           d = Context()
