@@ -571,8 +571,8 @@ def save_project(request, format=None):
       except:
         work = Work()
         work.project = project
-      work.weekly_hours = obj['work']['weekly_hours']
-      work.can_be_done_remotely = obj['work']['can_be_done_remotely']
+      work.weekly_hours = obj['work'].get('weekly_hours', 0)
+      work.can_be_done_remotely = obj['work'].get('can_be_done_remotely', None)
       work.save()
 
       if obj['work'].get('availabilities', None):
