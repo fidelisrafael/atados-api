@@ -527,7 +527,6 @@ def save_project(request, format=None):
       found = False
 
       for r in roles:
-        print r
         if r.get('id', None) == pr.id:
           found = True
 
@@ -543,10 +542,10 @@ def save_project(request, format=None):
         role = Role.objects.get(id=r['id'])
       else:
         role = Role()
-      role.name = r['name']
-      role.prerequisites = r['prerequisites']
-      role.details = r['details']
-      role.vacancies = r['vacancies']
+      role.name = r.get('name', '')
+      role.prerequisites = r.get('prerequisites', '')
+      role.details = r.get('details', '')
+      role.vacancies = r.get('vacancies', 1)
       role.save()
       project.roles.add(role)
 

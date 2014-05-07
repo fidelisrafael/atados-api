@@ -355,8 +355,9 @@ class ProjectEditTest(APITestCase):
     request = factory.put("/save/project/", {'project': project})
     force_authenticate(request, user=n.user)
     response = views.save_project(request)
-    newP = Project.objects.get(id=r1.id)
+    newP = Project.objects.get(id=p.id)
     self.assertEqual(newP.roles.count(), 1)
+    #self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
     self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
 
