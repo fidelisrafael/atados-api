@@ -405,6 +405,13 @@ class AddressTest(TestCase):
     city = City(name="Rio de Janeiro", state=state)
     return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, city=city)
 
+  def create_address_no_city(self, zipcode="05432-001", addressline="Rua Hello World", addressnumber="123", addressline2="apt 1101", neighborhood="Copacabana"):
+    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood)
+
+  def create_address_distance(self, zipcode="05432-001", addressline="Rua Hello World", addressnumber="123", addressline2="apt 1101", neighborhood="Copacabana"):
+    city = City(id=0, name="Trabalho a Distancia")
+    return Address.objects.create(zipcode=zipcode, addressline=addressline, addressnumber=addressnumber, addressline2=addressline2, neighborhood=neighborhood, city=city)
+
   def test_address_creation(self):
     """
     Tests Address.
@@ -413,6 +420,17 @@ class AddressTest(TestCase):
     self.assertTrue(isinstance(a, Address))
     self.assertEqual(a.__unicode__(),
                      "Rua Hello World, 123, apt 1101, Copacabana - Rio de Janeiro, RJ")
+
+  def test_address_city_state(self):
+    """
+    Tests Address.
+    """
+    a = self.create_address()
+    self.assertEqual(a.get_city_state(), "Rio de Janeiro, RJ")
+    a = self.create_address_no_city()
+    self.assertEqual(a.get_city_state(), "")
+    a = self.create_address_distance()
+    self.assertEqual(a.get_city_state(), "Trabalho a Distancia")
 
   def test_address_lat_long(self):
     """
