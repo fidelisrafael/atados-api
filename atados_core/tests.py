@@ -321,6 +321,45 @@ class ProjectEditTest(APITestCase):
     self.assertEqual(newP.roles.count(), 0)
     self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
+  def test_edit_projec_view_with_changing_roles_one_stays(self):
+    """
+    Project edit with deleting 1 role but keeping another.
+    """
+    project = {
+      'name': "Name",
+      'details': 'This needs to be big',
+      'description': 'This needs to be big',
+      'responsible': 'Marjori',
+      'phone': '123123',
+      'email': 'marjori@atados.com.br',
+      'skills': [1],
+      'causes': [2],
+      'job': {
+        'start_date': 20140416,
+        'end_date': 20140417
+      },
+      'nonprofit': 1
+    }
+    factory = APIRequestFactory()
+    n = self.create_nonprofit()
+    r = Role(name="role name")
+    r.save()
+    r1 = Role(name="role name 1")
+    r1.save()
+    p = Project(nonprofit=n, name='name', slug="name")
+    p.save()
+    p.roles.add(r)
+    p.roles.add(r1)
+    project['id'] = p.id
+    project['roles'] = [{'id': r.id}]
+    request = factory.put("/save/project/", {'project': project})
+    force_authenticate(request, user=n.user)
+    response = views.save_project(request)
+    newP = Project.objects.get(id=r1.id)
+    self.assertEqual(newP.roles.count(), 1)
+    self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+
+
   def test_edit_project_view_with_only_required_fields_job(self):
     """
     Project edit job with only required fields and no availabilites.
