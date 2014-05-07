@@ -5,7 +5,7 @@ from rest_framework.test import APIRequestFactory
 from rest_framework.test import force_authenticate
 from rest_framework.test import APITestCase
 
-from atados_core.models import (Availability, Cause, Skill, State, City, User, Volunteer,
+from atados_core.models import (Availability, Cause, Skill, State, City, User, Volunteer, Company,
                                 Comment, Project, Nonprofit, Address, Apply, ApplyStatus, Job)
 from atados_core import views
 
@@ -25,6 +25,20 @@ class AvailabilityTest(TestCase):
     a = self.create_availability()
     self.assertTrue(isinstance(a, Availability))
     self.assertEqual(a.__unicode__(), "Segunda -  Noite")
+
+class CompanyTest(TestCase):
+
+  def create_company(self, name="Atados"):
+    address = Address()
+    return Company.objects.create(name=name, address=address)
+
+  def test_company_creation(self):
+    """
+    Tests Company.
+    """
+    a = self.create_company()
+    self.assertTrue(isinstance(a, Company))
+    self.assertEqual(a.__unicode__(), "Atados")
 
 class CauseTest(TestCase):
 
