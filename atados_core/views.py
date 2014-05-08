@@ -198,7 +198,7 @@ def create_volunteer(request, format=None):
     user = User.objects.get(email=email)
     return Response({'detail': 'User already exists.'}, status.HTTP_404_NOT_FOUND)
   except User.DoesNotExist:
-    user = User.objects.create_user(email, password, slug=slug, site=request.META['HTTP_ORIGIN'])
+    user = User.objects.create_user(email, password, slug=slug, site=request.META.get('HTTP_ORIGIN', None))
     # Sending welcome email on email signup
     plaintext = get_template('email/volunteerSignup.txt')
     htmly     = get_template('email/volunteerSignup.html')
