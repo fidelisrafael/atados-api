@@ -1,6 +1,6 @@
 Confirme o email da sua conta no Atados clicando no link abaixo:
 
-https://www.atados.com.br/confirmar/email/?token={{ token }}
+{{ site }}/confirmar/email/?token={{ token }}
 
 Qualquer dúvida, crítica ou sugestão, fale com a gente. ;)
 

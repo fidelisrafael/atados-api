@@ -514,7 +514,7 @@ class UserManager(BaseUserManager):
 
     plaintext = get_template('email/emailVerification.txt')
     htmly     = get_template('email/emailVerification.html')
-    d = Context({ 'token': token })
+    d = Context({ 'token': token , 'site': extra_fields['site']})
     subject, from_email, to = u'Confirme seu email do Atados.', 'contato@atados.com.br', email
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
@@ -550,6 +550,8 @@ class User(AbstractBaseUser):
   hidden_address = models.BooleanField(_("Endereco escondido."), default=False)
 
   company = models.ForeignKey(Company, blank=True, null=True)
+
+  site = models.URLField(blank=True, null=True, default=None)
 
   phone = models.CharField(_('Phone'), max_length=20, blank=True, null=True, default=None)
 

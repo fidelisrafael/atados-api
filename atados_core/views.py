@@ -15,6 +15,7 @@ from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, se
 from datetime import datetime
 from datetime import timedelta
 
+from django.contrib.sites.models import get_current_site
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.core.mail import EmailMultiAlternatives
@@ -194,9 +195,10 @@ def create_volunteer(request, format=None):
   email = request.DATA['email']
   password = request.DATA['password']
   try:
-   user = User.objects.get(email=email)
+    user = User.objects.get(email=email)
+    return Response({'detail': 'User already exists.'}, status.HTTP_404_NOT_FOUND)
   except User.DoesNotExist:
-    user = User.objects.create_user(email, password, slug=slug)
+    user = User.objects.create_user(email, password, slug=slug, site=request.META['HTTP_ORIGIN'])
     # Sending welcome email on email signup
     plaintext = get_template('email/volunteerSignup.txt')
     htmly     = get_template('email/volunteerSignup.html')
@@ -207,12 +209,10 @@ def create_volunteer(request, format=None):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+    volunteer = Volunteer(user=user)
+    volunteer.save()
+    return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED)
 
-  if Volunteer.objects.filter(user=user):
-   return Response({'detail': 'Volunteer already exists.'}, status.HTTP_404_NOT_FOUND)
-  volunteer = Volunteer(user=user)
-  volunteer.save()
-  return Response({'detail': 'Volunteer succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['POST'])
 def create_nonprofit(request, format=None):
