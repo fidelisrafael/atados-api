@@ -15,7 +15,6 @@ from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, se
 from datetime import datetime
 from datetime import timedelta
 
-from django.contrib.sites.models import get_current_site
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.core.mail import EmailMultiAlternatives
@@ -646,15 +645,15 @@ def password_reset(request, format=None):
 
 @api_view(['PUT'])
 def change_password(request, format=None):
-  email = request.DATA['email']
-  user = User.objects.get(email=email)
-  password = request.DATA['password']
-  if email and password and user:
+  try:
+    email = request.DATA['email']
+    user = User.objects.get(email=email)
+    password = request.DATA['password']
     user.set_password(password)
     user.save()
-    return Response({"Password set successfuly"}, status.HTTP_200_OK)
-  else:
-    return Response({"There was a problem setting your password"}, status.HTTP_403_FORBIDDEN)
+    return Response({"Password set successfully."}, status.HTTP_200_OK)
+  except:
+    return Response({"There was a problem setting your password."}, status.HTTP_403_FORBIDDEN)
 
 @api_view(['POST'])
 def upload_volunteer_image(request, format=None):
