@@ -482,7 +482,10 @@ def save_project(request, format=None):
 
   try:
     project.name = obj['name']
-    slug = create_project_slug(obj['name'])
+    if obj['name'] != project.name:
+      slug = create_project_slug(obj['name'])
+    else:
+      slug = project.slug
     # Renaming the image file if the slug has changed
     if slug != project.slug and project.image.name:
       c = boto.connect_s3()
