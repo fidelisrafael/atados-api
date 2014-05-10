@@ -481,24 +481,28 @@ def save_project(request, format=None):
   project = Project.objects.get(id=obj['id'])
 
   try:
-    project.name = obj['name']
     if obj['name'] != project.name:
       slug = create_project_slug(obj['name'])
     else:
       slug = project.slug
+    project.name = obj['name']
     # Renaming the image file if the slug has changed
     if slug != project.slug and project.image.name:
-      c = boto.connect_s3()
-      bucket = c.get_bucket('atadosapp')
-      k = bucket.get_key(project.image.name)
-      if k:
-        name = "project/%s/%s.jpg" % (project.nonprofit.user.slug, obj['slug'])
-        if name != project.image.name:
-          k.copy('atadosapp', name)
-          k.delete()
-          project.image.name = name;
-      else:
-        return Response({'detail': 'Could not get boto key to change project image name on S3.'}, status.HTTP_400_BAD_REQUEST)
+      try:
+        c = boto.connect_s3()
+        bucket = c.get_bucket('atadosapp')
+        k = bucket.get_key(project.image.name)
+        if k:
+          name = "project/%s/%s.jpg" % (project.nonprofit.user.slug, obj['slug'])
+          if name != project.image.name:
+            k.copy('atadosapp', name)
+            k.delete()
+            project.image.name = name;
+        else:
+          return Response({'detail': 'Could not get boto key to change project image name on S3.'}, status.HTTP_400_BAD_REQUEST)
+      except Exception as e:
+        print e
+        pass
 
     project.slug = slug
     project.details = obj['details']
