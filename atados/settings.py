@@ -102,7 +102,6 @@ MIDDLEWARE_CLASSES = (
   'django.middleware.cache.UpdateCacheMiddleware',
   'django.middleware.cache.FetchFromCacheMiddleware',
   'django.middleware.common.CommonMiddleware',
-  'django.middleware.csrf.CsrfViewMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
@@ -156,6 +155,7 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.cache.CachePanel',
     'debug_toolbar.panels.headers.HeadersPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.request.RequestPanel',
@@ -245,31 +245,28 @@ SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
-    },
-}
+#CACHES = {
+#    'default': {
+#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#        'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
+#    },
+#}
 
-CACHE_MIDDLEWARE_SECONDS = 1200
-CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
+#CACHE_MIDDLEWARE_SECONDS = 1200
+#CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
       'rest_framework.authentication.SessionAuthentication',
       'rest_framework.authentication.OAuth2Authentication'
     ),
-
     'DEFAULT_PARSER_CLASSES': (
       'rest_framework.parsers.JSONParser',
       'rest_framework.parsers.MultiPartParser',
     ),
-
     'PAGINATE_BY': 12,
     # Allow client to override, using `?page_size=xxx`.
     'PAGINATE_BY_PARAM': 'page_size',
-
     'TEST_REQUEST_DEFAULT_FORMAT': 'json'
 }
 

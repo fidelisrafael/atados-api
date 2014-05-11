@@ -997,7 +997,6 @@ class PortoSegutoProjectList(generics.ListAPIView):
 
 class ProjectList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer
-  permission_classes = [AllowAny]
 
   def get_queryset(self):
     params = self.request.GET
