@@ -8,13 +8,14 @@ class Command(BaseCommand):
   help = 'Fix URLs for nonprofits Facebook Page'
 
   def check_link(self, link):
-    r = requests.get(link)
-    if r.status_code == 200:
-      print "OK " + link
+    try:
+      r = requests.get(link)
+      if r.status_code == 200:
+        print "OK " + link
 
-    elif r.status_code == 404:
-      print "404 " + link
-    else:
+      elif r.status_code == 404:
+        print "404 " + link
+    except:
       print "ERROR"
 
   def handle(self, *args, **options):
