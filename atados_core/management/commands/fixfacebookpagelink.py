@@ -5,15 +5,12 @@ from atados_core.models import Nonprofit
 import requests
 
 class Command(BaseCommand):
-  help = 'Fix URLs for nonprofits Facebook Page'
+  help = 'Fix URLs for nonprofits'
 
   def check_link(self, link):
     try:
       r = requests.get(link)
-      if r.status_code == 200:
-        print "OK " + link
-
-      elif r.status_code == 404:
+      if r.status_code == 404:
         print "404 " + link
     except:
       print "ERROR " + link
@@ -25,7 +22,6 @@ class Command(BaseCommand):
 
   def handle(self, *args, **options):
     nonprofits = Nonprofit.objects.filter(published=True).order_by('id')
-    linksFixed = 0
     for n in nonprofits:
       if n.facebook_page:
         new = self.check_link(n.facebook_page)
@@ -33,6 +29,9 @@ class Command(BaseCommand):
           print "NEW " + new
           n.facebook_page = new
           n.save()
-          linksFixed = linksFixed + 1
-
-    self.stdout.write('Fixed %s' % linksFixed)
+      if n.website:
+        new = self.check_link(n.website)
+        if not n.website == new:
+          print "NEW " + new
+          n.website = new
+          n.save()
