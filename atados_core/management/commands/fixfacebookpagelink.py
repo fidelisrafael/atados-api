@@ -19,12 +19,12 @@ class Command(BaseCommand):
       print "ERROR " + link
       if not "www" in link:
         link = "www." + link
-      link = "http://" + link
-      return self.check_link(link)
+      if not "http" in link:
+        link = "https://" + link
     return link
 
   def handle(self, *args, **options):
-    nonprofits = Nonprofit.objects.filter(published=True)
+    nonprofits = Nonprofit.objects.filter(published=True).order_by('id')
     linksFixed = 0
     for n in nonprofits:
       if n.facebook_page:
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         if not n.facebook_page == new:
           print "NEW " + new
           n.facebook_page = new
-          n.facebook_page.save()
+          n.save()
           linksFixed = linksFixed + 1
 
     self.stdout.write('Fixed %s' % linksFixed)
