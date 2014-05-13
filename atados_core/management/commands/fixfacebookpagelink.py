@@ -16,7 +16,7 @@ class Command(BaseCommand):
       elif r.status_code == 404:
         print "404 " + link
     except:
-      print "ERROR"
+      print "ERROR " + link
 
   def handle(self, *args, **options):
     nonprofits = Nonprofit.objects.all()
