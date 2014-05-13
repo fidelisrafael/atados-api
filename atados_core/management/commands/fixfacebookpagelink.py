@@ -17,21 +17,22 @@ class Command(BaseCommand):
         print "404 " + link
     except:
       print "ERROR " + link
+      if not "www" in link:
+        link = "www." + link
+      link = "http://" + link
+      return self.check_link(link)
+    return link
 
   def handle(self, *args, **options):
-    nonprofits = Nonprofit.objects.all()
+    nonprofits = Nonprofit.objects.filter(published=True)
     linksFixed = 0
     for n in nonprofits:
       if n.facebook_page:
-        try:
-          self.check_link(n.facebook_page)
-        except:
-          if not "www" in n.facebook_page:
-            n.facebook_page = "www." + n.facebook_page
-          n.facebook_page = "http://" + n.facebook_page
-          n.save()
-          self.check_link(n.facebook_page)
-
-        linksFixed = linksFixed + 1
+        new = self.check_link(n.facebook_page)
+        if not n.facebook_page == new:
+          print "NEW " + new
+          n.facebook_page = new
+          n.facebook_page.save()
+          linksFixed = linksFixed + 1
 
     self.stdout.write('Fixed %s' % linksFixed)
