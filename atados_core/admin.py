@@ -69,6 +69,10 @@ class CityAdmin(admin.ModelAdmin):
   search_fields = ['name', 'id']
   list_filter = ['active']
 
+class RoleAdmin(admin.ModelAdmin):
+  list_display = ('id', 'name', 'prerequisites', 'details', 'vacancies')
+  search_fields = ['name', 'id']
+
 class ProjectAdmin(admin.ModelAdmin):
 
   fields = (('name', 'slug'), 'url',
@@ -81,6 +85,7 @@ class ProjectAdmin(admin.ModelAdmin):
   list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
   readonly_fields = ['url', 'image_tag']
+  filter_horizontal = ('roles',)
 
   def url(self, instance):
    return format_html("<a href='https://www.atados.com.br/ato/{0}' target='_blank'>Clique para ver ato no site</a>", instance.slug)
@@ -95,7 +100,7 @@ admin.site.register(Nonprofit, NonprofitAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(User, UserAdmin)
-admin.site.register(Role)
+admin.site.register(Role, RoleAdmin)
 admin.site.register(Work)
 admin.site.register(Job)
 admin.site.register(City, CityAdmin)
