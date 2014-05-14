@@ -2,10 +2,11 @@ Temos aqui uma boa notícia!
 
 Um novo candidato quer participar do seu ato.
 
+{{ project_name }}
+
 Agora é com você: entre em contato com ele, combine os próximos passos e façam juntos do mundo um lugar melhor. Aproveite essa pessoa do bem.
 
 Veja abaixo a mensagem que o candidato enviou e bom ato.
-
 
 {{ volunteer_name }}
 {{ volunteer_email }}

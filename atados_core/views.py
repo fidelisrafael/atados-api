@@ -860,7 +860,7 @@ def apply_volunteer_to_project(request, format=None):
         # Sending email to nonprofit after user applied to project
         plaintext = get_template('email/nonprofitGetsNotifiedAboutApply.txt')
         htmly     = get_template('email/nonprofitGetsNotifiedAboutApply.html')
-        d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message })
+        d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message, "project_name": project.name})
         email = project.email if project.email else project.nonprofit.user.email
         subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'contato@atados.com.br', email
         text_content = plaintext.render(d)
