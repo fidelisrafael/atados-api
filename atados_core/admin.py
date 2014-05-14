@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*- 
+
 from django.contrib import admin
-from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job
+from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.util import lookup_field
@@ -37,12 +39,14 @@ class JobInline(admin.TabularInline):
     model = Job
 
 class AddressAdmin(admin.ModelAdmin):
-  list_display = ('object', 'id', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
+  readonly_fields = ['id']
+  fields = ('city', 'addressline', 'addressline2', 'addressnumber', 'neighborhood', 'zipcode', ('latitude', 'longitude'))
+  raw_id_fields = ['city']
+  related_lookup_fields = {
+      'city': ['city'],
+  }
+  list_display = ('id', 'object', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
   search_fields = ['id']
-  inlines = [
-    UserInline,
-    ProjectInline
-  ]
 
   def object(self, instance):
     try:
@@ -51,10 +55,19 @@ class AddressAdmin(admin.ModelAdmin):
     except:
       try:
         user = instance.user
-        return u"(Usuario) %s" % user
+        try:
+            user.nonprofit
+            return u"(ONG) %s" % user
+        except:
+            return u"(Voluntário) %s" % user
       except:
         company = instance.company
         return "%s" % ("(Empresa) ", company)
+
+class CityAdmin(admin.ModelAdmin):
+  list_display = ('id', 'name', 'state', 'active')
+  search_fields = ['name', 'id']
+  list_filter = ['active']
 
 class ProjectAdmin(admin.ModelAdmin):
 
@@ -85,6 +98,8 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Role)
 admin.site.register(Work)
 admin.site.register(Job)
+admin.site.register(City, CityAdmin)
+
 
 
 def export_as_xls(modeladmin, request, queryset):
