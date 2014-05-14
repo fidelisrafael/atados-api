@@ -74,21 +74,28 @@ class RoleAdmin(admin.ModelAdmin):
   search_fields = ['name', 'id']
 
 class ProjectAdmin(admin.ModelAdmin):
-
-  fields = (('name', 'slug'), 'url',
+  fields = ('id', 'url', 'work', 'job', ('name', 'slug'),
         'nonprofit', 'description', 'details', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'roles', 'skills', 'causes')
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'work', 'job')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
-  readonly_fields = ['url', 'image_tag']
+  readonly_fields = ['id', 'url', 'image_tag', 'work', 'job']
   filter_horizontal = ('roles',)
 
   def url(self, instance):
    return format_html("<a href='https://www.atados.com.br/ato/{0}' target='_blank'>Clique para ver ato no site</a>", instance.slug)
+
+class JobAdmin(admin.ModelAdmin):
+  list_display = ('id', 'project', 'start_date', 'end_date')
+
+class WorkAdmin(admin.ModelAdmin):
+  list_display = ('id', 'project', 'weekly_hours', 'can_be_done_remotely')
+  search_fields = ('id', )
+  filter_horizontal = ('availabilities',)
 
 class UserAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'email', 'phone')
@@ -101,8 +108,8 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Role, RoleAdmin)
-admin.site.register(Work)
-admin.site.register(Job)
+admin.site.register(Work, WorkAdmin)
+admin.site.register(Job, JobAdmin)
 admin.site.register(City, CityAdmin)
 
 

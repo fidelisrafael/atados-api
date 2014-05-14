@@ -439,6 +439,9 @@ class Work(models.Model):
                                       blank=True, null=True)
   can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'))
 
+  def __unicode__(self):
+    return "%s horas por semana" % (self.weekly_hours)
+
   class Meta:
     verbose_name = _('work')
     verbose_name_plural = _('works')
@@ -448,6 +451,9 @@ class Job(models.Model):
   project = models.OneToOneField(Project, blank=True, null=True)
   start_date = models.DateTimeField(_("Start date"), blank=True, null=True);
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
+
+  def __unicode__(self):
+    return "%s até %s" % (self.start_date, self.end_date)
 
   class Meta:
     verbose_name = _('Job')
