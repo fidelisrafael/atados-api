@@ -257,7 +257,7 @@ class ProjectCreateTest(APITestCase):
     n.save()
     force_authenticate(request, user=u)
     response = views.create_project(request)
-    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.data['detail'], 'Project succesfully created.')
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
   def test_create_project_view_with_only_required_fields_job(self):
@@ -286,7 +286,7 @@ class ProjectCreateTest(APITestCase):
     n.save()
     force_authenticate(request, user=u)
     response = views.create_project(request)
-    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.data['detail'], 'Project succesfully created.')
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
   def test_create_two_project_same_slug(self):
@@ -319,7 +319,7 @@ class ProjectCreateTest(APITestCase):
     request = factory.post("/create/project/", {'project': project})
     force_authenticate(request, user=u)
     response = views.create_project(request)
-    self.assertEqual(response.data, {'detail': 'Project succesfully created.'})
+    self.assertEqual(response.data['detail'], 'Project succesfully created.')
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 class ProjectEditTest(APITestCase):

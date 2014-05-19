@@ -371,8 +371,6 @@ def create_project(request, format=None):
     # Doing not required fields
     try:
       obja = obj.get('address', None)
-      print obj
-      print obja
       if obja:
           address = Address()
           address.addressline = obja.get('addressline', None)
@@ -404,17 +402,12 @@ def create_project(request, format=None):
       error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
       print error
 
-
   except Exception as e:
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
   project.save()
-  print project.address
-  #print project.address.latitude
-  #print project.address.city
-  print 'saved'
-  return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED)
+  return Response({'detail': 'Project succesfully created.', 'slug': project.slug}, status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
 def confirm_email(request, format=None):
