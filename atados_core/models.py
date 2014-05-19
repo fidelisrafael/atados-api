@@ -21,7 +21,7 @@ from datetime import datetime
 from atados import settings
 from itertools import chain
 
-from pygeocoder import Geocoder
+# from pygeocoder import Geocoder
 
 WEEKDAYS = (
   (1, _('Monday')),
@@ -110,13 +110,16 @@ class Address(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-     if self.city and not self.city.id == 0:
-      try: 
-        results = Geocoder.geocode(self)
-        self.latitude = results[0].coordinates[0]
-        self.longitude = results[0].coordinates[1]
-      except Exception as e:
-        print e
+      #if self.city and not self.city.id == 0:
+        #try:
+          #results = Geocoder.geocode(self)
+          #self.latitude = results[0].coordinates[0]
+          #self.longitude = results[0].coordinates[1]
+        #except Exception as e:
+          #print e
+      self.latitude = 0.0
+      self.longitude = 0.0
+
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Address, self).save(*args, **kwargs)
 

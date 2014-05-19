@@ -370,35 +370,50 @@ def create_project(request, format=None):
 
     # Doing not required fields
     try:
-      project.facebook_event = obj.get('facebook_event', None)
-      obja = obj['address']
-      project.address = Address()
-      project.address.addressline = obja['addressline']
-      project.address.addressline2 = obja['addressline2']
-      project.address.addressnumber = obja['addressnumber']
-      project.address.neighborhood = obja['neighborhood']
-      project.address.zipcode = obja['zipcode']
-      project.address.city = City.objects.get(id=obja['city']['id'])
-      project.address.save()
-      project.image = request.FILES.get('image')
-      roles = obj['roles']
-      for r in roles:
-        role = Role()
-        role.name = r['name']
-        role.prerequisites = r['prerequisites']
-        role.details = r['details']
-        role.vacancies = r['vacancies']
-        role.save()
-        project.roles.add(role)
-    except:
-      pass
+      obja = obj.get('address', None)
+      print obj
+      print obja
+      if obja:
+          address = Address()
+          address.addressline = obja.get('addressline', None)
+          address.addressline2 = obja.get('addressline2', None)
+          address.addressnumber = obja.get('addressnumber', None)
+          address.neighborhood = obja.get('neighborhood', None)
+          address.zipcode = obja.get('zipcode', None)
+          if obja.get('city', None) and obja['city'].get('id', None):
+              address.city = City.objects.get(id=obja['city']['id'])
+          address.save()
+          project.address = address
+          project.save()
 
-    project.save()
+      project.facebook_event = obj.get('facebook_event', None)
+
+      project.image = request.FILES.get('image')
+
+      roles = obj.get('roles', None)
+      if roles:
+          for r in roles:
+            role = Role()
+            role.name = r['name']
+            role.prerequisites = r['prerequisites']
+            role.details = r['details']
+            role.vacancies = r['vacancies']
+            role.save()
+            project.roles.add(role)
+    except Exception as e:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      print error
+
 
   except Exception as e:
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
+  project.save()
+  print project.address
+  #print project.address.latitude
+  #print project.address.city
+  print 'saved'
   return Response({'detail': 'Project succesfully created.'}, status.HTTP_201_CREATED)
 
 @api_view(['PUT'])
