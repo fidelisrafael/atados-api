@@ -75,16 +75,19 @@ class RoleAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
   fields = ('id', 'url', 'work', 'job', ('name', 'slug'),
-        'nonprofit', 'description', 'details', 'highlighted', 'image', 'image_tag',
+        'nonprofit', 'description', 'details', 'address_id', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'roles', 'skills', 'causes')
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'work', 'job')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'address_id', 'work', 'job')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
-  readonly_fields = ['id', 'url', 'image_tag', 'work', 'job']
+  readonly_fields = ['id', 'url', 'image_tag', 'work', 'job', 'address_id']
   filter_horizontal = ('roles',)
+
+  def address_id(self, instance):
+      return instance.address.id if instance.address else None
 
   def url(self, instance):
    return format_html("<a href='https://www.atados.com.br/ato/{0}' target='_blank'>Clique para ver ato no site</a>", instance.slug)
