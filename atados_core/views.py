@@ -708,6 +708,11 @@ def upload_nonprofit_cover_image(request, format=None):
   return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
 
 @api_view(['GET'])
+def applies(request, format=None):
+  applies = Apply.objects.values('id', 'date', 'project__name', 'volunteer__user__name', 'volunteer__user__email', 'volunteer__user__phone')
+  return Response(applies, status.HTTP_200_OK)
+
+@api_view(['GET'])
 def numbers(request, format=None):
   numbers = {}
   numbers['projects'] = Project.objects.filter(closed=False, published=True).count()
