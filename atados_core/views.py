@@ -709,7 +709,7 @@ def upload_nonprofit_cover_image(request, format=None):
 
 @api_view(['GET'])
 def applies(request, format=None):
-  applies = Apply.objects.values('id', 'date', 'project__name', 'volunteer__user__name', 'volunteer__user__email', 'volunteer__user__phone')
+  applies = Apply.objects.values('id', 'date', 'project__name', 'volunteer__user__name', 'volunteer__user__email', 'volunteer__user__phone', 'project__nonprofit__name')
   return Response(applies, status.HTTP_200_OK)
 
 @api_view(['GET'])
