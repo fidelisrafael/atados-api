@@ -79,12 +79,15 @@ class ProjectAdmin(admin.ModelAdmin):
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'roles', 'skills', 'causes')
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'address_id', 'work', 'job')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'city', 'address_id', 'work', 'job')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
   readonly_fields = ['id', 'url', 'image_tag', 'work', 'job', 'address_id']
   filter_horizontal = ('roles',)
+
+  def city(self, instance):
+      return instance.address.get_city_state() if instance.address else None
 
   def address_id(self, instance):
       return instance.address.id if instance.address else None
