@@ -521,10 +521,17 @@ class UserManager(BaseUserManager):
                       is_staff=False, is_active=True,
                       last_login=now, joined_date=now, **extra_fields)
 
-    plaintext = get_template('email/emailVerification.txt')
-    htmly     = get_template('email/emailVerification.html')
-    d = Context({ 'token': token , 'site': extra_fields.get('site', 'https://www.atados.com.br')})
-    subject, from_email, to = u'Confirme seu email do Atados.', 'contato@atados.com.br', email
+    site = extra_fields.get('site', 'https://www.atados.com.br')
+    if "atados" in site:
+      plaintext = get_template('email/emailVerification.txt')
+      htmly     = get_template('email/emailVerification.html')
+      subject   = u'Confirme seu email do Atados.'
+    elif "portovoluntario" in site:
+      plaintext = get_template('email/emailVerificationPorto.txt')
+      htmly     = get_template('email/emailVerificationPorto.html')
+      subject   = u'Confirme seu email do Porto Voluntário.'
+    d = Context({ 'token': token , 'site': site})
+    from_email, to = 'contato@atados.com.br', email
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])

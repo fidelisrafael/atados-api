@@ -197,12 +197,19 @@ def create_volunteer(request, format=None):
     user = User.objects.get(email=email)
     return Response({'detail': 'User already exists.'}, status.HTTP_404_NOT_FOUND)
   except User.DoesNotExist:
-    user = User.objects.create_user(email, password, slug=slug, site=request.META.get('HTTP_ORIGIN', None))
+    site = request.META.get('HTTP_ORIGIN', None)
+    user = User.objects.create_user(email, password, slug=slug, site=site)
     # Sending welcome email on email signup
-    plaintext = get_template('email/volunteerSignup.txt')
-    htmly     = get_template('email/volunteerSignup.html')
+    if "atados" in site:
+        plaintext = get_template('email/volunteerSignup.txt')
+        htmly     = get_template('email/volunteerSignup.html')
+        subject   = u"Seja bem vindo ao Atados"
+    elif "portovoluntario" in site:
+        plaintext = get_template('email/volunteerSignupPorto.txt')
+        htmly     = get_template('email/volunteerSignupPorto.html')
+        subject   = u"Seja bem vindo ao Porto Voluntário"
     d = Context({ 'name': user.name })
-    subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', user.email
+    from_email, to = 'contato@atados.com.br', user.email
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
