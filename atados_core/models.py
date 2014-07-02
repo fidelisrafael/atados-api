@@ -522,6 +522,7 @@ class UserManager(BaseUserManager):
                       last_login=now, joined_date=now, **extra_fields)
 
     site = extra_fields.get('site', 'https://www.atados.com.br')
+    print site
     if "atados" in site:
       plaintext = get_template('email/emailVerification.txt')
       htmly     = get_template('email/emailVerification.html')
