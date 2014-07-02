@@ -235,6 +235,8 @@ class Nonprofit(models.Model):
     facebook_page = models.URLField(blank=True, null=True, default=None)
     google_page = models.URLField(blank=True, null=True, default=None)
     twitter_handle = models.URLField(blank=True, null=True, default=None)
+
+    companies = models.ManyToManyField(Company, blank=True, null=True)
     
     def image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)

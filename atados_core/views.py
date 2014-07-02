@@ -1006,24 +1006,28 @@ class NonprofitViewSet(viewsets.ModelViewSet):
     except:
       raise Http404
 
-class PortoSegutoProjectList(generics.ListAPIView):
+class PortoSeguroProjectHighlightsList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer
   permission_classes = [AllowAny]
 
   def get_queryset(self):
-    porto_seguro = Company.objects.get(id=1)
-    return Project.objects.filter(deleted=False, closed=False, published=True, companies=porto_seguro).order_by('?')
-
+    porto_seguro = Company.objects.get(name="Porto Seguro")
+    return Project.objects.filter(deleted=False, closed=False,
+            published=True, highlighted=True, companies=porto_seguro).order_by('?')
 
 class ProjectList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer
 
   def get_queryset(self):
     params = self.request.GET
+    site = self.request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
 
     highlighted = params.get('highlighted') == 'true'
     if highlighted:
-      return Project.objects.filter(highlighted=highlighted)
+        if "atados" in site:
+          return Project.objects.filter(highlighted=highlighted).exclude(companies__name="Porto Seguro")
+        else:
+          return Project.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1042,7 +1046,11 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset]
 
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('?')
+    if "atados" in site:
+      print site
+      return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).exclude(companies__name="Porto Seguro")
+    else:
+      return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
@@ -1050,10 +1058,14 @@ class NonprofitList(generics.ListAPIView):
 
   def get_queryset(self):
     params = self.request.GET
-    highlighted = params.get('highlighted') == 'true'
+    site = self.request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
 
+    highlighted = params.get('highlighted') == 'true'
     if highlighted:
-      return Nonprofit.objects.filter(highlighted=highlighted)
+        if "atados" in site:
+          return Nonprofit.objects.filter(highlighted=highlighted).exclude(companies__name="Porto Seguro")
+        else:
+          return Nonprofit.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1065,7 +1077,10 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
 
-    return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?')
+    if "atados" in site:
+        return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?').exclude(companies__name="Porto Seguro")
+    else:
+        return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?')
 
 
 class VolunteerProjectList(generics.ListAPIView):
