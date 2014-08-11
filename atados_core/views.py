@@ -1020,14 +1020,10 @@ class ProjectList(generics.ListAPIView):
 
   def get_queryset(self):
     params = self.request.GET
-    site = self.request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
 
     highlighted = params.get('highlighted') == 'true'
     if highlighted:
-        if "atados" in site:
-          return Project.objects.filter(highlighted=highlighted).exclude(companies__name="Porto Seguro")
-        else:
-          return Project.objects.filter(highlighted=highlighted)
+        return Project.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1046,11 +1042,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset]
 
-    if "atados" in site:
-      print site
-      return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).exclude(companies__name="Porto Seguro")
-    else:
-      return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
+    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
