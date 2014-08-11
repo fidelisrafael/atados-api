@@ -158,6 +158,16 @@ class ProjectSerializer(serializers.ModelSerializer):
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted', 'volunteers_numbers',
               'work', 'job', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
 
+class ProjectMarkerSerializer(serializers.ModelSerializer):
+  name = serializers.CharField(source='name', required=False)
+  slug = serializers.CharField(source="slug", required=False)
+
+  class Meta:
+    model = Project
+    lookup_field = 'slug'
+    depth = 1
+    fields = ('name', 'slug','address')
+
 class ProjectSearchSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)
   slug = serializers.CharField(source="slug", required=False)
