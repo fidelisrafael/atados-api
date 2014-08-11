@@ -343,6 +343,7 @@ class Role(models.Model):
     def __unicode__(self):
       return  '%s - %s - %s (%s vagas)' % (self.name, self.details, self.prerequisites, self.vacancies)
 
+
 class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
@@ -434,7 +435,9 @@ class Project(models.Model):
     verbose_name = _('project')
     verbose_name_plural = _('projects')
 
-
+class AddressProject(Project):
+  class Meta:
+    proxy = True
   
 # Ato Recorrente
 class Work(models.Model):

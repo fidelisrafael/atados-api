@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 from django.contrib import admin
-from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City
+from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City, AddressProject
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.util import lookup_field
@@ -75,7 +75,7 @@ class RoleAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
   fields = ('id', 'url', 'work', 'job', ('name', 'slug'),
-        'nonprofit', 'description', 'address', 'details', 'address_id', 'highlighted', 'image', 'image_tag',
+        'nonprofit', 'description', 'details', 'address_id', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'roles', 'skills', 'causes')
@@ -85,7 +85,7 @@ class ProjectAdmin(admin.ModelAdmin):
   search_fields = ['name', 'slug']
   readonly_fields = ['id', 'url', 'image_tag', 'work', 'job', 'address_id']
   filter_horizontal = ('roles',)
-  raw_id_fields = ('nonprofit',)
+  raw_id_fields = ['nonprofit']
 
   def city(self, instance):
       return instance.address.get_city_state() if instance.address else None
@@ -110,8 +110,17 @@ class UserAdmin(admin.ModelAdmin):
   list_filter = ('last_login', 'joined_date')
   search_fields = ('email', 'slug')
 
+class AddressProjectAdmin(admin.ModelAdmin):
+  fields = ('name', 'slug', 'address')
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'address')
+  raw_id_fields = ['address']
+
+  def queryset(self, request):
+    return self.model.objects.all()
+
 admin.site.register(Nonprofit, NonprofitAdmin)
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(AddressProject, AddressProjectAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Role, RoleAdmin)
