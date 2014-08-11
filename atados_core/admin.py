@@ -85,6 +85,7 @@ class ProjectAdmin(admin.ModelAdmin):
   search_fields = ['name', 'slug']
   readonly_fields = ['id', 'url', 'image_tag', 'work', 'job', 'address_id']
   filter_horizontal = ('roles',)
+  raw_id_fields = ('nonprofit',)
 
   def city(self, instance):
       return instance.address.get_city_state() if instance.address else None
