@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 from django.contrib import admin
-from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City, AddressProject
+from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City, AddressProject, Volunteer, Apply
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.admin.util import lookup_field
@@ -108,7 +108,16 @@ class UserAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'email', 'phone')
   list_display = ('slug', 'email', 'name', 'last_login')
   list_filter = ('last_login', 'joined_date')
-  search_fields = ('email', 'slug')
+  search_fields = ['email', 'slug']
+
+class VolunteerAdmin(admin.ModelAdmin):
+  list_display = ['id', 'user', 'facebook_uid', 'image']
+  search_fields = ['image']
+
+class ApplyAdmin(admin.ModelAdmin):
+  fields = ['id', 'project', 'volunteer', 'status', 'canceled', 'canceled_date', 'date']
+  readonly_fields = ['id', 'project', 'volunteer', 'date']
+  list_display = ['id', 'project', 'volunteer']
 
 class AddressProjectAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'address')
@@ -123,6 +132,8 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(AddressProject, AddressProjectAdmin)
 admin.site.register(Address, AddressAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Volunteer, VolunteerAdmin)
+admin.site.register(Apply, ApplyAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Work, WorkAdmin)
 admin.site.register(Job, JobAdmin)

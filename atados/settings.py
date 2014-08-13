@@ -18,9 +18,6 @@ if os.environ.get('DJANGO_ENV') == 'production':
 else:
   DEVELOPMENT=True
 
-print "Development mode: %s" % DEVELOPMENT
-print "Debug mode: %s" % DEBUG
-
 if DEVELOPMENT:
   ALLOWED_HOSTS = (
     '.atadoslocal.com.br',
