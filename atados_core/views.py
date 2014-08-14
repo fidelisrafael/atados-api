@@ -1042,7 +1042,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset]
 
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
+    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('?')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
