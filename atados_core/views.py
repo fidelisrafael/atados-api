@@ -9,7 +9,7 @@ import urllib2
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
-from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMarkerSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
 from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
 
 from datetime import datetime
@@ -1044,35 +1044,11 @@ class ProjectList(generics.ListAPIView):
 
     return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
 
-class ProjectMarkerList(generics.ListAPIView):
-  serializer_class = ProjectMarkerSerializer
+class ProjectMapList(generics.ListAPIView):
+  serializer_class = ProjectMapSerializer
 
   def get_queryset(self):
-    params = self.request.GET
-
-    highlighted = params.get('highlighted') == 'true'
-    if highlighted:
-        return Project.objects.filter(highlighted=highlighted)
-
-    query = params.get('query', None)
-    cause = params.get('cause', None)
-    skill = params.get('skill', None)
-    city = params.get('city', None)
-    nonprofit = params.get('nonprofit', None)
-
-    if nonprofit:
-      nonprofit = Nonprofit.objects.get(user__slug=nonprofit)
-      queryset = Project.objects.filter(nonprofit=nonprofit)
-    else:
-        queryset = SearchQuerySet().models(Project)
-    queryset = queryset.filter(causes=cause) if cause else queryset
-    queryset = queryset.filter(skills=skill) if skill else queryset
-    queryset = queryset.filter(city=city) if city else queryset
-    queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
-    results = [ r.pk for r in queryset]
-
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True)
-
+    return Project.objects.filter(deleted=False, closed=False, published=True)
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
@@ -1104,6 +1080,11 @@ class NonprofitList(generics.ListAPIView):
     else:
         return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?')
 
+class NonprofitMapList(generics.ListAPIView):
+  serializer_class = NonprofitMapSerializer
+
+  def get_queryset(self):
+    return Nonprofit.objects.filter(deleted=False, published=True)
 
 class VolunteerProjectList(generics.ListAPIView):
   serializer_class = VolunteerProjectSerializer
