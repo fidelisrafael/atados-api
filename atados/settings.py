@@ -2,6 +2,7 @@
 # Django settings for atados project.
 import os
 import sys
+import djcelery
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
@@ -44,17 +45,7 @@ DATABASES = {
       'PORT': os.environ.get('ATADOS_DB_PORT', ''),
     }
 }
-#
-#if DEBUG and DEVELOPMENT:
-#    DATABASES['legacy_local'] = {
-#      'ENGINE': 'django.db.backends.mysql',
-#      'NAME': os.environ.get('LEGACY_DB_NAME', ''),
-#      'USER': os.environ.get('LEGACY_USERNAME', ''),
-#      'PASSWORD': os.environ.get('LEGACY_PASSWORD', ''),
-#      'HOST': os.environ.get('LEGACY_HOSTNAME', 'localhost'),
-#      'PORT': '3306',
-#    }
-#
+
 if 'test' in sys.argv:
   DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
 
@@ -140,7 +131,8 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'django_nose',
-    'import_export'
+    'import_export',
+    'djcelery'
 )
 
 
@@ -292,3 +284,13 @@ PASSWORD_HASHERS = (
 GRAPPELLI_ADMIN_TITLE="Admin do Atados"
 AUTOCOMPLETE_LIMIT=5
 EXPORT_RECORDS_LIMIT = 20000
+
+djcelery.setup_loader()
+BROKER_URL = 'amqp://ubuntu@localhost:5672//'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERY_BEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
