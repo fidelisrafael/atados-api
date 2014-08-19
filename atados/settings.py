@@ -140,8 +140,7 @@ INSTALLED_APPS = (
     'provider',
     'provider.oauth2',
     'django_nose',
-    'import_export',
-    'djcelery',
+    'import_export'
 )
 
 
@@ -293,23 +292,3 @@ PASSWORD_HASHERS = (
 GRAPPELLI_ADMIN_TITLE="Admin do Atados"
 AUTOCOMPLETE_LIMIT=5
 EXPORT_RECORDS_LIMIT = 20000
-
-import djcelery
-djcelery.setup_loader()
-
-BROKER_URL = 'amqp://guest@localhost:5672//'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'America/Sao_Paulo'
-CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
-CELERYD_NODES="worker1"
-CELERY_BIN="/home/ubuntu/.virtualenvs/atados/bin/celery"
-CELERY_APP="atados"
-CELERYD_CHDIR="/home/ubuntu/api/"
-CELERYD_OPTS="--time-limit=300 --concurrency=8"
-CELERYD_LOG_FILE="/var/log/celery/%N.log"
-CELERYD_PID_FILE="/var/run/celery/%N.pid"
-CELERYD_USER="root"
-CELERYD_GROUP="root"
-CELERY_CREATE_DIRS=1

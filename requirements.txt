@@ -7,7 +7,6 @@ boto==2.32.1
 coverage==3.7.1
 coveralls==0.4.2
 django-bootstrap-toolkit==2.15
-django-celery==3.1.10
 django-cors-headers==0.13
 django-debug-toolbar==1.2.1
 django-grappelli==2.5.3
