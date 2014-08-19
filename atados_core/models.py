@@ -308,6 +308,7 @@ class Nonprofit(models.Model):
       if self.pk is not None:
         orig = Nonprofit.objects.get(pk=self.pk)
         if not orig.published and self.published:
+          self.published_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
           # Sending welcome email on nonprofit signup
           plaintext = get_template('email/nonprofitApproved.txt')
           htmly     = get_template('email/nonprofitApproved.html')
@@ -406,6 +407,7 @@ class Project(models.Model):
     if self.pk is not None:
         orig = Project.objects.get(pk=self.pk)
         if not orig.published and self.published:
+          self.published_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
           # Sending welcome email on project creation
           plaintext = get_template('email/projectApproved.txt')
           htmly     = get_template('email/projectApproved.html')
