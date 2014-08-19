@@ -286,7 +286,7 @@ AUTOCOMPLETE_LIMIT=5
 EXPORT_RECORDS_LIMIT = 20000
 
 djcelery.setup_loader()
-BROKER_URL = 'amqp://ubuntu@localhost:5672//'
+BROKER_URL = 'amqp://guest@localhost:5672//'
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
