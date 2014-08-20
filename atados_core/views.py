@@ -200,14 +200,9 @@ def create_volunteer(request, format=None):
     site = request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
     user = User.objects.create_user(email, password, slug=slug, site=site)
     # Sending welcome email on email signup
-    if "atados" in site:
-        plaintext = get_template('email/volunteerSignup.txt')
-        htmly     = get_template('email/volunteerSignup.html')
-        subject   = u"Seja bem vindo ao Atados"
-    elif "portovoluntario" in site:
-        plaintext = get_template('email/volunteerSignupPorto.txt')
-        htmly     = get_template('email/volunteerSignupPorto.html')
-        subject   = u"Seja bem vindo ao Porto Voluntário"
+    plaintext = get_template('email/volunteerSignup.txt')
+    htmly     = get_template('email/volunteerSignup.html')
+    subject   = u"Seja bem vindo ao Atados"
     d = Context({ 'name': user.name })
     from_email, to = 'contato@atados.com.br', user.email
     text_content = plaintext.render(d)
@@ -1006,15 +1001,6 @@ class NonprofitViewSet(viewsets.ModelViewSet):
     except:
       raise Http404
 
-class PortoSeguroProjectHighlightsList(generics.ListAPIView):
-  serializer_class = ProjectSearchSerializer
-  permission_classes = [AllowAny]
-
-  def get_queryset(self):
-    porto_seguro = Company.objects.get(name="Porto Seguro")
-    return Project.objects.filter(deleted=False, closed=False,
-            published=True, highlighted=True, companies=porto_seguro).order_by('?')
-
 class ProjectList(generics.ListAPIView):
   serializer_class = ProjectSearchSerializer
 
@@ -1042,7 +1028,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset]
 
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('?')
+    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('highlighted')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
@@ -1056,14 +1042,10 @@ class NonprofitList(generics.ListAPIView):
 
   def get_queryset(self):
     params = self.request.GET
-    site = self.request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
 
     highlighted = params.get('highlighted') == 'true'
     if highlighted:
-        if "atados" in site:
-          return Nonprofit.objects.filter(highlighted=highlighted).exclude(companies__name="Porto Seguro")
-        else:
-          return Nonprofit.objects.filter(highlighted=highlighted)
+        return Nonprofit.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1075,10 +1057,7 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
 
-    if "atados" in site:
-        return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?').exclude(companies__name="Porto Seguro")
-    else:
-        return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('?')
+    return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('highlighted')
 
 class NonprofitMapList(generics.ListAPIView):
   serializer_class = NonprofitMapSerializer
