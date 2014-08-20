@@ -7,7 +7,7 @@ import pytz
 import sys
 import urllib2
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Company
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
 from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
@@ -1028,7 +1028,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset]
 
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('highlighted')
+    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
@@ -1057,7 +1057,7 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
     results = [ r.pk for r in queryset ]
 
-    return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('highlighted')
+    return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('-highlighted')
 
 class NonprofitMapList(generics.ListAPIView):
   serializer_class = NonprofitMapSerializer
