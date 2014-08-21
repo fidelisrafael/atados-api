@@ -1025,8 +1025,9 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(city=city) if city else queryset
-    queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
-    results = [ r.pk for r in queryset]
+    queryset = queryset.filter(content=query).boost(query, 2) if query else queryset # TODO: factor in similar words and words with accent
+    queryset = queryset.values_list('pk')
+    results = [item for sublist in queryset for item in sublist]
 
     return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
 
@@ -1055,7 +1056,8 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query).boost(query, 2) if query else queryset
-    results = [ r.pk for r in queryset ]
+    queryset = queryset.values_list('pk')
+    results = [item for sublist in queryset for item in sublist]
 
     return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('-highlighted')
 
