@@ -1,4 +1,5 @@
 {{ object.name }}
+{{ object.ascii_name }}
 {{ object.nonprofit.name }}
 {{ object.description }}
 {{ object.details }}

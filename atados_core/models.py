@@ -20,6 +20,8 @@ from import_export import resources, fields
 from datetime import datetime
 from atados import settings
 from itertools import chain
+from unidecode import unidecode
+
 
 # from pygeocoder import Geocoder
 
@@ -227,6 +229,10 @@ class Nonprofit(models.Model):
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=150)
+
+    def ascii_name(self):
+      return unidecode(self.name)
+
     details = models.TextField(_('Details'), max_length=1024, blank=True,
                                null=True, default=None)
     description = models.TextField(_('Short description'), max_length=160,
@@ -348,6 +354,10 @@ class Role(models.Model):
 class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
+
+  def ascii_name(self):
+    return unidecode(self.name)
+
   slug = models.SlugField(max_length=100, unique=True)
   details = models.TextField(_('Details'), max_length=1024)
   description = models.TextField(_('Short description'), max_length=160,
