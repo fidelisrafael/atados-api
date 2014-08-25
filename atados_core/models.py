@@ -539,15 +539,9 @@ class UserManager(BaseUserManager):
                       last_login=now, joined_date=now, **extra_fields)
 
     site = extra_fields.get('site', 'https://www.atados.com.br')
-    print site
-    if "atados" in site:
-      plaintext = get_template('email/emailVerification.txt')
-      htmly     = get_template('email/emailVerification.html')
-      subject   = u'Confirme seu email do Atados.'
-    elif "portovoluntario" in site:
-      plaintext = get_template('email/emailVerificationPorto.txt')
-      htmly     = get_template('email/emailVerificationPorto.html')
-      subject   = u'Confirme seu email do Porto Voluntário.'
+    plaintext = get_template('email/emailVerification.txt')
+    htmly     = get_template('email/emailVerification.html')
+    subject   = u'Confirme seu email do Atados.'
     d = Context({ 'token': token , 'site': site})
     from_email, to = 'contato@atados.com.br', email
     text_content = plaintext.render(d)
