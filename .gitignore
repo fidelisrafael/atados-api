@@ -51,3 +51,5 @@ coverage_html_report/
 atados.sqlite
 storage
 static
+celerybeat-schedule
+celeryev.pid
