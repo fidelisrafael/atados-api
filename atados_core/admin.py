@@ -106,7 +106,7 @@ class WorkAdmin(admin.ModelAdmin):
 
 class UserAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'email', 'phone', 'address')
-  list_display = ('slug', 'email', 'name', 'last_login')
+  list_display = ('slug', 'email', 'name', 'last_login', 'address')
   list_filter = ('last_login', 'joined_date')
   search_fields = ['email', 'slug']
   raw_id_fields = ['address']
