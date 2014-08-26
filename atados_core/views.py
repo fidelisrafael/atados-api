@@ -1060,6 +1060,7 @@ class NonprofitList(generics.ListAPIView):
     queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query) if query else queryset
     queryset = queryset.values_list('pk')
+    print queryset
     results = [item for sublist in queryset for item in sublist]
 
     return Nonprofit.objects.filter(pk__in=results, published=True, deleted=False).order_by('-highlighted')
