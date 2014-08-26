@@ -1,3 +1,4 @@
 {{ object.name }}
+{{ object.ascii_name }}
 {{ object.details }}
 {{ object.description }}
