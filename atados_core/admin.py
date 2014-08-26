@@ -105,10 +105,11 @@ class WorkAdmin(admin.ModelAdmin):
   filter_horizontal = ('availabilities',)
 
 class UserAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'email', 'phone')
+  fields = ('name', 'slug', 'email', 'phone', 'address')
   list_display = ('slug', 'email', 'name', 'last_login')
   list_filter = ('last_login', 'joined_date')
   search_fields = ['email', 'slug']
+  raw_id_fields = ['address']
 
 class VolunteerAdmin(admin.ModelAdmin):
   list_display = ['id', 'user', 'facebook_uid', 'image']
