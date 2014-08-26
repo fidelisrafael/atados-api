@@ -1052,6 +1052,9 @@ class NonprofitList(generics.ListAPIView):
     cause = params.get('cause', None)
     city = params.get('city', None)
 
+    city = int(city) if city else None
+    cause = int(cause) if cause else None
+
     queryset = SearchQuerySet().models(Nonprofit)
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(city=city) if city else queryset

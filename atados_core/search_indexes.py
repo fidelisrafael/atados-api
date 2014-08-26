@@ -1,11 +1,10 @@
 from haystack import indexes
-from atados_core.models import Nonprofit, Project#, Volunteer
+from atados_core.models import Nonprofit, Project
 
 class NonprofitIndex(indexes.SearchIndex, indexes.Indexable):
   causes = indexes.MultiValueField(faceted=True)
   text = indexes.CharField(document=True, use_template=True)
   city = indexes.CharField(faceted=True)
-  highlighted = indexes.BooleanField(model_attr='highlighted')
 
   def prepare_city(self, obj):
     city = obj.user.address.city if obj.user.address else None
@@ -25,7 +24,6 @@ class ProjectIndex(indexes.SearchIndex, indexes.Indexable):
   causes = indexes.MultiValueField(faceted=True)
   skills = indexes.MultiValueField(faceted=True)
   city = indexes.CharField(faceted=True)
-  highlighted = indexes.BooleanField(model_attr='highlighted')
 
   def prepare_causes(self, obj):
     return [cause.id for cause in obj.causes.all()]
