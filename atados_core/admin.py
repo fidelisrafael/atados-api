@@ -142,6 +142,79 @@ admin.site.register(City, CityAdmin)
 
 
 
+def export_emails(modeladmin, request, queryset):
+    """
+    Generic xls export admin action.
+    """
+    if queryset.count() > settings.EXPORT_RECORDS_LIMIT:
+        messages.error(request, "Can't export more then %s Records in one go. Narrow down your criteria using filters or search" % str(settings.EXPORT_RECORDS_LIMIT))
+        return HttpResponseRedirect(request.path_info)
+    fields = []
+
+    #PUT THE LIST OF FIELD NAMES YOU DON'T WANT TO EXPORT
+    #exclude_fields = ['password', 'id', 'last_login', 'slug', 'is_staff', 'is_email_verified', 'is_active', 'joined_date', 'modified_date', 'address_id', 'phone', 'legacy_uid', 'hidden_address', 'name', 'company_id', 'token', 'site'] 
+
+    #foreign key related fields
+    extras = []
+
+    if not request.user.is_staff:
+        raise PermissionDenied
+
+    for f in modeladmin.list_display:
+        if f == 'email':
+            fields.append(f)
+    
+    opts = modeladmin.model._meta
+
+    wb = Workbook()
+    ws0 = wb.add_sheet('0')
+    col = 0
+    field_names = []
+
+    # write header row
+    for field in fields:
+        ws0.write(0, col, field)
+        field_names.append(field)
+        col = col + 1
+    row = 1
+
+    # Write data rows
+    for obj in queryset:
+        col = 0
+        for field in field_names:
+            if field in extras:
+                try:
+                    val = [eval('obj.'+field)] #eval sucks but easiest way to deal
+                except :
+                    val = ['None']
+            else:
+                try:
+                    val = lookup_field(field, obj, modeladmin)
+                except :
+                    val = ['None']
+
+            if not val[-1] == None:
+              if isinstance(val[-1], bool):
+                ws0.write(row, col, strip_tags(str(val[-1])))
+              elif not isinstance(val[-1], str) and not isinstance(val[-1], unicode):
+                ws0.write(row, col, strip_tags(val[-1].__unicode__()))
+              elif val[-1]:
+                ws0.write(row, col, strip_tags(val[-1]))
+            else:
+              ws0.write(row, col, strip_tags(''))
+
+
+            col = col + 1
+        
+        row = row + 1
+
+    wb.save('/tmp/output.xls')
+    response = HttpResponse(open('/tmp/output.xls','r').read(),
+                  mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=%s.xls' % unicode(opts).replace('.', '_')
+    return response
+
+
 def export_as_xls(modeladmin, request, queryset):
     """
     Generic xls export admin action.
@@ -216,4 +289,6 @@ def export_as_xls(modeladmin, request, queryset):
     return response
 
 export_as_xls.short_description = _("Export selected to XLS")
+export_emails.short_description = _("Export emails to XLS")
 admin.site.add_action(export_as_xls)
+admin.site.add_action(export_emails)
