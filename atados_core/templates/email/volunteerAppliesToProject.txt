@@ -9,4 +9,8 @@ Se a ONG não entrar em contato com você em uma semana, fale com a gente pelo e
 
 Por último, um recadinho. É sempre bom lembrar da importância do comprometimento e da alegria que o voluntário deve ter para exercer suas atividades, afinal, voluntariado é coisa séria. Contamos com você.
 
+Dados do responsável pelo Ato:
+{{ project_email }}
+{{ project_phone }}
+
 Abraços carinhosos, equipe Atados.

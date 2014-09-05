@@ -861,7 +861,7 @@ def apply_volunteer_to_project(request, format=None):
         # Sending email to volunteer after user applied to project
         plaintext = get_template('email/volunteerAppliesToProject.txt')
         htmly     = get_template('email/volunteerAppliesToProject.html')
-        d = Context({ 'project_name': project.name })
+        d = Context({ 'project_name': project.name, 'project_email': project.email, 'project_phone': project.phone })
         subject, from_email, to = u'Confirmação do ato. Parabéns.', 'contato@atados.com.br', volunteer.user.email
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
