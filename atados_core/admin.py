@@ -105,7 +105,7 @@ class WorkAdmin(admin.ModelAdmin):
   filter_horizontal = ('availabilities',)
 
 class UserAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'email', 'phone', 'address')
+  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_email_verified')
   list_display = ('slug', 'email', 'name', 'last_login', 'address')
   list_filter = ('last_login', 'joined_date')
   search_fields = ['email', 'slug']
