@@ -2,6 +2,7 @@
 # Django settings for atados project.
 import os
 import sys
+import djcelery
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
