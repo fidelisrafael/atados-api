@@ -98,11 +98,11 @@ class ProjectAdmin(admin.ModelAdmin):
 
 class JobAdmin(admin.ModelAdmin):
   list_display = ['id', 'project', 'start_date', 'end_date']
-  search_fields = ['id']
+  search_fields = ['id', 'project__name', 'project__nonprofit__name']
 
 class WorkAdmin(admin.ModelAdmin):
   list_display = ['id', 'project', 'weekly_hours', 'can_be_done_remotely']
-  search_fields = ['id']
+  search_fields = ['id', 'project__name', 'project__nonprofit__name']
   filter_horizontal = ['availabilities']
 
 class UserAdmin(admin.ModelAdmin):
