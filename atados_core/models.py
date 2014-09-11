@@ -119,8 +119,6 @@ class Address(models.Model):
           self.longitude = results[0].coordinates[1]
         except Exception as e:
           print e
-      self.latitude = 0.0
-      self.longitude = 0.0
 
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Address, self).save(*args, **kwargs)

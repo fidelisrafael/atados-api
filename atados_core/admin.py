@@ -39,14 +39,14 @@ class JobInline(admin.TabularInline):
     model = Job
 
 class AddressAdmin(admin.ModelAdmin):
+  fields = ['city', 'addressline', 'addressline2', 'addressnumber', 'neighborhood', 'zipcode', ('latitude', 'longitude')]
   readonly_fields = ['id']
-  fields = ('city', 'addressline', 'addressline2', 'addressnumber', 'neighborhood', 'zipcode', ('latitude', 'longitude'))
   raw_id_fields = ['city']
   related_lookup_fields = {
       'city': ['city'],
   }
-  list_display = ('id', 'object', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
-  search_fields = ['id', 'addressline']
+  list_display = ['id', 'object', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude']
+  search_fields = ['id', 'addressline', 'city__name']
 
   def object(self, instance):
     try:
@@ -122,7 +122,7 @@ class ApplyAdmin(admin.ModelAdmin):
   list_display = ['id', 'project', 'volunteer']
 
 class AddressProjectAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'address')
+  fields = ['name', 'slug', 'address']
   list_display = ('id', 'name', 'slug', 'nonprofit', 'address')
   raw_id_fields = ['address']
 
