@@ -46,7 +46,7 @@ class AddressAdmin(admin.ModelAdmin):
       'city': ['city'],
   }
   list_display = ('id', 'object', 'addressline', 'addressnumber', 'neighborhood', 'city', 'zipcode', 'latitude', 'longitude')
-  search_fields = ['id']
+  search_fields = ['id', 'addressline']
 
   def object(self, instance):
     try:
@@ -97,12 +97,13 @@ class ProjectAdmin(admin.ModelAdmin):
    return format_html("<a href='https://www.atados.com.br/ato/{0}' target='_blank'>Clique para ver ato no site</a>", instance.slug)
 
 class JobAdmin(admin.ModelAdmin):
-  list_display = ('id', 'project', 'start_date', 'end_date')
+  list_display = ['id', 'project', 'start_date', 'end_date']
+  search_fields = ['id']
 
 class WorkAdmin(admin.ModelAdmin):
-  list_display = ('id', 'project', 'weekly_hours', 'can_be_done_remotely')
-  search_fields = ('id', )
-  filter_horizontal = ('availabilities',)
+  list_display = ['id', 'project', 'weekly_hours', 'can_be_done_remotely']
+  search_fields = ['id']
+  filter_horizontal = ['availabilities']
 
 class UserAdmin(admin.ModelAdmin):
   fields = ('name', 'slug', 'email', 'phone', 'address', 'is_email_verified')
