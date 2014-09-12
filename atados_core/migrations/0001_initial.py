@@ -1,513 +1,402 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+import atados_core.models
+import django.utils.timezone
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Availability'
-        db.create_table(u'atados_core_availability', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('weekday', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('period', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-        ))
-        db.send_create_signal(u'atados_core', ['Availability'])
+    dependencies = [
+    ]
 
-        # Adding model 'Cause'
-        db.create_table(u'atados_core_cause', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal(u'atados_core', ['Cause'])
-
-        # Adding model 'Skill'
-        db.create_table(u'atados_core_skill', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal(u'atados_core', ['Skill'])
-
-        # Adding model 'State'
-        db.create_table(u'atados_core_state', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('code', self.gf('django.db.models.fields.CharField')(max_length=2)),
-        ))
-        db.send_create_signal(u'atados_core', ['State'])
-
-        # Adding model 'City'
-        db.create_table(u'atados_core_city', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('state', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.State'])),
-            ('active', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal(u'atados_core', ['City'])
-
-        # Adding model 'Address'
-        db.create_table(u'atados_core_address', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('zipcode', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('addressline', self.gf('django.db.models.fields.CharField')(default=None, max_length=200, null=True, blank=True)),
-            ('addressnumber', self.gf('django.db.models.fields.CharField')(default=None, max_length=10, null=True, blank=True)),
-            ('addressline2', self.gf('django.db.models.fields.CharField')(default=None, max_length=100, null=True, blank=True)),
-            ('neighborhood', self.gf('django.db.models.fields.CharField')(default=None, max_length=50, null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.City'], null=True)),
-            ('latitude', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
-            ('longitude', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Address'])
-
-        # Adding model 'Volunteer'
-        db.create_table(u'atados_core_volunteer', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.User'], unique=True)),
-            ('facebook_uid', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('facebook_access_token', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('facebook_access_token_expires', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(default=None, max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Volunteer'])
-
-        # Adding M2M table for field causes on 'Volunteer'
-        m2m_table_name = db.shorten_name(u'atados_core_volunteer_causes')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('volunteer', models.ForeignKey(orm[u'atados_core.volunteer'], null=False)),
-            ('cause', models.ForeignKey(orm[u'atados_core.cause'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['volunteer_id', 'cause_id'])
-
-        # Adding M2M table for field skills on 'Volunteer'
-        m2m_table_name = db.shorten_name(u'atados_core_volunteer_skills')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('volunteer', models.ForeignKey(orm[u'atados_core.volunteer'], null=False)),
-            ('skill', models.ForeignKey(orm[u'atados_core.skill'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['volunteer_id', 'skill_id'])
-
-        # Adding model 'Nonprofit'
-        db.create_table(u'atados_core_nonprofit', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.User'], unique=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('details', self.gf('django.db.models.fields.TextField')(default=None, max_length=1024, null=True, blank=True)),
-            ('description', self.gf('django.db.models.fields.TextField')(max_length=100, null=True, blank=True)),
-            ('website', self.gf('django.db.models.fields.URLField')(default=None, max_length=200, null=True, blank=True)),
-            ('facebook_page', self.gf('django.db.models.fields.URLField')(default=None, max_length=200, null=True, blank=True)),
-            ('google_page', self.gf('django.db.models.fields.URLField')(default=None, max_length=200, null=True, blank=True)),
-            ('twitter_handle', self.gf('django.db.models.fields.CharField')(default=None, max_length=51, null=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(default=None, max_length=100, null=True, blank=True)),
-            ('cover', self.gf('django.db.models.fields.files.ImageField')(default=None, max_length=100, null=True, blank=True)),
-            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('published_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Nonprofit'])
-
-        # Adding M2M table for field causes on 'Nonprofit'
-        m2m_table_name = db.shorten_name(u'atados_core_nonprofit_causes')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('nonprofit', models.ForeignKey(orm[u'atados_core.nonprofit'], null=False)),
-            ('cause', models.ForeignKey(orm[u'atados_core.cause'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['nonprofit_id', 'cause_id'])
-
-        # Adding M2M table for field volunteers on 'Nonprofit'
-        m2m_table_name = db.shorten_name(u'atados_core_nonprofit_volunteers')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('nonprofit', models.ForeignKey(orm[u'atados_core.nonprofit'], null=False)),
-            ('volunteer', models.ForeignKey(orm[u'atados_core.volunteer'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['nonprofit_id', 'volunteer_id'])
-
-        # Adding model 'Role'
-        db.create_table(u'atados_core_role', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(default=None, max_length=50, null=True, blank=True)),
-            ('prerequisites', self.gf('django.db.models.fields.TextField')(default=None, max_length=1024, null=True, blank=True)),
-            ('details', self.gf('django.db.models.fields.TextField')(default=None, max_length=1024, null=True, blank=True)),
-            ('vacancies', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Role'])
-
-        # Adding model 'Project'
-        db.create_table(u'atados_core_project', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('nonprofit', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Nonprofit'])),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
-            ('details', self.gf('django.db.models.fields.TextField')(max_length=3000)),
-            ('description', self.gf('django.db.models.fields.TextField')(max_length=100, null=True, blank=True)),
-            ('facebook_event', self.gf('django.db.models.fields.URLField')(default=None, max_length=200, null=True, blank=True)),
-            ('responsible', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
-            ('published', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('published_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('closed', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('closed_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('deleted', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('deleted_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('created_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('modified_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('address', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Address'], unique=True, null=True, blank=True)),
-            ('legacy_nid', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('image', self.gf('django.db.models.fields.files.ImageField')(default=None, max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Project'])
-
-        # Adding M2M table for field roles on 'Project'
-        m2m_table_name = db.shorten_name(u'atados_core_project_roles')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('project', models.ForeignKey(orm[u'atados_core.project'], null=False)),
-            ('role', models.ForeignKey(orm[u'atados_core.role'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['project_id', 'role_id'])
-
-        # Adding M2M table for field skills on 'Project'
-        m2m_table_name = db.shorten_name(u'atados_core_project_skills')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('project', models.ForeignKey(orm[u'atados_core.project'], null=False)),
-            ('skill', models.ForeignKey(orm[u'atados_core.skill'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['project_id', 'skill_id'])
-
-        # Adding M2M table for field causes on 'Project'
-        m2m_table_name = db.shorten_name(u'atados_core_project_causes')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('project', models.ForeignKey(orm[u'atados_core.project'], null=False)),
-            ('cause', models.ForeignKey(orm[u'atados_core.cause'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['project_id', 'cause_id'])
-
-        # Adding model 'Work'
-        db.create_table(u'atados_core_work', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Project'], unique=True)),
-            ('weekly_hours', self.gf('django.db.models.fields.PositiveSmallIntegerField')(null=True, blank=True)),
-            ('can_be_done_remotely', self.gf('django.db.models.fields.BooleanField')()),
-        ))
-        db.send_create_signal(u'atados_core', ['Work'])
-
-        # Adding M2M table for field availabilities on 'Work'
-        m2m_table_name = db.shorten_name(u'atados_core_work_availabilities')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('work', models.ForeignKey(orm[u'atados_core.work'], null=False)),
-            ('availability', models.ForeignKey(orm[u'atados_core.availability'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['work_id', 'availability_id'])
-
-        # Adding model 'Job'
-        db.create_table(u'atados_core_job', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Project'], unique=True)),
-            ('start_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('end_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Job'])
-
-        # Adding model 'ApplyStatus'
-        db.create_table(u'atados_core_applystatus', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal(u'atados_core', ['ApplyStatus'])
-
-        # Adding model 'Apply'
-        db.create_table(u'atados_core_apply', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('volunteer', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Volunteer'])),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Project'])),
-            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('canceled', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('canceled_date', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Apply'])
-
-        # Adding model 'Recommendation'
-        db.create_table(u'atados_core_recommendation', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['atados_core.Project'])),
-            ('sort', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=None, null=True, blank=True)),
-            ('state', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.State'], null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['atados_core.City'], null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['Recommendation'])
-
-        # Adding model 'User'
-        db.create_table(u'atados_core_user', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('last_login', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now)),
-            ('email', self.gf('django.db.models.fields.EmailField')(unique=True, max_length=254)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
-            ('is_staff', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('is_active', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('is_email_verified', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('joined_date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, null=True, blank=True)),
-            ('modified_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, null=True, blank=True)),
-            ('address', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['atados_core.Address'], unique=True, null=True, blank=True)),
-            ('phone', self.gf('django.db.models.fields.CharField')(default=None, max_length=20, null=True, blank=True)),
-            ('legacy_uid', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'atados_core', ['User'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Availability'
-        db.delete_table(u'atados_core_availability')
-
-        # Deleting model 'Cause'
-        db.delete_table(u'atados_core_cause')
-
-        # Deleting model 'Skill'
-        db.delete_table(u'atados_core_skill')
-
-        # Deleting model 'State'
-        db.delete_table(u'atados_core_state')
-
-        # Deleting model 'City'
-        db.delete_table(u'atados_core_city')
-
-        # Deleting model 'Address'
-        db.delete_table(u'atados_core_address')
-
-        # Deleting model 'Volunteer'
-        db.delete_table(u'atados_core_volunteer')
-
-        # Removing M2M table for field causes on 'Volunteer'
-        db.delete_table(db.shorten_name(u'atados_core_volunteer_causes'))
-
-        # Removing M2M table for field skills on 'Volunteer'
-        db.delete_table(db.shorten_name(u'atados_core_volunteer_skills'))
-
-        # Deleting model 'Nonprofit'
-        db.delete_table(u'atados_core_nonprofit')
-
-        # Removing M2M table for field causes on 'Nonprofit'
-        db.delete_table(db.shorten_name(u'atados_core_nonprofit_causes'))
-
-        # Removing M2M table for field volunteers on 'Nonprofit'
-        db.delete_table(db.shorten_name(u'atados_core_nonprofit_volunteers'))
-
-        # Deleting model 'Role'
-        db.delete_table(u'atados_core_role')
-
-        # Deleting model 'Project'
-        db.delete_table(u'atados_core_project')
-
-        # Removing M2M table for field roles on 'Project'
-        db.delete_table(db.shorten_name(u'atados_core_project_roles'))
-
-        # Removing M2M table for field skills on 'Project'
-        db.delete_table(db.shorten_name(u'atados_core_project_skills'))
-
-        # Removing M2M table for field causes on 'Project'
-        db.delete_table(db.shorten_name(u'atados_core_project_causes'))
-
-        # Deleting model 'Work'
-        db.delete_table(u'atados_core_work')
-
-        # Removing M2M table for field availabilities on 'Work'
-        db.delete_table(db.shorten_name(u'atados_core_work_availabilities'))
-
-        # Deleting model 'Job'
-        db.delete_table(u'atados_core_job')
-
-        # Deleting model 'ApplyStatus'
-        db.delete_table(u'atados_core_applystatus')
-
-        # Deleting model 'Apply'
-        db.delete_table(u'atados_core_apply')
-
-        # Deleting model 'Recommendation'
-        db.delete_table(u'atados_core_recommendation')
-
-        # Deleting model 'User'
-        db.delete_table(u'atados_core_user')
-
-
-    models = {
-        u'atados_core.address': {
-            'Meta': {'object_name': 'Address'},
-            'addressline': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'addressline2': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'addressnumber': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.City']", 'null': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'latitude': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'longitude': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'neighborhood': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'zipcode': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '10', 'null': 'True', 'blank': 'True'})
-        },
-        u'atados_core.apply': {
-            'Meta': {'object_name': 'Apply'},
-            'canceled': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'canceled_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Project']"}),
-            'volunteer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Volunteer']"})
-        },
-        u'atados_core.applystatus': {
-            'Meta': {'object_name': 'ApplyStatus'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        u'atados_core.availability': {
-            'Meta': {'object_name': 'Availability'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'period': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
-            'weekday': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
-        },
-        u'atados_core.cause': {
-            'Meta': {'object_name': 'Cause'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        u'atados_core.city': {
-            'Meta': {'object_name': 'City'},
-            'active': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'state': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.State']"})
-        },
-        u'atados_core.job': {
-            'Meta': {'object_name': 'Job'},
-            'end_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.Project']", 'unique': 'True'}),
-            'start_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'})
-        },
-        u'atados_core.nonprofit': {
-            'Meta': {'object_name': 'Nonprofit'},
-            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Cause']", 'null': 'True', 'blank': 'True'}),
-            'cover': ('django.db.models.fields.files.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'deleted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'details': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
-            'facebook_page': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            'google_page': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'published_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'twitter_handle': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '51', 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.User']", 'unique': 'True'}),
-            'volunteers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Volunteer']", 'null': 'True', 'blank': 'True'}),
-            'website': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'})
-        },
-        u'atados_core.project': {
-            'Meta': {'object_name': 'Project'},
-            'address': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.Address']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Cause']", 'symmetrical': 'False'}),
-            'closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'closed_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'deleted_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'details': ('django.db.models.fields.TextField', [], {'max_length': '3000'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'facebook_event': ('django.db.models.fields.URLField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'legacy_nid': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'modified_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'nonprofit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Nonprofit']"}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
-            'published': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'published_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'responsible': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'roles': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Role']", 'null': 'True', 'blank': 'True'}),
-            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Skill']", 'symmetrical': 'False'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'})
-        },
-        u'atados_core.recommendation': {
-            'Meta': {'object_name': 'Recommendation'},
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.City']", 'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['atados_core.Project']"}),
-            'sort': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
-            'state': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': u"orm['atados_core.State']", 'null': 'True', 'blank': 'True'})
-        },
-        u'atados_core.role': {
-            'Meta': {'object_name': 'Role'},
-            'details': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
-            'end_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'prerequisites': ('django.db.models.fields.TextField', [], {'default': 'None', 'max_length': '1024', 'null': 'True', 'blank': 'True'}),
-            'start_date': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'vacancies': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'})
-        },
-        u'atados_core.skill': {
-            'Meta': {'object_name': 'Skill'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        u'atados_core.state': {
-            'Meta': {'object_name': 'State'},
-            'code': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '30'})
-        },
-        u'atados_core.user': {
-            'Meta': {'object_name': 'User'},
-            'address': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.Address']", 'unique': 'True', 'null': 'True', 'blank': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_email_verified': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'joined_date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'null': 'True', 'blank': 'True'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
-            'legacy_uid': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'modified_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'null': 'True', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'phone': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '20', 'null': 'True', 'blank': 'True'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'})
-        },
-        u'atados_core.volunteer': {
-            'Meta': {'object_name': 'Volunteer'},
-            'causes': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Cause']", 'null': 'True', 'blank': 'True'}),
-            'facebook_access_token': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'facebook_access_token_expires': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'facebook_uid': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.files.ImageField', [], {'default': 'None', 'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'skills': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': u"orm['atados_core.Skill']", 'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.User']", 'unique': 'True'})
-        },
-        u'atados_core.work': {
-            'Meta': {'object_name': 'Work'},
-            'availabilities': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['atados_core.Availability']", 'symmetrical': 'False'}),
-            'can_be_done_remotely': ('django.db.models.fields.BooleanField', [], {}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'project': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['atados_core.Project']", 'unique': 'True'}),
-            'weekly_hours': ('django.db.models.fields.PositiveSmallIntegerField', [], {'null': 'True', 'blank': 'True'})
-        }
-    }
-
-    complete_apps = ['atados_core']
+    operations = [
+        migrations.CreateModel(
+            name='User',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('password', models.CharField(max_length=128, verbose_name='password')),
+                ('last_login', models.DateTimeField(default=django.utils.timezone.now, verbose_name='last login')),
+                ('email', models.EmailField(unique=True, max_length=254, verbose_name=b'Email')),
+                ('name', models.CharField(max_length=200, verbose_name='Name', blank=True)),
+                ('slug', models.SlugField(unique=True, max_length=100, verbose_name='Slug')),
+                ('is_staff', models.BooleanField(default=False, verbose_name='Staff')),
+                ('is_active', models.BooleanField(default=True, verbose_name='Active')),
+                ('is_email_verified', models.BooleanField(default=False, verbose_name='Email verified')),
+                ('joined_date', models.DateTimeField(auto_now_add=True, null=True)),
+                ('modified_date', models.DateTimeField(auto_now=True, null=True)),
+                ('hidden_address', models.BooleanField(default=False, verbose_name='Endereco escondido.')),
+                ('site', models.URLField(default=None, null=True, blank=True)),
+                ('phone', models.CharField(default=None, max_length=20, null=True, verbose_name='Phone', blank=True)),
+                ('legacy_uid', models.PositiveIntegerField(null=True, blank=True)),
+                ('token', models.CharField(default=None, max_length=64, unique=True, null=True, verbose_name='token')),
+            ],
+            options={
+                'verbose_name': 'user',
+                'verbose_name_plural': 'users',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Address',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('zipcode', models.CharField(default=None, max_length=10, null=True, verbose_name='Zip code', blank=True)),
+                ('addressline', models.CharField(default=None, max_length=200, null=True, verbose_name='Street', blank=True)),
+                ('addressnumber', models.CharField(default=None, max_length=10, null=True, verbose_name='Address number', blank=True)),
+                ('addressline2', models.CharField(default=None, max_length=100, null=True, verbose_name='Apt, PO Box, block', blank=True)),
+                ('neighborhood', models.CharField(default=None, max_length=50, null=True, verbose_name='Neighborhood', blank=True)),
+                ('latitude', models.FloatField(default=0.0)),
+                ('longitude', models.FloatField(default=0.0)),
+                ('modified_date', models.DateTimeField(auto_now=True)),
+            ],
+            options={
+                'verbose_name': 'address',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Apply',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('canceled', models.BooleanField(default=False, verbose_name='Canceled')),
+                ('canceled_date', models.DateTimeField(null=True, verbose_name='Canceled date', blank=True)),
+            ],
+            options={
+                'verbose_name': 'apply',
+                'verbose_name_plural': 'applies',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='ApplyStatus',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=30, verbose_name='name')),
+            ],
+            options={
+                'verbose_name': 'apply status',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Availability',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('weekday', models.PositiveSmallIntegerField(verbose_name='weekday', choices=[(1, 'Monday'), (2, 'Tuesday'), (3, 'Wednesday'), (4, 'Thursday'), (5, 'Friday'), (6, 'Saturday'), (0, 'Sunday')])),
+                ('period', models.PositiveSmallIntegerField(verbose_name='period', choices=[(0, 'Morning'), (1, 'Afternoon'), (2, 'Evening')])),
+            ],
+            options={
+                'verbose_name': 'availability',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Cause',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100, verbose_name='name')),
+            ],
+            options={
+                'verbose_name': 'cause',
+                'verbose_name_plural': 'causes',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='City',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50, verbose_name='name')),
+                ('active', models.BooleanField(default=False, verbose_name='City where Atados is present.')),
+            ],
+            options={
+                'verbose_name': 'city',
+                'verbose_name_plural': 'cities',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Comment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('comment', models.TextField()),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('deleted', models.BooleanField(default=False, verbose_name='Deleted')),
+                ('deleted_date', models.DateTimeField(null=True, verbose_name='Deleted date', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Company',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=300, verbose_name='name')),
+                ('address', models.OneToOneField(null=True, blank=True, to='atados_core.Address')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Job',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('start_date', models.DateTimeField(null=True, verbose_name='Start date', blank=True)),
+                ('end_date', models.DateTimeField(null=True, verbose_name='End date', blank=True)),
+            ],
+            options={
+                'verbose_name': 'Job',
+                'verbose_name_plural': 'Jobs',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Nonprofit',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=150, verbose_name='Name')),
+                ('details', models.TextField(default=None, max_length=1024, null=True, verbose_name='Details', blank=True)),
+                ('description', models.TextField(max_length=160, null=True, verbose_name='Short description', blank=True)),
+                ('website', models.URLField(default=None, null=True, blank=True)),
+                ('facebook_page', models.URLField(default=None, null=True, blank=True)),
+                ('google_page', models.URLField(default=None, null=True, blank=True)),
+                ('twitter_handle', models.URLField(default=None, null=True, blank=True)),
+                ('image', models.ImageField(default=None, upload_to=atados_core.models.nonprofit_image_name, null=True, verbose_name='Logo 200x200', blank=True)),
+                ('cover', models.ImageField(default=None, upload_to=atados_core.models.nonprofit_cover_name, null=True, verbose_name='Cover 1450x340', blank=True)),
+                ('highlighted', models.BooleanField(default=False, verbose_name='Highlighted')),
+                ('published', models.BooleanField(default=False, verbose_name='Published')),
+                ('published_date', models.DateTimeField(null=True, verbose_name='Published date', blank=True)),
+                ('deleted', models.BooleanField(default=False, verbose_name='Deleted')),
+                ('deleted_date', models.DateTimeField(null=True, verbose_name='Deleted date', blank=True)),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('modified_date', models.DateTimeField(auto_now_add=True)),
+                ('causes', models.ManyToManyField(to='atados_core.Cause', null=True, blank=True)),
+                ('companies', models.ManyToManyField(to='atados_core.Company', null=True, blank=True)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name': 'nonprofit',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Project',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50, verbose_name='Project name')),
+                ('slug', models.SlugField(unique=True, max_length=100)),
+                ('details', models.TextField(max_length=1024, verbose_name='Details')),
+                ('description', models.TextField(max_length=160, null=True, verbose_name='Short description', blank=True)),
+                ('facebook_event', models.URLField(default=None, null=True, blank=True)),
+                ('responsible', models.CharField(max_length=50, null=True, verbose_name='Responsible name', blank=True)),
+                ('phone', models.CharField(max_length=20, null=True, verbose_name='Phone', blank=True)),
+                ('email', models.EmailField(max_length=75, null=True, verbose_name='E-mail', blank=True)),
+                ('published', models.BooleanField(default=False, verbose_name='Published')),
+                ('published_date', models.DateTimeField(null=True, verbose_name='Published date', blank=True)),
+                ('closed', models.BooleanField(default=False, verbose_name='Closed')),
+                ('closed_date', models.DateTimeField(null=True, verbose_name='Closed date', blank=True)),
+                ('deleted', models.BooleanField(default=False, verbose_name='Deleted')),
+                ('deleted_date', models.DateTimeField(null=True, verbose_name='Deleted date', blank=True)),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('modified_date', models.DateTimeField(auto_now=True)),
+                ('highlighted', models.BooleanField(default=False, verbose_name='Highlighted')),
+                ('legacy_nid', models.PositiveIntegerField(null=True, blank=True)),
+                ('image', models.ImageField(default=None, upload_to=atados_core.models.project_image_name, null=True, verbose_name='Image 350x260', blank=True)),
+                ('address', models.OneToOneField(null=True, blank=True, to='atados_core.Address')),
+                ('causes', models.ManyToManyField(to='atados_core.Cause')),
+                ('companies', models.ManyToManyField(to='atados_core.Company', null=True, blank=True)),
+                ('nonprofit', models.ForeignKey(to='atados_core.Nonprofit')),
+            ],
+            options={
+                'verbose_name': 'project',
+                'verbose_name_plural': 'projects',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Recommendation',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('sort', models.PositiveSmallIntegerField(default=None, null=True, verbose_name='Sort', blank=True)),
+                ('city', models.ForeignKey(default=None, blank=True, to='atados_core.City', null=True)),
+                ('project', models.ForeignKey(to='atados_core.Project')),
+            ],
+            options={
+                'verbose_name': 'recommendation',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Role',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(default=None, max_length=50, null=True, verbose_name='Role name', blank=True)),
+                ('prerequisites', models.TextField(default=None, max_length=1024, null=True, verbose_name='Prerequisites', blank=True)),
+                ('details', models.TextField(default=None, max_length=1024, null=True, verbose_name='Details', blank=True)),
+                ('vacancies', models.PositiveSmallIntegerField(default=None, null=True, verbose_name='Vacancies', blank=True)),
+            ],
+            options={
+                'verbose_name': 'role',
+                'verbose_name_plural': 'roles',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Skill',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=100, verbose_name='name')),
+            ],
+            options={
+                'verbose_name': 'skill',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='State',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=30, verbose_name='name')),
+                ('code', models.CharField(max_length=2, verbose_name='code')),
+            ],
+            options={
+                'verbose_name': 'state',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Volunteer',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('facebook_uid', models.CharField(max_length=255, blank=True)),
+                ('facebook_access_token', models.CharField(max_length=255, blank=True)),
+                ('facebook_access_token_expires', models.PositiveIntegerField(null=True, blank=True)),
+                ('birthDate', models.DateField(default=None, null=True, blank=True)),
+                ('created_date', models.DateTimeField(auto_now_add=True)),
+                ('modified_date', models.DateTimeField(auto_now=True)),
+                ('image', models.ImageField(default=None, null=True, upload_to=atados_core.models.volunteer_image_name, blank=True)),
+                ('causes', models.ManyToManyField(to='atados_core.Cause', null=True, blank=True)),
+                ('skills', models.ManyToManyField(to='atados_core.Skill', null=True, blank=True)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name': 'volunteer',
+                'verbose_name_plural': 'volunteers',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Work',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('weekly_hours', models.PositiveSmallIntegerField(null=True, verbose_name='Weekly hours', blank=True)),
+                ('can_be_done_remotely', models.BooleanField(default=False, verbose_name='This work can be done remotely.')),
+                ('availabilities', models.ManyToManyField(to='atados_core.Availability')),
+                ('project', models.OneToOneField(null=True, blank=True, to='atados_core.Project')),
+            ],
+            options={
+                'verbose_name': 'work',
+                'verbose_name_plural': 'works',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='recommendation',
+            name='state',
+            field=models.ForeignKey(default=None, blank=True, to='atados_core.State', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='project',
+            name='roles',
+            field=models.ManyToManyField(to='atados_core.Role', null=True, blank=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='project',
+            name='skills',
+            field=models.ManyToManyField(to='atados_core.Skill'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='nonprofit',
+            name='volunteers',
+            field=models.ManyToManyField(to='atados_core.Volunteer', null=True, blank=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='job',
+            name='project',
+            field=models.OneToOneField(null=True, blank=True, to='atados_core.Project'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comment',
+            name='project',
+            field=models.ForeignKey(to='atados_core.Project'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='comment',
+            name='user',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='city',
+            name='state',
+            field=models.ForeignKey(to='atados_core.State'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='apply',
+            name='project',
+            field=models.ForeignKey(to='atados_core.Project'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='apply',
+            name='status',
+            field=models.ForeignKey(to='atados_core.ApplyStatus'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='apply',
+            name='volunteer',
+            field=models.ForeignKey(to='atados_core.Volunteer'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='address',
+            name='city',
+            field=models.ForeignKey(default=None, blank=True, to='atados_core.City', null=True, verbose_name='City'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='address',
+            field=models.OneToOneField(null=True, blank=True, to='atados_core.Address'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='company',
+            field=models.ForeignKey(blank=True, to='atados_core.Company', null=True),
+            preserve_default=True,
+        ),
+        migrations.CreateModel(
+            name='AddressProject',
+            fields=[
+            ],
+            options={
+                'proxy': True,
+            },
+            bases=('atados_core.project',),
+        ),
+    ]

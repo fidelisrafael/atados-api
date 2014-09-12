@@ -158,6 +158,11 @@ class Company(models.Model):
   def __unicode__(self):
     return self.name
 
+def volunteer_image_name(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'volunteer/%s/%s.%s' % (self.user.slug,
+                                   self.user.slug,
+                                   extension)
 class Volunteer(models.Model):
 
   class Meta:
@@ -177,14 +182,8 @@ class Volunteer(models.Model):
   created_date = models.DateTimeField(auto_now_add=True)
   modified_date = models.DateTimeField(auto_now=True)
 
-  def image_name(self, filename):
-    left_path, extension = filename.rsplit('.', 1)
-    return 'volunteer/%s/%s.%s' % (self.user.slug,
-                                   self.user.slug,
-                                   extension)
-
-  image = models.ImageField(upload_to=image_name, blank=True,
-                     null=True, default=None)
+  image = models.ImageField(upload_to=volunteer_image_name, blank=True,
+                   null=True, default=None)
 
   @classmethod
   def create(cls, user):
@@ -222,6 +221,15 @@ class Volunteer(models.Model):
     return self.user.name
 
   
+def nonprofit_image_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit/%s.%s' % (self.user.slug, extension)
+
+def nonprofit_cover_name(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
+
+
 class Nonprofit(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     causes = models.ManyToManyField(Cause, blank=True, null=True)
@@ -242,26 +250,18 @@ class Nonprofit(models.Model):
 
     companies = models.ManyToManyField(Company, blank=True, null=True)
     
-    def image_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit/%s.%s' % (self.user.slug, extension)
-
     def image_tag(self):
         return u'<img src="%s" />' % self.image.url
     image_tag.short_description = 'Logo 200x200'
     image_tag.allow_tags = True
 
-    def cover_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
-
     def cover_tag(self):
-        return u'<img src="%s" />' % self.cover.url
+      return u'<img src="%s" />' % self.cover.url
     cover_tag.short_description = 'Cover 1450x340'
     cover_tag.allow_tags = True
 
-    image = models.ImageField(_("Logo 200x200"), upload_to=image_name, blank=True, null=True, default=None)
-    cover = models.ImageField(_("Cover 1450x340"),upload_to=cover_name, blank=True, null=True, default=None)
+    image = models.ImageField(_("Logo 200x200"), upload_to=nonprofit_image_name, blank=True, null=True, default=None)
+    cover = models.ImageField(_("Cover 1450x340"),upload_to=nonprofit_cover_name, blank=True, null=True, default=None)
 
     highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
     published = models.BooleanField(_("Published"), default=False)
@@ -349,6 +349,10 @@ class Role(models.Model):
       return  '%s - %s - %s (%s vagas)' % (self.name, self.details, self.prerequisites, self.vacancies)
 
 
+def project_image_name(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
+
 class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
@@ -386,17 +390,14 @@ class Project(models.Model):
 
   companies = models.ManyToManyField(Company, blank=True, null=True)
 
-  def image_name(self, filename):
-    left_path, extension = filename.rsplit('.', 1)
-    return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
-
+  
   def image_tag(self):
         return u'<img src="%s" />' % self.image.url
   image_tag.short_description = 'Image 350x260'
   image_tag.allow_tags = True
 
 
-  image = models.ImageField(_('Image 350x260'), upload_to=image_name, blank=True,
+  image = models.ImageField(_('Image 350x260'), upload_to=project_image_name, blank=True,
                      null=True, default=None)
 
   def get_volunteers(self):
@@ -455,7 +456,7 @@ class Work(models.Model):
   availabilities = models.ManyToManyField(Availability)
   weekly_hours = models.PositiveSmallIntegerField(_('Weekly hours'),
                                       blank=True, null=True)
-  can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'))
+  can_be_done_remotely = models.BooleanField(_('This work can be done remotely.'), default=False)
 
   def __unicode__(self):
     return "%s horas por semana" % (self.weekly_hours)

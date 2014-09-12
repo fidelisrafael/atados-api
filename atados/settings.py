@@ -126,7 +126,6 @@ INSTALLED_APPS = (
     'rest_framework_swagger',
     'facepy',
     'corsheaders',
-    'south',
     'pyExcelerator',
     'provider',
     'provider.oauth2',
