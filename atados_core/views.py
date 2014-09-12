@@ -955,6 +955,8 @@ def clone_project(request, project_slug, format=None):
     try:
       project = Project.objects.get(slug=project_slug)
       projectRoles = project.roles
+      projectCauses = project.causes
+      projectSkills = project.skills
       projectAva = []
       try:
         projectAva = project.work.availabilities
@@ -967,7 +969,6 @@ def clone_project(request, project_slug, format=None):
       address.save()
       project.address = address
       project.published = False
-      # TODO(mpomarole): Clone the project roles and availabilities
       roles = []
       for role in projectRoles.all():
         role.pk = None
@@ -978,12 +979,19 @@ def clone_project(request, project_slug, format=None):
         ava.pk = None
         ava.save()
         avas.append(ava)
+
       project.save()
+
+      for cause in projectCauses.all():
+        project.causes.add(cause)
+      for skill in projectSkills.all():
+        project.skills.add(skill)
       project.roles = roles
       try:
         project.work.availabilities = avas
       except:
         pass
+
       return Response(ProjectSerializer(project).data, status.HTTP_200_OK)
     except Exception as e:
       print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
