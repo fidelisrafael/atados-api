@@ -1,0 +1,175 @@
+[{
+  "pk": 1, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Capacita\u00e7\u00e3o Profissional"
+  }
+},
+{
+  "pk": 2, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Combate \u00e0 Pobreza"
+  }
+},
+{
+  "pk": 3, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Consumo Consciente"
+  }
+},
+{
+  "pk": 4, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Crian\u00e7as e Jovens"
+  }
+},
+{
+  "pk": 5, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Cultura, Esporte e Arte"
+  }
+},
+{
+  "pk": 6, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Defesa de Direitos"
+  }
+},
+{
+  "pk": 7, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Educa\u00e7\u00e3o"
+  }
+},
+{
+  "pk": 8, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Idosos"
+  }
+},
+{
+  "pk": 9, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Meio Ambiente"
+  }
+},
+{
+  "pk": 10, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Participa\u00e7\u00e3o Cidad\u00e3"
+  }
+},
+{
+  "pk": 11, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Prote\u00e7\u00e3o Animal"
+  }
+},
+{
+  "pk": 12, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Sa\u00fade"
+  }
+},
+{
+  "pk": 13, 
+  "model": "atados_core.cause", 
+  "fields": {
+    "name": "Pessoas com Defici\u00eancia"
+  }
+},
+{
+  "pk": 1, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Artes / Artesanato"
+  }
+},
+{
+  "pk": 2, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Comunica\u00e7\u00e3o"
+  }
+},
+{
+  "pk": 3, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Dan\u00e7a / M\u00fasica"
+  }
+},
+{
+  "pk": 4, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Direito"
+  }
+},
+{
+  "pk": 5, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Educa\u00e7\u00e3o"
+  }
+},
+{
+  "pk": 6, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Esportes"
+  }
+},
+{
+  "pk": 7, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Gastronomia"
+  }
+},
+{
+  "pk": 8, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Gest\u00e3o"
+  }
+},
+{
+  "pk": 9, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Idiomas"
+  }
+},
+{
+  "pk": 10, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Inform\u00e1tica / Eletr\u00f4nica"
+  }
+},
+{
+  "pk": 11, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Sa\u00fade / Psicologia"
+  }
+},
+{
+  "pk": 12, 
+  "model": "atados_core.skill", 
+  "fields": {
+    "name": "Outros"
+  }
+}]

@@ -599,7 +599,6 @@ class VolunteerTest(APITestCase):
     self.assertEqual(v.get_type(), "VOLUNTEER");
     self.assertEqual(v.image_name("teste.jpg"), "volunteer/" + self.slug + "/" + self.slug + ".jpg")
 
-
   def test_create_volunteer_view(self):
     """
     Ensure we can create a new volunteer.

@@ -185,6 +185,9 @@ class Volunteer(models.Model):
   image = models.ImageField(upload_to=volunteer_image_name, blank=True,
                    null=True, default=None)
 
+  def image_name(self, filename):
+    return volunteer_image_name(self, filename);
+
   @classmethod
   def create(cls, user):
     return cls(user=user)
@@ -259,6 +262,9 @@ class Nonprofit(models.Model):
       return u'<img src="%s" />' % self.cover.url
     cover_tag.short_description = 'Cover 1450x340'
     cover_tag.allow_tags = True
+
+    def image_name(self, filename):
+      return nonprofit_image_name(self, filename);
 
     image = models.ImageField(_("Logo 200x200"), upload_to=nonprofit_image_name, blank=True, null=True, default=None)
     cover = models.ImageField(_("Cover 1450x340"),upload_to=nonprofit_cover_name, blank=True, null=True, default=None)
