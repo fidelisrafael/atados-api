@@ -478,7 +478,7 @@ class Job(models.Model):
   end_date = models.DateTimeField(_("End date"), blank=True, null=True)
 
   def __unicode__(self):
-    return "%s até %s" % (self.start_date, self.end_date)
+    return "%s - %s" % (self.start_date, self.end_date)
 
   class Meta:
     verbose_name = _('Job')
