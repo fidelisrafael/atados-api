@@ -954,14 +954,36 @@ def clone_project(request, project_slug, format=None):
   if request.user.is_authenticated():
     try:
       project = Project.objects.get(slug=project_slug)
-      project.pk = None
+      projectRoles = project.roles
+      projectAva = []
+      try:
+        projectAva = project.work.availabilities
+      except:
+        pass
+      project.pk = None # This clones the Project object and does not change the original object
       project.slug = new_slug(project.slug)
       address = project.address
       address.pk = None
       address.save()
       project.address = address
       project.published = False
+      # TODO(mpomarole): Clone the project roles and availabilities
+      roles = []
+      for role in projectRoles.all():
+        role.pk = None
+        role.save()
+        roles.append(role)
+      avas = []
+      for ava in projectAva.all():
+        ava.pk = None
+        ava.save()
+        avas.append(ava)
       project.save()
+      project.roles = roles
+      try:
+        project.work.availabilities = avas
+      except:
+        pass
       return Response(ProjectSerializer(project).data, status.HTTP_200_OK)
     except Exception as e:
       print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
