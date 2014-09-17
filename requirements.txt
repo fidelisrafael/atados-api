@@ -28,6 +28,6 @@ elasticsearch==1.2.0
 pygeocoder==1.2.5
 python-dateutil==2.2
 python-memcached==1.53
-pytz==2014.4
+pytz==2014.7
 sorl-thumbnail==11.12
 Unidecode==0.04.16

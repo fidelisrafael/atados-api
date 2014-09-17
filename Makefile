@@ -7,7 +7,7 @@ db:
 
 install:
 	@pip install -r requirements.txt
-	@python ./manage.py migrate
+	@python ./manage.py syncdb --noinput
 
 run:
 	@python ./manage.py runserver
