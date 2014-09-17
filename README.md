@@ -27,10 +27,19 @@ uma forma de contribuir para o desenvolvimento coletivo fazendo algo que você
 faz muito bem!
 
 
+## Apps que precisam estar instalados
+
+- pip
+- elasticsearch rodando no port 9200
+- [postgresql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)
+
 ## Como rodar o projeto
 
     git clone https://github.com/atados/api.git
     cd api
+    apt-get install libmysqlclient-dev python-dev # Ubuntu
+    sudo apt-get install python-psycopg2 # Ubuntu
+    sudo apt-get install libpq-dev # Ubuntu
     make install && make run
 
 ## License
