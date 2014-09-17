@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'atados_core',
     'debug_toolbar',
 
+    'south',
     'haystack',
     'rest_framework',
     'rest_framework_swagger',
