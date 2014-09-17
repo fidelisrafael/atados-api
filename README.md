@@ -29,7 +29,7 @@ faz muito bem!
 
 ## Como rodar o projeto
 
-    git clone git@github.com:atados/api.git
+    git clone https://github.com/atados/api.git
     cd api
     make install && make run
 
