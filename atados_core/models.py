@@ -19,7 +19,6 @@ from django.utils.translation import ugettext_lazy as _
 from import_export import resources, fields
 from datetime import datetime
 from atados import settings
-from itertools import chain
 from unidecode import unidecode
 
 
