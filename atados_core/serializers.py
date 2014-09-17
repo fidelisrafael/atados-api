@@ -303,4 +303,4 @@ class VolunteerPublicSerializer(serializers.ModelSerializer):
     model = Volunteer
     lookup_field = 'slug'
     depth = 1
-    fields = ('slug', 'image_url', 'causes', 'skills', 'role', 'projects', 'nonprofits', 'name')
+    fields = ('slug', 'name', 'role', 'image_url', 'causes', 'skills', 'projects', 'nonprofits')

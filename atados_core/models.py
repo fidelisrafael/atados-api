@@ -214,7 +214,7 @@ class Volunteer(models.Model):
     return Project.objects.filter(id__in=Apply.objects.filter(volunteer_id=self.id, canceled=False).values_list('project', flat=True))
 
   def get_nonprofits(self):
-    return list(chain(Nonprofit.objects.filter(volunteers__in=[self]) , Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))))
+    return Nonprofit.objects.filter(volunteers__in=[self]) | Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))
 
   def save(self, *args, **kwargs):
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
