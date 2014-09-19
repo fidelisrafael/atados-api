@@ -13,7 +13,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     # Write permissions are only allowed to the owner of the snippet
     return request.user.is_staff or obj.user == request.user
 
-class IsNonprofit(permissions.BasePermission):
+class IsNonprofitOrStaff(permissions.BasePermission):
   """
   Custom permission for accessign volunteer data from the Nonprofit panel
   """

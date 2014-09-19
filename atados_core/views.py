@@ -8,7 +8,7 @@ import sys
 import urllib2
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
-from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofit
+from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofitOrStaff
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
 from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
 
@@ -227,6 +227,7 @@ def create_nonprofit(request, format=None):
   address.addressline2 = obja.get('addressline2')
   address.addressnumber = obja['addressnumber'][0:9]
   address.neighborhood = obja['neighborhood']
+  print address.neighborhood
   address.city = City.objects.get(id=obja['city']['id'])
   address.save()
 
@@ -1019,7 +1020,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class NonprofitViewSet(viewsets.ModelViewSet):
   queryset = Nonprofit.objects.filter(deleted=False)
   serializer_class = NonprofitSerializer
-  permission_classes = [IsOwnerOrReadOnly]
+  permission_classes = [IsOwnerOrReadOnly, IsNonprofitOrStaff]
   lookup_field = 'slug'
 
   def get_object(self):
@@ -1102,7 +1103,7 @@ class NonprofitMapList(generics.ListAPIView):
 
 class VolunteerProjectList(generics.ListAPIView):
   serializer_class = VolunteerProjectSerializer
-  permission_classes = (IsNonprofit, )
+  permission_classes = (IsNonprofitOrStaff, )
 
   def get_queryset(self):
     project_slug = self.kwargs.get('project_slug', None)
@@ -1141,7 +1142,7 @@ class VolunteerViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
   queryset = Project.objects.filter(deleted=False)
   serializer_class = ProjectSerializer
-  permissions_classes = [IsNonprofit]
+  permissions_classes = [IsNonprofitOrStaff]
   lookup_field = 'slug'
 
 class JobViewSet(viewsets.ModelViewSet):
@@ -1159,7 +1160,7 @@ class ApplyViewSet(viewsets.ModelViewSet):
 
 class ApplyList(generics.ListAPIView):
   serializer_class = ApplySerializer
-  permission_classes = [IsNonprofit]
+  permission_classes = [IsNonprofitOrStaff]
 
   def get_queryset(self):
     project_slug = self.request.QUERY_PARAMS['project_slug']

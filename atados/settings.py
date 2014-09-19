@@ -233,16 +233,6 @@ SOUTH_AUTO_FREEZE_APP = True
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-#CACHES = {
-#    'default': {
-#        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#        'LOCATION': os.environ.get('ATADOS_MEMCACHED_ENDPOINT', 'localhost:11211')
-#    },
-#}
-
-#CACHE_MIDDLEWARE_SECONDS = 1200
-#CACHE_MIDDLEWARE_KEY_PREFIX = 'atados'
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
       'rest_framework.authentication.SessionAuthentication',
