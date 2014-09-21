@@ -2,11 +2,11 @@ clean:
 	@find . -name "*.pyc" -delete
 
 db:
-	@python ./manage.py syncdb --noinput
+	@python ./manage.py migrate
 
 install:
 	@pip install -r requirements.txt
-	@python ./manage.py syncdb --noinput
+	@python ./manage.py migrate
 
 run:
 	@python ./manage.py runserver
