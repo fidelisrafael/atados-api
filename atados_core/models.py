@@ -241,7 +241,7 @@ class Nonprofit(models.Model):
     def ascii_name(self):
       return unidecode(self.name)
 
-    details = models.TextField(_('Details'), max_length=1024, blank=True,
+    details = models.TextField(_('Details'), max_length=2048, blank=True,
                                null=True, default=None)
     description = models.TextField(_('Short description'), max_length=160,
                                    blank=True, null=True)
@@ -366,7 +366,7 @@ class Project(models.Model):
     return unidecode(self.name)
 
   slug = models.SlugField(max_length=100, unique=True)
-  details = models.TextField(_('Details'), max_length=1024)
+  details = models.TextField(_('Details'), max_length=2048)
   description = models.TextField(_('Short description'), max_length=160,
                                  blank=True, null=True)
   facebook_event = models.URLField(blank=True, null=True, default=None)
