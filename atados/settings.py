@@ -25,7 +25,8 @@ if DEVELOPMENT:
   )
 else:
   ALLOWED_HOSTS = (
-    '.atados.com.br'
+    '.atados.com.br',
+    'www.atados.com.br'
   )
 
 ADMINS = (
@@ -248,6 +249,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
   'atados.com.br',
+  'www.atados.com.br',
   'atadoslocal.com.br'
 )
 
