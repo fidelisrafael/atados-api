@@ -25,8 +25,7 @@ if DEVELOPMENT:
   )
 else:
   ALLOWED_HOSTS = (
-    '.atados.com.br',
-    '.portovoluntario.com.br'
+    '.atados.com.br'
   )
 
 ADMINS = (
@@ -228,8 +227,6 @@ HAYSTACK_CONNECTIONS = {
 
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-SOUTH_AUTO_FREEZE_APP = True
-
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 REST_FRAMEWORK = {
@@ -262,7 +259,6 @@ else:
   CSRF_COOKIE_DOMAIN = ".atados.com.br"
   CORS_ORIGIN_WHITELIST = (
     'atados.com.br',
-    'portovoluntario.com.br'
   )
 
 PASSWORD_HASHERS = (
