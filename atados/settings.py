@@ -26,7 +26,6 @@ if DEVELOPMENT:
 else:
   ALLOWED_HOSTS = (
     '.atados.com.br',
-    'www.atados.com.br'
   )
 
 ADMINS = (
@@ -89,13 +88,13 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
   'django.middleware.cache.UpdateCacheMiddleware',
   'django.middleware.cache.FetchFromCacheMiddleware',
-  'corsheaders.middleware.CorsMiddleware', # Needs to come before CommonMiddleware
   'django.middleware.common.CommonMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.contrib.auth.middleware.AuthenticationMiddleware',
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.gzip.GZipMiddleware',
   'django.middleware.http.ConditionalGetMiddleware',
+  'corsheaders.middleware.CorsMiddleware',
   'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -247,18 +246,19 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (
-  'atados.com.br',
-  'www.atados.com.br',
-  'atadoslocal.com.br'
-)
 
 if DEVELOPMENT:
   CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
   SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
+  CORS_ORIGIN_WHITELIST = (
+    'atadoslocal.com.br',
+  )
 else:
   SESSION_COOKIE_DOMAIN = ".atados.com.br"
   CSRF_COOKIE_DOMAIN = ".atados.com.br"
+  CORS_ORIGIN_WHITELIST = (
+    'atados.com.br',
+  )
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(
