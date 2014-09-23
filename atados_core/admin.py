@@ -126,7 +126,7 @@ class AddressProjectAdmin(admin.ModelAdmin):
   list_display = ('id', 'name', 'slug', 'nonprofit', 'address')
   raw_id_fields = ['address']
 
-  def queryset(self, request):
+  def get_queryset(self, request):
     return self.model.objects.all()
 
 admin.site.register(Nonprofit, NonprofitAdmin)
