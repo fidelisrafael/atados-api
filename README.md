@@ -1,7 +1,6 @@
 # [Atados API](http://www.atados.com.br)
 [![Codeship](https://www.codeship.io/projects/139f1dd0-a88e-0131-806c-1a66b7fb6c8b/status)](https://codeship.io/projects/19157)
 [![Dependency Status](https://gemnasium.com/atados/api.svg)](https://gemnasium.com/atados/api)
-[![Coverage Status](https://coveralls.io/repos/atados/api/badge.png?branch=master)](https://coveralls.io/r/atados/api?branch=master)
 
 
 A ideia é simples: uma rede social na qual pessoas predispostas a praticar o bem
