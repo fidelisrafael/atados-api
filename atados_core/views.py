@@ -538,6 +538,7 @@ def save_project(request, format=None):
       address.zipcode = obja.get('zipcode', '')
       address.city = City.objects.get(id=obja.get('city', None))
       address.save()
+      project.address = address 
 
     roles = obj.get('roles', [])
 
