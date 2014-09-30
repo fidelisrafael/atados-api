@@ -434,8 +434,9 @@ def open_project(request, format=None):
   try:
     request.user.nonprofit
   except Exception as e:
-    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    if not request.user.is_staff:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     project_id = json.loads(request.DATA['project'])
@@ -457,8 +458,9 @@ def close_project(request, format=None):
   try:
     request.user.nonprofit
   except Exception as e:
-    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    if not request.user.is_staff:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     project_id = json.loads(request.DATA['project'])
