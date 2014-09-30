@@ -37,7 +37,6 @@ def send_email_to_volunteer_3_days_before_pontual(volunteer_email, project_id):
       print e
       return
 
-    # 4 semanas após voluntário se candidatar a um ato
     plaintext = get_template('email/volunteer3DaysBeforePontual.txt')
     htmly     = get_template('email/volunteer3DaysBeforePontual.html')
     d = Context({ "project_name": project.name })

@@ -841,10 +841,11 @@ def apply_volunteer_to_project(request, format=None):
 
         #if pontual, schedule email to be sent 3 days before
         try:
-          eta = project.job.start_date - timedelta(days=3)
-          send_email_to_volunteer_3_days_before_pontual.apply_async(
-            eta=eta,
-            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+          if project.job.start_date:
+            eta = project.job.start_date - timedelta(days=3)
+            send_email_to_volunteer_3_days_before_pontual.apply_async(
+              eta=eta,
+              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
         except:
           pass
 
@@ -901,10 +902,11 @@ def apply_volunteer_to_project(request, format=None):
 
       #if pontual, schedule email to be sent 3 days before
       try:
-        eta = project.job.start_date - timedelta(days=3)
-        send_email_to_volunteer_3_days_before_pontual.apply_async(
-          eta=eta,
-          kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+        if project.job.start_date:
+          eta = project.job.start_date - timedelta(days=3)
+          send_email_to_volunteer_3_days_before_pontual.apply_async(
+            eta=eta,
+            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
       except:
         pass
 
