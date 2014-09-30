@@ -631,12 +631,11 @@ def save_project(request, format=None):
       except:
         pass
 
-    project.save()
-
   except Exception as e:
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
+  project.save()
   return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED)
 
 
