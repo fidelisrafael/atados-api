@@ -13,13 +13,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['id', 'name', 'url', 'description',
+  fields = ['id', 'owner', 'name', 'url', 'description',
             ('published', 'deleted'),
             'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
   list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
   list_filter = ('published', 'deleted')
   search_fields = ['name']
   actions = ['make_published']
+  raw_id_fields= ['owner']
   readonly_fields = ['id', 'url', 'image_tag', 'cover_tag']
 
   def url(self, instance):
