@@ -24,7 +24,7 @@ msgstr "Publicar selecionados"
 
 #: admin.py:120
 msgid "Export selected to XLS"
-msgstr ""
+msgstr "Exportar selecionados para xls"
 
 #: dashboard.py:26
 msgid "Dados do Atados"
@@ -45,7 +45,7 @@ msgstr ""
 
 #: dashboard.py:53
 msgid "Recent Actions"
-msgstr ""
+msgstr "Ações recentes"
 
 #: models.py:25
 msgid "Monday"
@@ -191,7 +191,7 @@ msgstr "Curta descrição"
 
 #: models.py:245 models.py:351
 msgid "Highlighted"
-msgstr ""
+msgstr "Destacado"
 
 #: models.py:246 models.py:341
 msgid "Published"

@@ -20,7 +20,6 @@ class NonprofitAdmin(admin.ModelAdmin):
   list_filter = ('published', 'deleted')
   search_fields = ['name']
   actions = ['make_published']
-  raw_id_fields= ['owner']
   readonly_fields = ['id', 'url', 'image_tag', 'cover_tag']
 
   def url(self, instance):
