@@ -237,6 +237,7 @@ class Nonprofit(models.Model):
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=150)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='nonprofits')
 
     def ascii_name(self):
       return unidecode(self.name)
