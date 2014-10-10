@@ -7,6 +7,8 @@ import pytz
 import sys
 import urllib2
 
+from StringIO import StringIO
+from PIL import Image
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofitOrStaff
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
@@ -434,9 +436,8 @@ def open_project(request, format=None):
   try:
     request.user.nonprofit
   except Exception as e:
-    if not request.user.is_staff:
-      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     project_id = json.loads(request.DATA['project'])
@@ -458,9 +459,8 @@ def close_project(request, format=None):
   try:
     request.user.nonprofit
   except Exception as e:
-    if not request.user.is_staff:
-      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     project_id = json.loads(request.DATA['project'])
@@ -631,11 +631,12 @@ def save_project(request, format=None):
       except:
         pass
 
+    project.save()
+
   except Exception as e:
     error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
     return Response({'detail': error}, status.HTTP_400_BAD_REQUEST)
 
-  project.save()
   return Response(ProjectSerializer(project).data, status.HTTP_201_CREATED)
 
 
@@ -704,12 +705,22 @@ def upload_nonprofit_profile_image(request, format=None):
 
 @api_view(['POST'])
 def upload_nonprofit_cover_image(request, format=None):
-  if request.user.is_authenticated() and request.user.nonprofit:
-    nonprofit = request.user.nonprofit
-    nonprofit.cover = request.FILES.get('file')
-    nonprofit.save()
-    return Response({"file": nonprofit.get_cover_url()}, status.HTTP_200_OK)
-  return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
+    try:
+        if request.user.is_authenticated() and request.user.nonprofit:
+            height = request.QUERY_PARAMS.get('height')
+            width = request.QUERY_PARAMS.get('width')
+            x = request.QUERY_PARAMS.get('x')
+            y = request.QUERY_PARAMS.get('y')
+            im_crop = Image.open(StringIO(request.FILES['file'].read()))
+            box = (x, y, x + width, y + height)
+            im_final = im_crop.crop(box)
+            nonprofit = request.user.nonprofit
+            nonprofit.cover = im_final
+            nonprofit.save()
+            return Response({"file": nonprofit.get_cover_url()}, status.HTTP_200_OK)
+        return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
+    except:
+        print sys.exc_info()
 
 @api_view(['GET'])
 def applies(request, format=None):
