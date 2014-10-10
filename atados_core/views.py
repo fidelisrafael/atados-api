@@ -298,12 +298,15 @@ def create_project_slug(name):
 
 @api_view(['POST'])
 def create_project(request, format=None):
+
+  nonprofit = None
   # Need a nonprofit user
   try:
-    request.user.nonprofit
+    nonprofit = request.user.nonprofit
   except Exception as e:
-    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    if not request.user.is_staff:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     obj = json.loads(request.DATA['project'])
@@ -313,7 +316,11 @@ def create_project(request, format=None):
   project = Project()
   try:
     # Getting required field
-    project.nonprofit = request.user.nonprofit
+    if nonprofit:
+      project.nonprofit = nonprofit
+    else:
+      project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit'])
+
     project.name = obj['name']
     project.slug = create_project_slug(project.name)
     project.details = obj['details']
