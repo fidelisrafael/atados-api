@@ -106,9 +106,10 @@ class WorkAdmin(admin.ModelAdmin):
   filter_horizontal = ['availabilities']
 
 class UserAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_email_verified', 'is_staff')
-  list_display = ('slug', 'email', 'name', 'last_login', 'address')
+  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_staff', 'is_email_verified')
+  list_display = ('slug', 'email', 'name', 'last_login', 'address', 'is_staff', 'is_email_verified')
   list_filter = ('last_login', 'joined_date')
+  list_editable = ['is_staff', 'is_email_verified']
   search_fields = ['email', 'slug']
   raw_id_fields = ['address']
 
