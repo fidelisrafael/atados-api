@@ -1,7 +1,7 @@
 Celery==3.1.15
-Django==1.7
+Django==1.7.1
 MySQL-python==1.2.5
-Pillow==2.5.3
+Pillow==2.6.1
 Unidecode==0.4.16
 boto==2.33
 coverage==3.7.1
