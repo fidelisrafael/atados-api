@@ -14,7 +14,6 @@ django-haystack==2.3.1
 django-import-export==0.2.5
 django-nose==1.2
 django-oauth2-provider==0.2.6
-django-rest-swagger==0.1.14
 django-storages==1.1.8
 djangorestframework==2.4.3
 elasticsearch==1.2
@@ -27,5 +26,5 @@ pyExcelerator==0.6.4.1
 pygeocoder==1.2.5
 python-dateutil==2.2
 python-memcached==1.53
-pytz==2014.7
+pytz==2014.9
 sorl-thumbnail==11.12

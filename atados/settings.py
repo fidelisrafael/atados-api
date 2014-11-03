@@ -120,7 +120,6 @@ INSTALLED_APPS = (
 
     'haystack',
     'rest_framework',
-    'rest_framework_swagger',
     'facepy',
     'corsheaders',
     'pyExcelerator',
