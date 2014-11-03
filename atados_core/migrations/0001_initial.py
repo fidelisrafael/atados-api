@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=150, verbose_name='Name')),
-                ('details', models.TextField(default=None, max_length=1024, null=True, verbose_name='Details', blank=True)),
+                ('details', models.TextField(default=None, max_length=2048, null=True, verbose_name='Details', blank=True)),
                 ('description', models.TextField(max_length=160, null=True, verbose_name='Short description', blank=True)),
                 ('website', models.URLField(default=None, null=True, blank=True)),
                 ('facebook_page', models.URLField(default=None, null=True, blank=True)),
@@ -191,7 +191,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=50, verbose_name='Project name')),
                 ('slug', models.SlugField(unique=True, max_length=100)),
-                ('details', models.TextField(max_length=1024, verbose_name='Details')),
+                ('details', models.TextField(max_length=2048, verbose_name='Details')),
                 ('description', models.TextField(max_length=160, null=True, verbose_name='Short description', blank=True)),
                 ('facebook_event', models.URLField(default=None, null=True, blank=True)),
                 ('responsible', models.CharField(max_length=50, null=True, verbose_name='Responsible name', blank=True)),

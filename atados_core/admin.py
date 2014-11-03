@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
 class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['id', 'name', 'url', 'description',
+  fields = ['id', 'owner', 'name', 'url', 'description',
             ('published', 'deleted'),
             'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
   list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
@@ -106,9 +106,10 @@ class WorkAdmin(admin.ModelAdmin):
   filter_horizontal = ['availabilities']
 
 class UserAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_email_verified')
-  list_display = ('slug', 'email', 'name', 'last_login', 'address')
+  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_staff', 'is_email_verified')
+  list_display = ('slug', 'email', 'name', 'last_login', 'address', 'is_staff', 'is_email_verified')
   list_filter = ('last_login', 'joined_date')
+  list_editable = ['is_staff', 'is_email_verified']
   search_fields = ['email', 'slug']
   raw_id_fields = ['address']
 

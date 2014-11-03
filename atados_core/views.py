@@ -300,12 +300,15 @@ def create_project_slug(name):
 
 @api_view(['POST'])
 def create_project(request, format=None):
+
+  nonprofit = None
   # Need a nonprofit user
   try:
-    request.user.nonprofit
+    nonprofit = request.user.nonprofit
   except Exception as e:
-    error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
-    return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
+    if not request.user.is_staff:
+      error = "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+      return Response({"User not authenticated. " + error}, status.HTTP_403_FORBIDDEN)
 
   try:
     obj = json.loads(request.DATA['project'])
@@ -315,7 +318,11 @@ def create_project(request, format=None):
   project = Project()
   try:
     # Getting required field
-    project.nonprofit = request.user.nonprofit
+    if nonprofit:
+      project.nonprofit = nonprofit
+    else:
+      project.nonprofit = Nonprofit.objects.get(id=obj['nonprofit'])
+
     project.name = obj['name']
     project.slug = create_project_slug(project.name)
     project.details = obj['details']
@@ -538,6 +545,7 @@ def save_project(request, format=None):
       address.zipcode = obja.get('zipcode', '')
       address.city = City.objects.get(id=obja.get('city', None))
       address.save()
+      project.address = address 
 
     roles = obj.get('roles', [])
 
@@ -851,10 +859,11 @@ def apply_volunteer_to_project(request, format=None):
 
         #if pontual, schedule email to be sent 3 days before
         try:
-          eta = project.job.start_date - timedelta(days=3)
-          send_email_to_volunteer_3_days_before_pontual.apply_async(
-            eta=eta,
-            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+          if project.job.start_date:
+            eta = project.job.start_date - timedelta(days=3)
+            send_email_to_volunteer_3_days_before_pontual.apply_async(
+              eta=eta,
+              kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
         except:
           pass
 
@@ -911,10 +920,11 @@ def apply_volunteer_to_project(request, format=None):
 
       #if pontual, schedule email to be sent 3 days before
       try:
-        eta = project.job.start_date - timedelta(days=3)
-        send_email_to_volunteer_3_days_before_pontual.apply_async(
-          eta=eta,
-          kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
+        if project.job.start_date:
+          eta = project.job.start_date - timedelta(days=3)
+          send_email_to_volunteer_3_days_before_pontual.apply_async(
+            eta=eta,
+            kwargs={'project_id': project.id, 'volunteer_email': volunteer.user.email})
       except:
         pass
 

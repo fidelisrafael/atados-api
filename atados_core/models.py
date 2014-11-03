@@ -213,7 +213,7 @@ class Volunteer(models.Model):
     return Project.objects.filter(id__in=Apply.objects.filter(volunteer_id=self.id, canceled=False).values_list('project', flat=True))
 
   def get_nonprofits(self):
-    return Nonprofit.objects.filter(volunteers__in=[self]) | Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))
+    return Nonprofit.objects.filter(id__in=self.get_projects().values_list('nonprofit', flat=True))
 
   def save(self, *args, **kwargs):
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
@@ -237,6 +237,7 @@ class Nonprofit(models.Model):
     causes = models.ManyToManyField(Cause, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True, null=True)
     name = models.CharField(_('Name'), max_length=150)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, related_name='nonprofits', limit_choices_to={'is_staff': True})
 
     def ascii_name(self):
       return unidecode(self.name)
