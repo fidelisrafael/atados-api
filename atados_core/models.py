@@ -228,8 +228,8 @@ def nonprofit_image_name(self, filename):
         return 'nonprofit/%s.%s' % (self.user.slug, extension)
 
 def nonprofit_cover_name(self, filename):
-        left_path, extension = filename.rsplit('.', 1)
-        return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
+  left_path, extension = filename.rsplit('.', 1)
+  return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
 
 
 class Nonprofit(models.Model):

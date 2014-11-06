@@ -713,22 +713,28 @@ def upload_nonprofit_profile_image(request, format=None):
 
 @api_view(['POST'])
 def upload_nonprofit_cover_image(request, format=None):
-    try:
-        if request.user.is_authenticated() and request.user.nonprofit:
-            height = request.QUERY_PARAMS.get('height')
-            width = request.QUERY_PARAMS.get('width')
-            x = request.QUERY_PARAMS.get('x')
-            y = request.QUERY_PARAMS.get('y')
-            im_crop = Image.open(StringIO(request.FILES['file'].read()))
-            box = (x, y, x + width, y + height)
-            im_final = im_crop.crop(box)
-            nonprofit = request.user.nonprofit
-            nonprofit.cover = im_final
-            nonprofit.save()
-            return Response({"file": nonprofit.get_cover_url()}, status.HTTP_200_OK)
-        return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
-    except:
-        print sys.exc_info()
+  try:
+    if request.user.is_authenticated() and request.user.nonprofit:
+      height = int(request.QUERY_PARAMS.get('height'))
+      width = int(request.QUERY_PARAMS.get('width'))
+      x = int(request.QUERY_PARAMS.get('x'))
+      y = int(request.QUERY_PARAMS.get('y'))
+      im_crop = Image.open(StringIO(request.FILES['file'].read()))
+      box = (x, y, x + width, y + height)
+      try:
+        im_final = im_crop.crop(box)
+        nonprofit = request.user.nonprofit
+        print im_final
+        temp_file = NamedTemporaryFile(delete=True)
+        im_final.save(temp_file, format="JPEG")
+        nonprofit.cover.save("blah.jpg", File(temp_file))
+        return Response({nonprofit.get_cover_url()}, status.HTTP_200_OK)
+      except Exception as e:
+        print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
+        return Response({"ERROR"}, status.HTTP_400_BAD_REQUEST)
+    return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
+  except:
+    print sys.exc_info()
 
 @api_view(['GET'])
 def applies(request, format=None):

@@ -182,7 +182,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('ATADOS_EMAIL_PASSWORD', '')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage' # if not DEVELOPMENT else 'django.core.files.storage.FileSystemStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage' if not DEVELOPMENT else 'django.core.files.storage.FileSystemStorage'
 
     
 AWS_ACCESS_KEY_ID = 'AKIAIQNK65HU6JPWJB5A'
