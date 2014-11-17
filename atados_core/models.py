@@ -279,7 +279,6 @@ class Nonprofit(models.Model):
 
     def delete(self, *args, **kwargs):
       self.deleted = True
-      self.deleted_date = datetime.now()
       self.save()
 
     def get_type(self):
@@ -329,6 +328,9 @@ class Nonprofit(models.Model):
           msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
           msg.attach_alternative(html_content, "text/html")
           msg.send()
+        if not orig.deleted and self.deleted:
+          self.deleted_date = datetime.now()
+
 
       self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
       return super(Nonprofit, self).save(*args, **kwargs)
@@ -415,7 +417,6 @@ class Project(models.Model):
 
   def delete(self, *args, **kwargs):
       self.deleted = True
-      self.deleted_date = datetime.now()
       self.save()
 
   def save(self, *args, **kwargs):
@@ -433,6 +434,11 @@ class Project(models.Model):
           msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
           msg.attach_alternative(html_content, "text/html")
           msg.send()
+        if not orig.closed and self.closed:
+          self.closed_date = datetime.now()
+        if not orig.deleted and self.deleted:
+          self.deleted_date = datetime.now()
+
 
     self.modified_date = datetime.utcnow().replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
 
