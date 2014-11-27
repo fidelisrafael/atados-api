@@ -212,7 +212,7 @@ def export_emails(modeladmin, request, queryset):
 
     wb.save('/tmp/output.xls')
     response = HttpResponse(open('/tmp/output.xls','r').read(),
-                  mimetype='application/ms-excel')
+                  content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=%s.xls' % unicode(opts).replace('.', '_')
     return response
 
@@ -286,7 +286,7 @@ def export_as_xls(modeladmin, request, queryset):
 
     wb.save('/tmp/output.xls')
     response = HttpResponse(open('/tmp/output.xls','r').read(),
-                  mimetype='application/ms-excel')
+                  content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=%s.xls' % unicode(opts).replace('.', '_')
     return response
 
