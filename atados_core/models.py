@@ -544,7 +544,14 @@ class UserManager(BaseUserManager):
     if not email:
         raise ValueError('The given email address must be set')
     email = UserManager.normalize_email(email)
-    token = random_token([email])
+    try:
+        user = User.get(email=email)
+        if not user.token is None:
+            token = user.token
+        else:
+            token = random_token([email])
+    except:
+        token = random_token([email])
     user = self.model(email=email, token=token,
                       is_staff=False, is_active=True,
                       last_login=now, joined_date=now, **extra_fields)
