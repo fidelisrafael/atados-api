@@ -45,3 +45,7 @@ faz muito bem!
 ## License
 
 MIT License (See LICENSE file).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/atados/api/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
