@@ -22,6 +22,7 @@ else:
 if DEVELOPMENT:
   ALLOWED_HOSTS = (
     '.atadoslocal.com.br',
+    '.local.atados.com.br',
   )
 else:
   ALLOWED_HOSTS = (
@@ -29,7 +30,9 @@ else:
   )
 
 ADMINS = (
-    ('Marjori Pomarole', 'marjori@atados.com.br')
+    ('Marjori Pomarole', 'marjori@atados.com.br'),
+    ('Leonardo Arroyo', 'arroyo@atados.com.br'),
+    ('Vinicius Lourenço', 'vinicius@atados.com.br')
 )
 
 MANAGERS = ADMINS
