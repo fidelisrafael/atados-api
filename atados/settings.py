@@ -131,7 +131,8 @@ INSTALLED_APPS = (
     'provider.oauth2',
     'django_nose',
     'import_export',
-    'djcelery'
+    'djcelery',
+    'django_extensions'
 )
 
 LOGGING = {
