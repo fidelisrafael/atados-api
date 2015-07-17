@@ -545,7 +545,7 @@ def save_project(request, format=None):
       address.zipcode = obja.get('zipcode', '')
       address.city = City.objects.get(id=obja.get('city', None))
       address.save()
-      project.address = address 
+      project.address = address
 
     roles = obj.get('roles', [])
 
@@ -1066,12 +1066,15 @@ class ProjectList(generics.ListAPIView):
         queryset = SearchQuerySet().models(Project)
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
-    queryset = queryset.filter(city=city) if city else queryset
     queryset = queryset.filter(content=query) if query else queryset
+    queryset = queryset.filter(city=city) if int(city) else queryset
 
     results = [q.pk for q in queryset]
 
-    return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
+    if city == "0":
+        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, work__can_be_done_remotely=True).order_by('-highlighted')
+    else:
+        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
