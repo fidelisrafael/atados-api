@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import pytz
 import random
@@ -11,7 +11,7 @@ from django.template.loader import get_template
 from django.template import Context
 
 from django.db import models
-from django.db.models import Q 
+from django.db.models import Q
 
 from django.utils import timezone
 from django.utils.text import Truncator
@@ -222,7 +222,7 @@ class Volunteer(models.Model):
   def __unicode__(self):
     return self.user.name
 
-  
+
 def nonprofit_image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit/%s.%s' % (self.user.slug, extension)
@@ -252,7 +252,7 @@ class Nonprofit(models.Model):
     twitter_handle = models.URLField(blank=True, null=True, default=None)
 
     companies = models.ManyToManyField(Company, blank=True, null=True)
-    
+
     def image_tag(self):
         return u'<img src="%s" />' % self.image.url
     image_tag.short_description = 'Logo 200x200'
@@ -290,7 +290,7 @@ class Nonprofit(models.Model):
 
     def get_image_url(self):
       return self.image.url if self.image else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit/default_nonprofit.png"
-    
+
     def get_cover_url(self):
       return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit.png"
 
@@ -321,7 +321,7 @@ class Nonprofit(models.Model):
           # Sending welcome email on nonprofit signup
           plaintext = get_template('email/nonprofitApproved.txt')
           htmly     = get_template('email/nonprofitApproved.html')
-          d = Context()
+          d = Context({ 'id': orig.id })
           subject, from_email, to = 'Cadastro no Atados realizado com sucesso!', 'contato@atados.com.br', self.user.email
           text_content = plaintext.render(d)
           html_content = htmly.render(d)
@@ -398,7 +398,7 @@ class Project(models.Model):
 
   companies = models.ManyToManyField(Company, blank=True, null=True)
 
-  
+
   def image_tag(self):
         return u'<img src="%s" />' % self.image.url
   image_tag.short_description = 'Image 350x260'
@@ -461,7 +461,7 @@ class Project(models.Model):
 class AddressProject(Project):
   class Meta:
     proxy = True
-  
+
 # Ato Recorrente
 class Work(models.Model):
   project = models.OneToOneField(Project, blank=True, null=True)
@@ -639,7 +639,7 @@ class User(AbstractBaseUser):
 
 class Comment(models.Model):
   project = models.ForeignKey(Project, null=False)
-  user = models.ForeignKey(User, null=False) 
+  user = models.ForeignKey(User, null=False)
   comment = models.TextField()
   created_date = models.DateTimeField(auto_now_add=True)
   deleted = models.BooleanField(_("Deleted"), default=False)
