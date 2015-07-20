@@ -986,11 +986,13 @@ def clone_project(request, project_slug, format=None):
         role.pk = None
         role.save()
         roles.append(role)
+
       avas = []
-      for ava in projectAva.all():
-        ava.pk = None
-        ava.save()
-        avas.append(ava)
+      if type(projectAva) is not list:
+        for ava in projectAva.all():
+          ava.pk = None
+          ava.save()
+          avas.append(ava)
 
       project.save()
 
