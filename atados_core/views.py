@@ -1069,7 +1069,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(content=query) if query else queryset
-    queryset = queryset.filter(city=city) if int(city) else queryset
+    queryset = queryset.filter(city=city) if city != u"" and int(city) else queryset
 
     results = [q.pk for q in queryset]
 
