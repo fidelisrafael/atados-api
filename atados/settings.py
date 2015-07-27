@@ -132,7 +132,8 @@ INSTALLED_APPS = (
     'django_nose',
     'import_export',
     'djcelery',
-    'django_extensions'
+    'django_extensions',
+    'email_log'
 )
 
 LOGGING = {
@@ -178,7 +179,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
 )
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEVELOPMENT else 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_BACKEND = 'email_log.backends.EmailBackend' if not DEVELOPMENT else 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = '/tmp/atados-messages'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

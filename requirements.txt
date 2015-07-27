@@ -29,4 +29,5 @@ python-memcached==1.53
 pytz==2014.9
 sorl-thumbnail==11.12
 django-rest-swagger==0.3.2
+django-email-log=0.2.0
 https://github.com/atados-depot/django-oauth2-provider/archive/master/1.4.zip#egg=django-oauth2-provider
