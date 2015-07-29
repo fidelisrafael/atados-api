@@ -25,6 +25,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import cache_control
+from django.db.models import Q
 
 from haystack.query import SearchQuerySet
 
@@ -1065,7 +1066,7 @@ class ProjectList(generics.ListAPIView):
       nonprofit = Nonprofit.objects.get(user__slug=nonprofit)
       queryset = Project.objects.filter(nonprofit=nonprofit)
     else:
-        queryset = SearchQuerySet().models(Project)
+      queryset = SearchQuerySet().models(Project)
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(content=query) if query else queryset
@@ -1082,7 +1083,7 @@ class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
 
   def get_queryset(self):
-    return Project.objects.filter(deleted=False, closed=False, published=True)
+    return Project.objects.filter(Q(deleted=False, closed=False, published=True, work__isnull=True), Q(work__isnull=True) | Q(work__can_be_done_remotely=False))
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
