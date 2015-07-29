@@ -1083,7 +1083,7 @@ class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
 
   def get_queryset(self):
-    return Project.objects.filter(Q(deleted=False, closed=False, published=True, work__isnull=True), Q(work__isnull=True) | Q(work__can_be_done_remotely=False))
+    return Project.objects.filter(Q(deleted=False, closed=False, published=True), Q(work__isnull=True) | Q(work__can_be_done_remotely=False))
 
 class NonprofitList(generics.ListAPIView):
   serializer_class = NonprofitSearchSerializer
