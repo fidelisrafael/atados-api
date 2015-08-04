@@ -631,8 +631,8 @@ def save_project(request, format=None):
       except:
         job = Job()
         job.project = project
-      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
-      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("America/Sao_Paulo"))
+      job.start_date = datetime.utcfromtimestamp(obj['job']['start_date']/1000).replace(tzinfo=pytz.timezone("Etc/GMT"))
+      job.end_date = datetime.utcfromtimestamp(obj['job']['end_date']/1000).replace(tzinfo=pytz.timezone("Etc/GMT"))
       job.save()
       try:
         project.work.delete()
