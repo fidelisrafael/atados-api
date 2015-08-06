@@ -983,6 +983,7 @@ def clone_project(request, project_slug, format=None):
       project.address = address
       project.published = False
       roles = []
+
       for role in projectRoles.all():
         role.pk = None
         role.save()
@@ -996,6 +997,12 @@ def clone_project(request, project_slug, format=None):
           avas.append(ava)
 
       project.save()
+
+      if project.work:
+        work = project.work
+        work.pk = None
+        work.project = project
+        work.save()
 
       for cause in projectCauses.all():
         project.causes.add(cause)
