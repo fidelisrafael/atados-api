@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
     model = User
     lookup_field = 'slug'
     depth = 1
-    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff')
+    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff', 'hidden_address')
 
 class EditableUserSerializer(serializers.ModelSerializer):
   address = AddressSerializer()
@@ -39,7 +39,7 @@ class EditableUserSerializer(serializers.ModelSerializer):
     model = User
     lookup_field = 'slug'
     depth = 1
-    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff')
+    fields = ('email', 'slug', 'name', 'phone', 'address', 'is_staff', 'hidden_address')
 
 class VolunteerUserSerializer(serializers.ModelSerializer):
   class Meta:
@@ -228,7 +228,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
     model = Nonprofit
     lookup_field = 'slug'
     depth = 2
-    fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description', 
+    fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description',
               'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects', 'published')
 
 class NonprofitMapSerializer(serializers.ModelSerializer):
