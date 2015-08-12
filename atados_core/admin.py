@@ -30,6 +30,7 @@ class NonprofitAdmin(admin.ModelAdmin):
   search_fields = ['name']
   actions = ['make_published']
   readonly_fields = ['id', 'url', 'user_url', 'image_tag', 'cover_tag']
+  filter_horizontal = ('causes',)
 
   def url(self, instance):
     return format_html("<a href='https://www.atados.com.br/ong/{0}' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
@@ -87,7 +88,7 @@ class ProjectAdmin(admin.ModelAdmin):
   list_editable = ['published', 'closed']
   search_fields = ['name', 'slug']
   readonly_fields = ['id', 'url', 'image_tag', 'work', 'job', 'address_id']
-  filter_horizontal = ('roles',)
+  filter_horizontal = ('roles', 'skills', 'causes')
   raw_id_fields = ['nonprofit']
 
   def city(self, instance):
@@ -118,6 +119,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class VolunteerAdmin(admin.ModelAdmin):
   list_display = ['id', 'user', 'facebook_uid', 'image']
+  filter_horizontal = ('causes','skills')
   search_fields = ['image']
 
 class ApplyAdmin(admin.ModelAdmin):
