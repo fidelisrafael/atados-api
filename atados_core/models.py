@@ -7,6 +7,7 @@ import hashlib
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
+from django.core.urlresolvers import reverse
 from django.template.loader import get_template
 from django.template import Context
 
@@ -283,6 +284,9 @@ class Nonprofit(models.Model):
 
     def get_type(self):
       return "NONPROFIT";
+
+    def user_hidden_address(self):
+      return self.user.hidden_address
 
     def get_description(self):
       return self.description if self.description else Truncator(
@@ -628,6 +632,8 @@ class User(AbstractBaseUser):
       except:
         return None
 
+  def get_admin_url(self):
+    return reverse("admin:%s_%s_change" % (self._meta.app_label, self._meta.module_name), args=(self.id,))
 
   def has_module_perms(self, app_label):
     # Handle whether the user has permissions to view the app `app_label`?"

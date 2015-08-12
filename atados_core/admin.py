@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from django.contrib import admin
 from atados_core.models import Nonprofit, Project, User, Address, Role, Work, Job, City, AddressProject, Volunteer, Apply
@@ -12,23 +12,6 @@ from atados import settings
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html
 
-class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['id', 'owner', 'name', 'url', 'description',
-            ('published', 'deleted'),
-            'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
-  list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
-  list_filter = ('published', 'deleted')
-  search_fields = ['name']
-  actions = ['make_published']
-  readonly_fields = ['id', 'url', 'image_tag', 'cover_tag']
-
-  def url(self, instance):
-   return format_html("<a href='https://www.atados.com.br/ong/{0}' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
-
-  def make_published(self, request, queryset):
-      queryset.update(published=True)
-  make_published.short_description = _("Mark selected Nonprofits as published")
-
 class UserInline(admin.TabularInline):
     model = User
 class ProjectInline(admin.TabularInline):
@@ -37,6 +20,26 @@ class WorkInline(admin.TabularInline):
     model = Work
 class JobInline(admin.TabularInline):
     model = Job
+
+class NonprofitAdmin(admin.ModelAdmin):
+  fields = ['id', 'owner', 'name', 'url', 'user_url', 'description',
+            ('published', 'deleted'),
+            'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
+  list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
+  list_filter = ('published', 'deleted')
+  search_fields = ['name']
+  actions = ['make_published']
+  readonly_fields = ['id', 'url', 'user_url', 'image_tag', 'cover_tag']
+
+  def url(self, instance):
+    return format_html("<a href='https://www.atados.com.br/ong/{0}' target='_blank'>Clique para ver ong no site</a>", instance.user.slug)
+
+  def user_url(self, instance):
+    return format_html("<a href='{0}'>Clique para editar usuário</a>", instance.user.get_admin_url())
+
+  def make_published(self, request, queryset):
+      queryset.update(published=True)
+  make_published.short_description = _("Mark selected Nonprofits as published")
 
 class AddressAdmin(admin.ModelAdmin):
   fields = ['city', 'addressline', 'addressline2', 'addressnumber', 'neighborhood', 'zipcode', ('latitude', 'longitude')]
@@ -106,8 +109,8 @@ class WorkAdmin(admin.ModelAdmin):
   filter_horizontal = ['availabilities']
 
 class UserAdmin(admin.ModelAdmin):
-  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_staff', 'is_email_verified')
-  list_display = ('slug', 'email', 'name', 'last_login', 'address', 'is_staff', 'is_email_verified')
+  fields = ('name', 'slug', 'email', 'phone', 'address', 'is_staff', 'is_email_verified', 'hidden_address')
+  list_display = ('slug', 'email', 'name', 'last_login', 'address', 'is_staff', 'is_email_verified', 'hidden_address')
   list_filter = ('last_login', 'joined_date')
   list_editable = ['is_staff', 'is_email_verified']
   search_fields = ['email', 'slug']
@@ -154,7 +157,7 @@ def export_emails(modeladmin, request, queryset):
     fields = []
 
     #PUT THE LIST OF FIELD NAMES YOU DON'T WANT TO EXPORT
-    #exclude_fields = ['password', 'id', 'last_login', 'slug', 'is_staff', 'is_email_verified', 'is_active', 'joined_date', 'modified_date', 'address_id', 'phone', 'legacy_uid', 'hidden_address', 'name', 'company_id', 'token', 'site'] 
+    #exclude_fields = ['password', 'id', 'last_login', 'slug', 'is_staff', 'is_email_verified', 'is_active', 'joined_date', 'modified_date', 'address_id', 'phone', 'legacy_uid', 'hidden_address', 'name', 'company_id', 'token', 'site']
 
     #foreign key related fields
     extras = []
@@ -165,7 +168,7 @@ def export_emails(modeladmin, request, queryset):
     for f in modeladmin.list_display:
         if f == 'email':
             fields.append(f)
-    
+
     opts = modeladmin.model._meta
 
     wb = Workbook()
@@ -207,7 +210,7 @@ def export_emails(modeladmin, request, queryset):
 
 
             col = col + 1
-        
+
         row = row + 1
 
     wb.save('/tmp/output.xls')
@@ -227,7 +230,7 @@ def export_as_xls(modeladmin, request, queryset):
     fields = []
 
     #PUT THE LIST OF FIELD NAMES YOU DON'T WANT TO EXPORT
-    exclude_fields = [] 
+    exclude_fields = []
 
     #foreign key related fields
     extras = ['']
@@ -239,7 +242,7 @@ def export_as_xls(modeladmin, request, queryset):
         if f not in exclude_fields:
             fields.append(f)
     fields.extend(extras)
-    
+
     opts = modeladmin.model._meta
 
     wb = Workbook()
@@ -281,7 +284,7 @@ def export_as_xls(modeladmin, request, queryset):
 
 
             col = col + 1
-        
+
         row = row + 1
 
     wb.save('/tmp/output.xls')
