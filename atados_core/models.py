@@ -23,6 +23,7 @@ from atados import settings
 from unidecode import unidecode
 
 
+from django_resized import ResizedImageField
 from pygeocoder import Geocoder
 
 WEEKDAYS = (
@@ -365,6 +366,18 @@ def project_image_name(self, filename):
     left_path, extension = filename.rsplit('.', 1)
     return 'project/%s/%s.%s' % (self.nonprofit.user.slug, self.slug, extension)
 
+def project_image_name_small(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'project/%s/%s_small.%s' % (self.nonprofit.user.slug, self.slug, extension)
+
+def project_image_name_medium(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'project/%s/%s_medium.%s' % (self.nonprofit.user.slug, self.slug, extension)
+
+def project_image_name_large(self, filename):
+    left_path, extension = filename.rsplit('.', 1)
+    return 'project/%s/%s_large.%s' % (self.nonprofit.user.slug, self.slug, extension)
+
 class Project(models.Model):
   nonprofit = models.ForeignKey(Nonprofit)
   name = models.CharField(_('Project name'), max_length=50)
@@ -411,6 +424,9 @@ class Project(models.Model):
 
   image = models.ImageField(_('Image 350x260'), upload_to=project_image_name, blank=True,
                      null=True, default=None)
+  image_small = ResizedImageField(size=[350, 260], upload_to=project_image_name_small, blank=True, null=True, default=None)
+  image_medium = ResizedImageField(size=[420, 312], upload_to=project_image_name_medium, blank=True, null=True, default=None)
+  image_large = ResizedImageField(size=[1260, 936], upload_to=project_image_name_large, blank=True, null=True, default=None)
 
   def get_volunteers(self):
     apply = Apply.objects.filter(project=self, canceled=False)

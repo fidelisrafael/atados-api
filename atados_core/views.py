@@ -397,6 +397,9 @@ def create_project(request, format=None):
       project.facebook_event = obj.get('facebook_event', None)
 
       project.image = request.FILES.get('image')
+      project.image_small = request.FILES.get('image')
+      project.image_medium = request.FILES.get('image')
+      project.image_large = request.FILES.get('image')
 
       roles = obj.get('roles', None)
       if roles:
@@ -697,6 +700,9 @@ def upload_project_image(request, format=None):
   if request.user.is_authenticated():
     project = Project.objects.get(id=request.QUERY_PARAMS.get('id'))
     project.image = request.FILES.get('file')
+    project.image_small = request.FILES.get('file')
+    project.image_medium = request.FILES.get('file')
+    project.image_large = request.FILES.get('file')
     project.save()
     return Response({"file": project.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in."}, status.HTTP_403_FORBIDDEN)
