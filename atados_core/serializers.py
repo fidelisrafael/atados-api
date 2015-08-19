@@ -172,6 +172,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)
   slug = serializers.CharField(source="slug", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
+  small_image_url = serializers.CharField(source='get_small_image_url', required=False)
   nonprofit_image = serializers.CharField(source="nonprofit.get_image_url", required=False)
   nonprofit_slug = serializers.CharField(source="nonprofit.user.slug", required=False)
   nonprofit_name = serializers.CharField(source="nonprofit.name", required=False)
@@ -187,7 +188,7 @@ class ProjectSearchSerializer(serializers.ModelSerializer):
     lookup_field = 'slug'
     depth = 2
     fields = ('id', 'causes', 'name', 'slug', 'description', 'job', 'work',
-              'image_url', 'skills', 'nonprofit_image', 'city_state',
+              'image_url', 'small_image_url', 'skills', 'nonprofit_image', 'city_state',
               'nonprofit_slug', 'nonprofit_name', 'address', 'volunteers_numbers')
 
 class ProjectVolunteerSerializer(serializers.ModelSerializer):

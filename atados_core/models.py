@@ -471,6 +471,12 @@ class Project(models.Model):
   def get_image_url(self):
     return self.image.url if self.image else 'https://s3-sa-east-1.amazonaws.com/atadosapp/project/default_project.jpg'
 
+  def get_small_image_url(self):
+    try:
+      return self.image_small.url
+    except Exception as e:
+      return ""
+
   def __unicode__(self):
       return  '%s - %s' % (self.name, self.nonprofit.name)
 
