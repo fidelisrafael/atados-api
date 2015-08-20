@@ -218,6 +218,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
   slug = serializers.Field(source='user.slug')
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
+  medium_image_url = serializers.CharField(source='get_medium_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url', required=False)
   volunteers = VolunteerSlimSerializer(source='get_volunteers', required=False)
   volunteers_numbers = serializers.CharField(source='get_volunteers_numbers', required=False)
@@ -230,7 +231,7 @@ class NonprofitSerializer(serializers.ModelSerializer):
     lookup_field = 'slug'
     depth = 2
     fields = ('id', 'user', 'slug', 'image_url', 'cover_url', 'name', 'causes', 'details', 'description',
-              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects', 'published')
+              'website', 'facebook_page', 'google_page', 'twitter_handle', 'role', 'volunteers', 'projects', 'published', 'medium_image_url')
 
 class NonprofitMapSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)

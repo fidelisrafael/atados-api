@@ -312,6 +312,9 @@ class Nonprofit(models.Model):
     def get_image_url(self):
       return self.image.url if self.image else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit/default_nonprofit.png"
 
+    def get_medium_image_url(self):
+      return self.image_medium.url if self.image else self.get_image_url()
+
     def get_cover_url(self):
       return self.cover.url if self.cover else "https://s3-sa-east-1.amazonaws.com/atadosapp/nonprofit-cover/default_nonprofit.png"
 
