@@ -249,6 +249,7 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   city_state = serializers.CharField(source="user.address.get_city_state", required=False)
   role = serializers.Field(source='get_type')
   image_url = serializers.CharField(source='get_image_url', required=False)
+  medium_image_url = serializers.CharField(source='get_medium_image_url', required=False)
   cover_url = serializers.CharField(source='get_cover_url', required=False)
   name = serializers.CharField(source="name", required=False)
   causes = CauseSerializer(required=False)
@@ -257,7 +258,7 @@ class NonprofitSearchSerializer(serializers.ModelSerializer):
   class Meta:
     model = Nonprofit
     lookup_field = 'slug'
-    fields = ('id', 'address', 'city_state', 'slug', 'image_url', 'cover_url', 'name', 'causes',
+    fields = ('id', 'address', 'city_state', 'slug', 'image_url', 'medium_image_url', 'cover_url', 'name', 'causes',
               'description', 'role', 'volunteers_numbers')
 
 class NonprofitVolunteerSerializer(serializers.ModelSerializer):
