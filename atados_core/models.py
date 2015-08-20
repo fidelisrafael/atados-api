@@ -229,6 +229,18 @@ def nonprofit_image_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit/%s.%s' % (self.user.slug, extension)
 
+def nonprofit_image_name_small(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit/%s_small.%s' % (self.user.slug, extension)
+
+def nonprofit_image_name_medium(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit/%s_medium.%s' % (self.user.slug, extension)
+
+def nonprofit_image_name_large(self, filename):
+        left_path, extension = filename.rsplit('.', 1)
+        return 'nonprofit/%s_large.%s' % (self.user.slug, extension)
+
 def nonprofit_cover_name(self, filename):
         left_path, extension = filename.rsplit('.', 1)
         return 'nonprofit-cover/%s.%s' % (self.user.slug, extension)
@@ -270,6 +282,10 @@ class Nonprofit(models.Model):
 
     image = models.ImageField(_("Logo 200x200"), upload_to=nonprofit_image_name, blank=True, null=True, default=None)
     cover = models.ImageField(_("Cover 1450x340"),upload_to=nonprofit_cover_name, blank=True, null=True, default=None)
+
+    image_small = ResizedImageField(size=[250, 250], upload_to=nonprofit_image_name_small, blank=True, null=True, default=None)
+    image_medium = ResizedImageField(size=[450, 450], upload_to=nonprofit_image_name_medium, blank=True, null=True, default=None)
+    image_large = ResizedImageField(size=[900, 900], upload_to=nonprofit_image_name_large, blank=True, null=True, default=None)
 
     highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
     published = models.BooleanField(_("Published"), default=False)
@@ -317,6 +333,21 @@ class Nonprofit(models.Model):
 
     def get_address(self):
       return self.user.address
+
+    def resize_images(self):
+      from django.core.files.base import ContentFile
+      objs = Nonprofit.objects.all()
+      for i, obj in enumerate(objs):
+        if obj.image:
+          print i
+          cf = ContentFile(obj.image.read())
+          obj.image_small = cf
+          obj.image_small.name = nonprofit_image_name_small(obj, obj.image.name.rsplit('/', 1)[1])
+          obj.image_medium = cf
+          obj.image_medium.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
+          obj.image_large = cf
+          obj.image_large.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
+          obj.save()
 
     def save(self, *args, **kwargs):
       if self.pk is not None:

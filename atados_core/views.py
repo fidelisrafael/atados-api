@@ -268,6 +268,9 @@ def create_nonprofit(request, format=None):
    nonprofit.twitter_handle = obj[TWITTER_KEY]
 
   nonprofit.image = request.FILES.get('image')
+  nonprofit.image_small = request.FILES.get('image')
+  nonprofit.image_medium = request.FILES.get('image')
+  nonprofit.image_large = request.FILES.get('image')
   nonprofit.cover = request.FILES.get('cover')
   nonprofit.save()
 
@@ -713,6 +716,9 @@ def upload_nonprofit_profile_image(request, format=None):
   if request.user.is_authenticated() and request.user.nonprofit:
     nonprofit = request.user.nonprofit
     nonprofit.image = request.FILES.get('file')
+    nonprofit.image_small = request.FILES.get('file')
+    nonprofit.image_medium = request.FILES.get('file')
+    nonprofit.image_large = request.FILES.get('file')
     nonprofit.save()
     return Response({"file": nonprofit.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
