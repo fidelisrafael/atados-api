@@ -339,19 +339,19 @@ class Nonprofit(models.Model):
       objs = Nonprofit.objects.all()
       for i, obj in enumerate(objs):
         if obj.image:
-          try:
-            print i
-            cf = ContentFile(obj.image.read())
-            obj.image_small = cf
-            obj.image_small.name = nonprofit_image_name_small(obj, obj.image.name.rsplit('/', 1)[1])
-            obj.image_medium = cf
-            obj.image_medium.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
-            obj.image_large = cf
-            obj.image_large.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
-            obj.save()
-          except Exception as e:
-            print "Failed {}".format(i)
-            print e
+          if obj.image_small != None and obj.image_medium != None and obj.image_large != None:
+            try:
+              print i
+              cf = ContentFile(obj.image.read())
+              obj.image_small = cf
+              obj.image_small.name = nonprofit_image_name_small(obj, obj.image.name.rsplit('/', 1)[1])
+              obj.image_medium = cf
+              obj.image_medium.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
+              obj.image_large = cf
+              obj.image_large.name = nonprofit_image_name_medium(obj, obj.image.name.rsplit('/', 1)[1])
+              obj.save()
+            except Exception as e:
+              print "Failed {}".format(i)
 
     def save(self, *args, **kwargs):
       if self.pk is not None:
