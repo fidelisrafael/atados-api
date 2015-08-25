@@ -142,6 +142,7 @@ class ProjectSerializer(serializers.ModelSerializer):
   slug = serializers.CharField(source="slug", required=False)
   details = serializers.CharField(source="details", required=False)
   image_url = serializers.CharField(source='get_image_url', required=False)
+  small_image_url = serializers.CharField(source='get_small_image_url', required=False)
   nonprofit = NonprofitProjectSerializer(required=False)
   nonprofit_image = serializers.CharField(source="nonprofit.get_image_url", required=False)
   nonprofit_city_state = serializers.CharField(source="nonprofit.user.address.get_city_state", required=False)
@@ -156,7 +157,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     depth = 1
     fields = ('id', 'causes', 'name', 'volunteers', 'slug', 'details', 'description', 'facebook_event',
               'responsible', 'address', 'phone', 'email', 'published', 'closed', 'deleted', 'volunteers_numbers',
-              'work', 'job', 'image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
+              'work', 'job', 'image_url', 'small_image_url', 'skills', 'roles', 'nonprofit', 'nonprofit_image', 'nonprofit_city_state')
 
 class ProjectMapSerializer(serializers.ModelSerializer):
   name = serializers.CharField(source='name', required=False)
