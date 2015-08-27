@@ -53,3 +53,4 @@ storage
 static
 celerybeat-schedule
 celeryev.pid
+newsletter.txt

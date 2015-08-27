@@ -37,6 +37,9 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
+from suds.client import Client
+from suds.xsd.doctor import ImportDoctor, Import
+
 @api_view(['GET'])
 def current_user(request, format=None):
   if request.user.is_authenticated():
@@ -718,7 +721,7 @@ def upload_nonprofit_profile_image(request, format=None):
     nonprofit.image = request.FILES.get('file')
     nonprofit.image_small = request.FILES.get('file')
     nonprofit.image_medium = request.FILES.get('file')
-    nonprofit.image_large = request.FILES.get('file')
+    nonprofit.image_ = request.FILES.get('file')
     nonprofit.save()
     return Response({"file": nonprofit.get_image_url()}, status.HTTP_200_OK)
   return Response({"Not logged in or not nonprofit."}, status.HTTP_403_FORBIDDEN)
@@ -1043,6 +1046,29 @@ def export_project_csv(request, project_slug, format=None):
       print "ERROR - %d - %s" % (sys.exc_traceback.tb_lineno, e)
       return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
   return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def add_to_newsletter(request, format=None):
+  # To be implemented when allin reply with a fix
+  #values = {"nm_lista": "newsletter", "campos": "nm_email;nome", "valor": "teste@teste.com.br;teste"}
+
+  #imp = Import('http://schemas.xmlsoap.org/soap/encoding/')
+  #d = ImportDoctor(imp)
+
+  #client = Client("http://painel01.allinmail.com.br/wsAllin/login.php?wsdl")
+  #ticket = client.service.getTicket('', '')
+
+  #client2 = Client("http://painel01.allinmail.com.br/wsAllin/inserir_email_base.php?wsdl", doctor = d)
+  #response = client2.service.inserirEmailBase(ticket, values)
+
+  # For now, just a csv
+  params = json.loads(request.body)
+
+  with open("newsletter.txt", "a") as f:
+       f.write("{};{}\n".format(params['name'], params['email']))
+
+  response = "Seu email foi salvo!"
+  return Response({"msg": response})
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()

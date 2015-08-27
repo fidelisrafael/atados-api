@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from django.conf.urls import patterns, url, include
 from atados_core import views
@@ -64,5 +64,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/project/(?P<project_slug>[\w-]+)/clone/', 'clone_project'),
   url(r'v1/project/(?P<project_slug>[\w-]+)/export/', 'export_project_csv'),
 
-  url(r'v1/dashboard/applies/', 'applies')
+  url(r'v1/dashboard/applies/', 'applies'),
+
+  url(r'v1/add_to_newsletter/', 'add_to_newsletter')
 )
