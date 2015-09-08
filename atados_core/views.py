@@ -37,7 +37,7 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
-from suds.client import Client
+from suds.client import Client as SudsClient
 from suds.xsd.doctor import ImportDoctor, Import
 
 @api_view(['GET'])
@@ -1055,10 +1055,10 @@ def add_to_newsletter(request, format=None):
   #imp = Import('http://schemas.xmlsoap.org/soap/encoding/')
   #d = ImportDoctor(imp)
 
-  #client = Client("http://painel01.allinmail.com.br/wsAllin/login.php?wsdl")
+  #client = SudsClient("http://painel01.allinmail.com.br/wsAllin/login.php?wsdl")
   #ticket = client.service.getTicket('', '')
 
-  #client2 = Client("http://painel01.allinmail.com.br/wsAllin/inserir_email_base.php?wsdl", doctor = d)
+  #client2 = SudsClient("http://painel01.allinmail.com.br/wsAllin/inserir_email_base.php?wsdl", doctor = d)
   #response = client2.service.inserirEmailBase(ticket, values)
 
   # For now, just a csv
