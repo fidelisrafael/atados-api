@@ -30,7 +30,6 @@ else:
   )
 
 ADMINS = (
-    ('Marjori Pomarole', 'marjoripomarole@gmail.com'),
     ('Leonardo Arroyo', 'arroyo@atados.com.br'),
     ('Vinicius Lourenço', 'vinicius@atados.com.br')
 )
