@@ -1,0 +1,96 @@
+FROM ubuntu:14.04
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update
+
+RUN apt-get install wget -y
+
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+
+RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+RUN echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main" | tee -a /etc/apt/sources.list.d/elasticsearch-1.7.list
+RUN apt-get update
+
+
+RUN echo "instalando node e npm..."
+RUN apt-get install -y nodejs
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+RUN apt-get install -y npm
+
+RUN echo "instalando bower..."
+RUN npm install -g bower
+
+RUN echo "instalando grunt..."
+RUN npm install -g grunt-cli
+
+RUN echo "instalando ruby e compass..."
+RUN apt-get install -y ruby-dev
+RUN gem install compass
+
+RUN echo "instalando git..."
+RUN apt-get install -y git
+
+
+#RUN echo "clonando atados-www..."
+#WORKDIR /
+#RUN git clone https://github.com/atados/www.git atados-www
+#RUN cd atados-www && git checkout atualizando-ambiente
+
+#RUN echo "instalando atados-www..."
+#WORKDIR /atados-www
+#RUN npm install
+#RUN bower --allow-root install
+
+RUN echo "instalando libs python..."
+RUN apt-get install -y python-pip libmysqlclient-dev python-dev python-psycopg2 libpq-dev
+
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+RUN apt-get install -y oracle-java8-installer
+RUN apt-get install -y oracle-java8-set-default
+
+RUN echo "instalando elastic search..."
+RUN apt-get install elasticsearch -y
+
+RUN echo "clonando atados-api..."
+WORKDIR /
+RUN git clone https://github.com/atados/api.git atados-api
+RUN cd atados-api && git checkout atualizando-ambiente
+
+RUN echo "definindo variáveis de ambiente..."
+RUN cat /atados-api/environment.sh >> ~/.bashrc
+
+RUN echo "instalando dependências python..."
+RUN pip install -r /atados-api/requirements.txt
+
+RUN echo "instalando POSTGRES..."
+RUN apt-get install -y postgresql postgresql-contrib
+
+RUN echo "criando banco..."
+USER postgres
+RUN /etc/init.d/postgresql start &&\
+    psql --command "CREATE USER atadosdb WITH PASSWORD 'atadosdb';" &&\
+    createdb -O atadosdb atadosdb
+RUN echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
+USER root
+
+COPY atados_pgsql /
+RUN chown postgres.postgres /atados_pgsql
+RUN python ./atados-api/manage.py migrate
+#RUN /etc/init.d/postgresql start
+#RUN sudo -u postgres psql atadosdb < /atados_pgsql
+
+WORKDIR /
+RUN git clone https://github.com/atados/www.git atados-www
+WORKDIR /atados-www
+RUN git checkout atualizando-ambiente
+RUN npm install
+RUN bower --allow-root install
+WORKDIR /
+
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# talvez precise da 9200 do elasticsearch
+# 8000: api, 9000: www
+EXPOSE 8000 9000
