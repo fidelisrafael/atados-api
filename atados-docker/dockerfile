@@ -76,7 +76,7 @@ USER root
 
 COPY atados_pgsql /
 RUN chown postgres.postgres /atados_pgsql
-RUN python ./atados-api/manage.py migrate
+#RUN python ./atados-api/manage.py migrate
 #RUN /etc/init.d/postgresql start
 #RUN sudo -u postgres psql atadosdb < /atados_pgsql
 
@@ -89,7 +89,7 @@ RUN bower --allow-root install
 WORKDIR /
 
 COPY docker-entrypoint.sh /
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # talvez precise da 9200 do elasticsearch
 # 8000: api, 9000: www

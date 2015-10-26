@@ -7,7 +7,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('backend.views',
     url(r'^', include('atados_core.urls')),
-
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^docs/', include('rest_framework_swagger.urls')),

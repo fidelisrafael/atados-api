@@ -6,8 +6,9 @@ import json
 import pytz
 import sys
 import urllib2
+import requests
 
-from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work
+from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Subscription
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofitOrStaff
 from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
 from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
@@ -147,7 +148,7 @@ def facebook_auth(request, format=None):
         plaintext = get_template('email/volunteerFacebookSignup.txt')
         htmly     = get_template('email/volunteerFacebookSignup.html')
         d = Context({ 'name': name })
-        subject, from_email, to = 'Seja bem vindo ao Atados', 'contato@atados.com.br', email
+        subject, from_email, to = 'Seja bem vindo ao Atados', 'site@atados.com.br', email
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -208,7 +209,7 @@ def create_volunteer(request, format=None):
     htmly     = get_template('email/volunteerSignup.html')
     subject   = u"Seja bem vindo ao Atados"
     d = Context({ 'name': user.name })
-    from_email, to = 'contato@atados.com.br', user.email
+    from_email, to = 'site@atados.com.br', user.email
     text_content = plaintext.render(d)
     html_content = htmly.render(d)
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -281,7 +282,7 @@ def create_nonprofit(request, format=None):
   plaintext = get_template('email/nonprofitSignup.txt')
   htmly     = get_template('email/nonprofitSignup.html')
   d = Context()
-  subject, from_email, to = 'Cadastro no Atados enviado com sucesso!', 'contato@atados.com.br', nonprofit.user.email
+  subject, from_email, to = 'Cadastro no Atados enviado com sucesso!', 'site@atados.com.br', nonprofit.user.email
   text_content = plaintext.render(d)
   html_content = htmly.render(d)
   msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -671,7 +672,7 @@ def password_reset(request, format=None):
     plaintext += password
     plaintext += u'. Por favor entre na sua conta e mude para algo de sua preferência. Qualquer dúvida retorne o email. Abraços.'
     html = plaintext
-    subject, from_email, to = 'Nova senha do Atados', 'contato@atados.com.br', email
+    subject, from_email, to = 'Nova senha do Atados', 'site@atados.com.br', email
     msg = EmailMultiAlternatives(subject, plaintext, from_email, [to])
     msg.attach_alternative(html, "text/html")
     msg.send()
@@ -889,7 +890,7 @@ def apply_volunteer_to_project(request, format=None):
         plaintext = get_template('email/volunteerAppliesToProject.txt')
         htmly     = get_template('email/volunteerAppliesToProject.html')
         d = Context({ 'project_name': project.name, 'project_email': project.email, 'project_phone': project.phone })
-        subject, from_email, to = u'Confirmação do ato. Parabéns.', 'contato@atados.com.br', volunteer.user.email
+        subject, from_email, to = u'Confirmação do ato. Parabéns.', 'site@atados.com.br', volunteer.user.email
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -904,7 +905,7 @@ def apply_volunteer_to_project(request, format=None):
         htmly     = get_template('email/nonprofitGetsNotifiedAboutApply.html')
         d = Context({ 'volunteer_name': volunteer.user.name, "volunteer_email": volunteer.user.email, "volunteer_phone": volunteer.user.phone, "volunteer_message": message, "project_name": project.name})
         email = project.email if project.email else project.nonprofit.user.email
-        subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'contato@atados.com.br', email
+        subject, from_email, to = u'Um voluntário se candidatou a seu ato!', 'site@atados.com.br', email
         text_content = plaintext.render(d)
         html_content = htmly.render(d)
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
@@ -1056,7 +1057,6 @@ def add_to_newsletter(request, format=None):
   #d = ImportDoctor(imp)
 
   #client = SudsClient("http://painel01.allinmail.com.br/wsAllin/login.php?wsdl")
-  #ticket = client.service.getTicket('', '')
 
   #client2 = SudsClient("http://painel01.allinmail.com.br/wsAllin/inserir_email_base.php?wsdl", doctor = d)
   #response = client2.service.inserirEmailBase(ticket, values)
@@ -1069,6 +1069,52 @@ def add_to_newsletter(request, format=None):
 
   response = "Seu email foi salvo!"
   return Response({"msg": response})
+
+@api_view(['GET', 'POST'])
+def contribute(request):
+  params = json.loads(request.body)
+
+  sub = Subscription()
+  sub.name = params.get('name', None)
+  sub.email = params.get('email', None)
+  sub.phone = params.get('phone', None)
+  sub.doc = params.get('doc', None)
+  sub.street = params.get('address_street', None)
+  sub.number = params.get('address_number', None)
+  sub.complement = params.get('address_complement', None)
+  sub.city = params.get('address_city', None)
+  sub.state = params.get('address_state', None)
+  sub.value = params.get('value', 30)
+  sub.recurrent = params.get('recurrent', None)
+  sub.cardhash = params.get('card_hash', None)
+  sub.cardholder_name = params.get('card_holder_name', None)
+  sub.exp_month = params.get('card_exp_month', None)
+  sub.exp_year = params.get('card_exp_year', None)
+  sub.cvv = params.get('card_cvv', None)
+  sub.save()
+
+  data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': 'ak_test_z2yd301SAYqspjn7boCCJNEve0BI9w', 'cardholder_name': sub.cardholder_name}
+  r = requests.post('https://api.pagar.me/1/transactions', params=data)
+  resp = json.loads(r.text)
+
+  sub.tid = resp.get('tid', None)
+  sub.status = resp.get('status', None)
+  sub.status_reason = resp.get('status_reason', None)
+  sub.save()
+
+  try:
+    plaintext = get_template('email/volunteerFacebookSignup.txt')
+    htmly     = get_template('email/volunteerFacebookSignup.html')
+    subject, from_email, to = 'Sua doação foi feita!', 'site@atados.com.br', sub.email
+    text_content = plaintext.render(d)
+    html_content = htmly.render(d)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+  except:
+    pass
+
+  return Response({'success': True})
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()

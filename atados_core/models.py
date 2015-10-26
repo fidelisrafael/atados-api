@@ -735,3 +735,33 @@ class VolunteerResource(resources.ModelResource):
   def dehydrate_telefone(self, volunteer):
     return volunteer.user.phone
 
+
+class Subscription(models.Model):
+  name = models.CharField(_('Name'), max_length=200, blank=True, null=True)
+  email = models.CharField(_('Email'), max_length=200, blank=True, null=True)
+  phone = models.CharField(_('Phone'), max_length=200, blank=True, null=True)
+  doc = models.CharField(_('Doc'), max_length=200, blank=True, null=True)
+
+  street = models.CharField(_('Street'), max_length=200, blank=True, null=True)
+  number = models.CharField(_('Number'), max_length=200, blank=True, null=True)
+  complement = models.CharField(_('Complement'), max_length=200, blank=True, null=True)
+  city = models.CharField(_('City'), max_length=200, blank=True, null=True)
+  state = models.CharField(_('State'), max_length=200, blank=True, null=True)
+
+  cardhash = models.CharField(_('Card'), max_length=500)
+  cardholder_name = models.CharField(_('CardholderName'), max_length=200)
+  exp_month = models.CharField(_('ExpMonth'), max_length=200)
+  exp_year = models.CharField(_('ExpYear'), max_length=200)
+  cvv = models.CharField(_('Cvv'), max_length=500)
+
+  tid = models.CharField(_('Tid'), max_length=500, blank=True, null=True)
+  status = models.CharField(_('Status'), max_length=500, blank=True, null=True)
+  status_reason = models.CharField(_('Status'), max_length=500, blank=True, null=True)
+
+  value = models.FloatField(blank=False, null=False, default=0.0)
+  active = models.BooleanField(default=False, null=False)
+  recurrent = models.BooleanField(default=False, null=False)
+  parent = models.ForeignKey('self', default='', null=True)
+  created_date = models.DateTimeField(auto_now_add=True)
+  deleted = models.BooleanField(_("Deleted"), default=False)
+  deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
