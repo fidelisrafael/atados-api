@@ -1,0 +1,15 @@
+export ATADOS_ENV=debug
+export DJANGO_ENV=development
+export DJANGO_SECRET_KEY="#7j@g*f*nufizr04s!f8_3+h&amp;1x!l04!q@0u@28ppkl)5kuy2^"
+export AWS_STORAGE_BUCKET_NAME=atadosapp
+export AWS_ACCESS_KEY_ID=AKIAJ6XE7J7Z7W3DKUQA
+export AWS_SECRET_KEY=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
+export ATADOS_DB_HOSTNAME=localhost
+export ATADOS_DB_NAME=atadosdb
+export ATADOS_DB_USERNAME=atadosdb
+export ATADOS_DB_PASSWORD=atadosdb
+export ATADOS_DB_PORT=5432
+export ATADOS_SEARCH_ENDPOINT=localhost:9200
+export ATADOS_CLIENT_ID=da4bc76b44b73cda7e4d
+export ATADOS_CLIENT_SECRET=3414d4cc0fb94521f0361ee5aba1b7eb73b5a468
+export ATADOS_FACEBOOK_ID=430973993601792
