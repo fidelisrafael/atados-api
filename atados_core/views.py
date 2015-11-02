@@ -1099,7 +1099,8 @@ def contribute(request):
   resp = json.loads(r.text)
 
   with open("pag.txt", "a") as f:
-     f.write(u"{}\n".format(r.text))
+    f.write("{}\n".format(r.text.encode('utf8')))
+
 
   sub.tid = resp.get('tid', None)
   sub.status = resp.get('status', None)
