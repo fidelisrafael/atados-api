@@ -7,6 +7,7 @@ import pytz
 import sys
 import urllib2
 import requests
+import os
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Subscription
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofitOrStaff
@@ -1093,7 +1094,7 @@ def contribute(request):
   sub.cvv = params.get('card_cvv', None)
   sub.save()
 
-  data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': 'ak_test_z2yd301SAYqspjn7boCCJNEve0BI9w', 'cardholder_name': sub.cardholder_name}
+  data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': os.environ.get('ATADOS_API_KEY'), 'cardholder_name': sub.cardholder_name}
   r = requests.post('https://api.pagar.me/1/transactions', params=data)
   resp = json.loads(r.text)
 
