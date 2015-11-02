@@ -1098,6 +1098,9 @@ def contribute(request):
   r = requests.post('https://api.pagar.me/1/transactions', params=data)
   resp = json.loads(r.text)
 
+  with open("pag.txt", "a") as f:
+     f.write("{}\n".format(r.text)
+
   sub.tid = resp.get('tid', None)
   sub.status = resp.get('status', None)
   sub.status_reason = resp.get('status_reason', None)
