@@ -1094,7 +1094,11 @@ def contribute(request):
   sub.cvv = params.get('card_cvv', None)
   sub.save()
 
-  data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': os.environ.get('ATADOS_API_KEY'), 'cardholder_name': sub.cardholder_name}
+  address = {'zipcode': params.get('address_zip'), 'neighborhood': '-', 'street': sub.street, 'street_number': sub.number}
+  phone = {'number': sub.phone, 'ddd': '--'}
+  customer = {'name': sub.name, 'email': sub.email, 'document_number': sub.doc, 'address': address}
+
+  data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': os.environ.get('ATADOS_API_KEY'), 'customer': customer}
   with open("pag.txt", "a") as f:
     f.write("Data: {}\n".format(json.dumps(data)))
 
