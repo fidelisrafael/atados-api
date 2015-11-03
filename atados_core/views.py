@@ -1095,12 +1095,14 @@ def contribute(request):
   sub.save()
 
   data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': os.environ.get('ATADOS_API_KEY'), 'cardholder_name': sub.cardholder_name}
+  with open("pag.txt", "a") as f:
+    f.write("Data: {}\n".format(r.text.encode('utf8')))
+
   r = requests.post('https://api.pagar.me/1/transactions', params=data)
   resp = json.loads(r.text)
 
   with open("pag.txt", "a") as f:
-    f.write("{}\n".format(r.text.encode('utf8')))
-
+    f.write("Response: {}\n".format(r.text.encode('utf8')))
 
   sub.tid = resp.get('tid', None)
   sub.status = resp.get('status', None)
