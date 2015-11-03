@@ -1104,6 +1104,10 @@ def contribute(request):
   with open("pag.txt", "a") as f:
     f.write("Response: {}\n".format(r.text.encode('utf8')))
 
+  if errors in resp:
+    return Response({"Server error. Please contact admin."}, status.HTTP_400_BAD_REQUEST)
+
+
   sub.tid = resp.get('tid', None)
   sub.status = resp.get('status', None)
   sub.status_reason = resp.get('status_reason', None)
