@@ -1115,14 +1115,20 @@ def contribute(request):
   sub.tid = resp.get('tid', None)
   sub.status = resp.get('status', None)
   sub.status_reason = resp.get('status_reason', None)
+
+  data = {'api_key': os.environ.get('ATADOS_API_KEY'), 'card_hash': sub.cardhash}
+  r = requests.post('https://api.pagar.me/1/cards', params=data)
+  resp = json.loads(r.text)
+  sub.card_id = resp['id']
+
   sub.save()
 
   try:
-    plaintext = get_template('email/volunteerFacebookSignup.txt')
-    htmly     = get_template('email/volunteerFacebookSignup.html')
+    plaintext = get_template('email/successfulDonation.txt')
+    htmly     = get_template('email/successfulDonation.html')
     subject, from_email, to = 'Sua doação foi feita!', 'site@atados.com.br', sub.email
-    text_content = plaintext.render(d)
-    html_content = htmly.render(d)
+    text_content = plaintext.render(Context())
+    html_content = htmly.render(Context())
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
