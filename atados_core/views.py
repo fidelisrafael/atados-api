@@ -1075,6 +1075,7 @@ def add_to_newsletter(request, format=None):
 def contribute(request):
   params = json.loads(request.body)
 
+  # Save transaction on database
   sub = Subscription()
   sub.name = params.get('name', None)
   sub.email = params.get('email', None)
@@ -1094,21 +1095,31 @@ def contribute(request):
   sub.cvv = params.get('card_cvv', None)
   sub.save()
 
+  # Prepare data
   address = {'zipcode': params.get('address_zip'), 'neighborhood': '-', 'street': sub.street, 'street_number': sub.number}
   phone = {'number': sub.phone, 'ddd': '--'}
   customer = {'name': sub.name, 'email': sub.email, 'document_number': sub.doc, 'address': address}
-
   data = {'amount': sub.value*100, 'card_hash': sub.cardhash, 'api_key': os.environ.get('ATADOS_API_KEY'), 'customer': customer}
+
+  # Dump data log
   with open("pag.txt", "a") as f:
     f.write("Data: {}\n".format(json.dumps(data)))
 
+  # Request pagar.me
   r = requests.post('https://api.pagar.me/1/transactions', params=data)
   resp = json.loads(r.text)
 
+  # Dump response log
   with open("pag.txt", "a") as f:
     f.write("Response: {}\n".format(r.text.encode('utf8')))
 
+  # Tilt!
   if resp.has_key('errors'):
+    for resp.errors as error:
+      if error['type'] == "action_forbidden" and error['message'] == "Sem ambiente configurado para este tipo de transação.":
+        sub.status = "invalid_flag"
+        sub.save()
+        return Response({'success': False, 'error': 'invalid_flag'})
     return Response({"Server error. Please contact admin."}, status.HTTP_400_BAD_REQUEST)
 
 
