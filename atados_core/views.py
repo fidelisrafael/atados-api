@@ -1115,7 +1115,7 @@ def contribute(request):
 
   # Tilt!
   if resp.has_key('errors'):
-    for error in resp.errors:
+    for error in resp['errors']:
       if error['type'] == "action_forbidden" and error['message'] == "Sem ambiente configurado para este tipo de transação.":
         sub.status = "invalid_flag"
         sub.save()
