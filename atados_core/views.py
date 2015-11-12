@@ -1087,7 +1087,7 @@ def contribute(request):
   sub.city = params.get('address_city', None)
   sub.state = params.get('address_state', None)
   sub.value = params.get('value', 30)
-  sub.recurrent = params.get('recurrent', None)
+  sub.recurrent = params.get('recurrent', False)
   sub.cardhash = params.get('card_hash', None)
   sub.cardholder_name = params.get('card_holder_name', None)
   sub.exp_month = params.get('card_exp_month', None)
@@ -1134,17 +1134,25 @@ def contribute(request):
 
   sub.save()
 
-  try:
-    plaintext = get_template('email/successfulDonation.txt')
-    htmly     = get_template('email/successfulDonation.html')
-    subject, from_email, to = 'Sua doação foi feita!', 'site@atados.com.br', sub.email
-    text_content = plaintext.render(Context())
-    html_content = htmly.render(Context())
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-  except:
-    pass
+  if sub.status === "refused" or sub.status === "refunded" or sub.status === "chargedback":
+    return Response({'success': False, 'error': 'card_refused'})
+
+  if sub.status === "authorized" or sub.status === "paid":
+    try:
+      if sub.recurrent:
+        plaintext = get_template('email/successfulDonationMonthly.txt')
+        htmly     = get_template('email/successfulDonationMonthly.html')
+      else:
+        plaintext = get_template('email/successfulDonationPunctual.txt')
+        htmly     = get_template('email/successfulDonationPunctual.html')
+      subject, from_email, to = 'Sua doação foi feita!', 'site@atados.com.br', sub.email
+      text_content = plaintext.render(Context())
+      html_content = htmly.render(Context())
+      msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+      msg.attach_alternative(html_content, "text/html")
+      msg.send()
+    except:
+      pass
 
   return Response({'success': True})
 
