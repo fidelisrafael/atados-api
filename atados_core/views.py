@@ -1134,10 +1134,10 @@ def contribute(request):
 
   sub.save()
 
-  if sub.status === "refused" or sub.status === "refunded" or sub.status === "chargedback":
+  if sub.status == "refused" or sub.status == "refunded" or sub.status == "chargedback":
     return Response({'success': False, 'error': 'card_refused'})
 
-  if sub.status === "authorized" or sub.status === "paid":
+  if sub.status == "authorized" or sub.status == "paid":
     try:
       if sub.recurrent:
         plaintext = get_template('email/successfulDonationMonthly.txt')
