@@ -199,12 +199,21 @@ def create_volunteer(request, format=None):
   slug = request.DATA['slug']
   email = request.DATA['email']
   password = request.DATA['password']
+  user_address = request.DATA.get('address', None)
+
+  if user_address:
+    address = Address()
+    address.city = City.objects.get(id=user_address['city'])
+    address.save()
+
   try:
     user = User.objects.get(email=email)
     return Response({'detail': 'User already exists.'}, status.HTTP_404_NOT_FOUND)
   except User.DoesNotExist:
     site = request.META.get('HTTP_ORIGIN', 'https://www.atados.com.br')
     user = User.objects.create_user(email, password, slug=slug, site=site)
+    user.address = address
+    user.save()
     # Sending welcome email on email signup
     plaintext = get_template('email/volunteerSignup.txt')
     htmly     = get_template('email/volunteerSignup.html')
@@ -1064,9 +1073,13 @@ def add_to_newsletter(request, format=None):
 
   # For now, just a csv
   params = json.loads(request.body)
+  city = params.get('city', None)
+  if city:
+    state = city['state']['code']
+    city = city['name']
 
   with open("newsletter.txt", "a") as f:
-       f.write("{};{}\n".format(params['name'], params['email']))
+       f.write("{};{};{};{}\n".format(params['name'], params['email'], city, state))
 
   response = "Seu email foi salvo!"
   return Response({"msg": response})
@@ -1195,6 +1208,10 @@ class ProjectList(generics.ListAPIView):
 
     highlighted = params.get('highlighted') == 'true'
     if highlighted:
+      city = params.get('city', None)
+      if city:
+        return Project.objects.filter(highlighted=highlighted, address__city=city)
+      else:
         return Project.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
