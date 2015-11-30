@@ -22,7 +22,7 @@ class JobInline(admin.TabularInline):
     model = Job
 
 class NonprofitAdmin(admin.ModelAdmin):
-  fields = ['id', 'owner', 'name', 'url', 'user_url', 'description',
+  fields = ['id', 'owner', 'name', 'highlighted', 'url', 'user_url', 'description',
             ('published', 'deleted'),
             'details', 'image', 'image_tag', 'cover', 'cover_tag', 'website', 'facebook_page', 'google_page', 'twitter_handle', 'causes']
   list_display = ['id', 'name', 'description', 'published', 'deleted', 'created_date', 'get_address']
