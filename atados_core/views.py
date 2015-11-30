@@ -1252,6 +1252,10 @@ class NonprofitList(generics.ListAPIView):
 
     highlighted = params.get('highlighted') == 'true'
     if highlighted:
+      city = params.get('city', None)
+      if city:
+        return Nonprofit.objects.filter(highlighted=highlighted, user__address__city=city)
+      else:
         return Nonprofit.objects.filter(highlighted=highlighted)
 
     query = params.get('query', None)
