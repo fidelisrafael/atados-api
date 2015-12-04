@@ -1153,8 +1153,8 @@ def contribute(request):
   if sub.status == "authorized" or sub.status == "paid":
     try:
       if sub.recurrent:
-        plaintext = get_template('email/successfulDonationMonthly.txt')
-        htmly     = get_template('email/successfulDonationMonthly.html')
+        plaintext = get_template('email/successfulDonationRecurrent.txt')
+        htmly     = get_template('email/successfulDonationRecurrent.html')
       else:
         plaintext = get_template('email/successfulDonationPunctual.txt')
         htmly     = get_template('email/successfulDonationPunctual.html')
