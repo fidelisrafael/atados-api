@@ -1171,7 +1171,7 @@ def contribute(request):
     try:
       # Schedule email to be sent 7 days after this subscription
       eta = datetime.now() + timedelta(days=7)
-      send_email_to_donator_after_4_days_of_subscription.apply_async(
+      send_email_to_donator_after_7_days_of_subscription.apply_async(
         eta=eta,
         kwargs={'donator_email': sub.email})
     except:
