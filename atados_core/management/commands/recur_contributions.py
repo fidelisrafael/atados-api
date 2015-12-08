@@ -18,10 +18,13 @@ class Command(NoArgsCommand):
       children = Subscription.objects.filter(parent=sub).order_by('-created_date')
       compare_date = sub.created_date
 
+      delta = relativedelta(months=+1)
       if children.count():
         compare_date = children[0].created_date
+        if children[0].status != "paid" and children[0].status != "authorized":
+          delta = relativedelta(days=+10)
 
-      compare_date = (compare_date + relativedelta(months=+1)).replace(tzinfo=None)
+      compare_date = (compare_date + delta).replace(tzinfo=None)
       if compare_date < datetime.now():
           print "[{}][{}] {}: - Expected: {}".format(sub.id, children.count(), sub.name, compare_date)
 

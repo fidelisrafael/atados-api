@@ -1106,6 +1106,7 @@ def contribute(request):
   sub.exp_month = params.get('card_exp_month', None)
   sub.exp_year = params.get('card_exp_year', None)
   sub.cvv = params.get('card_cvv', None)
+  sub.active = True
   sub.save()
 
   # Prepare data
