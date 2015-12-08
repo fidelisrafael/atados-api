@@ -749,10 +749,6 @@ class Subscription(models.Model):
   state = models.CharField(_('State'), max_length=200, blank=True, null=True)
 
   cardhash = models.CharField(_('Card'), max_length=500)
-  cardholder_name = models.CharField(_('CardholderName'), max_length=200)
-  exp_month = models.CharField(_('ExpMonth'), max_length=200)
-  exp_year = models.CharField(_('ExpYear'), max_length=200)
-  cvv = models.CharField(_('Cvv'), max_length=500)
   card_id = models.CharField(_('Card ID'), max_length=500)
 
   tid = models.CharField(_('Tid'), max_length=500, blank=True, null=True)

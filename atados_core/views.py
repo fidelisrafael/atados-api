@@ -1102,10 +1102,6 @@ def contribute(request):
   sub.value = params.get('value', 30)
   sub.recurrent = params.get('recurrent', False)
   sub.cardhash = params.get('card_hash', None)
-  sub.cardholder_name = params.get('card_holder_name', None)
-  sub.exp_month = params.get('card_exp_month', None)
-  sub.exp_year = params.get('card_exp_year', None)
-  sub.cvv = params.get('card_cvv', None)
   sub.active = True
   sub.save()
 
