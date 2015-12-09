@@ -8,10 +8,11 @@ import sys
 import urllib2
 import requests
 import os
+import re
 
 from atados_core.models import Nonprofit, Volunteer, Project, Availability, Cause, Skill, State, City, Address, User, Apply, ApplyStatus, VolunteerResource, Role, Job, Work, Subscription
 from atados_core.permissions import IsOwnerOrReadOnly, IsNonprofitOrStaff
-from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer
+from atados_core.serializers import UserSerializer, NonprofitSerializer, NonprofitSearchSerializer, VolunteerSerializer, VolunteerPublicSerializer, ProjectSerializer, ProjectSearchSerializer, CauseSerializer, SkillSerializer, AddressSerializer, StateSerializer, CitySerializer, AvailabilitySerializer, ApplySerializer, VolunteerProjectSerializer, JobSerializer, WorkSerializer, ProjectMapSerializer, NonprofitMapSerializer, SubscriptionSerializer
 from atados_core.tasks import send_email_to_volunteer_after_4_weeks_of_apply, send_email_to_volunteer_3_days_before_pontual
 
 from datetime import datetime
@@ -28,6 +29,7 @@ from django.utils import timezone
 from django.utils.encoding import iri_to_uri
 from django.views.decorators.cache import cache_control
 from django.db.models import Q
+from django.http import QueryDict
 
 from haystack.query import SearchQuerySet
 
@@ -1176,6 +1178,36 @@ def contribute(request):
       pass
 
   return Response({'success': True})
+
+@api_view(['GET', 'DELETE'])
+def contributions(request):
+  params = request.GET
+  email = params.get('email', None)
+  doc = params.get('doc', '')
+
+  if request.method == "GET":
+    normalized_doc = re.sub(r'\W+', '', doc)
+
+    if not email or not doc:
+      return Response({'success': False, 'error': 'Insufficient data'})
+
+    subs = Subscription.objects.raw('SELECT * FROM atados_core_subscription WHERE email = %s AND REPLACE(REPLACE(doc, \'.\', \'\'), \'-\', \'\') = %s', [email, normalized_doc])
+    return Response(SubscriptionSerializer(subs, many=True).data)
+
+  elif request.method == "DELETE":
+    id = params.get('id', '')
+
+    if not email or not doc or not id:
+      return Response({'success': False, 'error': 'Insufficient data'})
+
+    sub = Subscription.objects.get(pk=id, email=email, doc=doc)
+    if sub:
+      sub.active = False
+      sub.save()
+    else:
+      return Response({'success': False, 'error': 'Invalid subscription'})
+
+    return Response({'success': True})
 
 class UserViewSet(viewsets.ModelViewSet):
   queryset = User.objects.all()

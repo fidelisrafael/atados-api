@@ -1,7 +1,12 @@
 from atados_core.models import (Nonprofit, Volunteer, Project, Availability, Cause,
   Skill, State, City, Address, Work, Role,
-  Apply, Recommendation, Job, User)
+  Apply, Recommendation, Job, User, Subscription)
 from rest_framework import serializers
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Subscription
+    fields = ('id', 'email', 'status', 'doc', 'value', 'created_date', 'active')
 
 class StateSerializer(serializers.ModelSerializer):
   class Meta:
