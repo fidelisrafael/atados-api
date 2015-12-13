@@ -35,6 +35,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/close/project', 'close_project'),
 
   url(r'v1/check_slug/', 'check_slug'),
+  url(r'v1/generate_slug/(?P<nonprofit_name>[\wi\ ]+)/', 'generate_slug'),
   url(r'v1/check_email/', 'check_email'),
   url(r'v1/confirm_email/', 'confirm_email'),
 

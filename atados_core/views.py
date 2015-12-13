@@ -92,6 +92,11 @@ def check_slug(request, format=None):
     return Response({"alreadyUsed": False}, status.HTTP_200_OK)
 
 @api_view(['GET'])
+def generate_slug(request, nonprofit_name= '', format=None):
+  slug = create_user_slug(nonprofit_name)
+  return Response({"slug": slug}, status.HTTP_200_OK)
+
+@api_view(['GET'])
 def check_email(request, format=None):
   try:
     User.objects.get(email=request.QUERY_PARAMS['email'].split('?')[0])
@@ -302,6 +307,19 @@ def create_nonprofit(request, format=None):
   msg.send()
 
   return Response({'detail': 'Nonprofit succesfully created.'}, status.HTTP_200_OK)
+
+def create_user_slug(name):
+  if name:
+    slug = slugify(name)[0:99]
+    append = ''
+    i = 0
+
+    query = User.objects.filter(slug=slug + append)
+    while query.count() > 0:
+      i += 1
+      append = '-' + str(i)
+      query = User.objects.filter(slug=slug + append)
+    return slug + append
 
 def create_project_slug(name):
   if name:
