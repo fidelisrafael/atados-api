@@ -85,6 +85,7 @@ class City(models.Model):
     name = models.CharField(_('name'), max_length=50)
     state = models.ForeignKey(State)
     active = models.BooleanField(_("City where Atados is present."), default=False)
+    highlight = models.BooleanField(_("Highlight this city when listing cities"), default=False)
 
     def __unicode__(self):
         return '%s, %s' % (self.name, self.state.code)

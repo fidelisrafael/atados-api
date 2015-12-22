@@ -18,7 +18,7 @@ class CitySerializer(serializers.ModelSerializer):
 
   class Meta:
     model = City
-    fields = ('id', 'name', 'state', 'active')
+    fields = ('id', 'name', 'state', 'highlight', 'active')
 
 class AddressSerializer(serializers.ModelSerializer):
   city_state = serializers.CharField(source="get_city_state", required=False)
