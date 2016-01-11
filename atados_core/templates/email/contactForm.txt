@@ -1,0 +1,7 @@
+Olá! Tudo bem? Parece que alguém quer falar com você através do formulário de contato!
+
+Nome: {{name}}
+Email: {{email}}
+
+{{message}}
+

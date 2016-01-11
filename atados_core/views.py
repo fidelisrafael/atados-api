@@ -1104,6 +1104,34 @@ def add_to_newsletter(request, format=None):
   response = "Seu email foi salvo!"
   return Response({"msg": response})
 
+@api_view(['POST'])
+def contact(request):
+  valid_emails = ['bsb@atados.com.br', 'rj@atados.com.br', 'contato@atados.com.br']
+
+  params = json.loads(request.body)
+
+  name = params['name']
+  message = params['message']
+  email = params['email']
+  recipients = params['recipient']['email'].split(';')
+
+  for recipient in recipients:
+    if recipient not in valid_emails:
+      return Response({"Server error. Please contact admin."}, status.HTTP_400_BAD_REQUEST)
+
+  plaintext = get_template('email/contactForm.txt')
+  htmly     = get_template('email/contactForm.html')
+  subject, from_email = '[Atados] Formulário de contato', 'site@atados.com.br'
+  context = Context({'name': name, 'message': message, 'email': email})
+  text_content = plaintext.render(context)
+  html_content = htmly.render(context)
+  msg = EmailMultiAlternatives(subject, text_content, from_email, recipients)
+  msg.attach_alternative(html_content, "text/html")
+  msg.send()
+
+  return Response({'success': True})
+
+
 @api_view(['GET', 'POST'])
 def contribute(request):
   params = json.loads(request.body)

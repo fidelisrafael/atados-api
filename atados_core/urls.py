@@ -68,6 +68,7 @@ urlpatterns = patterns('atados_core.views',
   url(r'v1/dashboard/applies/', 'applies'),
 
   url(r'v1/add_to_newsletter/', 'add_to_newsletter'),
+  url(r'v1/contact/', 'contact'),
 
   url(r'v1/contribute/', 'contribute'),
   url(r'v1/contributions/', 'contributions'),
