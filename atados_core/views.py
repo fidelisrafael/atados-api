@@ -838,8 +838,8 @@ def set_volunteer_to_nonprofit(request, format=None):
 @api_view(['POST'])
 def apply_volunteer_to_project(request, format=None):
   if request.user.is_authenticated():
-    if not request.user.is_email_verified:
-      return Response({"403": "Volunteer has not actived its account by email."}, status.HTTP_403_FORBIDDEN)
+    #if not request.user.is_email_verified:
+    #  return Response({"403": "Volunteer has not actived its account by email."}, status.HTTP_403_FORBIDDEN)
 
     volunteer = Volunteer.objects.get(user=request.user)
 
