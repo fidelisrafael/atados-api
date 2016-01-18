@@ -128,8 +128,8 @@ class ApplyAdmin(admin.ModelAdmin):
   list_display = ['id', 'project', 'volunteer']
 
 class AddressProjectAdmin(admin.ModelAdmin):
-  fields = ['name', 'slug', 'address']
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'address')
+  fields = ['name', 'slug', 'address', 'gdd']
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'address', 'gdd')
   raw_id_fields = ['address']
 
   def get_queryset(self, request):
