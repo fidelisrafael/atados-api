@@ -1284,12 +1284,13 @@ class ProjectList(generics.ListAPIView):
     params = self.request.GET
 
     highlighted = params.get('highlighted') == 'true'
+    gdd = params.get('gdd', False)
     if highlighted:
       city = params.get('city', None)
       if city:
-        return Project.objects.filter(highlighted=highlighted, address__city=city)
+        return Project.objects.filter(gdd=gdd, highlighted=highlighted, address__city=city)
       else:
-        return Project.objects.filter(highlighted=highlighted)
+        return Project.objects.filter(gdd=gdd, highlighted=highlighted)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1310,9 +1311,9 @@ class ProjectList(generics.ListAPIView):
     results = [q.pk for q in queryset]
 
     if city == "0":
-        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, work__can_be_done_remotely=True).order_by('-highlighted')
+        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd, work__can_be_done_remotely=True).order_by('-highlighted')
     else:
-        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
+        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd).order_by('-highlighted')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
