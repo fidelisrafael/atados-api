@@ -366,6 +366,7 @@ def create_project(request, format=None):
     project.responsible = obj['responsible']
     project.phone = obj['phone']
     project.email = obj['email']
+    project.gdd = obj.get('gdd', False)
     project.save()
 
     skills = obj['skills']

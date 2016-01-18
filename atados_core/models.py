@@ -453,6 +453,7 @@ class Project(models.Model):
   legacy_nid = models.PositiveIntegerField(blank=True, null=True)
 
   companies = models.ManyToManyField(Company, blank=True, null=True)
+  gdd = models.BooleanField(_("Dia das boas acoes"), default=False)
 
 
   def image_tag(self):
