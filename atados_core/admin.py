@@ -82,7 +82,7 @@ class ProjectAdmin(admin.ModelAdmin):
         'nonprofit', 'description', 'details', 'address_id', 'highlighted', 'image', 'image_tag',
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
-        'roles', 'skills', 'causes')
+        'roles', 'skills', 'causes', 'gdd')
   list_display = ('id', 'name', 'slug', 'nonprofit', 'description', 'published', 'closed', 'deleted', 'created_date', 'city', 'address_id', 'work', 'job')
   list_filter = ['published', 'deleted', 'closed']
   list_editable = ['published', 'closed']
@@ -128,8 +128,8 @@ class ApplyAdmin(admin.ModelAdmin):
   list_display = ['id', 'project', 'volunteer']
 
 class AddressProjectAdmin(admin.ModelAdmin):
-  fields = ['name', 'slug', 'address', 'gdd']
-  list_display = ('id', 'name', 'slug', 'nonprofit', 'address', 'gdd')
+  fields = ['name', 'slug', 'address']
+  list_display = ('id', 'name', 'slug', 'nonprofit', 'address')
   raw_id_fields = ['address']
 
   def get_queryset(self, request):
