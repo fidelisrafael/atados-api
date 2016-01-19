@@ -1288,9 +1288,9 @@ class ProjectList(generics.ListAPIView):
     if highlighted:
       city = params.get('city', None)
       if city:
-        return Project.objects.filter(gdd=gdd, highlighted=highlighted, address__city=city)
+        return Project.objects.filter(gdd=gdd, highlighted=highlighted, address__city=city, published=True)
       else:
-        return Project.objects.filter(gdd=gdd, highlighted=highlighted)
+        return Project.objects.filter(gdd=gdd, highlighted=highlighted, published=True)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1306,7 +1306,7 @@ class ProjectList(generics.ListAPIView):
     queryset = queryset.filter(causes=cause) if cause else queryset
     queryset = queryset.filter(skills=skill) if skill else queryset
     queryset = queryset.filter(content=query) if query else queryset
-    queryset = queryset.filter(city=city) if city != u"" and int(city) else queryset
+    queryset = queryset.filter(city=city) if city != u"" and city != None and int(city) else queryset
 
     results = [q.pk for q in queryset]
 
