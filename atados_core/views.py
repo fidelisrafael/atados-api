@@ -1301,10 +1301,17 @@ class ProjectList(generics.ListAPIView):
     gdd = params.get('gdd', False)
     if highlighted:
       city = params.get('city', None)
-      if city:
-        return Project.objects.filter(gdd=gdd, highlighted=highlighted, address__city=city, published=True)
+
+      if gdd:
+        if city:
+          return Project.objects.filter(gdd=gdd, gdd_highlighted=highlighted, address__city=city, published=True)
+        else:
+          return Project.objects.filter(gdd=gdd, gdd_highlighted=highlighted, published=True)
       else:
-        return Project.objects.filter(gdd=gdd, highlighted=highlighted, published=True)
+        if city:
+          return Project.objects.filter(highlighted=highlighted, address__city=city, published=True)
+        else:
+          return Project.objects.filter(highlighted=highlighted, published=True)
 
     query = params.get('query', None)
     cause = params.get('cause', None)
@@ -1324,10 +1331,16 @@ class ProjectList(generics.ListAPIView):
 
     results = [q.pk for q in queryset]
 
-    if city == "0":
-        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd, work__can_be_done_remotely=True).order_by('-highlighted')
+    if gdd:
+      if city == "0":
+          return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd, work__can_be_done_remotely=True).order_by('-highlighted')
+      else:
+          return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd).order_by('-highlighted')
     else:
-        return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, gdd=gdd).order_by('-highlighted')
+      if city == "0":
+          return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True, work__can_be_done_remotely=True).order_by('-highlighted')
+      else:
+          return Project.objects.filter(pk__in=results, deleted=False, closed=False, published=True).order_by('-highlighted')
 
 class ProjectMapList(generics.ListAPIView):
   serializer_class = ProjectMapSerializer
