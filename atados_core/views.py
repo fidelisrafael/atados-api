@@ -1080,6 +1080,20 @@ def export_project_csv(request, project_slug, format=None):
   return Response({"Some error with export csv of project."}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+def add_to_gdd_newsletter(request, format=None):
+  params = json.loads(request.body)
+  city = params.get('city', None)
+  if city:
+    state = city['state']['code']
+    city = city['name']
+
+  with open("gdd.txt", "a") as f:
+       f.write("{};\n".format(params['email']))
+
+  response = "Seu email foi salvo!"
+  return Response({"msg": response})
+
+@api_view(['POST'])
 def add_to_newsletter(request, format=None):
   # To be implemented when allin reply with a fix
   #values = {"nm_lista": "newsletter", "campos": "nm_email;nome", "valor": "teste@teste.com.br;teste"}
