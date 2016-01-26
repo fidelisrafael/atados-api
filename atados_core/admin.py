@@ -79,7 +79,7 @@ class RoleAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(admin.ModelAdmin):
   fields = ('id', 'url', 'work', 'job', ('name', 'slug'),
-        'nonprofit', 'description', 'details', 'address_id', 'highlighted', 'image', 'image_tag',
+        'nonprofit', 'description', 'details', 'address_id', 'highlighted', 'image', 'image_tag', 'gdd_highlighted'
         'responsible', 'phone', 'email',
         ('published', 'closed', 'deleted'),
         'roles', 'skills', 'causes', 'gdd')

@@ -444,6 +444,7 @@ class Project(models.Model):
   address = models.OneToOneField(Address, blank=True, null=True)
 
   highlighted = models.BooleanField(_("Highlighted"), default=False, blank=False)
+  gdd_highlighted = models.BooleanField(_("DBA Highlighted"), default=False, blank=False)
 
   roles = models.ManyToManyField(Role, blank=True, null=True)
 
