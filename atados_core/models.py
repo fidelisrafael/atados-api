@@ -763,5 +763,6 @@ class Subscription(models.Model):
   recurrent = models.BooleanField(default=False, null=False)
   parent = models.ForeignKey('self', default='', null=True)
   created_date = models.DateTimeField(auto_now_add=True)
+  month = models.CharField(_('Month payment'), max_length=500, blank=True, null=True)
   deleted = models.BooleanField(_("Deleted"), default=False)
   deleted_date = models.DateTimeField(_("Deleted date"), blank=True, null=True)
