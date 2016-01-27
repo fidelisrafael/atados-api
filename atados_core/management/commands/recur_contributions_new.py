@@ -21,7 +21,7 @@ class Command(NoArgsCommand):
       payment_dict = self.fill_payment_dict(payment_dict, children)
 
       print "---------"
-      print "[{}] {} - {} - {}".format(sub.id, sub.name, sub.status, sub_month)
+      print "[{}] {} - {} - {}".format(sub.id, sub.name.encode('utf8'), sub.status, sub_month)
       print "Payment dict:", payment_dict
 
       self.request_payments(payment_dict, sub)
