@@ -6,21 +6,17 @@ import djcelery
 
 PROJECT_ROOT = os.path.normpath(os.path.dirname(os.path.abspath(__file__)))
 
-if os.environ.get('ATADOS_ENV') == 'debug':
-  DEBUG=True
-else:
-  DEBUG=False
+DEBUG = os.environ.get('ATADOS_ENV') == 'debug'
 
 TEMPLATE_DEBUG=DEBUG
 
 # Settings for when developing on local computer
-if os.environ.get('DJANGO_ENV') == 'production':
-  DEVELOPMENT=False
-else:
-  DEVELOPMENT=True
+DEVELOPMENT= os.environ.get('DJANGO_ENV') != 'production'
 
 if DEVELOPMENT:
   ALLOWED_HOSTS = (
+    'localhost',
+    '127.0.0.1',
     '.atadoslocal.com.br',
     '.local.atados.com.br',
   )
@@ -234,15 +230,12 @@ CORS_ALLOW_CREDENTIALS = True
 if DEVELOPMENT:
   CSRF_COOKIE_DOMAIN = ".atadoslocal.com.br"
   SESSION_COOKIE_DOMAIN = ".atadoslocal.com.br"
-  CORS_ORIGIN_WHITELIST = (
-    'atadoslocal.com.br',
-  )
 else:
   SESSION_COOKIE_DOMAIN = ".atados.com.br"
   CSRF_COOKIE_DOMAIN = ".atados.com.br"
-  CORS_ORIGIN_WHITELIST = (
-    'atados.com.br',
-  )
+
+
+CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
 
 PASSWORD_HASHERS = (
   'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher', # Drupal legacy sucks :(

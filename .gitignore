@@ -57,3 +57,6 @@ newsletter.txt
 pag.txt
 users.csv
 gdd.txt
+
+environment.sh
+*.backup

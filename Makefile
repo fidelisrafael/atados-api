@@ -8,12 +8,15 @@ install:
 	@pip install -r requirements.txt
 	@python ./manage.py migrate
 
+generate_config:
+	@cp environment.sh.sample environment.sh
+
 run:
 	@python ./manage.py runserver
 
 pep8:
 	@pep8 --exclude 'migrations' .
-	
+
 test:
 	@coverage run --source=atados_core manage.py test -s -v 2
 
@@ -34,7 +37,7 @@ dumpoauth2:
 makemessages:
 	@cd atados_core; \
 	django-admin.py makemessages --all
-	
+
 compilemessages:
 	@cd atados_core; \
 	django-admin.py compilemessages
